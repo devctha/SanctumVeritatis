@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>CANAL DISCIPLINAR // CORVO vs ALTO COMANDO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES E ÍCONES -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #050505;
+            --panel: #0a0a0a;
+            --corvo: #d4af37;
+            --cmd: #ff5252;
+            --sys: #888;
+            --text: #e0e0e0;
+            --mono: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* TELA DE BLOQUEIO */
+        #lock {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s;
+        }
+        #lock h1 {
+            font-family: var(--mono);
+            letter-spacing: 4px;
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+        .btn-unlock {
+            margin-top: 2rem;
+            padding: 1rem 3rem;
+            border: 1px solid var(--corvo);
+            background: transparent;
+            color: var(--corvo);
+            font-family: var(--mono);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-unlock:hover {
+            background: var(--corvo);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212,175,55,0.5);
+        }
+
+        /* INTERFACE CHAT */
+        #app {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.95)), url("https://www.transparenttextures.com/patterns/dark-matter.png");
+        }
+
+        .header {
+            padding: 1.2rem 2rem;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #060606;
+        }
+        .header-left h2 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .header-left span {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: #777;
+        }
+        .header-right {
+            text-align: right;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: #777;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: red;
+            box-shadow: 0 0 8px red;
+            margin-right: 5px;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        #chat {
+            flex-grow: 1;
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            scroll-behavior: smooth;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 0.9rem 1.2rem;
+            border-radius: 4px;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: show 0.4s forwards;
+        }
+        @keyframes show {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-header {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .msg-text { color: #ddd; }
+
+        .msg.corvo {
+            align-self: flex-end;
+            background: rgba(212,175,55,0.06);
+            border-color: var(--corvo);
+            text-align: right;
+        }
+        .msg.corvo .msg-header { color: var(--corvo); }
+
+        .msg.cmd {
+            align-self: flex-start;
+            background: rgba(255,82,82,0.07);
+            border-color: var(--cmd);
+        }
+        .msg.cmd .msg-header { color: var(--cmd); }
+
+        .msg.sys {
+            align-self: center;
+            background: transparent;
+            border: none;
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: #666;
+        }
+
+        .footer {
+            padding: 0.8rem 2rem;
+            border-top: 1px solid #222;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+        }
+        .bar {
+            width: 55%;
+            height: 3px;
+            background: #222;
+            position: relative;
+        }
+        .fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--corvo);
+            transition: width 0.1s linear;
+        }
+
+        @media (max-width: 768px) {
+            #chat { padding: 1rem; }
+            .header { padding: 1rem; }
+            .footer { padding: 0.8rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="lock">
+    <i class="fas fa-shield-alt" style="font-size: 3.5rem; color:#333; margin-bottom:1.5rem;"></i>
+    <h1>CANAL DISCIPLINAR // ORDO REALITAS</h1>
+    <p style="margin-top:0.7rem; color:#666; font-size:0.85rem;">ACESSO APENAS PARA AGENTES NÍVEL 4+</p>
+    <button class="btn-unlock" onclick="unlock()">EXIBIR TRANSCRIÇÃO</button>
+    <a href="index.html" style="margin-top:1.5rem; font-family:var(--mono); color:#444; font-size:0.75rem; text-decoration:none;">CANCELAR</a>
+</div>
+
+<div id="app">
+    <div class="header">
+        <div class="header-left">
+            <h2>CANAL PRIVADO: DISCIPLINA / CORVO</h2>
+            <span>TRANSCRIÇÃO DE VOZ -> TEXTO // CLASSIFICAÇÃO: ULTRA-SECRETO</span>
+        </div>
+        <div class="header-right">
+            <div><span class="status-dot"></span>SESSÃO ENCERRADA</div>
+            <div>ID DO ARQUIVO: DR-VAL-EXON-07</div>
+        </div>
+    </div>
+
+    <div id="chat"></div>
+
+    <div class="footer">
+        <span>REGISTRO AUTOMÁTICO // SISTEMA INTERNO</span>
+        <div class="bar"><div class="fill" id="fill"></div></div>
+        <span id="timer">00:00:00</span>
+    </div>
+</div>
+
+<script>
+    const chat = document.getElementById('chat');
+    const fill = document.getElementById('fill');
+    const timerEl = document.getElementById('timer');
+    const lock = document.getElementById('lock');
+    const app = document.getElementById('app');
+
+    const log = [
+        {t:'sys', s:'--- INÍCIO DA TRANSMISSÃO [CANAL DISCIPLINAR – SALA FECHADA] ---'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Agente de codinome "Corvo", você sabe por que foi convocado a este canal.'},
+        {t:'corvo', n:'CORVO', m:'Imagino que não seja para me agradecer por tentar salvar a vida de cinco agentes abandonados.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Você conduziu uma operação em Setentrional sem autorização. Violou três protocolos internacionais e ao menos cinco diretrizes da própria Ordo.'},
+        {t:'corvo', n:'CORVO', m:'Eu preenchi três pedidos de reforço. Três. Vocês responderam com silêncio.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'O silêncio às vezes é a resposta mais responsável, Corvo. Aquela ilha está marcada como QUARENTENA NÍVEL 5. Nada entra. Nada sai.'},
+        {t:'corvo', n:'CORVO', m:'Exceto quando vocês mesmos mandaram o Projeto Setentrional pra lá e deixaram metade da equipe enlouquecer no subsolo do farol.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Você está fora de sua alçada. Os detalhes do Projeto Setentrional estão acima do seu nível de acesso.'},
+        {t:'corvo', n:'CORVO', m:'Acima do meu nível de acesso, mas não acima do sangue que grudou na minha mão quando recolhi os corpos que vocês fingem que nunca existiram.'},
+
+        // Tensão aumenta
+        {t:'sys', s:'[PAUSA NA TRANSMISSÃO – RUÍDO LEVE NA LINHA]'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Estamos aqui para discutir sua conduta, não para reabrir dossiês enterrados.'},
+        {t:'corvo', n:'CORVO', m:'A minha conduta foi tentar tirar a Alpha da ilha viva. A conduta de vocês foi tratá-los como estatística controlada.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Seus relatórios mostram que você sabia do risco de ruptura em larga escala. Mesmo assim, insistiu em financiar mercenários e recrutar agentes por fora dos canais oficiais.'},
+        {t:'corvo', n:'CORVO', m:'Quando a casa de vocês pega fogo, vocês chamam bombeiro. Quando a casa da realidade pega fogo, vocês chamam silêncio.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Cuidado com o tom, Corvo.'},
+        {t:'corvo', n:'CORVO', m:'Cuidado com o quê? Com a verdade? Porque se for para falar de verdade, posso começar pelo fiasco em Reykjavik, ou preferem Londres, 2011, ala norte do metrô? Aquela "anomalia de luz" que custou dois bairros inteiros e foi arquivada como pane elétrica.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Você está mencionando operações de nível internacional cobertas por acordos de sigilo com governos estrangeiros.'},
+        {t:'corvo', n:'CORVO', m:'E ainda assim, quem entrou no túnel inundado naquela noite fui eu. Sem reforço. Porque vocês decidiram que evacuar a cidade era "politicamente inviável".'},
+
+        // Nome real exposto
+        {t:'sys', s:'[ALTERAÇÃO DE PERMISSÕES – CANAL PASSA PARA MODO DISCIPLINAR PLENO]'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Chega de rodeios. Varn, você sempre foi um problema.'},
+        {t:'corvo', n:'CORVO', m:'...'},
+        {t:'corvo', n:'CORVO', m:'Repete isso, Hartmann.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Você me ouviu. Varn. Varn Arnaud Belcadior Blackwood. Seu codinome não te protege aqui.'},
+        {t:'corvo', n:'CORVO', m:'E você acha que o seu te protege? Porque eu posso começar a usar "nomes" também, se quiser.'},
+        {t:'corvo', n:'CORVO', m:'Eduard Hartmann. Responsável pelo encobrimento em Munique, 2009. Assinatura direta na ordem que deixou um time inteiro preso no subsolo da Klinikum Nord para "conter dano de imagem". Lembra deles? Eu lembro de cada rosto.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Você está cruzando uma linha muito perigosa, agente.'},
+        {t:'corvo', n:'CORVO', m:'Não sou só eu cruzando linha hoje, Eduard. Você acabou de expor meu nome verdadeiro em um canal que supostamente é de disciplina interna. Então deixa eu retribuir a gentileza.'},
+        {t:'corvo', n:'CORVO', m:'Lysandra Wolfe, presente no canal? Responsável pela "não intervenção" em Nova Délhi quando a ruptura de conhecimento começou a consumir bibliotecas inteiras. Você assinou aquele "NÃO" em letras maiúsculas.'},
+        {t:'cmd', n:'CONSELHEIRA WOLFE', m:'Isso é irrelevante para este processo.'},
+        {t:'corvo', n:'CORVO', m:'Irrelevante pra você, que assina papéis de longe. Pra quem teve que entrar na chuva de livros em chamas, não foi irrelevante.'},
+
+        // Corvo explode
+        {t:'sys', s:'[AUMENTO NA FREQUÊNCIA CARDÍACA DO AGENTE CORVO – BIOMETRIA EM ALERTA]'},
+        {t:'corvo', n:'CORVO', m:'Vocês negaram ajuda em São Firmo porque é mais fácil enterrar uma ilha do que admitir que erraram na primeira vez.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Negamos ajuda porque mexer com Setentrional novamente ameaça a estabilidade de três países e dois tratados internacionais.'},
+        {t:'corvo', n:'CORVO', m:'Vocês não negaram por medo geopolítico. Vocês negaram por covardia.'},
+        {t:'cmd', n:'CONSELHEIRA WOLFE', m:'Cuidado, Varn. Você ainda responde à Ordo Realitas.'},
+        {t:'corvo', n:'CORVO', m:'Eu respondo à memória das pessoas que vocês largaram pra morrer. A Yin, o Marcus, o Klaus, a Sophia... eram minha equipe. Minha família. Vocês chamam isso de "variável descartável". Eu chamo de nomes.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Sua "família" foi para um lugar do qual não deveria ter voltado. Você os levou até lá.'},
+        {t:'corvo', n:'CORVO', m:'Eu os levei porque vocês trancaram a porta e jogaram a chave no mar. Alguém precisava olhar a ilha de novo.'},
+
+        // Decisão da Ordo
+        {t:'sys', s:'[CONSULTA INTERNA – VOTAÇÃO RÁPIDA ENTRE OS CONSELHEIROS]' },
+        {t:'cmd', n:'ALTO COMANDO', m:'Depois de analisar sua conduta, a maioria do Conselho vota por sua expulsão formal da Ordo Realitas.'},
+        {t:'corvo', n:'CORVO', m:'Finalmente alguma honestidade.'},
+        {t:'cmd', n:'CONSELHEIRA WOLFE', m:'Mas não é tão simples, infelizmente. Você sabe demais, Varn. Fechar você completamente seria desperdiçar um recurso valioso e criar um mártir.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Portanto, sua situação será a seguinte: Status Operante. Mantido no quadro de agentes, oficialmente ativo, mas sem acesso a recursos, equipes oficiais ou suporte logístico.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Você passa a operar exclusivamente por sua conta e risco. Sem reforços. Sem evacuação. Sem garantia de backup.'},
+        {t:'corvo', n:'CORVO', m:'Então é isso. Me deixam com o crachá, mas tiram todas as portas.'},
+        {t:'cmd', n:'CONSELHEIRA WOLFE', m:'Você poderá, se assim desejar, recrutar elementos externos: mercenários, agentes aposentados, contatos independentes. Nada disso estará ligado oficialmente à Ordo.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Se algo der errado, será tratado como uma iniciativa individual sua, fora da cadeia de comando.'},
+        {t:'corvo', n:'CORVO', m:'E se der certo?' },
+        {t:'cmd', n:'ALTO COMANDO', m:'Se der certo, será fácil demais para nós dizer que "sempre esteve sob observação e controle". É assim que funcionamos.'},
+
+        // Corvo usa mais podres
+        {t:'sys', s:'[BREVE SILÊNCIO DETECTADO – 3 SEGUNDOS]' },
+        {t:'corvo', n:'CORVO', m:'Vocês falam como se eu ainda devesse algo a vocês.'},
+        {t:'corvo', n:'CORVO', m:'Vocês me deixaram sozinho em Varsóvia quando a criatura tomou o prédio inteiro e comeu andar por andar. Eu ouvi o rádio de vocês desligando a linha enquanto as pessoas gritavam. Lembra, Hartmann? Você estava na chamada.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Situação resolvida sem ruptura global. O objetivo maior foi alcançado.'},
+        {t:'corvo', n:'CORVO', m:'"Objetivo maior". Vocês adoram esse termo. Em Tóquio, em Oslo, no Alasca... sempre o mesmo discurso. Cada cidade um experimento fracassado escondido sob a palavra "controle".'},
+
+        // Limite emocional
+        {t:'sys', s:'[NÍVEL DE ESTRESSE DO AGENTE: CRÍTICO – RECOMENDADO ENCERRAR SESSÃO]' },
+        {t:'corvo', n:'CORVO', m:'Escutem bem, porque vou dizer isso uma vez: eu não estou pedindo permissão pra voltar em Setentrional.'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Então está admitindo que pretende violar novamente ordens diretas do Conselho.'},
+        {t:'corvo', n:'CORVO', m:'Admitindo? Eu estou prometendo.'},
+        {t:'corvo', n:'CORVO', m:'Vou voltar pra ilha. Vou mandar quem eu puder convencer, quem tiver coragem (ou desespero) suficiente pra pisar lá. Agentes novos, velhos, mercenários, gente quebrada que vocês descartaram. Vou usar cada contato que vocês fingem que não existem.'},
+        {t:'cmd', n:'CONSELHEIRA WOLFE', m:'Você está basicamente anunciando uma célula paralela de operação. Sabe como isso é chamado, não sabe?'},        
+        {t:'corvo', n:'CORVO', m:'Chame do que quiser, Lysandra. Sabe como eu chamo? Família. Algo que vocês esqueceram o significado há muito tempo.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'E se essa sua "família" falhar? Se a ilha engolir todos eles também?'},
+        {t:'corvo', n:'CORVO', m:'Então pelo menos eles vão morrer sabendo por que lutaram. Não como números de um relatório com tarja preta.'},
+
+        // Formalização da punição
+        {t:'sys', s:'[ATUALIZAÇÃO DE STATUS: AGENTE "CORVO" → STATUS: OPERANTE (SEM SUPORTE)]'},
+        {t:'cmd', n:'ALTO COMANDO', m:'Está decidido. A partir deste momento, você opera sem vínculo operacional direto. Qualquer coisa que fizer em Setentrional será atribuída a ações individuais, sem respaldo oficial.'},
+        {t:'cmd', n:'CONSELHEIRO HARTMANN', m:'Se morrer lá, seu arquivo dirá que agiu por conta própria. Um erro pessoal. Nada mais.'},
+        {t:'corvo', n:'CORVO', m:'Já estou morto faz tempo, Hartmann. Vocês só continuam usando o meu fantasma.'},
+
+        // Última provocação de nomes reais
+        {t:'corvo', n:'CORVO', m:'Mas já que abriram a temporada de nomes reais, deixa eu deixar registrado pro arquivo.'},
+        {t:'corvo', n:'CORVO', m:'Eduard Hartmann, Lysandra Wolfe, Diretoria Anônima da Célula Europeia, Observatório de Reykjavik, Comitê Fantasma de Munique... Se eu não voltar da ilha, alguém vai achar esse log. E quando achar, seus sobrenomes vão estar colados no inferno que vocês ajudaram a construir.'},
+        {t:'cmd', n:'CONSELHEIRA WOLFE', m:'Acha que ameaças pessoais vão mudar algo na forma como lidamos com rupturas de escala global?'},
+        {t:'corvo', n:'CORVO', m:'Não. Mas me faz dormir um pouco melhor saber que, se eu cair, pelo menos levo os seus segredos juntos.'},
+
+        // Encerramento
+        {t:'sys', s:'[CANAL EM PROCESSO DE ENCERRAMENTO]' },
+        {t:'cmd', n:'ALTO COMANDO', m:'Transmissão encerrada. Boa sorte, Varn. Você vai precisar.'},
+        {t:'corvo', n:'CORVO', m:'Guarda essa sorte pra vocês. Eu vou precisar de algo que vocês não têm há muito tempo: coragem.'},
+        {t:'sys', s:'--- FIM DA TRANSCRIÇÃO ---'},
+        {t:'sys', s:'OBS.: Arquivo mantido em cofre digital. Acesso limitado a poucos agentes de confiança. Se você está lendo isto, Corvo decidiu que você merece saber pelo que está se colocando.'}
+    ];
+
+    let idx = 0;
+    let seconds = 0;
+
+    function unlock() {
+        lock.style.opacity = 0;
+        setTimeout(() => {
+            lock.style.display = 'none';
+            app.style.display = 'flex';
+            playLog();
+        }, 800);
+    }
+
+    function addMessage(entry) {
+        const div = document.createElement('div');
+        if (entry.t === 'sys') {
+            div.className = 'msg sys';
+            div.textContent = entry.s;
+        } else {
+            div.className = 'msg ' + (entry.t === 'corvo' ? 'corvo' : 'cmd');
+            div.innerHTML = `
+                <div class="msg-header">
+                    <span>${entry.n}</span>
+                    <span>${randomHour()}</span>
+                </div>
+                <div class="msg-text">${entry.m}</div>
+            `;
+        }
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+
+        // Progresso
+        const pct = ((idx + 1) / log.length) * 100;
+        fill.style.width = pct + '%';
+    }
+
+    function playLog() {
+        if (idx >= log.length) return;
+        const entry = log[idx];
+        addMessage(entry);
+        idx++;
+
+        let delay = 1400;
+        if (entry.t === 'sys') delay = 1800;
+        if (entry.m && entry.m.length > 80) delay = 2600;
+        if (entry.m && entry.m.length > 150) delay = 3500;
+
+        setTimeout(playLog, delay);
+    }
+
+    function randomHour() {
+        const h = String(Math.floor(Math.random() * 24)).padStart(2, '0');
+        const m = String(Math.floor(Math.random() * 60)).padStart(2, '0');
+        return `${h}:${m}`;
+    }
+
+    setInterval(() => {
+        if (app.style.display !== 'flex') return;
+        seconds++;
+        const d = new Date(0);
+        d.setSeconds(seconds);
+        timerEl.textContent = d.toISOString().substring(11, 19);
+    }, 1000);
+</script>
+</body>
+</html>

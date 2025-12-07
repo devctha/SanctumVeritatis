@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ARQUIVO MORTO // EQUIPE ALPHA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;600&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #020202;
+            --card-bg: #0a0a0a;
+            --text-main: #d0d0d0;
+            --text-muted: #666;
+            --accent-red: #8a0000; /* Cor de arquivo morto/perigo */
+            --accent-blue: #2a3b4c; /* Cor técnica da Ordo */
+            --border: #222;
+            --mono: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
+                              url('https://www.transparenttextures.com/patterns/diagmonds-light.png');
+        }
+
+        /* HEADER TÉCNICO */
+        header {
+            border-bottom: 2px solid var(--accent-red);
+            padding: 2rem;
+            background: #050505;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        
+        .header-title h1 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .header-meta {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--accent-red);
+            text-align: right;
+        }
+
+        .stamp-box {
+            border: 2px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 0.5rem 1rem;
+            font-family: 'Oswald', sans-serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transform: rotate(-5deg);
+            display: inline-block;
+            opacity: 0.8;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .mission-abstract {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid var(--accent-red);
+            padding: 2rem;
+            margin-bottom: 4rem;
+        }
+        .mission-abstract h2 {
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        .mission-data {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem; margin-top: 1.5rem; font-family: var(--mono); font-size: 0.9rem; color: #888;
+        }
+
+        /* GRID DE AGENTES */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .agent-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .agent-card:hover { border-color: #444; }
+
+        /* HEADER DO CARD (FOTO + NOME) */
+        .card-header {
+            position: relative;
+            height: 120px;
+            background: #111;
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem;
+            display: flex; align-items: center; gap: 1.5rem;
+        }
+        .photo-placeholder {
+            width: 80px; height: 80px;
+            background: #222;
+            border: 1px solid #444;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: #444;
+        }
+        .agent-info h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.2rem;
+        }
+        .agent-role {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--accent-red);
+        }
+
+        /* CORPO DO CARD */
+        .card-body { padding: 1.5rem; }
+
+        .stat-row {
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid #222;
+            padding: 0.5rem 0;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .stat-val { color: #ccc; }
+
+        .profile-text {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #aaa;
+        }
+        .profile-text strong { color: #fff; font-weight: 600; }
+
+        /* STATUS TAGS */
+        .status-tag {
+            position: absolute; top: 1rem; right: 1rem;
+            font-family: var(--mono); font-size: 0.7rem;
+            padding: 2px 6px; background: #000; border: 1px solid #333;
+        }
+        .status-kia { color: var(--accent-red); border-color: var(--accent-red); }
+        .status-mia { color: #ffae00; border-color: #ffae00; }
+
+        /* REDACTED EFFECT */
+        .redacted {
+            background: #ccc; color: transparent;
+            font-size: 0.7em; padding: 0 4px;
+            user-select: none;
+        }
+        .redacted:hover { background: #333; color: #555; cursor: help; } /* Easter egg: hover revela pouco */
+
+        /* FOOTER */
+        .footer-note {
+            margin-top: 4rem; text-align: center;
+            font-family: var(--mono); font-size: 0.8rem; color: #444;
+            border-top: 1px solid #222; padding-top: 2rem;
+        }
+
+        /* TEXTURAS */
+        .scanlines {
+            position: fixed; inset: 0; pointer-events: none; z-index: 10;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
+        }
+
+        /* BOTÃO VOLTAR */
+        .back-btn {
+            position: fixed; top: 2rem; right: 2rem; z-index: 100;
+            color: #666; text-decoration: none; font-family: var(--mono); font-size: 0.8rem;
+        }
+        .back-btn:hover { color: #fff; }
+
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+    <a href="index.html" class="back-btn"><i class="fas fa-times"></i> FECHAR ARQUIVO</a>
+
+    <header>
+        <div class="header-title">
+            <h1>EQUIPE ALPHA</h1>
+            <div style="font-family: var(--mono); font-size: 0.9rem; color: #666;">OPERAÇÃO SETENTRIONAL // ID: #OP-99B</div>
+        </div>
+        <div class="header-meta">
+            <div>STATUS DA MISSÃO: <span style="color:var(--accent-red)">FALHA TOTAL</span></div>
+            <div>BAIXAS CONFIRMADAS: 5/5</div>
+            <div style="margin-top: 10px;" class="stamp-box">ARQUIVO MORTO</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- RESUMO DA MISSÃO -->
+        <div class="mission-abstract">
+            <h2>> RESUMO OPERACIONAL</h2>
+            <p style="color: #aaa;">
+                A Equipe Alpha foi implantada na Ilha de São Firmo sob protocolo de sigilo nível 4. O objetivo primário era reconhecimento e avaliação de anomalia paranormal. O contato foi perdido 48 horas após a inserção. Análises póstumas indicam falha catastrófica de contenção e corrupção da membrana local.
+            </p>
+            <div class="mission-data">
+                <div>DATA INSERÇÃO: <span class="redacted">DD/MM/AAAA</span></div>
+                <div>LÍDER TÁTICO: AGENTE MARCUS</div>
+                <div>NÍVEL DE AMEAÇA: SANGUE/MEDO</div>
+                <div>LOCAL: ILHA SÃO FIRMO</div>
+            </div>
+        </div>
+
+        <!-- GRID DOS AGENTES -->
+        <div class="agents-grid">
+
+            <!-- AGENTE MARCUS -->
+            <article class="agent-card">
+                <div class="status-tag status-mia">STATUS: MIA (DESAPARECIDO)</div>
+                <div class="card-header">
+                    <div class="photo-placeholder"><i class="fas fa-user-shield"></i></div>
+                    <div class="agent-info">
+                        <h3>MARCUS</h3>
+                        <div class="agent-role">LÍDER TÁTICO // COMBATENTE</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="stat-row"><span>NEX:</span> <span class="stat-val">45%</span></div>
+                    <div class="stat-row"><span>PATENTE:</span> <span class="stat-val">OFICIAL DE CAMPO</span></div>
+                    
+                    <div class="profile-text">
+                        <strong>Perfil Psicológico:</strong> Ex-militar com histórico de insubordinação justificada por "proteção de equipe". Avaliações indicavam um apego patológico aos membros do esquadrão, priorizando a segurança deles acima dos objetivos da Ordo.
+                        <br><br>
+                        <strong>Último Registro:</strong> Transmissão de áudio enviada 4 horas após a perda de contato da Agente Sophia. Recusou ordem de evacuação individual. "Ninguém fica pra trás" foi sua última frase inteligível.
+                    </div>
+                </div>
+            </article>
+
+            <!-- AGENTE YIN -->
+            <article class="agent-card">
+                <div class="status-tag status-kia">STATUS: KIA (CORROMPIDA)</div>
+                <div class="card-header">
+                    <div class="photo-placeholder"><i class="fas fa-eye"></i></div>
+                    <div class="agent-info">
+                        <h3>YIN</h3>
+                        <div class="agent-role">OCULTISTA // SENSITIVA</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="stat-row"><span>NEX:</span> <span class="stat-val">50%</span></div>
+                    <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">CONDUITE</span></div>
+                    
+                    <div class="profile-text">
+                        <strong>Perfil Psicológico:</strong> Alta afinidade com a Membrana. Histórico de instabilidade emocional compensada por um poder bruto excepcional. Relatórios médicos apontavam curiosidade perigosa pelo "Outro Lado".
+                        <br><br>
+                        <strong>Causa da Perda:</strong> Exposição direta à Entidade do Farol. Testemunhas relatam liquefação corporal seguida de transmutação em neblina. O corpo físico não foi recuperado; presume-se que tenha se tornado um vetor da entidade.
+                    </div>
+                </div>
+            </article>
+
+            <!-- AGENTE ELIAS -->
+            <article class="agent-card">
+                <div class="status-tag status-kia">STATUS: KIA (MORTO EM COMBATE)</div>
+                <div class="card-header">
+                    <div class="photo-placeholder"><i class="fas fa-laptop-code"></i></div>
+                    <div class="agent-info">
+                        <h3>ELIAS</h3>
+                        <div class="agent-role">TÉCNICO // SUPORTE</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="stat-row"><span>NEX:</span> <span class="stat-val">30%</span></div>
+                    <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">SINAIS</span></div>
+                    
+                    <div class="profile-text">
+                        <strong>Perfil Psicológico:</strong> Perfil analítico obsessivo. Tendência a racionalizar o paranormal, o que causou atraso de reação em encontros anteriores. Extremamente leal ao Agente Marcus, servindo sob seu comando há 6 anos.
+                        <br><br>
+                        <strong>Último Registro:</strong> Dados de telemetria indicam parada cardíaca súbita durante o ataque à Igreja Submersa. Equipamento de gravação recuperou apenas estática e sons de vidro quebrando.
+                    </div>
+                </div>
+            </article>
+
+            <!-- AGENTE SOPHIA -->
+            <article class="agent-card">
+                <div class="status-tag status-kia">STATUS: KIA (DESCONHECIDO)</div>
+                <div class="card-header">
+                    <div class="photo-placeholder"><i class="fas fa-user-md"></i></div>
+                    <div class="agent-info">
+                        <h3>SOPHIA</h3>
+                        <div class="agent-role">MÉDICA DE CAMPO</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="stat-row"><span>NEX:</span> <span class="stat-val">35%</span></div>
+                    <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">TRAUMA</span></div>
+                    
+                    <div class="profile-text">
+                        <strong>Perfil Psicológico:</strong> Cirurgiã de trauma. Conhecida pela frieza em situações de gore extremo. No entanto, demonstrou hesitação fatal ao tratar a infecção da Agente Yin, recusando protocolos de contenção por "vínculo afetivo".
+                        <br><br>
+                        <strong>Último Registro:</strong> Separada do grupo durante a fuga do Bunker. O sinal de biometria cessou instantaneamente, sugerindo morte indolor ou desconexão forçada do equipamento.
+                    </div>
+                </div>
+            </article>
+
+            <!-- AGENTE KLAUS -->
+            <article class="agent-card">
+                <div class="status-tag status-kia">STATUS: KIA (PRIMEIRA BAIXA)</div>
+                <div class="card-header">
+                    <div class="photo-placeholder"><i class="fas fa-binoculars"></i></div>
+                    <div class="agent-info">
+                        <h3>KLAUS</h3>
+                        <div class="agent-role">RECONHECIMENTO</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="stat-row"><span>NEX:</span> <span class="stat-val">40%</span></div>
+                    <div class="stat-row"><span>ESPECIALIDADE:</span> <span class="stat-val">INFILTRAÇÃO</span></div>
+                    
+                    <div class="profile-text">
+                        <strong>Perfil Psicológico:</strong> Solitário. Histórico de missões solo. Sua inclusão na Equipe Alpha foi um pedido direto do Agente Marcus, visando integrar suas habilidades de furtividade. 
+                        <br><br>
+                        <strong>Último Registro:</strong> Desaparecido nas primeiras 6 horas de missão. Seu rádio transmitiu sons biológicos não identificados por 4 minutos antes de ser destruído.
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- NOTA FINAL -->
+        <div class="footer-note">
+            <p style="max-width: 600px; margin: 0 auto; line-height: 1.8;">
+                OBSERVAÇÃO DA DIRETORIA: A falha da Equipe Alpha demonstra os riscos de formar esquadrões com laços emocionais pré-existentes. A hesitação em sacrificar membros comprometidos resultou na perda total da unidade. <br>
+                <strong style="color:var(--accent-red)">RECOMENDAÇÃO: Proibição de equipes familiares em zonas de Afinidade Alta.</strong>
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ARQUIVO SETENTRIONAL | Lore da Ilha</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #030303;
+            --panel: #0a0a0a;
+            --panel-soft: #101010;
+            --text: #e0e0e0;
+            --muted: #9a9a9a;
+            --gold: #d4af37;
+            --accent: #8a0000;
+            --border: #222;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 2px; text-transform: uppercase; }
+        .mono { font-family: 'Share Tech Mono', monospace; text-transform: uppercase; letter-spacing: 2px; }
+        .italic { font-family: 'Playfair Display', serif; font-style: italic; }
+
+        /* BACKGROUND FX */
+        .texture {
+            position: fixed; inset: 0;
+            background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: -2;
+        }
+        .vignette {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.7) 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.5rem 2.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent);
+            z-index: 50;
+        }
+        nav a {
+            text-decoration: none; color: #777; font-size: 0.8rem;
+        }
+        nav a:hover { color: var(--gold); }
+
+        /* HERO */
+        .hero {
+            min-height: 70vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 6rem 2rem 3rem 2rem;
+            text-align: center;
+            background: radial-gradient(circle at top, #1b1b1b 0%, #050505 60%);
+        }
+        .hero-inner {
+            max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-block;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .hero-sub {
+            max-width: 650px;
+            margin: 0.5rem auto 1.5rem auto;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .hero-quote {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #cfcfcf;
+        }
+
+        /* LAYOUT GERAL */
+        .wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem 5rem 2rem;
+        }
+
+        .section-title {
+            margin: 3rem 0 1.5rem 0;
+            font-size: 1.6rem;
+            border-left: 4px solid var(--gold);
+            padding-left: 1rem;
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            margin: 2rem 0 4rem 0;
+            padding-left: 1.5rem;
+        }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            opacity: 0.4;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -2px;
+            top: 3px;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 10px rgba(212,175,55,0.6);
+        }
+        .timeline-year {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.2rem;
+        }
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .timeline-text {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        /* DOCUMENTOS / RELATOS */
+        .doc-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .doc-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .doc-card::before {
+            content: attr(data-label);
+            position: absolute;
+            top: 14px; right: -40px;
+            transform: rotate(35deg);
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.06);
+        }
+        .doc-meta {
+            font-size: 0.75rem;
+            color: #777;
+            margin-bottom: 0.6rem;
+        }
+        .doc-heading {
+            font-size: 1.05rem;
+            margin-bottom: 0.6rem;
+            color: #f5f5f5;
+        }
+        .doc-body {
+            font-size: 0.92rem;
+            color: #c5c5c5;
+        }
+        .doc-body p + p {
+            margin-top: 0.7rem;
+        }
+        .doc-sign {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #888;
+            text-align: right;
+        }
+
+        /* CITAS / TRECHOS CURTOS */
+        .excerpt {
+            margin-top: 1.5rem;
+            padding: 1.2rem 1.5rem;
+            border-left: 3px solid var(--accent);
+            background: linear-gradient(90deg, rgba(138,0,0,0.2), transparent);
+            font-size: 0.9rem;
+            color: #f3f3f3;
+        }
+
+        /* RELATOS CURTOS EM LISTA */
+        .short-list {
+            margin-top: 1.5rem;
+        }
+        .short-item {
+            border-bottom: 1px dashed #333;
+            padding: 0.8rem 0;
+        }
+        .short-label {
+            font-size: 0.75rem;
+            color: var(--gold);
+            margin-bottom: 0.1rem;
+        }
+        .short-text {
+            font-size: 0.88rem;
+            color: #b9b9b9;
+        }
+
+        @media (max-width: 900px) {
+            .doc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="texture"></div>
+    <div class="vignette"></div>
+
+    <nav>
+        <div class="mono" style="color:#777;">ARQUIVO: SETENTRIONAL // LORE</div>
+        <a href="index.html" class="mono"><i class="fas fa-chevron-left"></i> VOLTAR</a>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge mono">ACESSO RESTRITO – NÍVEL 3</div>
+            <h1>Ilha de São Firmo</h1>
+            <p class="hero-sub">
+                Um pedaço esquecido de rocha e neblina ao norte da costa, ausente dos mapas oficiais, mas presente em relatórios velados da Ordo Realitas.  
+                O que segue são fragmentos: dossiês, diários, cartas e transcrições que tentam costurar um século de anomalias em um lugar que insiste em não esquecer.
+            </p>
+            <p class="hero-quote italic">
+                “O mar em volta dela não reflete o céu. Reflete algo mais antigo que o próprio tempo.” — Agente “Norte”
+            </p>
+        </div>
+    </section>
+
+    <main class="wrapper">
+
+        <!-- LINHA DO TEMPO -->
+        <h2 class="section-title">Linha do Tempo da Ilha</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">Século XVIII – Registros Apagados</div>
+                <div class="timeline-title">Pescadores, Fuga e Superstição</div>
+                <div class="timeline-text">
+                    Primeiras menções a São Firmo em diários de bordo: refúgio de piratas e foragidos, conhecida entre marinheiros apenas como “A Ilha Sem Sinos”, onde o som das igrejas do continente não alcança e nenhum sino consegue permanecer inteiro por muito tempo.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">1894 – 1910</div>
+                <div class="timeline-title">Construção do Farol Setentrional</div>
+                <div class="timeline-text">
+                    A coroa autoriza a construção do farol para conter naufrágios frequentes na região. Engenheiros relatam “anomalias magnéticas” e bússolas enlouquecidas. A obra atrasa anos devido a acidentes inexplicáveis, mas é oficialmente concluída sem maiores explicações.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">1973 – 1985</div>
+                <div class="timeline-title">Primeira Observação da Ordo</div>
+                <div class="timeline-text">
+                    A Ordo Realitas marca São Firmo como “ponto de atenção” após uma sequência de desaparecimentos de embarcações em mar calmo. Investigadores locais relatam neblina com propriedades anômalas e padrões de luz que não obedecem a qualquer fonte aparente.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">1987 – 1995</div>
+                <div class="timeline-title">Projeto Setentrional</div>
+                <div class="timeline-text">
+                    Instala-se secretamente um complexo de pesquisa abaixo do farol. A Ordo usa a ilha como laboratório de contenção e estudo de manifestações ligadas ao Medo e ao Conhecimento. O farol passa a ser utilizado como “agulha” na membrana entre os mundos.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">1995</div>
+                <div class="timeline-title">O Apagão e o Silêncio</div>
+                <div class="timeline-text">
+                    Uma noite de tempestade encerra oficialmente o Projeto Setentrional. O farol é dado como desativado. Os relatórios são selados. Nos anos seguintes, a ilha desaparece de registros públicos, mas continua aparecendo em relatos de pescadores — agora com um brilho estranho cortando a neblina em noites sem lua.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-year">3 Semanas Atrás</div>
+                <div class="timeline-title">O Sinal Retorna</div>
+                <div class="timeline-text">
+                    Estações meteorológicas costeiras registram um pico anômalo de energia na região de São Firmo. O farol, oficialmente desativado, volta a emitir um pulso — não de luz, mas de algo que distorce sinais de rádio e provoca pesadelos em quem mora na costa.
+                </div>
+            </div>
+        </div>
+
+        <!-- RELATÓRIOS OFICIAIS & DIÁRIOS -->
+        <h2 class="section-title">Relatos da Ordo & Documentos Locais</h2>
+
+        <div class="doc-grid">
+            <!-- Relatório de Geólogo -->
+            <article class="doc-card" data-label="RELATÓRIO">
+                <div class="doc-meta mono">RELATÓRIO TÉCNICO – ORDO REALITAS // 1973</div>
+                <h3 class="doc-heading">Análise Geológica Preliminar – Ilha de São Firmo</h3>
+                <div class="doc-body">
+                    <p>
+                        Amostras de rocha coletadas na falésia norte indicam composição basáltica comum, porém com concentração anormal de minerais ferromagnéticos. A intensidade magnética parece oscilar de forma cíclica, sem correlação com variações solares conhecidas.
+                    </p>
+                    <p>
+                        Instrumentos de medição enlouquecem nas proximidades do farol. Em 3 ocasiões distintas, bússolas marcaram “Norte” apontando diretamente para o centro da ilha, ignorando o polo magnético real. Um dos assistentes relatou forte enxaqueca e náusea ao permanecer mais de 20 minutos próximo às rochas expostas.
+                    </p>
+                    <p>
+                        Recomendação: restringir acesso à falésia norte a agentes treinados em exposição prolongada ao Outro Lado. A ilha em si parece uma cicatriz geológica, mas o que pulsa por baixo não é apenas pedra.
+                    </p>
+                </div>
+                <div class="doc-sign mono">Ass.: Dr. Raul Menezes – Consultor Geológico</div>
+            </article>
+
+            <!-- Diário do Faroleiro -->
+            <article class="doc-card" data-label="DIÁRIO">
+                <div class="doc-meta mono">DIÁRIO PESSOAL – JOAQUIM “FAROLETE” // 1989–1990</div>
+                <h3 class="doc-heading">Trechos Recuperados – Caderno de Capa Azul</h3>
+                <div class="doc-body">
+                    <p>
+                        <span class="italic">“8 de Julho –</span> Hoje o pessoal da ‘companhia elétrica’ desceu para o subsolo de novo. Nunca vi fio de luz descer tanto assim. O engenheiro de óculos me disse que era só manutenção, mas a luz do farol mudou de cor. Antes era amarela, agora, às vezes, parece quase azul-esverdeada. Os peixes pararam de saltar quando o facho passa.”
+                    </p>
+                    <p>
+                        <span class="italic">“23 de Setembro –</span> Não é a maré que dita a neblina aqui. Tem noite que o céu tá limpo, mas uma fumaça branca ronda a ilha, como se brotasse do mar. Quando olho pra ela tempo demais, juro que vejo rostos. O padre diz que é coisa da minha cabeça. A ‘companhia elétrica’ diz que é refração. Eu digo que eles não sobem sozinhos até o topo à noite.”
+                    </p>
+                    <p>
+                        <span class="italic">“12 de Novembro –</span> A luz falhou por 3 segundos. Três segundos exatos. Nesse intervalo, eu juro que não ouvi o mar. Não vento, não gaivota, nada. Silêncio absoluto. Quando a lâmpada religou, tinha água no chão da sala de máquinas, como se alguém tivesse saído do mar caminhando até ali. Minhas pegadas eram as únicas secas.”
+                    </p>
+                </div>
+                <div class="doc-sign mono">Caderno apreendido e arquivado – Código: SF-JOQ-01</div>
+            </article>
+        </div>
+
+        <div class="doc-grid">
+            <!-- Carta nunca enviada -->
+            <article class="doc-card" data-label="CARTA">
+                <div class="doc-meta mono">CARTA NÃO ENVIADA – MORADORA LOCAL // 1995</div>
+                <h3 class="doc-heading">“Querida irmã, sobre o que aconteceu ontem”</h3>
+                <div class="doc-body">
+                    <p>
+                        Eu sei que prometi que voltaria para o continente quando a situação aqui começasse a ficar estranha, mas como é que eu descrevo “estranha” pra você sem parecer louca? Não são só as noites insônias, nem as vozes no vento. É a forma como todo mundo aqui finge que está tudo normal.
+                    </p>
+                    <p>
+                        Ontem, o mar recuou demais. A maré baixa sempre foi generosa, mas desta vez ela recuou tanto que a antiga igreja apareceu inteira, em pé, no meio da lama. Te juro: inteira. Parecia que nunca tinha caído. O padre Orlando mandou todo mundo ficar em casa, disse que era perigoso descer. Mas vi luz de vela lá embaixo, e ouvi canto. Não era em português.
+                    </p>
+                    <p>
+                        Quando acordei hoje, a água já tinha voltado. A igreja sumiu de novo, só os telhados quebrados aparecendo na superfície. O padre tava na missa com olheiras profundas, dizendo que Deus tinha nos poupado de um castigo maior. Mas eu sei quando alguém tá mentindo. Você sabe que eu sei.
+                    </p>
+                </div>
+                <div class="doc-sign mono">Carta encontrada sem destinatário – Gaveta trancada em São Firmo</div>
+            </article>
+
+            <!-- Anotações da médica -->
+            <article class="doc-card" data-label="PRONTUÁRIO">
+                <div class="doc-meta mono">ANOTAÇÕES – DRA. LÍVIA RAMOS // 3 ANOS ATRÁS</div>
+                <h3 class="doc-heading">“Síndrome da Neblina” – Padrões Clínicos</h3>
+                <div class="doc-body">
+                    <p>
+                        Pacientes relatam sensação recorrente de serem observados quando a neblina cobre a vila. Casos de insônia, perda de apetite e episódios de despersonalização aumentam em até 300% durante semanas de neblina densa, independentemente da temperatura ou umidade.
+                    </p>
+                    <p>
+                        Em exames físicos, poucos achados concretos: leve taquicardia, pressão arterial elevada, mãos frias. Em exames neurológicos simplificados (testes cognitivos), alguns pacientes demonstram lapsos de memória seletiva: esquecem trajetos percorridos na própria ilha, mas se lembram em detalhes de sonhos recorrentes com o farol e com a falésia norte.
+                    </p>
+                    <p>
+                        Comecei a chamar informalmente de “Síndrome da Neblina”. Oficialmente, escrevo como “Transtornos de Ansiedade Relacionados ao Ambiente”. Nunca gostei de mentir em prontuário, mas é isso ou ver a ilha perder o único posto de saúde que tem.
+                    </p>
+                </div>
+                <div class="doc-sign mono">Documento fotografado e transmitido anonimamente para a Ordo</div>
+            </article>
+        </div>
+
+        <!-- EXCERPT / CENA BREVE -->
+        <div class="excerpt italic">
+            “Na primeira noite em que dormi em São Firmo, sonhei que caminhava pela praia durante a maré baixa. A areia era macia como carne e, quando olhei para trás, minhas pegadas enchiam de água escura. No horizonte, o farol piscava em um ritmo que eu reconhecia de algum lugar — o mesmo ritmo do meu próprio coração.”  
+            <span class="mono" style="display:block; margin-top:0.6rem; font-size:0.7rem; color:#ccc;">— Agente designado para o Projeto Setentrional, registro onírico nº 01</span>
+        </div>
+
+        <!-- TRANSCRIÇÕES CURTAS -->
+        <h2 class="section-title">Trechos de Áudio & Sussurros</h2>
+        <div class="doc-grid">
+            <article class="doc-card" data-label="ÁUDIO">
+                <div class="doc-meta mono">TRANSCRIÇÃO PARCIAL – CHAMADA DE EMERGÊNCIA COSTEIRA</div>
+                <h3 class="doc-heading">Áudio #SF-004 — “Ruído na Frequência”</h3>
+                <div class="doc-body">
+                    <p>
+                        <strong>[00:03]</strong> <span class="mono">VOZ MASCULINA:</span> “– aqui é a Guarda Costeira, repita a posição da embarcação, recepção ruim…”
+                    </p>
+                    <p>
+                        <strong>[00:07]</strong> <span class="mono">VOZ FEMININA (DISTANTE):</span> “A ilha… Ela não… não devia estar aqui. O farol tá… apontando pra baixo.”
+                    </p>
+                    <p>
+                        <strong>[00:11]</strong> <span class="mono">RUÍDO ESTÁTICO:</span> (padrão rítmico constante, semelhante a batimentos cardíacos).
+                    </p>
+                    <p>
+                        <strong>[00:14]</strong> <span class="mono">VOZ MASCULINA:</span> “Moça, não há ilhas mapeadas nessa área, você deve estar desorien–”
+                    </p>
+                    <p>
+                        <strong>[00:16]</strong> <span class="mono">VOZ FEMININA (AGORA CLARA):</span> “Ele tá olhando pra dentro. Você não entende. O farol tá olhando pra dentro.”
+                    </p>
+                    <p>
+                        <strong>[00:19]</strong> <span class="mono">SINAL:</span> (chamada cai. Tentativas de reconexão sem sucesso.)
+                    </p>
+                </div>
+            </article>
+
+            <article class="doc-card" data-label="CAMPO">
+                <div class="doc-meta mono">ANOTAÇÃO DE CAMPO – AGENTE “NORTE”</div>
+                <h3 class="doc-heading">Relato Pessoal – Dia 17 do Projeto</h3>
+                <div class="doc-body">
+                    <p>
+                        A ilha reage à observação. Quanto mais medimos, mais ela distorce. O farol não é uma simples fonte de luz — é um metrônomo entre dois mundos, marcando o compasso de algo que quer atravessar.
+                    </p>
+                    <p>
+                        As pessoas aqui aprendem a não olhar diretamente para a luz. Dizem que “dá azar”. O que dá azar, na verdade, é perceber padrões demais onde antes só havia superstição. Nessa ilha, a superstição é um protocolo de segurança disfarçado de crença.
+                    </p>
+                    <p>
+                        Começo a esquecer datas, mas lembro com perfeição de cada sonho. Acordo com gosto de sal na boca, mesmo sem ter ido ao mar.
+                    </p>
+                </div>
+                <div class="doc-sign mono">Documento marcado como “Extraviado” no arquivo oficial</div>
+            </article>
+        </div>
+
+        <!-- RELATOS CURTOS / LENDAS LOCAIS -->
+        <h2 class="section-title">Lendas Contadas em São Firmo</h2>
+        <div class="short-list">
+            <div class="short-item">
+                <div class="short-label mono">“A MARÉ QUE NÃO VOLTA”</div>
+                <div class="short-text">
+                    Dizem que uma vez por geração, a maré desce tanto que revela um caminho de pedras levando até o meio do mar. Quem anda por ele ouvindo apenas o som das próprias pegadas, volta com os cabelos completamente brancos — se voltar.
+                </div>
+            </div>
+            <div class="short-item">
+                <div class="short-label mono">“OS SINOS QUE NUNCA TOCAM”</div>
+                <div class="short-text">
+                    Qualquer sino trazido para a ilha racha na primeira noite de neblina. O padre Orlando diz que é defeito de fundição. As crianças dizem que é a ilha recusando qualquer chamada que não seja a do farol.
+                </div>
+            </div>
+            <div class="short-item">
+                <div class="short-label mono">“AS LUZES EMBAIXO DA ÁGUA”</div>
+                <div class="short-text">
+                    Pescadores mais velhos juram que, em noites específicas, o mar em volta da ilha acende por baixo, como se cidades inteiras estivessem acesas no fundo. Ninguém joga rede nessas noites.
+                </div>
+            </div>
+            <div class="short-item">
+                <div class="short-label mono">“O QUARTO ANDAR DO FAROL”</div>
+                <div class="short-text">
+                    Oficialmente, o farol tem três níveis de acesso. Extraoficialmente, todos em São Firmo sabem que quem sobe mais um lance de escadas encontra uma porta que não deveria existir. Ela só aparece para quem já sonhou com ela antes.
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SISTEMA ORDO // CALIBRAÇÃO DE VISOR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <!-- ÁUDIO (ruído) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --grid: #111;
+            --text: #555;
+            --accent: #d4af37;
+            --error: #ff3333;
+            --mono: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--mono);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+            z-index: -2;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0.3),
+                rgba(0,0,0,0.3) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            mix-blend-mode: multiply;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            color: #777;
+        }
+
+        header .status {
+            font-size: 0.8rem;
+            color: #444;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        /* TEXTO TÉCNICO (com pistas) */
+        .fine-print {
+            max-width: 650px;
+            font-size: 0.75rem;
+            color: #333;
+            text-align: justify;
+            line-height: 1.8;
+            opacity: 0.7;
+            transition: 0.5s;
+            margin-bottom: 3rem;
+        }
+        .fine-print:hover {
+            opacity: 1;
+            color: #555;
+        }
+        .fine-print span {
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .fine-print span.glow {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        /* SLIDER */
+        .slider-container {
+            width: 320px;
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .slider-label {
+            font-size: 0.85rem;
+            margin-bottom: 0.7rem;
+            color: #777;
+        }
+
+        input[type=range] {
+            width: 100%;
+            -webkit-appearance: none;
+            background: #151515;
+            height: 3px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #555;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid #888;
+        }
+
+        #freq-val {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        /* BOTÃO */
+        #cal-btn {
+            background: transparent;
+            border: 1px solid #333;
+            color: #666;
+            padding: 0.7rem 2rem;
+            cursor: pointer;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        #cal-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 20px rgba(212,175,55,0.3);
+        }
+
+        /* GLITCH OVERLAY */
+        #glitch-fx {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 200;
+        }
+        @keyframes glitchFlash {
+            0% { opacity: 0; transform: translate(0,0); }
+            15% { opacity: 0.9; transform: translate(-8px, 4px); }
+            30% { opacity: 0.2; transform: translate(5px, -3px); }
+            45% { opacity: 0.8; transform: translate(-3px, 2px); }
+            60% { opacity: 0.1; transform: translate(0,0); }
+            100% { opacity: 0; transform: translate(0,0); }
+        }
+
+        /* TERMINAL SECRETO */
+        #secret-terminal {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            color: #f33;
+            font-family: var(--mono);
+            padding: 3.5rem 2rem;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 150;
+        }
+
+        .term-line {
+            margin-bottom: 0.4rem;
+            opacity: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .term-line.show {
+            animation: typeIn 0.12s forwards;
+        }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hl {
+            background: var(--error);
+            color: #fff;
+            padding: 0 4px;
+        }
+
+        .nash-tag {
+            color: #0ff;
+        }
+
+        .btn-exit {
+            margin-top: 2rem;
+            display: inline-block;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .btn-exit:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 1rem; }
+            main { padding: 1.5rem; }
+            #secret-terminal { padding: 2.5rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
+    <div id="glitch-fx"></div>
+
+    <!-- Áudio de ruído (mantido) -->
+    <audio id="noise-audio" loop>
+        <source src="https://lasonotheque.org/UPLOAD/mp3/0278.mp3" type="audio/mp3">
+    </audio>
+
+    <header>
+        <h1>SISTEMA ORDO REALITAS // CALIBRAÇÃO DE VÍDEO</h1>
+        <div class="status" id="status-text">STATUS: AGUARDANDO AJUSTE</div>
+    </header>
+
+    <main id="main-interface">
+        <div class="fine-print" id="fine-print">
+            Para garantir a integridade da experiência visual, ajuste a frequência do visor até que os padrões de ruído desapareçam. 
+            Exposições prolongadas fora do intervalo seguro podem causar distorções temporais e cognitivas em usuários não treinados.
+            Nenhum controle adicional será disponibilizado sem a calibração correta.
+            <br><br>
+            A configuração recomendada é <span>100.0 MHz</span>. Modificações agressivas podem resultar em
+            artefatos na imagem, perda de detalhes e eventual comprometimento da leitura de dados sensíveis.
+            <br><br>
+            <span id="c1">O</span>bservadores não familiarizados com protocolos de campo devem evitar ajustar o visor além dos padrões da Ordo.
+            <span id="c2">L</span>imites de exposição não devem ser testados sem supervisão.
+            <span id="c3">H</span>á registros de agentes que, ao tentar "ver melhor", enxergaram o que não deveriam.
+            <span id="c4">E</span>les não voltaram ao normal.
+            <br>
+            <span id="c5">P</span>ara baixo, abaixo da superfície do valor recomendado, sinais secundários podem surgir.
+            <span id="c6">A</span>lguns deles não são destinados aos olhos humanos.
+            <span id="c7">R</span>essonâncias específicas podem perfurar camadas de mascaramento.
+            <span id="c8">A</span> estrutura que você vê não é uma torre.
+            <span id="c9">D</span>entro dela há uma agulha.
+            <span id="c10">E</span>ntre as rochas, algo espera.
+            <span id="c11">N</span>ão olhe diretamente para a luz.
+            <span id="c12">T</span>oda agulha tem dois lados.
+            <span id="c13">R</span>upturas começam com curiosidade.
+            <span id="c14">O</span> resto você descobre sozinho.
+        </div>
+
+        <div class="slider-container">
+            <div class="slider-label">AJUSTE DE FREQUÊNCIA (MHz)</div>
+            <input type="range" min="80.0" max="120.0" step="0.1" value="100.0" id="freq-slider">
+            <div id="freq-val">100.0</div>
+        </div>
+
+        <button id="cal-btn">CONFIRMAR CALIBRAÇÃO</button>
+    </main>
+
+    <!-- TERMINAL SECRETO -->
+    <div id="secret-terminal"></div>
+
+    <script>
+        const slider = document.getElementById('freq-slider');
+        const valDisplay = document.getElementById('freq-val');
+        const statusText = document.getElementById('status-text');
+        const glitchFx = document.getElementById('glitch-fx');
+        const mainInterface = document.getElementById('main-interface');
+        const terminal = document.getElementById('secret-terminal');
+        const audio = document.getElementById('noise-audio');
+        const finePrint = document.getElementById('fine-print');
+
+        const TARGET_FREQ = "108.4";
+        let solved = false;
+
+        const clueSpans = [
+            document.getElementById('c1'),
+            document.getElementById('c2'),
+            document.getElementById('c3'),
+            document.getElementById('c4'),
+            document.getElementById('c5'),
+            document.getElementById('c6'),
+            document.getElementById('c7'),
+            document.getElementById('c8'),
+            document.getElementById('c9'),
+            document.getElementById('c10'),
+            document.getElementById('c11'),
+            document.getElementById('c12'),
+            document.getElementById('c13'),
+            document.getElementById('c14')
+        ];
+
+        slider.addEventListener('input', (e) => {
+            if (solved) return;
+            const val = parseFloat(e.target.value).toFixed(1);
+            valDisplay.textContent = val + ' MHz';
+
+            // Dica visual quando aproxima da região certa
+            if (val > 107.5 && val < 109.0) {
+                document.body.style.backgroundColor = '#120000';
+                statusText.textContent = 'STATUS: INTERFERÊNCIA DETECTADA';
+                statusText.style.color = '#ff5555';
+                audio.volume = 0.6;
+                if (audio.paused) audio.play();
+                clueSpans.forEach(s => s.classList.add('glow'));
+            } else {
+                document.body.style.backgroundColor = '#050505';
+                statusText.textContent = 'STATUS: AGUARDANDO AJUSTE';
+                statusText.style.color = '#444';
+                clueSpans.forEach(s => s.classList.remove('glow'));
+                if (!solved) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            }
+
+            // Acerto exato
+            if (val === TARGET_FREQ) {
+                revelarSegredo();
+            }
+        });
+
+        document.getElementById('cal-btn').addEventListener('click', () => {
+            // Botão é um bait – se o jogador não acertou 108.4, só muda o texto
+            if (!solved) {
+                statusText.textContent = 'STATUS: CALIBRAÇÃO IMPRECISA';
+                statusText.style.color = '#ff5555';
+            }
+        });
+
+        function revelarSegredo() {
+            if (solved) return;
+            solved = true;
+            slider.disabled = true;
+            statusText.textContent = 'STATUS: PROTOCOLO NÃO AUTORIZADO';
+            statusText.style.color = '#ff3333';
+
+            // Mantém o ruído, mas um pouco mais baixo
+            audio.volume = 0.3;
+            if (audio.paused) audio.play();
+
+            // Glitch visual
+            glitchFx.style.animation = 'glitchFlash 0.6s ease-in-out 3';
+            setTimeout(() => {
+                glitchFx.style.animation = '';
+                glitchFx.style.opacity = 0;
+                mainInterface.style.display = 'none';
+                iniciarTerminal();
+            }, 2000);
+        }
+
+        function iniciarTerminal() {
+            terminal.style.display = 'flex';
+
+            const linhas = [
+                "[SISTEMA DE MASCARAMENTO // ORDO REALITAS]",
+                "[ERRO]: FREQUÊNCIA NÃO HOMOLOGADA DETECTADA.",
+                "[ERRO]: CANAL INTERCEPTADO.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> ...então você encontrou a frequência morta.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Não era para você estar aqui.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Mas já que chegou, vamos pular os avisos legais.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> O Farol de São Firmo nunca foi um farol.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> A luz é um <span class='hl'>RASTREADOR</span>. O feixe aponta sempre para o mesmo ponto no leito rochoso.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Lá embaixo, enterrado, há algo que a Ordo chama de <span class='hl'>NÓ DE CONHECIMENTO</span>.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Não é um artefato. Não é um deus. É um erro antigo que aprendeu a pensar.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> O Projeto Setentrional nunca foi pesquisa neutra.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Era alimentação controlada. Cada agente, cada ritual, cada morte, tudo era <span class='hl'>COMBUSTÍVEL</span>.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> A Equipe Alpha foi enviada quando a Entidade começou a acordar de verdade.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Corvo acha que os mandou para salvar a ilha.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> O Alto Comando os mandou para alimentar o NÓ mais uma vez.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Você já leu os relatórios oficiais.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Viu as linhas frias, os carimbos de 'ARQUIVO MORTO'.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> O que não está escrito é que a ilha respondeu. Ela aprendeu.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Agora, cada vez que alguém pisa em São Firmo com um motivo nobre, o NÓ cresce.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Corvo está montando uma nova equipe.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Ele acha que está trabalhando contra a Ordo.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> A verdade é que ele está repetindo o padrão que alimenta a coisa lá embaixo.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Esperança. Sacrifício. Culpa. Ciclo perfeito.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> A L.O.T.U.S. existe para quebrar ciclos.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Não para salvar o mundo. Isso é problema da Ordo.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Nosso trabalho é mostrar as rachaduras e ver o que você faz com isso.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Agora você sabe:",
+                "<span class='nash-tag'>NASH/LOTUS:</span> O Farol aponta para baixo.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> O NÓ come histórias de heróis.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> A Equipe Alpha foi refeição, não falha.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Corvo é o próximo prato que a Ordo está preparando, mesmo sem admitir.",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> A pergunta não é se você acredita em mim.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> A pergunta é:",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Quando estiver diante da luz do Farol,",
+                "<span class='nash-tag'>NASH/LOTUS:</span> você vai subir para ajudar Corvo...",
+                "<span class='nash-tag'>NASH/LOTUS:</span> ou descer para descobrir o que realmente está preso lá embaixo?",
+                "-----------------------------------------------------",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Este log não existe.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> Se alguém perguntar, você só calibrava o monitor.",
+                "<span class='nash-tag'>NASH/LOTUS:</span> // Encerrando transmissão não autorizada.",
+                "-----------------------------------------------------",
+                "[ERRO]: PACOTE DE DADOS NÃO REGISTRADO.",
+                "[ERRO]: IMPOSSÍVEL APAGAR RASTROS COMPLETAMENTE.",
+                "[SISTEMA]: Se chegou até aqui, você já está envolvido demais.",
+                "[SISTEMA]: Boa sorte em Setentrional.",
+                " "
+            ];
+
+            let delay = 0;
+            linhas.forEach((linha, index) => {
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = 'term-line';
+                    div.innerHTML = linha;
+                    terminal.appendChild(div);
+                    requestAnimationFrame(() => {
+                        div.classList.add('show');
+                    });
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, delay);
+                delay += Math.max(800, linha.length * 22);
+            });
+
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.href = "index.html";
+                link.textContent = "> APAGAR O QUE DER E VOLTAR À SUPERFÍCIE";
+                link.className = "btn-exit term-line";
+                terminal.appendChild(link);
+                requestAnimationFrame(() => {
+                    link.classList.add('show');
+                });
+            }, delay + 1500);
+        }
+    </script>
+</body>
+</html>

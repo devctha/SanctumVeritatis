@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORDO REALITAS | Protocolo P.A.T.</title>
+    <!-- Bibliotecas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Share+Tech+Mono&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CORE STYLES --- */
+        :root {
+            --bg: #050505;
+            --panel: #0a0a0a;
+            --text: #e0e0e0;
+            --gold: #d4af37;
+            --red: #8a0000;
+            --blue: #00f0ff;
+            --purple: #9d00ff;
+            --border: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+                url('https://www.transparenttextures.com/patterns/dark-matter.png');
+        }
+
+        /* Tipografia */
+        .mono { font-family: 'Share Tech Mono', monospace; text-transform: uppercase; letter-spacing: 2px; }
+        .serif { font-family: 'Cinzel', serif; }
+
+        /* --- UI ELEMENTS --- */
+        .container {
+            width: 100%; max-width: 800px; padding: 2rem;
+            position: relative; z-index: 10;
+        }
+
+        /* Form Styling */
+        .input-group { margin-bottom: 2rem; position: relative; }
+        .input-group label { display: block; color: var(--gold); font-size: 0.8rem; margin-bottom: 0.5rem; }
+        .input-field {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            padding: 1rem; color: #fff; font-family: 'Share Tech Mono'; font-size: 1.1rem;
+            transition: 0.3s;
+        }
+        .input-field:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 15px rgba(212,175,55,0.2); }
+
+        /* Buttons */
+        .btn {
+            background: var(--gold); color: #000; border: none; padding: 1rem 3rem;
+            font-family: 'Share Tech Mono'; font-weight: bold; cursor: pointer;
+            transition: 0.3s; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        .btn:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 0 20px rgba(212,175,55,0.4); }
+        .btn-opt {
+            background: transparent; border: 1px solid var(--border); color: #888;
+            width: 100%; text-align: left; margin-bottom: 1rem; position: relative;
+            overflow: hidden;
+        }
+        .btn-opt:hover { border-color: var(--gold); color: #fff; padding-left: 3.5rem; background: rgba(212,175,55,0.05); }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: #111; z-index: 100;
+        }
+        .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.3s ease; box-shadow: 0 0 10px var(--gold); }
+
+        /* DOSSIER CARD (FINAL RESULT) */
+        .dossier-card {
+            background: #080808; border: 1px solid var(--border);
+            padding: 3rem; position: relative; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            display: none; /* Hidden by default */
+        }
+        
+        .dossier-header {
+            border-bottom: 2px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        
+        .stamp {
+            border: 2px solid var(--gold); color: var(--gold); padding: 0.5rem 1rem;
+            transform: rotate(-5deg); font-weight: bold; opacity: 0.8;
+        }
+
+        .class-result-title {
+            font-size: 3.5rem; margin: 1rem 0; text-shadow: 0 0 20px currentColor;
+        }
+
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 3rem;
+        }
+        .stat-col { text-align: center; background: rgba(255,255,255,0.02); padding: 1rem; border: 1px solid #222; }
+        .stat-val { font-size: 1.5rem; margin-top: 0.5rem; font-weight: bold; }
+
+        /* Effects */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 900;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+        }
+        .fade-in { animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="progress-wrapper"><div class="progress-fill" id="progress"></div></div>
+    <div class="scanlines"></div>
+
+    <div class="container">
+
+        <!-- STEP 1: REGISTRATION -->
+        <div id="step-register" class="fade-in">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <img src="https://cdn.discordapp.com/attachments/1447048682514944050/1447050177784315934/op-logo.png?ex=693635ff&is=6934e47f&hm=2b0eb716bd9fc1f2ef995127871d5551167b0d3abcb543ecef3b9808bc123ff6" width="150" style="opacity: 0.8;">
+                <h1 class="serif" style="font-size: 2.5rem; margin-top: 1rem;">Protocolo P.A.T.</h1>
+                <p class="mono" style="color: var(--gold);">Triagem Psicológica Obrigatória</p>
+            </div>
+
+            <div class="input-group">
+                <label class="mono">NOME DO AGENTE / CANDIDATO</label>
+                <input type="text" id="input-name" class="input-field" placeholder="Ex: Dante" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label class="mono">CONCEITO / ARQUÉTIPO</label>
+                <input type="text" id="input-concept" class="input-field" placeholder="Ex: Policial Aposentado, Médico, Hacker..." autocomplete="off">
+            </div>
+
+            <button onclick="startTest()" class="btn btn-opt" style="text-align: center; color: black;">INICIAR AVALIAÇÃO</button>
+        </div>
+
+        <!-- STEP 2: QUESTIONS -->
+        <div id="step-quiz" style="display: none;">
+            <div class="mono" style="color: #555; margin-bottom: 1rem;">
+                PERGUNTA <span id="q-number" style="color: white;">01</span> / 50
+            </div>
+            
+            <h2 id="q-text" class="serif fade-in" style="font-size: 1.8rem; height: 120px; margin-bottom: 2rem;">
+                Carregando...
+            </h2>
+
+            <div id="options-container">
+                <!-- Buttons injected via JS -->
+            </div>
+        </div>
+
+        <!-- STEP 3: RESULT (DOSSIER) -->
+        <div id="step-result" style="display: none;">
+            
+            <!-- ÁREA DE PRINT (VISUAL DO DOSSÍE) -->
+            <div id="dossier-card" class="dossier-card fade-in">
+                <div class="dossier-header mono">
+                    <div>
+                        <div style="font-size: 0.8rem; color: #666;">ORDO REALITAS // DB-04</div>
+                        <div style="font-size: 1.2rem; color: white; margin-top: 5px;" id="res-name">NOME</div>
+                        <div style="font-size: 0.9rem; color: var(--gold);" id="res-concept">CONCEITO</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="stamp">APROVADO</div>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">ID: <span id="res-id" style="color: white;">0000</span></div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; padding: 2rem 0;">
+                    <p class="mono" style="color: #555; letter-spacing: 4px;">DESIGNAÇÃO TÁTICA</p>
+                    <h1 class="class-result-title serif" id="res-class-name">CLASSE</h1>
+                    <div id="res-icon" style="font-size: 4rem; margin: 1rem 0;"></div>
+                    <p style="font-family: 'Inter'; font-style: italic; color: #aaa; max-width: 500px; margin: 0 auto;" id="res-desc">
+                        Descrição...
+                    </p>
+                </div>
+
+                <div class="stats-grid mono">
+                    <div class="stat-col" style="border-bottom: 3px solid var(--red);">
+                        <div style="font-size: 0.7rem; color: #666;">COMBATENTE</div>
+                        <div class="stat-val" style="color: var(--red);" id="val-com">0%</div>
+                    </div>
+                    <div class="stat-col" style="border-bottom: 3px solid var(--blue);">
+                        <div style="font-size: 0.7rem; color: #666;">ESPECIALISTA</div>
+                        <div class="stat-val" style="color: var(--blue);" id="val-esp">0%</div>
+                    </div>
+                    <div class="stat-col" style="border-bottom: 3px solid var(--purple);">
+                        <div style="font-size: 0.7rem; color: #666;">OCULTISTA</div>
+                        <div class="stat-val" style="color: var(--purple);" id="val-ocu">0%</div>
+                    </div>
+                </div>
+                
+                <div class="mono" style="margin-top: 2rem; font-size: 0.6rem; text-align: center; color: #333;">
+                    DOCUMENTO GERADO EM <span id="res-date">DATA</span>. CONFIDENCIAL.
+                </div>
+            </div>
+
+            <!-- CONTROLES FINAIS -->
+            <div style="margin-top: 2rem; text-align: center;">
+                <p class="mono" style="color: var(--gold); margin-bottom: 1rem;">
+                    <i class="fas fa-exclamation-triangle"></i> ATENÇÃO, AGENTE
+                </p>
+                <p style="color: #aaa; margin-bottom: 2rem; font-size: 0.9rem;">
+                    O download do seu dossiê foi autorizado. Baixe a imagem abaixo e envie imediatamente para o <strong>Agente Corvo</strong> via canal seguro do Discord.
+                </p>
+                <button onclick="downloadDossier()" class="btn btn-opt" style="text-align: center; color: black; background: var(--gold);">
+                    <i class="fas fa-download"></i> BAIXAR DOSSIÊ
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // --- BANCO DE DADOS: 50 PERGUNTAS ---
+        // C = Combatente, E = Especialista, O = Ocultista
+        const QUESTIONS = [
+            // FASE 1: INSTINTO E SOBREVIVÊNCIA
+            { q: "Um zumbi de sangue arromba a porta. Você tem um segundo.", a: [{t:"Chuto ele de volta e fecho a porta.", v:"C"}, {t:"Procuro uma rota de fuga pela janela.", v:"E"}, {t:"Tento paralisá-lo com um gesto.", v:"O"}] },
+            { q: "Você encontra uma arma estranha pulsando energia.", a: [{t:"Disparo para testar o poder de fogo.", v:"C"}, {t:"Desmonto para entender o funcionamento.", v:"E"}, {t:"Sinto a ressonância dela com o Outro Lado.", v:"O"}] },
+            { q: "Seu parceiro foi mordido e está se transformando.", a: [{t:"Dou o tiro de misericórdia. Rápido.", v:"C"}, {t:"Tento conter a infecção cirurgicamente.", v:"E"}, {t:"Tento um ritual arriscado de purificação.", v:"O"}] },
+            { q: "Você está encurralado em um beco sem saída.", a: [{t:"Luto até o último suspiro.", v:"C"}, {t:"Escalo a parede ou arrombo o bueiro.", v:"E"}, {t:"Abro uma passagem pela membrana.", v:"O"}] },
+            { q: "O prédio está desabando.", a: [{t:"Carrego os feridos nos ombros.", v:"C"}, {t:"Calculo a rota estruturalmente segura.", v:"E"}, {t:"Uso telecinese para segurar os escombros.", v:"O"}] },
+            { q: "Uma criatura invisível está na sala.", a: [{t:"Atiro onde ouço barulho.", v:"C"}, {t:"Jogo farinha/tinta para revelá-la.", v:"E"}, {t:"Fecho os olhos e uso minha percepção paranormal.", v:"O"}] },
+            { q: "Você precisa interrogar um cultista fanático.", a: [{t:"Ameaço quebrar os dedos dele.", v:"C"}, {t:"Uso lógica para quebrar suas crenças.", v:"E"}, {t:"Invado a mente dele.", v:"O"}] },
+            { q: "Qual sua maior qualidade em campo?", a: [{t:"Coragem inabalável.", v:"C"}, {t:"Raciocínio rápido.", v:"E"}, {t:"Intuição sobrenatural.", v:"O"}] },
+            { q: "O que você teme mais?", a: [{t:"Ser fraco demais para proteger alguém.", v:"C"}, {t:"Perder minha sanidade/memória.", v:"E"}, {t:"Ser consumido pelo poder que uso.", v:"O"}] },
+            { q: "Sua arma favorita seria...", a: [{t:"Uma espingarda calibre 12.", v:"C"}, {t:"Um rifle de precisão ou kit tático.", v:"E"}, {t:"Um punhal cerimonial ou grimório.", v:"O"}] },
+
+            // FASE 2: INVESTIGAÇÃO E INTELECTO
+            { q: "Um diário antigo está escrito em código.", a: [{t:"Ignoro, foco nas ameaças físicas.", v:"C"}, {t:"Passo a noite decifrando.", v:"E"}, {t:"Uso o sangue do autor para revelar o texto.", v:"O"}] },
+            { q: "Uma sala está cheia de armadilhas mortais.", a: [{t:"Uso um objeto para dispará-las.", v:"C"}, {t:"Desarmo o mecanismo central.", v:"E"}, {t:"Flutuo sobre elas.", v:"O"}] },
+            { q: "Quem lidera a missão?", a: [{t:"Quem tiver mais experiência de combate.", v:"C"}, {t:"Quem tiver o melhor plano.", v:"E"}, {t:"Quem entende o inimigo.", v:"O"}] },
+            { q: "Você encontra um cofre da Ordo fechado.", a: [{t:"Explosivos plásticos.", v:"C"}, {t:"Estetoscópio e gazuas.", v:"E"}, {t:"Derreto a fechadura com entropia.", v:"O"}] },
+            { q: "Um civil viu um monstro. O que fazer?", a: [{t:"Digo para ele correr e esquecer.", v:"C"}, {t:"Invento uma história de encobrimento convincente.", v:"E"}, {t:"Apago a memória dele magicamente.", v:"O"}] },
+            { q: "O computador central está protegido por senha.", a: [{t:"Destruo o servidor para ninguém acessar.", v:"C"}, {t:"Hackeio o terminal.", v:"E"}, {t:"Pergunto aos espíritos da máquina.", v:"O"}] },
+            { q: "Como você lida com um enigma impossível?", a: [{t:"Busco outro caminho, forço a passagem.", v:"C"}, {t:"Pesquiso até encontrar a resposta.", v:"E"}, {t:"Aceito que a resposta não é lógica.", v:"O"}] },
+            { q: "Você precisa entrar em uma festa de gala.", a: [{t:"Entro como segurança.", v:"C"}, {t:"Falsifico um convite VIP.", v:"E"}, {t:"Uso um ritual de ilusão/disfarce.", v:"O"}] },
+            { q: "Onde você procura pistas primeiro?", a: [{t:"Nos corpos das vítimas.", v:"C"}, {t:"Nos documentos e arquivos.", v:"E"}, {t:"Nos resquícios de aura do local.", v:"O"}] },
+            { q: "A verdade é...", a: [{t:"Dura e sangrenta.", v:"C"}, {t:"Complexa e detalhada.", v:"E"}, {t:"Incompreensível e perigosa.", v:"O"}] },
+
+            // FASE 3: O PARANORMAL
+            { q: "O símbolo da Espiral te faz sentir...", a: [{t:"Raiva.", v:"C"}, {t:"Curiosidade mórbida.", v:"E"}, {t:"Atração.", v:"O"}] },
+            { q: "Um ritual exige um sacrifício de sangue.", a: [{t:"Ofereço meu próprio sangue, sem hesitar.", v:"C"}, {t:"Busco uma alternativa técnica ao sacrifício.", v:"E"}, {t:"Entendo o preço e realizo o ritual.", v:"O"}] },
+            { q: "Você ouve sussurros na sua cabeça.", a: [{t:"Grito para que calem a boca.", v:"C"}, {t:"Tomo remédios e faço terapia.", v:"E"}, {t:"Escuto o que eles têm a dizer.", v:"O"}] },
+            { q: "O tempo começa a distorcer ao seu redor.", a: [{t:"Mantenho o foco no meu relógio biológico.", v:"C"}, {t:"Calculo a taxa de distorção.", v:"E"}, {t:"Aproveito para agir fora do tempo.", v:"O"}] },
+            { q: "Um fantasma bloqueia o caminho.", a: [{t:"Atiro com balas de sal/amaldiçoadas.", v:"C"}, {t:"Investigo quem ele era para dar paz.", v:"E"}, {t:"Controlo a alma dele.", v:"O"}] },
+            { q: "Qual elemento você mais tem afinidade?", a: [{t:"Sangue (Sentimento/Dor).", v:"C"}, {t:"Conhecimento (Lógica/Ordem).", v:"E"}, {t:"Energia/Morte (Caos/Fim).", v:"O"}] },
+            { q: "O Outro Lado é...", a: [{t:"Um inimigo a ser destruído.", v:"C"}, {t:"Um fenômeno a ser estudado.", v:"E"}, {t:"Uma fonte de poder.", v:"O"}] },
+            { q: "Você aceitaria um pacto com uma entidade?", a: [{t:"Jamais.", v:"C"}, {t:"Apenas se eu puder enganá-la nas letras miúdas.", v:"E"}, {t:"Se o poder valer o preço, sim.", v:"O"}] },
+            { q: "Como você recarrega suas energias?", a: [{t:"Exercício físico intenso.", v:"C"}, {t:"Lendo ou jogando xadrez.", v:"E"}, {t:"Meditando no escuro.", v:"O"}] },
+            { q: "O que é a morte para você?", a: [{t:"O fim da luta.", v:"C"}, {t:"Um estado biológico irreversível.", v:"E"}, {t:"Apenas o começo.", v:"O"}] },
+
+            // FASE 4: ÉTICA E ESCOLHAS
+            { q: "Salvar um inocente ou eliminar um monstro perigoso?", a: [{t:"Eliminar a ameaça para salvar muitos.", v:"C"}, {t:"Tento fazer os dois, calculando o risco.", v:"E"}, {t:"O destino do inocente já estava selado.", v:"O"}] },
+            { q: "Um colega está enlouquecendo.", a: [{t:"Eu o protejo até o fim.", v:"C"}, {t:"O afasto da missão para segurança de todos.", v:"E"}, {t:"Uso a loucura dele como arma.", v:"O"}] },
+            { q: "A Ordo Realitas pede algo imoral.", a: [{t:"Cumpro a missão. Ordens são ordens.", v:"C"}, {t:"Questiono e busco outra forma.", v:"E"}, {t:"A moralidade é uma construção humana.", v:"O"}] },
+            { q: "Você tem a chance de ressuscitar alguém amado.", a: [{t:"Não. Os mortos devem descansar.", v:"C"}, {t:"Investigo as consequências primeiro.", v:"E"}, {t:"Faço imediatamente, custe o que custar.", v:"O"}] },
+            { q: "Dinheiro ou Informação?", a: [{t:"Dinheiro compra armas.", v:"C"}, {t:"Informação vale mais que ouro.", v:"E"}, {t:"Nenhum dos dois tem valor no Outro Lado.", v:"O"}] },
+            { q: "Um traidor é descoberto.", a: [{t:"Execução sumária.", v:"C"}, {t:"Prisão e interrogatório.", v:"E"}, {t:"Maldição eterna.", v:"O"}] },
+            { q: "O mundo vai acabar amanhã.", a: [{t:"Passo o dia com quem amo.", v:"C"}, {t:"Tento impedir até o último segundo.", v:"E"}, {t:"Aceito a entropia.", v:"O"}] },
+            { q: "Você prefere agir...", a: [{t:"Em grupo.", v:"C"}, {t:"Em duplas especializadas.", v:"E"}, {t:"Sozinho.", v:"O"}] },
+            { q: "Sua motivação é...", a: [{t:"Vingança.", v:"C"}, {t:"Curiosidade.", v:"E"}, {t:"Transcendência.", v:"O"}] },
+            { q: "O medo é...", a: [{t:"Combustível.", v:"C"}, {t:"Um alerta.", v:"E"}, {t:"Um velho amigo.", v:"O"}] },
+
+            // FASE 5: ABSTRATO E FINAL
+            { q: "Escolha uma cor.", a: [{t:"Vermelho Sangue.", v:"C"}, {t:"Dourado Ordem.", v:"E"}, {t:"Roxo Espiral.", v:"O"}] },
+            { q: "Escolha um objeto.", a: [{t:"Espada.", v:"C"}, {t:"Lupa.", v:"E"}, {t:"Caveira.", v:"O"}] },
+            { q: "Escolha um animal.", a: [{t:"Lobo.", v:"C"}, {t:"Coruja.", v:"E"}, {t:"Gato.", v:"O"}] },
+            { q: "Escolha um lugar.", a: [{t:"Campo de batalha.", v:"C"}, {t:"Biblioteca.", v:"E"}, {t:"Cemitério.", v:"O"}] },
+            { q: "Seus olhos...", a: [{t:"Veem o alvo.", v:"C"}, {t:"Veem os detalhes.", v:"E"}, {t:"Veem o invisível.", v:"O"}] },
+            { q: "Sua mão...", a: [{t:"Fecha em punho.", v:"C"}, {t:"Segura a caneta.", v:"E"}, {t:"Desenha o sigilo.", v:"O"}] },
+            { q: "No fim, resta...", a: [{t:"A glória.", v:"C"}, {t:"O legado.", v:"E"}, {t:"O nada.", v:"O"}] },
+            { q: "Você está pronto para morrer?", a: [{t:"Sempre estive.", v:"C"}, {t:"Ainda tenho muito a fazer.", v:"E"}, {t:"A morte é relativa.", v:"O"}] },
+            { q: "Última chance de desistir.", a: [{t:"Nunca desisto.", v:"C"}, {t:"Calculei as chances, vou continuar.", v:"E"}, {t:"O abismo já me escolheu.", v:"O"}] },
+            { q: "Quem é você?", a: [{t:"Um guerreiro.", v:"C"}, {t:"Um investigador.", v:"E"}, {t:"Um ocultista.", v:"O"}] }
+        ];
+
+        // --- GAME LOGIC ---
+        let currentIdx = 0;
+        let scores = { C: 0, E: 0, O: 0 };
+        let userData = { name: "", concept: "", id: "" };
+
+        // Passo 1: Iniciar e Validar
+        function startTest() {
+            const name = document.getElementById('input-name').value;
+            const concept = document.getElementById('input-concept').value;
+            
+            if (!name || !concept) {
+                alert("AGENTE, IDENTIFIQUE-SE CORRETAMENTE.");
+                return;
+            }
+
+            // Gerar ID Aleatório
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const randomLetter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)];
+            userData = { name, concept, id: `AGENTE-${randomNum}${randomLetter}` };
+
+            // Troca de Tela
+            document.getElementById('step-register').style.display = 'none';
+            document.getElementById('step-quiz').style.display = 'block';
+            loadQuestion();
+        }
+
+        // Passo 2: Carregar Pergunta
+        function loadQuestion() {
+            const data = QUESTIONS[currentIdx];
+            
+            // UI Update
+            document.getElementById('q-number').innerText = (currentIdx + 1).toString().padStart(2, '0');
+            const qText = document.getElementById('q-text');
+            qText.style.opacity = 0;
+            
+            // Progress Bar
+            const pct = ((currentIdx) / QUESTIONS.length) * 100;
+            document.getElementById('progress').style.width = pct + '%';
+
+            setTimeout(() => {
+                qText.innerText = data.q;
+                qText.style.opacity = 1;
+                
+                const container = document.getElementById('options-container');
+                container.innerHTML = ''; // Limpa
+                
+                // Embaralha levemente as respostas para não ficar viciado na ordem
+                // (Opcional, mas deixei fixo para manter consistência visual)
+                data.a.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-opt fade-in';
+                    btn.innerHTML = `<i class="fas fa-caret-right"></i> ${opt.t}`;
+                    btn.onclick = () => selectOption(opt.v);
+                    container.appendChild(btn);
+                });
+            }, 300);
+        }
+
+        // Passo 3: Escolher e Avançar
+        function selectOption(type) {
+            scores[type]++;
+            currentIdx++;
+
+            if (currentIdx < QUESTIONS.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        // Passo 4: Calcular Resultado
+        function showResult() {
+            document.getElementById('step-quiz').style.display = 'none';
+            document.getElementById('step-result').style.display = 'block';
+
+            // Cálculos
+            const total = scores.C + scores.E + scores.O;
+            const pC = Math.round((scores.C / total) * 100);
+            const pE = Math.round((scores.E / total) * 100);
+            const pO = Math.round((scores.O / total) * 100);
+
+            // Determina Vencedor
+            let winner = "COMBATENTE";
+            let color = "var(--red)";
+            let desc = "Você é a linha de frente. Força, vigor e armamento pesado são seus aliados.";
+            let icon = '<i class="fas fa-fist-raised" style="color:var(--red)"></i>';
+
+            if (scores.E >= scores.C && scores.E >= scores.O) {
+                winner = "ESPECIALISTA";
+                color = "var(--blue)";
+                desc = "Mestre da técnica e da perícia. Você resolve problemas que balas não resolvem.";
+                icon = '<i class="fas fa-fingerprint" style="color:var(--blue)"></i>';
+            } else if (scores.O >= scores.C && scores.O >= scores.E) {
+                winner = "OCULTISTA";
+                color = "var(--purple)";
+                desc = "Conectado com o Outro Lado. Você manipula a realidade, mas paga o preço.";
+                icon = '<i class="fas fa-eye" style="color:var(--purple)"></i>';
+            }
+
+            // Preenche o Dossiê
+            document.getElementById('res-name').innerText = userData.name.toUpperCase();
+            document.getElementById('res-concept').innerText = userData.concept.toUpperCase();
+            document.getElementById('res-id').innerText = userData.id;
+            
+            const title = document.getElementById('res-class-name');
+            title.innerText = winner;
+            title.style.color = color;
+            
+            document.getElementById('res-icon').innerHTML = icon;
+            document.getElementById('res-desc').innerText = desc;
+            
+            // Preenche Barras
+            document.getElementById('val-com').innerText = pC + '%';
+            document.getElementById('val-esp').innerText = pE + '%';
+            document.getElementById('val-ocu').innerText = pO + '%';
+            
+            // Data
+            const today = new Date();
+            document.getElementById('res-date').innerText = today.toLocaleDateString('pt-BR');
+
+            // Mostra o card (para poder tirar print)
+            document.getElementById('dossier-card').style.display = 'block';
+        }
+
+        // Passo 5: Baixar Imagem
+        function downloadDossier() {
+            const element = document.getElementById('dossier-card');
+            
+            html2canvas(element, {
+                backgroundColor: "#080808",
+                scale: 2, // Alta qualidade
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `DOSSIE_${userData.id}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

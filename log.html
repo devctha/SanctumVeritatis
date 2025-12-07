@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRO DE ÁUDIO #99-B | ACESSO RESTRITO</title>
+    
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #050505;
+            --chat-bg: #0a0a0a;
+            --corvo: #d4af37; /* Dourado */
+            --agente: #4a9eff; /* Azul */
+            --yin: #ff4a4a; /* Vermelho (Sinal de perigo/sangue) */
+            --base: #888888; /* Cinza */
+            --text: #e0e0e0;
+            --mono: 'Share Tech Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden; /* Impede scroll na tela inicial */
+            display: flex; flex-direction: column;
+        }
+
+        /* TELA INICIAL (BLOQUEIO) */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s;
+        }
+        
+        .decrypt-btn {
+            background: transparent; border: 1px solid var(--corvo); color: var(--corvo);
+            padding: 1rem 3rem; font-family: var(--mono); font-size: 1.2rem; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px; transition: 0.3s;
+            margin-top: 2rem;
+        }
+        .decrypt-btn:hover { background: var(--corvo); color: #000; box-shadow: 0 0 20px rgba(212,175,55,0.4); }
+
+        /* INTERFACE DO CHAT */
+        #chat-interface {
+            display: none; height: 100%; flex-direction: column;
+            background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
+                              url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        }
+
+        /* HEADER */
+        .chat-header {
+            padding: 1.5rem; border-bottom: 1px solid #333;
+            background: rgba(10, 10, 10, 0.95);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .status-light {
+            display: inline-block; width: 10px; height: 10px; background: red;
+            border-radius: 50%; box-shadow: 0 0 10px red; margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        /* ÁREA DE MENSAGENS */
+        #chat-container {
+            flex-grow: 1; overflow-y: auto; padding: 2rem;
+            display: flex; flex-direction: column; gap: 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        /* ESTILO DAS MENSAGENS */
+        .msg {
+            max-width: 80%; padding: 1rem 1.5rem; border-radius: 4px;
+            position: relative; opacity: 0; transform: translateY(20px);
+            animation: appear 0.5s forwards; border-left: 3px solid transparent;
+        }
+        @keyframes appear { to { opacity: 1; transform: translateY(0); } }
+
+        .msg-header {
+            font-family: var(--mono); font-size: 0.75rem; margin-bottom: 0.5rem;
+            display: flex; justify-content: space-between; opacity: 0.7;
+        }
+
+        .msg-text { font-size: 0.95rem; line-height: 1.6; }
+        
+        /* CORES POR PERSONAGEM */
+        .msg.corvo { background: rgba(212, 175, 55, 0.05); border-color: var(--corvo); align-self: flex-end; text-align: right; }
+        .msg.corvo .msg-header { color: var(--corvo); }
+
+        .msg.agente { background: rgba(74, 158, 255, 0.05); border-color: var(--agente); align-self: flex-start; }
+        .msg.agente .msg-header { color: var(--agente); }
+
+        .msg.yin { background: rgba(255, 74, 74, 0.05); border-color: var(--yin); align-self: flex-start; }
+        .msg.yin .msg-header { color: var(--yin); }
+
+        .msg.base { background: #111; border-color: var(--base); align-self: center; max-width: 90%; text-align: center; font-style: italic; color: #888; }
+        
+        .msg.system { 
+            align-self: center; font-family: var(--mono); color: #555; 
+            font-size: 0.8rem; border: none; background: transparent; padding: 0;
+            text-align: center; margin: 1rem 0;
+        }
+
+        /* PLAYER CONTROLS (FALSO) */
+        .controls {
+            padding: 1rem 2rem; border-top: 1px solid #333; background: #080808;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: var(--mono); font-size: 0.8rem; color: #666;
+        }
+        .progress-bar { width: 60%; height: 4px; background: #333; position: relative; }
+        .progress-fill { height: 100%; background: var(--corvo); width: 0%; transition: width 0.1s linear; }
+
+    </style>
+</head>
+<body>
+
+    <!-- TELA DE BLOQUEIO -->
+    <div id="lock-screen">
+        <i class="fas fa-file-audio" style="font-size: 4rem; color: #333; margin-bottom: 2rem;"></i>
+        <h1 style="font-family: var(--mono); color: var(--text); letter-spacing: 3px;">ARQUIVO: OP-SETENTRIONAL</h1>
+        <p style="color: #666; margin-top: 1rem;">CRIPTOGRAFIA DE NÍVEL 4 DETECTADA</p>
+        <button class="decrypt-btn" onclick="iniciarDecrypt()">DESCRIPTOGRAFAR LOG</button>
+        <a href="index.html" style="margin-top: 2rem; color: #444; font-family: var(--mono); text-decoration: none;">VOLTAR</a>
+    </div>
+
+    <!-- CHAT INTERFACE -->
+    <div id="chat-interface">
+        <div class="chat-header">
+            <div>
+                <h3 style="color: var(--text);">CANAL CRIPTOGRAFADO: SÃO FIRMO</h3>
+                <span style="font-family: var(--mono); font-size: 0.8rem; color: #666;">FREQ: 108.4 MHz // OFF THE RECORD</span>
+            </div>
+            <div style="text-align: right;">
+                <div style="color: red; font-family: var(--mono); font-size: 0.8rem;"><span class="status-light"></span> GRAVAÇÃO ENCERRADA</div>
+            </div>
+        </div>
+
+        <div id="chat-container">
+            <!-- MENSAGENS SERÃO INJETADAS AQUI VIA JS -->
+        </div>
+
+        <div class="controls">
+            <span>REPRODUZINDO: LOG_FINAL_YIN.WAV</span>
+            <div class="progress-bar"><div class="progress-fill" id="prog-bar"></div></div>
+            <span id="time-display">00:00:00</span>
+        </div>
+    </div>
+
+    <script>
+        // ROTEIRO COMPLETO (Simulando uma conversa MUITO longa através de blocos)
+        const SCRIPT = [
+            // PARTE 1: CHEGADA E OTIMISMO
+            { type: 'system', text: '--- INÍCIO DA TRANSMISSÃO [DATA: 3 DIAS ATRÁS] ---' },
+            { type: 'corvo', name: 'CORVO', text: 'Equipe Alpha, checagem de som. Estamos operando fora da rede oficial da Ordo a partir deste ponto. Se forem pegos, eu nego conhecimento.' },
+            { type: 'agente', name: 'AGENTE MARCUS (Líder)', text: 'Copiado, Corvo. Estamos visualizando a ilha. O mar está... estranho. Parece óleo.' },
+            { type: 'agente', name: 'AGENTE ELIAS (Técnico)', text: 'Interferência magnética estourando os medidores. Minha bússola tá girando feito um ventilador.' },
+            { type: 'yin', name: 'AGENTE YIN (Ocultista)', text: 'Não é magnético, Elias. É a Membrana. Ela está fina aqui. Posso sentir o gosto de ferro na boca.' },
+            { type: 'agente', name: 'AGENTE SOPHIA (Médica)', text: 'Todos com os batimentos elevados. Mantenham a calma. Yin, você tá pálida.' },
+            { type: 'yin', name: 'AGENTE YIN', text: 'Tô bem. Só... tem algo me chamando. É como um zumbido.' },
+            { type: 'corvo', name: 'CORVO', text: 'Mantenham o foco. Objetivo: Infiltrar no vilarejo, confirmar a origem do sinal e sair. Sem heroismo.' },
+            
+            // PARTE 2: EXPLORAÇÃO E ESTRANHEZA
+            { type: 'system', text: '--- SALTO TEMPORAL: 6 HORAS DEPOIS ---' },
+            { type: 'agente', name: 'AGENTE KLAUS (Recon)', text: 'Corvo, o vilarejo tá vazio. Mas tem comida na mesa. Pratos quentes. Eles sumiram no meio do jantar.' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'Não tem sinais de luta. Nenhuma gota de sangue. É como se tivessem evaporado.' },
+            { type: 'yin', name: 'AGENTE YIN', text: 'Eles não foram embora. Eles desceram. Olhem as marcas de arrasto na areia... vão pro mar.' },
+            { type: 'agente', name: 'AGENTE ELIAS', text: 'Corvo, achei um rádio amador ligado. Tem uma transmissão em loop. Vou tocar pra você.' },
+            { type: 'system', text: '[RUÍDO DE ESTÁTICA E GRITOS DISTANTES TOCANDO]' },
+            { type: 'corvo', name: 'CORVO', text: 'Desligue isso agora, Elias. Isso é um risco cognitivo. Não ouçam.' },
+            { type: 'yin', name: 'AGENTE YIN', text: 'Tarde demais. Eu entendi o que eles disseram. "O Norte Verdadeiro exige carne".' },
+
+            // PARTE 3: O PRIMEIRO CONTATO
+            { type: 'system', text: '--- SALTO TEMPORAL: NOITE 1 ---' },
+            { type: 'agente', name: 'AGENTE SOPHIA', text: 'Klaus sumiu. Ele foi mijar e não voltou.' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'Klaus! Responda o rádio!' },
+            { type: 'base', name: 'RÁDIO DE KLAUS', text: '... (som de respiração molhada e ossos estalando) ...' },
+            { type: 'corvo', name: 'CORVO', text: 'Marcus, reagrupar na igreja agora. Saiam do aberto. O que vocês estão vendo?' },
+            { type: 'agente', name: 'AGENTE ELIAS', text: 'Tem... coisas na neblina. Parecem pessoas, mas os membros são longos demais. Eles andam dobrados pra trás.' },
+            { type: 'yin', name: 'AGENTE YIN', text: 'Não atirem! Eles são feitos de Medo. Balas não funcionam. Preciso desenhar um círculo de proteção.' },
+            { type: 'system', text: '[SOM DE TIROS E VIDRO QUEBRANDO]' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'Merda! Pegaram o Elias! Puxaram ele pra cima! Pelo telhado!' },
+            
+            // PARTE 4: A QUEDA DE YIN
+            { type: 'system', text: '--- SALTO TEMPORAL: NOITE 2 (BUNKER) ---' },
+            { type: 'agente', name: 'AGENTE SOPHIA', text: 'Só sobrou eu, o Marcus e a Yin. Estamos no porão do farol. A Yin não para de sangrar pelo nariz.' },
+            { type: 'corvo', name: 'CORVO', text: 'Sophia, relatório médico da Yin. Agora.' },
+            { type: 'agente', name: 'AGENTE SOPHIA', text: 'Temperatura corporal 34 graus. Pupilas dilatadas. Ela tá escrevendo símbolos no chão com o próprio sangue.' },
+            { type: 'yin', name: 'AGENTE YIN', text: 'Eu vejo, Corvo. Eu vejo porque você nos mandou aqui. A Ordo sabia. Vocês sabiam o que tinha no farol.' },
+            { type: 'corvo', name: 'CORVO', text: 'Yin, me escute. A entidade está tentando te manipular. É uma alucinação.' },
+            { type: 'yin', name: 'AGENTE YIN', text: 'Não... é clareza. O Farol não é uma torre. É uma agulha. E ela tá costurando a nossa realidade na Deles.' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'Corvo, ela tá levitando. Os olhos dela... ficaram pretos.' },
+            { type: 'yin', name: 'AGENTE YIN', text: 'O Norte Verdadeiro... é lindo.' },
+            { type: 'system', text: '[ESTOURO DE ÁUDIO - DISTORÇÃO MÁXIMA]' },
+            
+            // PARTE 5: O PEDIDO DE SOCORRO
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'CORVO! A YIN EXPLODIU! Não, ela não morreu... ela virou... neblina. Ela tá preenchendo a sala!' },
+            { type: 'agente', name: 'AGENTE SOPHIA', text: '(Tossindo) Não consigo respirar... o cheiro... é enxofre e ozônio...' },
+            { type: 'corvo', name: 'CORVO', text: 'Marcus! Sophia! Saiam daí! Protocolo Terra Queimada! Usem as granadas incendiárias!' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'Não dá... a porta sumiu. Só tem parede. A Yin tá rindo, Corvo. A voz dela tá saindo das paredes.' },
+            { type: 'base', name: 'VOZ DISTORCIDA (YIN)', text: 'NÃO HÁ MAIS SAÍDA. NÓS SOMOS A ILHA AGORA.' },
+            
+            // PARTE 6: O CONFRONTO COM A BASE
+            { type: 'system', text: '--- CANAL PRIORITÁRIO: CORVO -> ALTO COMANDO ---' },
+            { type: 'corvo', name: 'CORVO', text: 'Comando, aqui é Agente Corvo. Código Vermelho em Setentrional. Perdi a Equipe Alpha. Solicito extração imediata e contenção.' },
+            { type: 'base', name: 'ALTO COMANDO', text: 'Negativo, Corvo. Essa operação não foi sancionada. Setentrional é zona de quarentena nível 5. Nenhum recurso será enviado.' },
+            { type: 'corvo', name: 'CORVO', text: 'Vocês têm agentes morrendo lá embaixo! A Yin foi tomada! Se aquilo sair da ilha...' },
+            { type: 'base', name: 'ALTO COMANDO', text: 'Então certifique-se de que não saia. A ilha é o túmulo deles. Não cave um para você também. Câmbio desligo.' },
+            
+            // PARTE 7: A RESOLUÇÃO FINAL
+            { type: 'system', text: '--- RETORNO AO CANAL DA EQUIPE ---' },
+            { type: 'corvo', name: 'CORVO', text: 'Marcus? Sophia? Alguém na escuta?' },
+            { type: 'system', text: '[SILÊNCIO POR 4 HORAS]' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: '...Corvo... a bateria tá acabando. A Sophia se foi. A neblina pegou ela.' },
+            { type: 'corvo', name: 'CORVO', text: 'Marcus, aguente firme. Eu vou dar um jeito.' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'Não venha. É o que Ele quer. Mais comida. Escuta... eu deixei o diário do Klaus na igreja. E as anotações da Yin no posto médico. Se mandar mais alguém... diga pra não olharem pro farol.' },
+            { type: 'agente', name: 'AGENTE MARCUS', text: 'Eles estão aqui. A Yin tá aqui. Ela diz que sente sua falta, Corvo. Adeus.' },
+            { type: 'system', text: '[SINAL PERDIDO. AGENTE OFF-LINE.]' },
+            
+            // PARTE 8: O EPÍLOGO DO CORVO
+            { type: 'corvo', name: 'CORVO', text: 'Registro Final. A Ordo lavou as mãos. Eles acham que podem ignorar o que está acontecendo em Setentrional.' },
+            { type: 'corvo', name: 'CORVO', text: 'Eu não vou deixar o sacrifício da Alpha ser em vão. Vou montar uma nova equipe. Mercenários, novatos, renegados... não importa. Vou financiar isso do meu bolso se for preciso.' },
+            { type: 'corvo', name: 'CORVO', text: 'Se você está lendo este log... você é a minha última esperança. Bem-vindo à Operação Setentrional. Tente não morrer.' },
+            { type: 'system', text: '--- FIM DO REGISTRO DE ÁUDIO ---' }
+        ];
+
+        // LÓGICA DE EXIBIÇÃO
+        const chatContainer = document.getElementById('chat-container');
+        const timeDisplay = document.getElementById('time-display');
+        const progBar = document.getElementById('prog-bar');
+        const lockScreen = document.getElementById('lock-screen');
+        const chatInterface = document.getElementById('chat-interface');
+        let currentIndex = 0;
+        let isAutoScrolling = true;
+
+        function iniciarDecrypt() {
+            // Animação de saída da tela de bloqueio
+            lockScreen.style.opacity = 0;
+            setTimeout(() => {
+                lockScreen.style.display = 'none';
+                chatInterface.style.display = 'flex';
+                tocarMensagens();
+            }, 1000);
+        }
+
+        function tocarMensagens() {
+            if (currentIndex >= SCRIPT.length) return;
+
+            const data = SCRIPT[currentIndex];
+            const msgDiv = document.createElement('div');
+            
+            // Define classes baseadas no tipo
+            msgDiv.className = `msg ${data.type}`;
+            
+            // Monta o HTML interno
+            if (data.type === 'system') {
+                msgDiv.innerHTML = `[ ${data.text} ]`;
+            } else {
+                msgDiv.innerHTML = `
+                    <div class="msg-header">
+                        <span>${data.name}</span>
+                        <span>${getRandomTime()}</span>
+                    </div>
+                    <div class="msg-text">${data.text}</div>
+                `;
+            }
+
+            chatContainer.appendChild(msgDiv);
+
+            // Auto-Scroll
+            if (isAutoScrolling) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            // Atualiza barra de progresso
+            const progress = ((currentIndex + 1) / SCRIPT.length) * 100;
+            progBar.style.width = `${progress}%`;
+            
+            currentIndex++;
+
+            // Define o tempo para a próxima mensagem (baseado no tamanho do texto para leitura)
+            let delay = 1500; // base
+            if (data.type === 'system') delay = 2000;
+            if (data.text && data.text.length > 50) delay = 3000;
+            if (data.text && data.text.length > 100) delay = 4500;
+
+            setTimeout(tocarMensagens, delay);
+        }
+
+        // Função auxiliar para gerar horários fictícios
+        function getRandomTime() {
+            const h = Math.floor(Math.random() * 24).toString().padStart(2,'0');
+            const m = Math.floor(Math.random() * 60).toString().padStart(2,'0');
+            return `${h}:${m}`;
+        }
+
+        // Timer Falso correndo
+        let seconds = 0;
+        setInterval(() => {
+            seconds++;
+            const date = new Date(0);
+            date.setSeconds(seconds);
+            timeDisplay.innerText = date.toISOString().substr(11, 8);
+        }, 1000);
+
+    </script>
+</body>
+</html>
