@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRIADOR DE AGENTE | Ordem Paranormal</title>
+    
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- BIBLIOTECA PARA GERAR IMAGEM -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --panel: #0f0f0f;
+            --border: #333;
+            --text: #e0e0e0;
+            --muted: #888;
+            --gold: #d4af37;
+            --red: #8a0000;
+            --mono: 'Share Tech Mono', monospace;
+            --serif: 'Cinzel', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .header {
+            background: rgba(5,5,5,0.95);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header h1 {
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .header a {
+            color: var(--muted);
+            text-decoration: none;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .header a:hover { color: var(--gold); }
+
+        /* LAYOUT PRINCIPAL */
+        .container {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* PAINEL LATERAL (FORMULÁRIO) */
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        .panel h2 {
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.7rem;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--gold);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* GRID DE ATRIBUTOS */
+        .attr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        /* BOTÕES */
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        .btn-secondary {
+            border-color: var(--border);
+            color: var(--muted);
+        }
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: transparent;
+        }
+
+        /* FICHA VISUAL (CENTRO) */
+        .sheet-preview {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 0;
+            position: relative;
+            min-height: 1000px;
+        }
+
+        /* FICHA EM SI (Para captura) */
+        #ficha-render {
+            background: linear-gradient(145deg, #0a0a0a, #050505);
+            padding: 3rem;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* CABEÇALHO DA FICHA */
+        .sheet-header {
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .sheet-logo {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            opacity: 0.3;
+        }
+        .sheet-header h1 {
+            font-family: var(--serif);
+            font-size: 2.5rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+        .sheet-header .subtitle {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* SEÇÕES DA FICHA */
+        .sheet-section {
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.3);
+        }
+        .sheet-section h3 {
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .info-item {
+            background: #000;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+        }
+        .info-label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+        .info-value {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* ATRIBUTOS */
+        .attr-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+        }
+        .attr-box {
+            text-align: center;
+            background: #000;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+        .attr-name {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+        .attr-val {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* PERÍCIAS */
+        .pericias-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+        .pericia-item {
+            background: #000;
+            padding: 0.5rem;
+            border-left: 2px solid var(--border);
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .pericia-trained { border-left-color: var(--gold); color: var(--gold); }
+
+        /* RODAPÉ DA FICHA */
+        .sheet-footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: #333;
+            text-align: center;
+        }
+
+        /* DICE ROLLER */
+        .dice-panel {
+            background: rgba(138,0,0,0.1);
+            border: 1px solid var(--red);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .dice-panel h3 {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--red);
+            margin-bottom: 1rem;
+        }
+        .dice-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+        .dice-btn {
+            background: #000;
+            border: 1px solid var(--red);
+            color: var(--red);
+            padding: 0.6rem;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .dice-btn:hover {
+            background: var(--red);
+            color: #fff;
+        }
+        #dice-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #000;
+            border: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--gold);
+            min-height: 50px;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .panel {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1><i class="fas fa-id-card"></i> CRIADOR DE AGENTE</h1>
+        <a href="index.html"><i class="fas fa-arrow-left"></i> VOLTAR</a>
+    </div>
+
+    <div class="container">
+        
+        <!-- PAINEL LATERAL (FORMULÁRIO) -->
+        <aside class="panel">
+            <h2><i class="fas fa-edit"></i> DADOS DO PERSONAGEM</h2>
+
+            <div class="form-group">
+                <label>Nome do Agente</label>
+                <input type="text" id="nome" placeholder="Ex: Marcus Vieira">
+            </div>
+
+            <div class="form-group">
+                <label>Classe</label>
+                <select id="classe">
+                    <option>Combatente</option>
+                    <option>Especialista</option>
+                    <option>Ocultista</option>
+                    <option>Comandante de Campo</option>
+                    <option>Operações Especiais</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>NEX (%)</label>
+                <input type="number" id="nex" value="5" min="5" max="99">
+            </div>
+
+            <div class="form-group">
+                <label>Origem</label>
+                <input type="text" id="origem" placeholder="Ex: Acadêmico">
+            </div>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-heartbeat"></i> STATUS</h2>
+
+            <div class="attr-grid">
+                <div class="form-group">
+                    <label>PV Máximo</label>
+                    <input type="number" id="pv" value="12">
+                </div>
+                <div class="form-group">
+                    <label>PE Máximo</label>
+                    <input type="number" id="pe" value="2">
+                </div>
+                <div class="form-group">
+                    <label>SAN Máximo</label>
+                    <input type="number" id="san" value="12">
+                </div>
+                <div class="form-group">
+                    <label>Defesa</label>
+                    <input type="number" id="defesa" value="10">
+                </div>
+            </div>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-dice-d20"></i> ATRIBUTOS</h2>
+
+            <div class="attr-grid">
+                <div class="form-group">
+                    <label>AGI</label>
+                    <input type="number" id="agi" value="1">
+                </div>
+                <div class="form-group">
+                    <label>INT</label>
+                    <input type="number" id="int" value="1">
+                </div>
+                <div class="form-group">
+                    <label>VIG</label>
+                    <input type="number" id="vig" value="1">
+                </div>
+                <div class="form-group">
+                    <label>PRE</label>
+                    <input type="number" id="pre" value="1">
+                </div>
+                <div class="form-group">
+                    <label>FOR</label>
+                    <input type="number" id="for" value="1">
+                </div>
+            </div>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-briefcase"></i> PERÍCIAS TREINADAS</h2>
+            <div class="form-group">
+                <label>Digite as perícias separadas por vírgula</label>
+                <textarea id="pericias" placeholder="Ex: Atletismo, Investigação, Luta"></textarea>
+            </div>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-scroll"></i> HABILIDADES</h2>
+            <div class="form-group">
+                <textarea id="habilidades" placeholder="Liste suas habilidades de classe, rituais, etc."></textarea>
+            </div>
+
+            <!-- ROLAGEM DE DADOS -->
+            <div class="dice-panel">
+                <h3><i class="fas fa-dice"></i> ROLAGEM DE DADOS</h3>
+                <div class="dice-buttons">
+                    <button class="dice-btn" onclick="rolarDado(20)">D20</button>
+                    <button class="dice-btn" onclick="rolarDado(12)">D12</button>
+                    <button class="dice-btn" onclick="rolarDado(10)">D10</button>
+                    <button class="dice-btn" onclick="rolarDado(8)">D8</button>
+                    <button class="dice-btn" onclick="rolarDado(6)">D6</button>
+                    <button class="dice-btn" onclick="rolarDado(4)">D4</button>
+                </div>
+                <div id="dice-result"></div>
+            </div>
+
+            <!-- BOTÕES PRINCIPAIS -->
+            <button class="btn" onclick="atualizarPreview()">
+                <i class="fas fa-sync"></i> ATUALIZAR PRÉVIA
+            </button>
+            <button class="btn" onclick="baixarFicha()">
+                <i class="fas fa-download"></i> BAIXAR FICHA (PNG)
+            </button>
+            <button class="btn btn-secondary" onclick="limparFicha()">
+                <i class="fas fa-trash"></i> LIMPAR TUDO
+            </button>
+        </aside>
+
+        <!-- VISUALIZAÇÃO DA FICHA -->
+        <main class="sheet-preview">
+            <div id="ficha-render">
+                
+                <!-- CABEÇALHO -->
+                <div class="sheet-header">
+                    <img src="https://cdn.discordapp.com/attachments/1447048682514944050/1447050177784315934/op-logo.png?ex=693635ff&is=6934e47f&hm=2b0eb716bd9fc1f2ef995127871d5551167b0d3abcb543ecef3b9808bc123ff6" class="sheet-logo" alt="Logo">
+                    <h1 id="preview-nome">NOME DO AGENTE</h1>
+                    <div class="subtitle">ORDO REALITAS // DOSSIÊ DE AGENTE OFICIAL</div>
+                </div>
+
+                <!-- INFORMAÇÕES BÁSICAS -->
+                <div class="sheet-section">
+                    <h3>IDENTIFICAÇÃO</h3>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <div class="info-label">Classe</div>
+                            <div class="info-value" id="preview-classe">Combatente</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">NEX</div>
+                            <div class="info-value" id="preview-nex">5%</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Origem</div>
+                            <div class="info-value" id="preview-origem">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATUS -->
+                <div class="sheet-section">
+                    <h3>STATUS DE COMBATE</h3>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <div class="info-label">Pontos de Vida</div>
+                            <div class="info-value" id="preview-pv">12</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Pontos de Esforço</div>
+                            <div class="info-value" id="preview-pe">2</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Sanidade</div>
+                            <div class="info-value" id="preview-san">12</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Defesa</div>
+                            <div class="info-value" id="preview-defesa">10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ATRIBUTOS -->
+                <div class="sheet-section">
+                    <h3>ATRIBUTOS</h3>
+                    <div class="attr-row">
+                        <div class="attr-box">
+                            <div class="attr-name">AGI</div>
+                            <div class="attr-val" id="preview-agi">1</div>
+                        </div>
+                        <div class="attr-box">
+                            <div class="attr-name">INT</div>
+                            <div class="attr-val" id="preview-int">1</div>
+                        </div>
+                        <div class="attr-box">
+                            <div class="attr-name">VIG</div>
+                            <div class="attr-val" id="preview-vig">1</div>
+                        </div>
+                        <div class="attr-box">
+                            <div class="attr-name">PRE</div>
+                            <div class="attr-val" id="preview-pre">1</div>
+                        </div>
+                        <div class="attr-box">
+                            <div class="attr-name">FOR</div>
+                            <div class="attr-val" id="preview-for">1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERÍCIAS -->
+                <div class="sheet-section">
+                    <h3>PERÍCIAS TREINADAS</h3>
+                    <div class="pericias-grid" id="preview-pericias">
+                        <div class="pericia-item"><span>Nenhuma perícia treinada</span></div>
+                    </div>
+                </div>
+
+                <!-- HABILIDADES -->
+                <div class="sheet-section">
+                    <h3>HABILIDADES & RITUAIS</h3>
+                    <div style="color: #aaa; font-size: 0.9rem; line-height: 1.6;" id="preview-habilidades">
+                        Nenhuma habilidade registrada.
+                    </div>
+                </div>
+
+                <!-- RODAPÉ -->
+                <div class="sheet-footer">
+                    DOCUMENTO GERADO VIA SISTEMA ORDO REALITAS v4.2 // CONFIDENCIAL
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        // ATUALIZAR PREVIEW
+        function atualizarPreview() {
+            document.getElementById('preview-nome').textContent = document.getElementById('nome').value || 'NOME DO AGENTE';
+            document.getElementById('preview-classe').textContent = document.getElementById('classe').value;
+            document.getElementById('preview-nex').textContent = document.getElementById('nex').value + '%';
+            document.getElementById('preview-origem').textContent = document.getElementById('origem').value || '-';
+            
+            document.getElementById('preview-pv').textContent = document.getElementById('pv').value;
+            document.getElementById('preview-pe').textContent = document.getElementById('pe').value;
+            document.getElementById('preview-san').textContent = document.getElementById('san').value;
+            document.getElementById('preview-defesa').textContent = document.getElementById('defesa').value;
+            
+            document.getElementById('preview-agi').textContent = document.getElementById('agi').value;
+            document.getElementById('preview-int').textContent = document.getElementById('int').value;
+            document.getElementById('preview-vig').textContent = document.getElementById('vig').value;
+            document.getElementById('preview-pre').textContent = document.getElementById('pre').value;
+            document.getElementById('preview-for').textContent = document.getElementById('for').value;
+
+            // Perícias
+            const periciasText = document.getElementById('pericias').value;
+            const periciasContainer = document.getElementById('preview-pericias');
+            if (periciasText.trim()) {
+                const lista = periciasText.split(',').map(p => p.trim()).filter(p => p);
+                periciasContainer.innerHTML = lista.map(p => 
+                    `<div class="pericia-item pericia-trained"><span>${p}</span><span>✓</span></div>`
+                ).join('');
+            } else {
+                periciasContainer.innerHTML = '<div class="pericia-item"><span>Nenhuma perícia treinada</span></div>';
+            }
+
+            // Habilidades
+            const habText = document.getElementById('habilidades').value;
+            document.getElementById('preview-habilidades').textContent = habText || 'Nenhuma habilidade registrada.';
+        }
+
+        // BAIXAR FICHA COMO IMAGEM
+        function baixarFicha() {
+            const ficha = document.getElementById('ficha-render');
+            const nomeAgente = document.getElementById('nome').value || 'Agente';
+            
+            html2canvas(ficha, {
+                backgroundColor: '#0a0a0a',
+                scale: 2,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Ficha_${nomeAgente.replace(/\s/g, '_')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // LIMPAR FICHA
+        function limparFicha() {
+            if(confirm('Tem certeza que deseja limpar todos os dados?')) {
+                document.querySelectorAll('input, textarea, select').forEach(el => {
+                    if(el.type === 'number') el.value = el.id === 'nex' ? 5 : 1;
+                    else el.value = '';
+                });
+                atualizarPreview();
+            }
+        }
+
+        // ROLAGEM DE DADOS
+        function rolarDado(faces) {
+            const resultado = Math.floor(Math.random() * faces) + 1;
+            const display = document.getElementById('dice-result');
+            display.innerHTML = `<i class="fas fa-dice"></i> D${faces}: <strong>${resultado}</strong>`;
+            
+            // Efeito visual
+            display.style.animation = 'none';
+            setTimeout(() => {
+                display.style.animation = 'pulse 0.5s ease';
+            }, 10);
+        }
+
+        // Atualizar preview automaticamente ao carregar
+        window.addEventListener('load', atualizarPreview);
+    </script>
+
+    <style>
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+
+</body>
+</html>

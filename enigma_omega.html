@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordo Realitas // Sistema de Análise de Ruído</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES E ÍCONES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ÁUDIO AMBIENTE (loop) -->
+    <audio id="bg-audio" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1e5b98e2b0.mp3?filename=dark-ambient-110397.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ÁUDIO MORSE / SINAL OCULTO -->
+    <audio id="code-audio">
+        <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_852673d25a.mp3?filename=morse-code-ambient-124238.mp3" type="audio/mpeg">
+    </audio>
+
+    <style>
+        :root {
+            --bg-dark: #020203;
+            --bg-panel: #050607;
+            --text-primary: #e0e0e0;
+            --text-muted: #8f8f8f;
+            --accent-gold: #d4af37;
+            --accent-red: #8a0000;
+            --accent-cyan: #00e5ff;
+            --accent-purple: #a000ff;
+            --border: rgba(255,255,255,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background: radial-gradient(circle at top, #151515 0, #050505 45%, #000 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* BACKGROUND FX */
+        .noise {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.25;
+            mix-blend-mode: soft-light;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+        }
+
+        .scanlines {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            background: linear-gradient(to bottom,
+                rgba(255,255,255,0) 0,
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2) 100%);
+            background-size: 100% 3px;
+            opacity: 0.4;
+        }
+
+        .vignette {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle, transparent 50%, #000 120%);
+        }
+
+        /* HEADER */
+        header {
+            position: sticky; top: 0; z-index: 10;
+            background: rgba(5,5,5,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+        }
+        .nav-logo span { color: var(--accent-gold); }
+        .nav-actions {
+            display: flex; gap: 0.75rem;
+        }
+        .btn-nav {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 0.35rem 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            background: transparent;
+        }
+        .btn-nav:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        /* HERO */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3.5rem 2rem 1rem 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+            gap: 2rem;
+            align-items: center;
+        }
+        .hero-title {
+            position: relative;
+        }
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.75rem;
+        }
+        .hero .subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+        .hero p { color: var(--text-muted); max-width: 600px; }
+        .hero-callout {
+            margin-top: 1.5rem;
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+        }
+
+        /* GRAFICO / OSCILOSCOPIO */
+        .hero-visual {
+            background: radial-gradient(circle at top, #111 0, #050505 60%, #000 100%);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .oscilloscope {
+            width: 100%; height: 180px;
+            border: 1px solid #222;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        .osc-line {
+            position: absolute; top: 50%; left: -10%;
+            width: 120%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            box-shadow: 0 0 8px var(--accent-cyan);
+            animation: scan 2s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-40px); opacity: 0.4; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .osc-noise {
+            position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(
+                to right,
+                rgba(0,255,255,0.15) 0 1px,
+                transparent 1px 3px
+            );
+            opacity: 0.2;
+            mix-blend-mode: screen;
+        }
+        .osc-label {
+            position: absolute; bottom: 8px; left: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .hero-visual small {
+            display: block;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+            color: #777;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .btn-main {
+            margin-top: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border: 1px solid var(--accent-cyan);
+            padding: 0.6rem 1.4rem;
+            background: transparent;
+            color: var(--accent-cyan);
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+        .btn-main:hover { background: var(--accent-cyan); color: #000; }
+
+        /* CONTEÚDO PRINCIPAL */
+        .layout {
+            max-width: 1200px;
+            margin: 0 auto 4rem auto;
+            padding: 0 2rem 4rem 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2.2fr) minmax(240px, 0.9fr);
+            gap: 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        .panel {
+            background: rgba(5,5,5,0.96);
+            border: 1px solid var(--border);
+            padding: 1.8rem 1.8rem 2rem 1.8rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: -6px; right: -6px;
+            width: 18px; height: 18px;
+            border-top: 2px solid var(--accent-gold);
+            border-right: 2px solid var(--accent-gold);
+        }
+        .panel-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+        .panel-sub {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .panel p { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+
+        .highlight {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            border-left: 2px solid var(--accent-cyan);
+            padding-left: 0.7rem;
+            margin-top: 0.5rem;
+            color: var(--accent-cyan);
+        }
+
+        /* TABELA / LOG */
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+        }
+        .log-table th, .log-table td {
+            border: 1px solid #111;
+            padding: 0.4rem 0.5rem;
+            text-align: left;
+        }
+        .log-table th {
+            background: #050505;
+            color: #888;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+        .log-table tr:nth-child(even) { background: #060606; }
+        .log-table tr:nth-child(odd) { background: #030303; }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: sticky;
+            top: 90px;
+            align-self: flex-start;
+        }
+        .sidebar-block {
+            background: rgba(4,4,4,0.98);
+            border: 1px solid var(--border);
+            padding: 1.2rem 1.4rem;
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 0.7rem;
+            color: var(--accent-gold);
+        }
+        .sidebar p {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .code-string {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-purple);
+            word-break: break-all;
+        }
+
+        /* SEÇÃO ESCONDIDA / CRIPTICA */
+        .anomalia {
+            background: #050505;
+            border: 1px solid #111;
+            padding: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 1rem;
+            position: relative;
+            cursor: default;
+        }
+
+        .anomalia span[data-k] {
+            opacity: 0.35;
+            transition: 0.3s;
+        }
+        .anomalia span[data-k]:hover {
+            opacity: 1;
+            color: var(--accent-cyan);
+        }
+
+        /* GLITCH HIDDEN TRIGGER */
+        .glitch-trigger {
+            font-size: 0.7rem;
+            color: #333;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        /* MODAL FINAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        .modal.active { display: flex; }
+        .modal-inner {
+            background: #050505;
+            border: 1px solid var(--accent-gold);
+            padding: 2rem 2.5rem;
+            max-width: 700px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .modal-inner h2 {
+            margin-bottom: 1rem;
+        }
+        .modal-inner p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: none;
+            border: none;
+            color: #555;
+            cursor: pointer;
+        }
+        .modal-close:hover { color: #fff; }
+
+        /* ANIMAÇÃO DE PISCAR NO TÍTULO DO MODAL */
+        @keyframes pulse {
+            0%, 100% { text-shadow: 0 0 0 transparent; }
+            50% { text-shadow: 0 0 18px rgba(212,175,55,0.8); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            font-size: 0.75rem;
+            color: #555;
+            border-top: 1px solid #111;
+        }
+
+        @media (max-width: 960px) {
+            .hero { grid-template-columns: 1fr; }
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<header>
+    <div class="nav-logo mono">
+        ORDO REALITAS <span>//</span> SISTEMA DE ANÁLISE DE RUÍDO
+    </div>
+    <div class="nav-actions">
+        <button class="btn-nav" id="btn-audio"><i class="fas fa-volume-off"></i> Áudio</button>
+        <button class="btn-nav" id="btn-hint">??</button>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-title">
+        <h1>Observatório de Interferência</h1>
+        <div class="subtitle">PROJETO: MEMBRANA-04 / PROTOCOLO: EC-Δ</div>
+        <p>
+            Esta página aparenta ser apenas um monitor de ruídos anômalos interceptados na costa de São Firmo.
+            Agentes são instruídos a registrar padrões incomuns, mas alguns desses padrões carregam mensagens
+            destinadas apenas a quem sabe o que procurar.
+        </p>
+        <div class="hero-callout">
+            > ORIENTAÇÃO: SE VOCÊ ESTÁ LENDO ISTO, JÁ ESTÁ SENDO OBSERVADO.
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <div class="oscilloscope" id="osc">
+            <div class="osc-line"></div>
+            <div class="osc-noise"></div>
+            <div class="osc-label">canal: sf-ruído-973 | ganho: 0.73 | offset: -0.04</div>
+        </div>
+        <small class="mono">
+            Clique em "Iniciar varredura" e observe qualquer irregularidade visual, textual ou sonora.
+            Tudo é suspeito; nada é gratuito.
+        </small>
+        <button class="btn-main" id="btn-scan">Iniciar varredura</button>
+    </div>
+</section>
+
+<main class="layout">
+    <section>
+        <!-- PAINEL 1 -->
+        <div class="panel">
+            <h2 class="panel-title">Registro de Pacotes</h2>
+            <div class="panel-sub">LOG DE SINAIS CAPTADOS — CANAL COSTEIRO</div>
+            <p>
+                Abaixo estão amostras de transmissão aparentemente corrompida. Agentes devem apenas
+                verificar se há padrões repetidos. Não há instruções adicionais.
+            </p>
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Horário</th>
+                        <th>Origem</th>
+                        <th>Nível</th>
+                        <th>Pacote</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>19:03:17</td>
+                        <td>FAROL-SF</td>
+                        <td>ALTO</td>
+                        <td data-seq="1">9-18-4-15 18-5-1-12-9-20-1-19</td>
+                    </tr>
+                    <tr>
+                        <td>19:10:42</td>
+                        <td>ILHA-EXTERNA</td>
+                        <td>MÉDIO</td>
+                        <td data-seq="2">5-19-20-1-15 19-5-13-16-18-5</td>
+                    </tr>
+                    <tr>
+                        <td>19:22:09</td>
+                        <td>CANAL-ALFA</td>
+                        <td>BAIXO</td>
+                        <td data-seq="3">1-16-5-14-1-19 5-19-20-1-13</td>
+                    </tr>
+                    <tr>
+                        <td>19:45:33</td>
+                        <td>SUBNÍVEL-3</td>
+                        <td>ALTO</td>
+                        <td data-seq="4">3-8-1-13-1-4-15 4-5</td>
+                    </tr>
+                    <tr>
+                        <td>20:01:02</td>
+                        <td>FAROL-SF</td>
+                        <td>MÉDIO</td>
+                        <td data-seq="5">18-9-16-1 12-5-13-2-18-1-14-3-1</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight">
+                > Dica técnica (aparentemente inútil): convém testar a substituição 1=A, 2=B, 3=C... e manter a ordem dos pacotes.
+            </div>
+        </div>
+
+        <!-- PAINEL 2 -->
+        <div class="panel">
+            <h2 class="panel-title">Relatório de Campo</h2>
+            <div class="panel-sub">TRANSCRIÇÃO DE ÁUDIO — OPERAÇÃO EC-Δ/004</div>
+            <p>
+                Parte da gravação foi corrompida por interferência. O agente que fez o relatório
+                descreve um sussurro repetindo números em intervalos irregulares.
+            </p>
+            <p>
+                "Quando olhei para o mar, os ruídos começaram a se alinhar. Três séries, 
+                sempre três séries. Era como se a própria água estivesse <span style="color:var(--accent-gold);">contando ao contrário</span>."
+            </p>
+            <div class="anomalia" id="anomalia">
+                <span data-k="13">7</span>
+                <span data-k="27">1</span>
+                <span data-k="2">4</span>
+                <span data-k="16">2</span>
+                <span data-k="9">8</span>
+                <span data-k="21">5</span>
+                <span data-k="3">0</span>
+                <span data-k="11">9</span>
+                <span data-k="19">2</span>
+                <span data-k="7">6</span>
+                <span data-k="24">3</span>
+                <span data-k="5">1</span>
+                <span data-k="18">7</span>
+                <span data-k="10">4</span>
+                <span data-k="1">9</span>
+                <span data-k="14">2</span>
+                <span data-k="4">6</span>
+                <span data-k="23">8</span>
+                <span data-k="12">5</span>
+                <span data-k="8">3</span>
+                <span data-k="20">0</span>
+                <span data-k="6">1</span>
+                <span data-k="15">3</span>
+                <span data-k="25">7</span>
+                <span data-k="17">4</span>
+                <span data-k="22">9</span>
+            </div>
+            <span class="glitch-trigger mono" id="glitch-hint">[ruído se repete a cada 9 batidas]</span>
+        </div>
+
+        <!-- PAINEL 3 -->
+        <div class="panel">
+            <h2 class="panel-title">Canal de Diagnóstico</h2>
+            <div class="panel-sub">INTERFACE TÉCNICA — APENAS PARA ENGENHEIROS</div>
+            <p>
+                Operadores experientes sabem que o canal de diagnóstico nunca é "apenas diagnóstico".
+                Se houver algo que não faça sentido, provavelmente é proposital.
+            </p>
+            <p>
+                Verifique o identificador abaixo. Ele parece estável, mas nem todos os blocos
+                pertencem ao mesmo sistema de codificação.
+            </p>
+            <p class="code-string" id="diag-code">
+                53-45-54-5F-4F-50-45-4E-5F-4F-55-54-52-4F-5F-57-4F-52-4C-44-0A-01010011-01000101-01001110-01010100-01010010-01001001-01001110-01001111
+            </p>
+            <p class="mono" style="font-size:0.75rem; color:#555; margin-top:0.9rem;">
+                [nota de rodapé ilegível]
+            </p>
+        </div>
+    </section>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-block">
+            <div class="sidebar-title"><i class="fas fa-info-circle"></i> Protocolo de Observação</div>
+            <p>
+                1. Ative o áudio. <br>
+                2. Inicie a varredura. <br>
+                3. Analise o que não se encaixa. <br>
+                4. Quando tiver CERTEZA, tente uma palavra-chave no console.
+            </p>
+        </div>
+
+        <div class="sidebar-block">
+            <div class="sidebar-title"><i class="fas fa-terminal"></i> Console</div>
+            <p style="margin-bottom:0.6rem;">Insira a palavra-chave decifrada:</p>
+            <input id="console-input" class="mono" type="text" placeholder="AGENTE..." style="width:100%; background:#000; border:1px solid #333; color:#fff; padding:0.4rem 0.5rem; font-size:0.8rem; margin-bottom:0.4rem;">
+            <button id="console-btn" class="btn-main" style="width:100%; font-size:0.75rem; text-align:center;">ENVIAR</button>
+            <p id="console-output" class="mono" style="font-size:0.75rem; color:#777; margin-top:0.6rem; min-height:1.2rem;"></p>
+        </div>
+    </aside>
+</main>
+
+<!-- MODAL FINAL -->
+<div class="modal" id="modal-final">
+    <div class="modal-inner">
+        <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+        <h2 style="animation:pulse 2s infinite;">ACESSO CONCEDIDO</h2>
+        <p class="mono" style="color:var(--accent-gold);">
+            Você cruzou as três camadas: texto, número e som.
+        </p>
+        <p>
+            A mensagem oculta confirma que o Setor 973 não é apenas um servidor — é um arquivo vivo de campanhas,
+            linhas temporais e agentes que se observam mutuamente. Nenhuma transmissão é realmente "ruído".
+        </p>
+        <p>
+            Os pacotes numéricos indicavam que a <strong>realidade é uma construção compartilhada</strong>.
+            A sequência de "batidas" revelava que <strong>o tempo não é linear dentro da Ilha</strong>.
+            E o identificador de diagnóstico apontava para <strong>o verdadeiro nome do subsistema</strong>.
+        </p>
+        <p>
+            Se você conseguiu decifrar, está pronto para lidar com mensagens que não foram feitas
+            para olhos comuns. Compartilhe o que entendeu — não como solução, mas como uma teoria.
+        </p>
+        <p class="mono" style="margin-top:1.2rem; color:#666;">
+            > Próxima etapa: observe se outros agentes conseguem chegar até aqui sem "spoilers". Isso também é um teste.
+        </p>
+    </div>
+</div>
+
+<footer>
+    ORDEM PARANORMAL © CELLBIT — Esta interface é um artefato de ficção para a campanha SETENTRIONAL. 
+</footer>
+
+<script>
+    const bgAudio = document.getElementById('bg-audio');
+    const codeAudio = document.getElementById('code-audio');
+    const btnAudio = document.getElementById('btn-audio');
+    const btnScan = document.getElementById('btn-scan');
+    const btnHint = document.getElementById('btn-hint');
+    const glitchHint = document.getElementById('glitch-hint');
+    const osc = document.getElementById('osc');
+    const consoleInput = document.getElementById('console-input');
+    const consoleBtn = document.getElementById('console-btn');
+    const consoleOutput = document.getElementById('console-output');
+    const modalFinal = document.getElementById('modal-final');
+    const modalClose = document.getElementById('modal-close');
+    const diagCode = document.getElementById('diag-code');
+    const anomalia = document.getElementById('anomalia');
+    let audioOn = false;
+    let scanActive = false;
+
+    btnAudio.addEventListener('click', () => {
+        if (!audioOn) {
+            bgAudio.volume = 0.45;
+            bgAudio.play();
+            btnAudio.innerHTML = '<i class="fas fa-volume-up"></i> Áudio';
+            audioOn = true;
+        } else {
+            bgAudio.pause();
+            btnAudio.innerHTML = '<i class="fas fa-volume-off"></i> Áudio';
+            audioOn = false;
+        }
+    });
+
+    btnScan.addEventListener('click', () => {
+        if (!scanActive) {
+            scanActive = true;
+            btnScan.textContent = 'Varredura em andamento...';
+            btnScan.disabled = true;
+            codeAudio.volume = 0.8;
+            codeAudio.play();
+            osc.style.boxShadow = '0 0 25px rgba(0,229,255,0.6)';
+            setTimeout(() => {
+                osc.style.boxShadow = 'none';
+            }, 5000);
+        }
+    });
+
+    btnHint.addEventListener('click', () => {
+        btnHint.textContent = '...';
+        setTimeout(() => {
+            btnHint.textContent = '??';
+        }, 800);
+    });
+
+    glitchHint.addEventListener('click', () => {
+        glitchHint.textContent = '[separe em blocos de 3, leia só o primeiro número de cada bloco]';
+        glitchHint.style.color = '#888';
+    });
+
+    consoleBtn.addEventListener('click', () => {
+        const value = consoleInput.value.trim().toUpperCase();
+        if (!value) {
+            consoleOutput.textContent = 'Nenhum dado enviado.';
+            return;
+        }
+        if (value === 'SETOR') {
+            consoleOutput.textContent = '> Padrão parcial detectado. Continue.';
+        } else if (value === 'SETOR973') {
+            consoleOutput.textContent = '> Padrão avançado detectado. Falta uma camada.';
+        } else if (value === 'SETENTRIONAL') {
+            consoleOutput.textContent = '';
+            modalFinal.classList.add('active');
+        } else {
+            consoleOutput.textContent = '> Ruído irreconhecível.';
+        }
+    });
+
+    consoleInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') consoleBtn.click();
+    });
+
+    modalClose.addEventListener('click', () => {
+        modalFinal.classList.remove('active');
+    });
+
+    modalFinal.addEventListener('click', (e) => {
+        if (e.target === modalFinal) modalFinal.classList.remove('active');
+    });
+
+    diagCode.addEventListener('click', () => {
+        if (!diagCode.dataset.revealed) {
+            diagCode.dataset.revealed = '1';
+            diagCode.style.color = '#ccc';
+        } else {
+            diagCode.dataset.revealed = '';
+            diagCode.style.color = 'var(--accent-purple)';
+        }
+    });
+
+    anomalia.addEventListener('dblclick', () => {
+        anomalia.style.color = '#999';
+    });
+</script>
+
+</body>
+</html>

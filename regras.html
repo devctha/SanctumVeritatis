@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SETENTRIONAL // REGRAS DA MESA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES E ÍCONES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-panel: #0f0f0f;
+            --text-primary: #e0e0e0;
+            --text-muted: #888888;
+            --accent-gold: #d4af37;
+            --accent-red: #8a0000;
+            --border: rgba(255,255,255,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #101010 0, #050505 45%, #000 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* TEXTURAS */
+        .overlay-noise {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.25;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+        }
+        .overlay-scanline {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 6;
+            background: linear-gradient(to bottom,
+                rgba(255,255,255,0) 0,
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.25) 50%,
+                rgba(0,0,0,0.25) 100%);
+            background-size: 100% 4px;
+            mix-blend-mode: soft-light;
+        }
+
+        /* HEADER SUPERIOR */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(5,5,5,0.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+        }
+        .logo span { color: var(--accent-gold); }
+        .header-right a {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            margin-left: 1.5rem;
+            text-transform: uppercase;
+        }
+        .header-right a:hover { color: var(--accent-gold); }
+
+        /* HERO */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem 2rem;
+            position: relative;
+        }
+        .hero-title {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.6rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.3rem 0.7rem;
+            text-transform: uppercase;
+        }
+        .hero p {
+            max-width: 800px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .hero-callout {
+            margin-top: 1.5rem;
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .layout {
+            max-width: 1200px;
+            margin: 0 auto 4rem auto;
+            padding: 0 2rem 4rem 2rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2.2fr) minmax(260px, 0.9fr);
+            gap: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* SUMÁRIO */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            align-self: flex-start;
+            background: rgba(10,10,10,0.9);
+            border: 1px solid var(--border);
+            padding: 1.5rem 1.4rem;
+        }
+        .sidebar h3 {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+        .toc-list {
+            list-style: none;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+        }
+        .toc-list li {
+            margin-bottom: 0.4rem;
+        }
+        .toc-list a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .toc-list a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* BLOCOS DE REGRAS */
+        .section-block {
+            background: rgba(10,10,10,0.9);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            padding: 1.75rem 1.8rem;
+            position: relative;
+        }
+        .section-block::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 22px;
+            height: 22px;
+            border-top: 2px solid var(--accent-gold);
+            border-right: 2px solid var(--accent-gold);
+            opacity: 0.7;
+        }
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .section-sub {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .rules-list {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        .rules-list li {
+            margin-bottom: 0.7rem;
+            padding-left: 1.8rem;
+            position: relative;
+        }
+        .rules-list li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            font-size: 0.55rem;
+            color: var(--accent-gold);
+        }
+        .rule-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+        }
+        .rule-body {
+            display: block;
+            margin-top: 0.1rem;
+            color: var(--text-primary);
+        }
+
+        /* AVISOS */
+        .callout {
+            border-left: 3px solid var(--accent-red);
+            background: rgba(138,0,0,0.08);
+            padding: 0.9rem 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+        }
+        .callout strong {
+            color: var(--accent-red);
+            text-transform: uppercase;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem 3rem 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border-top: 1px solid #111;
+        }
+
+        @media (max-width: 960px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            header { padding: 1rem 1.5rem; }
+            .hero { padding: 3rem 1.5rem 1.5rem 1.5rem; }
+            .sidebar { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay-noise"></div>
+<div class="overlay-scanline"></div>
+
+<header>
+    <div class="logo">
+        ORDO REALITAS <span>//</span> SETENTRIONAL
+    </div>
+    <div class="header-right">
+        <a href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Dossiê</a>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-title">
+        <h1>PROTOCOLO DE REGRAS</h1>
+        <div class="tag">Operação São Firmo</div>
+    </div>
+    <p>
+        Este documento define como o jogo funciona na mesa de SETENTRIONAL: o que é esperado de cada jogador, 
+        como os testes são feitos, quando cenas podem ser interrompidas e onde estão os limites que não devem ser cruzados. 
+        É um acordo de operação para garantir diversão, segurança e terror na medida certa.
+    </p>
+    <div class="hero-callout">
+        > Nenhuma história vale mais do que o conforto das pessoas na mesa. As regras existem para proteger a mesa, não para engessá-la.
+    </div>
+</section>
+
+<main class="layout">
+    <!-- COLUNA PRINCIPAL -->
+    <div>
+
+        <!-- 1. FUNDAMENTOS DA MESA -->
+        <section id="fundamentos" class="section-block">
+            <h2 class="section-title">Fundamentos da Mesa</h2>
+            <div class="section-sub">O que todo agente precisa saber antes de pisar na Ilha</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 01 — A mesa vem antes da missão.</span>
+                    <span class="rule-body">Se alguém não estiver confortável com uma cena, tema ou abordagem, a cena é ajustada ou cortada imediatamente, sem discussão ou justificativa necessária.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 02 — Consentimento é contínuo.</span>
+                    <span class="rule-body">Um assunto aceito no início da campanha pode deixar de ser confortável depois; qualquer jogador pode pedir mudança a qualquer momento.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 03 — O Mestre não é inimigo.</span>
+                    <span class="rule-body">O Mestre cria obstáculos, não tenta “ganhar” dos jogadores; o objetivo é construir tensão, não provar um ponto.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 04 — Jogador decide, personagem sofre.</span>
+                    <span class="rule-body">Quando você escolhe um risco, está escolhendo sujeitar o personagem às consequências, não a você como pessoa.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 05 — Clima acima de otimização.</span>
+                    <span class="rule-body">Construções extremas de personagem não devem quebrar o tom de terror ou transformar o jogo em competição de números.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 06 — Não monopolize o holofote.</span>
+                    <span class="rule-body">Evite monopolizar cenas, diálogos ou decisões; todo agente deve ter momentos de destaque ao longo da sessão.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 07 — Blefe não substitui respeito.</span>
+                    <span class="rule-body">Dentro do jogo, o personagem pode mentir; fora dele, as informações combinadas com o Mestre e outros jogadores são tratadas com honestidade.</span>
+                </li>
+            </ul>
+            <div class="callout">
+                <strong>Atenção:</strong> Se algum comportamento estiver prejudicando a diversão do grupo, a conversa será feita fora de jogo. Persistindo, o jogador pode ser desconvidado da campanha.
+            </div>
+        </section>
+
+        <!-- 2. ESTRUTURA DE EPISÓDIO -->
+        <section id="estrutura" class="section-block">
+            <h2 class="section-title">Estrutura de Episódio</h2>
+            <div class="section-sub">Como a sessão normalmente flui</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 08 — Abertura rápida.</span>
+                    <span class="rule-body">O jogo começa com um breve resumo do episódio anterior e um lembrete de ganchos pendentes; criação de ficha e ajustes são feitos antes do horário marcado.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 09 — Pausa é protocolar.</span>
+                    <span class="rule-body">Para sessões de 3–4 horas, haverá pelo menos uma pausa formal para água, banheiro e descanso mental.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 10 — Cena focada.</span>
+                    <span class="rule-body">Cenas longas de conversa são bem-vindas, mas o Mestre pode cortar ou avançar no tempo quando o ritmo começar a cair.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 11 — Clip de encerramento.</span>
+                    <span class="rule-body">Toda sessão termina com uma imagem ou momento forte: cliffhanger, revelação ou consequência clara para o próximo episódio.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 12 — Debrief rápido.</span>
+                    <span class="rule-body">Após o final, se houver tempo, o grupo pode comentar brevemente o que funcionou, o que pesou demais e o que querem ver mais.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 3. REGRAS DE NARRATIVA -->
+        <section id="narrativa" class="section-block">
+            <h2 class="section-title">Regras de Narrativa</h2>
+            <div class="section-sub">Como contar a história sem brigar com o dado</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 13 — Declare intenção antes de rolar.</span>
+                    <span class="rule-body">Explique o que o personagem faz e qual é o objetivo; o Mestre decide se há teste, qual atributo e qual consequência falha.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 14 — Falha ainda move a história.</span>
+                    <span class="rule-body">Testes falhos não travam a trama; em vez de “não acontece nada”, algo pior, mais caro ou mais demorado acontece.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 15 — Ninguém narra o fracasso do outro.</span>
+                    <span class="rule-body">Você pode sugerir ideias, mas o resultado final de um teste é narrado pelo Mestre, com espaço para o jogador complementar.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 16 — Flashbacks são permitidos.</span>
+                    <span class="rule-body">Combinado com o Mestre, flashbacks podem justificar preparos, contatos e equipamentos que façam sentido para o personagem.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 17 — Segredo é do personagem, não da mesa.</span>
+                    <span class="rule-body">Segredos importantes podem ser combinados com o Mestre e revelados aos poucos; a mesa, como público, pode saber antes dos personagens.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 18 — Monólogo não cancela cena.</span>
+                    <span class="rule-body">Monólogos dramáticos são bem-vindos, mas não podem ser usados para ignorar ações, ameaças ou tempo em cena.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 19 — Terror é colaborativo.</span>
+                    <span class="rule-body">Jogadores podem sugerir detalhes desconfortáveis ou estranhos, desde que respeitem os limites e avisos definidos pelo grupo.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 4. SISTEMA E ROLAGENS -->
+        <section id="sistema" class="section-block">
+            <h2 class="section-title">Sistema e Rolagens</h2>
+            <div class="section-sub">Quando rolar, como rolar e quando não rolar</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 20 — Dado aparece quando há risco.</span>
+                    <span class="rule-body">Se não há consequência interessante para falhar, a ação não exige teste: o personagem simplesmente consegue.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 21 — Testes abertos sempre que possível.</span>
+                    <span class="rule-body">Rolagens são feitas em canal visível para todos; segredos, quando necessários, ficam a cargo do Mestre.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 22 — Um teste por intenção.</span>
+                    <span class="rule-body">Evita-se empilhar múltiplos testes para a mesma ação; um único resultado resume o risco da cena.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 23 — Críticos são gatilhos narrativos.</span>
+                    <span class="rule-body">Sucessos críticos habilitam efeitos únicos, pistas extras ou impactos cinematográficos; falhas críticas abrem portas para problemas novos.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 24 — Repetir teste tem custo.</span>
+                    <span class="rule-body">Se o grupo insistir em repetir uma ação falha, algo precisa mudar: tempo gasto, recurso gasto ou risco aumentado.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 25 — Rolagens sociais valem tanto quanto combate.</span>
+                    <span class="rule-body">Testes de interação, investigação e medo são tratados com a mesma seriedade de ataques e defesas.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 26 — Dado não cancela acordo prévio.</span>
+                    <span class="rule-body">Nenhuma rolagem deve ser usada para quebrar consenso de mesa, segurança ou decisões combinadas fora de jogo.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 5. SEGURANÇA E LIMITES -->
+        <section id="seguranca" class="section-block">
+            <h2 class="section-title">Segurança e Limites</h2>
+            <div class="section-sub">Ferramentas para manter o terror saudável</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 27 — Conteúdo sensível é avisado.</span>
+                    <span class="rule-body">Temas pesados são anunciados antes da campanha e, quando forem surgir, recebem aviso curto antes da cena.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 28 — Qualquer pessoa pode pausar.</span>
+                    <span class="rule-body">Qualquer jogador pode pedir pausa na sessão, sem justificar, caso algo esteja desconfortável demais.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 29 — Off-topic emocional é bem-vindo.</span>
+                    <span class="rule-body">Se uma cena bate em algo pessoal, a pessoa tem espaço para falar fora de jogo e renegociar o tom.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 30 — Não se usa trauma real como arma.</span>
+                    <span class="rule-body">Histórias pessoais compartilhadas pelos jogadores não são usadas depois para “pegar mais pesado” com eles na ficção.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 31 — Não há punição por recuar.</span>
+                    <span class="rule-body">Se alguém reduzir envolvimento por desconforto, o grupo ajusta sem punições narrativas ou sociais.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 32 — O jogo não substitui terapia.</span>
+                    <span class="rule-body">Elementos de medo, culpa e trauma são ficcionais; para questões reais, a mesa incentiva buscar ajuda profissional, não resolver no jogo.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 6. CONDUTA ENTRE JOGADORES -->
+        <section id="conduta" class="section-block">
+            <h2 class="section-title">Conduta Entre Jogadores</h2>
+            <div class="section-sub">O que nunca fazer — dentro e fora de personagem</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 33 — Zero tolerância a preconceito.</span>
+                    <span class="rule-body">Comentários racistas, machistas, LGBTfóbicos ou ofensivos não são permitidos, nem “só como piada”, nem via personagem.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 34 — PvP só com consentimento claro.</span>
+                    <span class="rule-body">Conflito direto entre personagens só acontece se todos os envolvidos estiverem de acordo e o Mestre aprovar.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 35 — Não invalide a agência alheia.</span>
+                    <span class="rule-body">Evite dizer aos outros o que seus personagens “deveriam” fazer; ofereça sugestões, não ordens.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 36 — Não jogue por cima da fala.</span>
+                    <span class="rule-body">Durante cenas importantes, evite interrupções constantes; se necessário, o Mestre pode apontar quem fala.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 37 — Spoilers internos são combinados.</span>
+                    <span class="rule-body">Se você sabe algo por bastidor ou por ter lido material extra, não use essa informação sem alinhar com o Mestre.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 38 — Respeite ausência e atraso.</span>
+                    <span class="rule-body">Quando alguém não puder jogar, o grupo adapta a narrativa em vez de punir o personagem.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 7. JOGO ONLINE / FERRAMENTAS -->
+        <section id="online" class="section-block">
+            <h2 class="section-title">Jogo Online e Ferramentas</h2>
+            <div class="section-sub">Etiquetas para Discord, bots e TTS</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 39 — Microfone é parte da imersão.</span>
+                    <span class="rule-body">Evite ruídos constantes; quando não estiver em cena ou falando, mantenha o microfone mutado.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 40 — Chats paralelos com cuidado.</span>
+                    <span class="rule-body">Conversas de meme e comentários soltos são legais, mas não podem atrapalhar quem está descrevendo cena ou rolagem.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 41 — Bots são auxiliares, não juízes.</span>
+                    <span class="rule-body">Resultados de bots de rolagem são aceitos, mas o Mestre ainda pode ajustar dificuldades e efeitos conforme a narrativa.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 42 — Regras são públicas.</span>
+                    <span class="rule-body">House rules, mudanças de sistema e exceções são sempre registradas em canal de texto acessível a todos.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 43 — Feedback não é exposição.</span>
+                    <span class="rule-body">Críticas e ajustes são tratados em conversas privadas ou canais apropriados, nunca como ataque público.</span>
+                </li>
+                <li>
+                    <span class="rule-tag">Regra 44 — Final de sessão é desacelerar.</span>
+                    <span class="rule-body">Depois de cenas muito pesadas, o grupo é encorajado a conversar um pouco de coisas leves antes de encerrar a call.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 8. REGRA DE OURO -->
+        <section id="ouro" class="section-block">
+            <h2 class="section-title">Regra de Ouro da Operação</h2>
+            <div class="section-sub">Quando todas as outras falham</div>
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-tag">Regra 45 — A história é de todo mundo.</span>
+                    <span class="rule-body">Se seguir uma regra literalmente destruir a diversão do grupo, a regra pode ser dobrada, reescrita ou descartada em favor de uma solução conversada.</span>
+                </li>
+            </ul>
+            <div class="callout">
+                <strong>Em resumo:</strong> ninguém está aqui para vencer o jogo; estamos aqui para construir, juntos, uma história de terror que valha a pena lembrar.
+            </div>
+        </section>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h3><i class="fas fa-list-ul"></i> Sumário Rápido</h3>
+        <ul class="toc-list">
+            <li><a href="#fundamentos">Fundamentos da Mesa</a></li>
+            <li><a href="#estrutura">Estrutura de Episódio</a></li>
+            <li><a href="#narrativa">Regras de Narrativa</a></li>
+            <li><a href="#sistema">Sistema e Rolagens</a></li>
+            <li><a href="#seguranca">Segurança e Limites</a></li>
+            <li><a href="#conduta">Conduta Entre Jogadores</a></li>
+            <li><a href="#online">Jogo Online e Ferramentas</a></li>
+            <li><a href="#ouro">Regra de Ouro</a></li>
+        </ul>
+        <div class="callout" style="margin-top:1.5rem;">
+            <strong>Dica:</strong> use esta página como documento vivo. Ajuste, acrescente ou remova regras conforme o grupo evoluir.
+        </div>
+    </aside>
+</main>
+
+<footer>
+    SETENTRIONAL é um projeto de fã, sem fins lucrativos. Ordem Paranormal © Cellbit.<br>
+    Layout inspirado em templates modernos de sites de RPG e dark mode para leitura confortável.
+</footer>
+
+</body>
+</html>
