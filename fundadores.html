@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ORDO REALITAS // FUNDADORES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #0a0a0a;
+            --text-primary: #e0e0e0;
+            --text-muted: #888;
+            --accent-gold: #d4af37;
+            --accent-red: #8a0000;
+            --accent-purple: #4a0080;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* TEXTURAS */
+        .texture-noise {
+            position: fixed; inset: 0; pointer-events: none; z-index: -1; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        .vignette {
+            position: fixed; inset: 0; pointer-events: none; z-index: 10;
+            background: radial-gradient(circle, transparent 40%, #000 120%);
+        }
+
+        /* HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 1.5rem 3rem; background: rgba(5,5,5,0.95); backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; letter-spacing: 2px; }
+        .logo span { color: var(--accent-gold); }
+        .back-link { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; text-decoration: none; color: var(--text-muted); text-transform: uppercase; }
+        .back-link:hover { color: var(--accent-gold); }
+
+        /* HERO SECTION */
+        .hero {
+            height: 80vh; display: flex; align-items: center; justify-content: center;
+            position: relative; text-align: center; overflow: hidden;
+        }
+        .hero h1 {
+            font-family: 'Cinzel', serif; font-size: 4rem; text-transform: uppercase; letter-spacing: 10px;
+            background: linear-gradient(180deg, #fff, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            position: relative; z-index: 2;
+        }
+        .hero p {
+            font-family: 'Share Tech Mono', monospace; color: var(--accent-gold); letter-spacing: 3px;
+            margin-top: 1rem; position: relative; z-index: 2; font-size: 0.9rem;
+        }
+        .hero-bg-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Cinzel', serif; font-size: 15vw; opacity: 0.03; white-space: nowrap; pointer-events: none;
+        }
+
+        /* FUNDADORES GRID */
+        .founders-container {
+            max-width: 1300px; margin: 0 auto; padding: 4rem 2rem;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 4rem;
+        }
+
+        /* CARD DO FUNDADOR */
+        .founder-card {
+            background: var(--bg-card); border: 1px solid var(--border); position: relative;
+            transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .founder-card:hover { transform: translateY(-10px); border-color: var(--accent-gold); }
+
+        /* IMAGEM EFEITO */
+        .card-img-wrapper {
+            height: 400px; overflow: hidden; position: relative; filter: grayscale(100%); transition: 0.5s;
+        }
+        .founder-card:hover .card-img-wrapper { filter: grayscale(0%); }
+        .founder-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* TEXTO DO CARD */
+        .card-content { padding: 2.5rem; position: relative; }
+        .founder-role {
+            font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--accent-gold);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem;
+        }
+        .founder-name {
+            font-family: 'Cinzel', serif; font-size: 2rem; color: #fff; margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+        .founder-bio { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.7; }
+        
+        /* SISTEMAS TAGS */
+        .systems-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .sys-tag {
+            font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+            padding: 0.3rem 0.6rem; border: 1px solid #333; color: #666; text-transform: uppercase;
+        }
+        .founder-card:hover .sys-tag { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+        /* DETALHES DECORATIVOS */
+        .corner-mark {
+            position: absolute; width: 10px; height: 10px; border: 1px solid var(--accent-gold);
+            opacity: 0; transition: 0.3s;
+        }
+        .founder-card:hover .corner-mark { opacity: 1; }
+        .tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        /* RELAÇÃO (COUPLE / FRIENDS) */
+        .relation-badge {
+            position: absolute; top: 1rem; right: 1rem; z-index: 5;
+            background: rgba(0,0,0,0.8); border: 1px solid var(--accent-red);
+            padding: 0.4rem 0.8rem; font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem; color: var(--accent-red); text-transform: uppercase;
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 900px) {
+            .founders-container { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; letter-spacing: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="texture-noise"></div>
+    <div class="vignette"></div>
+
+    <header>
+        <div class="logo">SETOR 973 <span>//</span> ALTO COMANDO</div>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Voltar à Base</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-bg-text">LEADERSHIP</div>
+        <div>
+            <h1>Os Fundadores</h1>
+            <p>// ARQUITETOS DO PESADELO</p>
+        </div>
+    </section>
+
+    <div class="founders-container">
+        
+        <!-- CARD 1: CORVO -->
+        <article class="founder-card">
+            <div class="corner-mark tl"></div> <div class="corner-mark br"></div>
+            <div class="relation-badge"><i class="fas fa-ring"></i> Casal Fundador</div>
+            
+            <div class="card-img-wrapper">
+                <img src="https://cdn.discordapp.com/attachments/1328421433285677198/1447664029425205278/0127.png?ex=693871b0&is=69372030&hm=69a41fa6ed2e3b29109a36b560210acca8b6a8ec60627cfb8d748a6695c88844" class="founder-img" alt="Corvo">
+                <div style="position:absolute; bottom:0; left:0; width:100%; height:50%; background:linear-gradient(to top, #0a0a0a, transparent);"></div>
+            </div>
+            
+            <div class="card-content">
+                <div class="founder-role">Líder & Mestre Principal</div>
+                <h2 class="founder-name">Corvo <span style="font-size:1rem; color:#444; margin-left:10px;">(26)</span></h2>
+                <p class="founder-bio">
+                    A mente estratégica por trás do Setor 973. Especialista em horror tático e construção de mundos densos. Suas narrativas exigem frieza e sacrifício. Marido da Mariposa e pilar central da guilda.
+                </p>
+                <div class="systems-list">
+                    <span class="sys-tag">Ordem Paranormal</span>
+                    <span class="sys-tag">Game of Thrones</span>
+                    <span class="sys-tag">Vampiro</span>
+                    <span class="sys-tag">Call of Cthulhu</span>
+                    <span class="sys-tag">Mothership</span>
+                    <span class="sys-tag">Homebrews</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- CARD 2: MARIPOSA -->
+        <article class="founder-card">
+            <div class="corner-mark tl"></div> <div class="corner-mark br"></div>
+            <div class="relation-badge"><i class="fas fa-ring"></i> Casal Fundador</div>
+            
+            <div class="card-img-wrapper">
+                <img src="https://cdn.discordapp.com/attachments/1328421433285677198/1447666353438724196/F09F93B820ashleyosborn.png?ex=693873db&is=6937225b&hm=6e30975a2241000af28613fe08ad0a3c8075a03a1bbe13b8d28e6d82e278aedd" class="founder-img" alt="Mariposa">
+                <div style="position:absolute; bottom:0; left:0; width:100%; height:50%; background:linear-gradient(to top, #0a0a0a, transparent);"></div>
+            </div>
+            
+            <div class="card-content">
+                <div class="founder-role">Administração & Lore</div>
+                <h2 class="founder-name">Mariposa <span style="font-size:1rem; color:#444; margin-left:10px;">(25)</span></h2>
+                <p class="founder-bio">
+                    A alma criativa que equilibra o caos. Especialista em dramas pessoais e horror psicológico. Esposa do Corvo, ela garante que cada ficha tenha um coração pulsante antes de ser estraçalhado.
+                </p>
+                <div class="systems-list">
+                    <span class="sys-tag">Ordem Paranormal</span>
+                    <span class="sys-tag">Game of Thrones</span>
+                    <span class="sys-tag">Call of Cthulhu</span>
+                    <span class="sys-tag">Vampiro</span>
+                    <span class="sys-tag">Tormenta 20</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- CARD 3: NOIR -->
+        <article class="founder-card">
+            <div class="corner-mark tl"></div> <div class="corner-mark br"></div>
+            <div class="relation-badge" style="border-color:#444; color:#888;">Aliado do Círculo</div>
+            
+            <div class="card-img-wrapper">
+                <img src="https://cdn.discordapp.com/attachments/1402302584123031675/1447674601222967326/pixai-1858734046755700388-1.png?ex=69387b89&is=69372a09&hm=ee192b4f71f3a822b9c65b4739537e5f1669fcc7b7f389b2b1dc0704f2e7f66f" class="founder-img" alt="Noir">
+                <div style="position:absolute; bottom:0; left:0; width:100%; height:50%; background:linear-gradient(to top, #0a0a0a, transparent);"></div>
+            </div>
+            
+            <div class="card-content">
+                <div class="founder-role">Investigação & Regras</div>
+                <h2 class="founder-name">Noir <span style="font-size:1rem; color:#444; margin-left:10px;">(23)</span></h2>
+                <p class="founder-bio">
+                    O especialista em sistemas. Amigo de longa data do casal, Noir traz o rigor mecânico para a mesa. Mestre em criar mistérios investigativos onde cada detalhe importa.
+                </p>
+                <div class="systems-list">
+                    <span class="sys-tag">Ordem Paranormal</span>
+                    <span class="sys-tag">Tormenta</span>
+                    <span class="sys-tag">D&D 5e</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- CARD 4: EPICGRAIL -->
+        <article class="founder-card">
+            <div class="corner-mark tl"></div> <div class="corner-mark br"></div>
+            <div class="relation-badge" style="border-color:#444; color:#888;">Aliado do Círculo</div>
+            
+            <div class="card-img-wrapper">
+                <img src="https://cdn.discordapp.com/attachments/1282025767714291813/1447717729380597810/0fcce7c17ec8f0c65d91c540f9adad85.jpg?ex=6938a3b3&is=69375233&hm=d9c3e2eb037b603e18d1605d5b47c3bf2f48e80a422ace6b951bac54e94165a5" class="founder-img" alt="EpicGrail">
+                <div style="position:absolute; bottom:0; left:0; width:100%; height:50%; background:linear-gradient(to top, #0a0a0a, transparent);"></div>
+            </div>
+            
+            <div class="card-content">
+                <div class="founder-role">Narrativa & Mundo</div>
+                <h2 class="founder-name">EpicGrail <span style="font-size:1rem; color:#444; margin-left:10px;">(21)</span></h2>
+                <p class="founder-bio">
+                    O mais jovem, porém um veterano em construção de mundos épicos. Traz a grandiosidade da fantasia medieval adaptada para o horror moderno. O braço direito do grupo em grandes campanhas.
+                </p>
+                <div class="systems-list">
+                    <span class="sys-tag">D&D 5e</span>
+                    <span class="sys-tag">Game of Thrones</span>
+                    <span class="sys-tag">Ordem Paranormal</span>
+                </div>
+            </div>
+        </article>
+
+    </div>
+
+    <footer style="text-align:center; padding:2rem; color:#444; font-size:0.75rem; border-top:1px solid #111;">
+        SETOR 973 // ARQUIVO DE PESSOAL CONFIDENCIAL
+    </footer>
+
+</body>
+</html>

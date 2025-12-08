@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ORDO REALITAS // CRIAÇÃO DE HISTÓRICO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SCRIPT DE EXPORTAÇÃO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-panel: #0a0a0a;
+            --text-primary: #e0e0e0;
+            --text-muted: #888;
+            --accent-gold: #d4af37;
+            --accent-red: #8a0000;
+            --border: rgba(255,255,255,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* TEXTURA DE FUNDO */
+        .bg-noise {
+            position: fixed; inset: 0; pointer-events: none; z-index: -1;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* HEADER */
+        header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(5,5,5,0.9);
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 50;
+        }
+        .logo { font-family: 'Share Tech Mono', monospace; letter-spacing: 2px; font-size: 0.9rem; }
+        .logo span { color: var(--accent-gold); }
+
+        /* LAYOUT PRINCIPAL */
+        .container {
+            max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem;
+            display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem;
+        }
+
+        /* COLUNA DA ESQUERDA: PERGUNTAS */
+        .guide-panel {
+            position: sticky; top: 100px; align-self: start;
+        }
+        .guide-title {
+            font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--accent-gold);
+            margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
+        }
+        
+        .question-block {
+            margin-bottom: 2rem;
+            opacity: 0.7; transition: 0.3s;
+            border-left: 2px solid transparent; padding-left: 1rem;
+        }
+        .question-block:hover, .question-block.active { opacity: 1; border-left-color: var(--accent-gold); }
+        .q-label {
+            font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--accent-gold);
+            text-transform: uppercase; margin-bottom: 0.3rem; display: block;
+        }
+        .q-text { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .q-hint { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* COLUNA DA DIREITA: EDITOR */
+        .editor-panel {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            padding: 2rem; position: relative;
+        }
+        .editor-panel::before {
+            content: ''; position: absolute; top: -1px; left: -1px; width: 20px; height: 20px;
+            border-top: 2px solid var(--accent-gold); border-left: 2px solid var(--accent-gold);
+        }
+
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label {
+            display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.8rem;
+            color: var(--text-muted); margin-bottom: 0.5rem;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%; background: #080808; border: 1px solid #333; color: #eee;
+            padding: 1rem; font-family: 'Inter', sans-serif; font-size: 0.95rem;
+            transition: 0.3s;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: var(--accent-gold); outline: none;
+        }
+        .input-group textarea { min-height: 400px; resize: vertical; line-height: 1.7; }
+
+        .btn-action {
+            width: 100%; padding: 1rem; background: transparent; border: 1px solid var(--accent-gold);
+            color: var(--accent-gold); font-family: 'Share Tech Mono', monospace;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            margin-top: 1rem;
+        }
+        .btn-action:hover { background: var(--accent-gold); color: #000; }
+
+        /* --- ÁREA DE RENDERIZAÇÃO (ESCONDIDA ATÉ O DOWNLOAD) --- */
+        #render-area {
+            position: absolute; left: -9999px; top: 0; width: 800px;
+            background: #080808; padding: 4rem; color: #e0e0e0;
+            border: 1px solid #333; font-family: 'Inter', sans-serif;
+        }
+        .doc-header {
+            border-bottom: 2px solid var(--accent-gold); padding-bottom: 1.5rem; margin-bottom: 2rem;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        .doc-title { font-family: 'Cinzel', serif; font-size: 2rem; color: var(--accent-gold); }
+        .doc-meta { font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #666; text-align: right; }
+        
+        .doc-body { white-space: pre-wrap; font-size: 1rem; color: #ccc; line-height: 1.8; text-align: justify; }
+        .doc-footer {
+            margin-top: 4rem; padding-top: 1rem; border-top: 1px solid #333;
+            font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #444; text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .guide-panel { position: static; margin-bottom: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-noise"></div>
+
+    <header>
+        <div class="logo">ORDO REALITAS <span>//</span> PSYCH PROFILE</div>
+        <a href="index.html" style="color:var(--text-muted); text-decoration:none; font-size:0.8rem;"><i class="fas fa-arrow-left"></i> VOLTAR</a>
+    </header>
+
+    <div class="container">
+        
+        <!-- GUIA DE PERGUNTAS -->
+        <aside class="guide-panel">
+            <h2 class="guide-title">Diretrizes de Escrita</h2>
+            <p style="font-size:0.9rem; color:#666; margin-bottom:2rem;">Use estas perguntas como base. Você não precisa responder todas, mas elas ajudam a dar profundidade.</p>
+
+            <div class="question-block active">
+                <span class="q-label">01. ORIGEM</span>
+                <div class="q-text">Quem você era antes da Ordem?</div>
+                <div class="q-hint">Qual era sua profissão? Onde você morava? Você tinha uma vida normal ou já vivia à margem?</div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">02. O TRAUMA</span>
+                <div class="q-text">Qual foi seu primeiro contato com o Paranormal?</div>
+                <div class="q-hint">Você perdeu alguém? Viu algo que não devia? Sobreviveu a um ataque? Esse é o motivo de você ter sido recrutado.</div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">03. MEDO E FRAQUEZA</span>
+                <div class="q-text">O que te apavora de verdade?</div>
+                <div class="q-hint">Não apenas monstros. É a solidão? O fracasso? A perda de controle? Como isso afeta suas decisões?</div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label">04. OBJETIVO</span>
+                <div class="q-text">Por que você continua lutando?</div>
+                <div class="q-hint">Vingança? Proteção? Curiosidade mórbida? Ou você simplesmente não tem mais para onde ir?</div>
+            </div>
+        </aside>
+
+        <!-- ÁREA DE ESCRITA -->
+        <main class="editor-panel">
+            <h2 style="font-family:'Cinzel', serif; margin-bottom:1.5rem; color:#fff;">REGISTRO DE AGENTE</h2>
+            
+            <div class="input-group">
+                <label>NOME DO AGENTE</label>
+                <input type="text" id="char-name" placeholder="Ex: Arthur Cervero">
+            </div>
+
+            <div class="input-group">
+                <label>ARQUIVO DE BACKGROUND</label>
+                <textarea id="char-story" placeholder="Comece a escrever sua história aqui... Use os tópicos ao lado como guia."></textarea>
+            </div>
+
+            <button class="btn-action" onclick="gerarDossie()">
+                <i class="fas fa-file-export"></i> PROCESSAR E BAIXAR DOSSIÊ (IMAGEM)
+            </button>
+            <p style="font-size:0.75rem; color:#555; text-align:center; margin-top:0.5rem;">O arquivo será salvo como PNG de alta resolução.</p>
+        </main>
+    </div>
+
+    <!-- MODELO OCULTO PARA GERAR A IMAGEM -->
+    <div id="render-area">
+        <div class="doc-header">
+            <div>
+                <div class="doc-title" id="render-name">NOME DO AGENTE</div>
+                <div style="font-size:0.9rem; color:#888; text-transform:uppercase;">PERFIL PSICOLÓGICO & HISTÓRICO</div>
+            </div>
+            <div class="doc-meta">
+                ORDO REALITAS<br>
+                SETOR 973: CASOS ARQUIVADOS<br>
+                CONFIDENCIAL
+            </div>
+        </div>
+        
+        <div class="doc-body" id="render-text">
+            [O texto do jogador aparecerá aqui...]
+        </div>
+
+        <div class="doc-footer">
+            DOCUMENTO GERADO VIA SISTEMA 973 // USO EXCLUSIVO DA MESA SETENTRIONAL
+        </div>
+    </div>
+
+    <script>
+        // Interatividade das perguntas (apenas visual)
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.addEventListener('click', () => {
+                document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+                block.classList.add('active');
+            });
+        });
+
+        function gerarDossie() {
+            const nome = document.getElementById('char-name').value || 'DESCONHECIDO';
+            const historia = document.getElementById('char-story').value || 'Nenhum registro encontrado.';
+
+            // Preencher a área oculta
+            document.getElementById('render-name').textContent = nome;
+            document.getElementById('render-text').textContent = historia;
+
+            const renderArea = document.getElementById('render-area');
+
+            // Gerar imagem
+            html2canvas(renderArea, {
+                backgroundColor: '#080808',
+                scale: 2 // Alta resolução
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Dossie_${nome.replace(/\s/g, '_')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+
+</body>
+</html>

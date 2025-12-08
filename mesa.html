@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ORDO REALITAS // SOBRE A OPERAÇÃO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-panel: #0a0a0a;
+            --text-primary: #e0e0e0;
+            --text-muted: #888;
+            --accent-gold: #d4af37;
+            --accent-red: #8a0000;
+            --accent-blue: #00bcd4;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* TEXTURAS */
+        .bg-grid {
+            position: fixed; inset: 0; pointer-events: none; z-index: -1;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.5;
+        }
+        .vignette {
+            position: fixed; inset: 0; pointer-events: none; z-index: 10;
+            background: radial-gradient(circle, transparent 40%, #000 120%);
+        }
+
+        /* HEADER */
+        header {
+            padding: 1.5rem 3rem; background: rgba(5,5,5,0.95);
+            border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-family: 'Share Tech Mono', monospace; letter-spacing: 2px; font-size: 0.9rem; }
+        .logo span { color: var(--accent-gold); }
+
+        /* HERO TEXT */
+        .hero {
+            max-width: 900px; margin: 4rem auto 2rem auto; text-align: center; padding: 0 1.5rem;
+        }
+        .hero h1 {
+            font-family: 'Cinzel', serif; font-size: 2.8rem; color: #fff; margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        .hero-tag {
+            display: inline-block; padding: 0.4rem 0.8rem; border: 1px solid var(--accent-gold);
+            color: var(--accent-gold); font-family: 'Share Tech Mono', monospace; font-size: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* SEÇÕES DE CONTEÚDO */
+        .content-block {
+            max-width: 1000px; margin: 0 auto 4rem auto; padding: 0 2rem;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+        }
+        .content-text h2 {
+            font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--accent-gold); margin-bottom: 1rem;
+        }
+        .content-text p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1rem; }
+        
+        /* DESTAQUE DE VALOR (PREÇO) */
+        .value-box {
+            background: rgba(212, 175, 55, 0.05); border: 1px solid var(--accent-gold);
+            padding: 2rem; position: relative;
+        }
+        .value-box h3 {
+            font-family: 'Share Tech Mono', monospace; color: var(--accent-gold); font-size: 1rem;
+            text-transform: uppercase; margin-bottom: 1rem; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 0.5rem;
+        }
+        .check-list { list-style: none; margin-top: 1rem; }
+        .check-list li {
+            margin-bottom: 0.8rem; color: #ccc; font-size: 0.9rem; position: relative; padding-left: 1.5rem;
+        }
+        .check-list li::before {
+            content: "\f00c"; font-family: "Font Awesome 5 Free"; font-weight: 900;
+            position: absolute; left: 0; color: var(--accent-gold); font-size: 0.8rem;
+        }
+
+        /* PLATAFORMA (TABLETOP) */
+        .platform-box {
+            border: 1px solid var(--accent-blue); background: rgba(0, 188, 212, 0.05);
+            padding: 2rem; position: relative; margin-top: 2rem;
+        }
+        .platform-title { color: var(--accent-blue); font-family: 'Share Tech Mono', monospace; text-transform: uppercase; margin-bottom: 1rem; }
+
+        /* CTA FINAL */
+        .cta-section {
+            text-align: center; padding: 4rem 2rem; background: #080808; border-top: 1px solid var(--border);
+        }
+        .btn-cta {
+            display: inline-block; padding: 1rem 3rem; background: var(--accent-gold); color: #000;
+            font-family: 'Share Tech Mono', monospace; font-weight: bold; text-decoration: none;
+            text-transform: uppercase; font-size: 1.1rem; transition: 0.3s;
+        }
+        .btn-cta:hover { background: #fff; transform: scale(1.05); }
+
+        @media (max-width: 900px) {
+            .content-block { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="vignette"></div>
+
+    <header>
+        <div class="logo">SETOR 973 <span>//</span> BRIEFING OPERACIONAL</div>
+        <a href="index.html" style="color:var(--text-muted); text-decoration:none; font-size:0.8rem;"><i class="fas fa-arrow-left"></i> VOLTAR</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-tag">MEMORANDO DE RECRUTAMENTO</div>
+        <h1>Por que lutar pelo Setor 973?</h1>
+        <p style="font-size:1.1rem; color:#bbb;">
+            Esta não é apenas mais uma mesa de fim de semana. É uma experiência de horror imersivo, 
+            construída com rigor profissional para quem busca profundidade narrativa e tática.
+        </p>
+    </section>
+
+    <!-- BLOCO 1: O VALOR DA EXPERIÊNCIA -->
+    <section class="content-block">
+        <div class="content-text">
+            <h2>Investimento na Imersão</h2>
+            <p>
+                Muitos perguntam: <em>"Por que pagar R$ 30,00 por sessão se existem mesas gratuitas?"</em>
+            </p>
+            <p>
+                A resposta é simples: <strong>Compromisso e Produção</strong>. Mesas gratuitas frequentemente sofrem com cancelamentos de última hora, mestres despreparados e falta de acabamento visual.
+            </p>
+            <p>
+                No Setor 973, sua taxa financia a manutenção de servidores, a compra de assets premium, trilhas sonoras licenciadas e, principalmente, garante que todos na mesa (mestre e jogadores) estejam 100% dedicados à história naquele horário.
+            </p>
+        </div>
+        <div class="value-box">
+            <h3><i class="fas fa-shield-alt"></i> O que sua contribuição garante:</h3>
+            <ul class="check-list">
+                <li>Mestre experiente com preparação profissional.</li>
+                <li>Zero cancelamentos por "falta de vontade".</li>
+                <li>Trilhas sonoras exclusivas e engenharia de áudio.</li>
+                <li>Mapas e handouts 3D de alta fidelidade.</li>
+                <li>Sessões que começam e terminam no horário.</li>
+                <li>Grupo selecionado e engajado (sem "trolls").</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- BLOCO 2: A PLATAFORMA (TABLETOP SIMULATOR) -->
+    <section class="content-block" style="direction: rtl;"> <!-- Inverte ordem visual -->
+        <div class="content-text" style="direction: ltr;">
+            <h2 style="color:var(--accent-blue);">O Campo de Batalha: Tabletop Simulator</h2>
+            <p>
+                Esqueça os tabuleiros 2D estáticos. Nós jogamos no <strong>Tabletop Simulator</strong> para trazer fisicalidade ao horror.
+            </p>
+            <p>
+                Aqui, você pode pegar os documentos com a mão, lançar os dados com sua própria força e ver a miniatura do monstro em escala real diante do seu agente.
+            </p>
+            <div class="platform-box">
+                <div class="platform-title"><i class="fas fa-vr-cardboard"></i> DIFERENCIAL TÉCNICO</div>
+                <p style="font-size:0.9rem; color:#ccc; margin-bottom:0;">
+                    Usamos scripts personalizados para automatizar fichas sem perder a sensação de "jogo de mesa". 
+                    Mapas com iluminação dinâmica, neblina volumétrica e props 3D que podem ser inspecionados em busca de pistas físicas.
+                </p>
+            </div>
+        </div>
+        <div style="direction: ltr;">
+            <!-- Placeholder para imagem/vídeo do TTS -->
+            <img src="https://images.unsplash.com/photo-1642425149856-639db5c9535b?q=80&w=1000&auto=format&fit=crop" style="width:100%; border:1px solid var(--accent-blue); filter:grayscale(50%);" alt="Tabletop Simulator Gameplay">
+            <p style="text-align:center; font-size:0.7rem; color:#666; margin-top:0.5rem; font-family:'Share Tech Mono', monospace;">VISUALIZAÇÃO TÁTICA 3D DO SETOR</p>
+        </div>
+    </section>
+
+    <!-- BLOCO 3: CONCLUSÃO / COMUNIDADE -->
+    <section class="content-block">
+        <div class="content-text" style="width:100%;">
+            <h2>Mais que uma campanha, um Universo</h2>
+            <p>
+                Ao entrar no Setor 973, você não joga apenas uma aventura isolada. Seu agente faz parte de um cânone vivo. 
+                Ações em uma mesa podem gerar ecos em outras missões do servidor.
+            </p>
+            <p>
+                Oferecemos canais de <em>off-roleplay</em> textuais ativos durante a semana, onde seu personagem pode interagir com outros agentes, 
+                criar laços e investigar mistérios menores entre as sessões oficiais. O RPG não para quando a chamada encerra.
+            </p>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 style="font-family:'Cinzel', serif; color:#fff; margin-bottom:1rem;">PRONTO PARA ASSINAR O CONTRATO?</h2>
+        <p style="color:#888; margin-bottom:2.5rem;">Vagas são limitadas por esquadrão.</p>
+        <a href="#" class="btn-cta">ALISTAR-SE AGORA</a>
+    </section>
+
+</body>
+</html>
