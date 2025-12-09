@@ -116,8 +116,29 @@
             margin-top: 2rem; padding: 1rem; border: 1px solid #333;
             display: flex; align-items: center; gap: 1rem;
         }
-        .play-btn { width: 40px; height: 40px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; cursor: pointer; }
-        .sound-wave { height: 20px; flex-grow: 1; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20" viewBox="0 0 100 20"><path d="M0 10 L5 2 L10 18 L15 5 L20 15 L25 8 L30 12" stroke="%23555" fill="none"/></svg>'); background-size: contain; }
+        .play-btn { 
+            width: 40px; height: 40px; background: var(--gold); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            color: black; cursor: pointer; transition: 0.2s;
+        }
+        .play-btn:hover { transform: scale(1.1); background: #fff; }
+        
+        .sound-wave { 
+            height: 20px; flex-grow: 1; 
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20" viewBox="0 0 100 20"><path d="M0 10 L5 2 L10 18 L15 5 L20 15 L25 8 L30 12" stroke="%23555" fill="none"/></svg>'); 
+            background-size: contain; 
+            opacity: 0.5;
+        }
+        /* Classe para animar a onda quando tocando */
+        .sound-wave.playing {
+            animation: waveMove 1s linear infinite;
+            opacity: 1;
+            filter: drop-shadow(0 0 5px var(--gold));
+        }
+        @keyframes waveMove {
+            from { background-position: 0 0; }
+            to { background-position: 100px 0; }
+        }
 
         /* --- MANIFESTO (Cellbit Comparison) --- */
         .manifesto {
@@ -174,7 +195,7 @@
             </div>
             
             <div class="profile-frame">
-                <!-- COLOCAR SUA FOTO AQUI, ou um avatar misterioso de um Corvo/Ocultista -->
+                <!-- FOTO DO MESTRE -->
                 <img src="images/0127.png" alt="Foto do Mestre" class="profile-img">
             </div>
         </div>
@@ -228,9 +249,9 @@
                 <p style="font-size: 0.9rem; color: #888;">Temas compostos exclusivamente para os momentos de tensão da nossa mesa.</p>
                 
                 <div class="audio-visual">
-                    <div class="play-btn"><i class="fas fa-play"></i></div>
-                    <div class="mono" style="font-size: 0.7rem; color: #666;">TEMA: "NEBLINA DE SÃO FIRMO"</div>
-                    <div class="sound-wave"></div>
+                    <div class="play-btn" id="playTrigger"><i class="fas fa-play"></i></div>
+                    <div class="mono" style="font-size: 0.7rem; color: #666;">TEMA: "NEBLINA DE SÃO FIRMO"</div>   
+                    <div class="sound-wave" id="soundWave"></div>
                 </div>
             </div>
         </div>
@@ -263,6 +284,42 @@
     <footer style="text-align: center; padding: 2rem; border-top: 1px solid #111; color: #444; font-size: 0.8rem;">
         &copy; 2025 Astra "Corvo" Productions.
     </footer>
+
+    <!-- AUDIO PLAYER OCULTO -->
+    <!-- Coloque o LINK da sua música gerada pelo Suno aqui no 'src' -->
+    <audio id="themeAudio" src="images/1.mp3"></audio>
+
+    <script>
+        const playBtn = document.getElementById('playTrigger');
+        const audio = document.getElementById('themeAudio');
+        const soundWave = document.getElementById('soundWave');
+        const icon = playBtn.querySelector('i');
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            if (!isPlaying) {
+                audio.play();
+                isPlaying = true;
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+                soundWave.classList.add('playing');
+            } else {
+                audio.pause();
+                isPlaying = false;
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+                soundWave.classList.remove('playing');
+            }
+        });
+
+        // Reseta o botão quando a música acabar
+        audio.addEventListener('ended', () => {
+            isPlaying = false;
+            icon.classList.remove('fa-pause');
+            icon.classList.add('fa-play');
+            soundWave.classList.remove('playing');
+        });
+    </script>
 
 </body>
 </html>
