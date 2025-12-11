@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>LOG CRIPTOGRAFADO // OPERAÇÃO DRACONIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #020304;
+      --primary: #00ff9c;
+      --accent: #ff2f6e;
+      --accent2: #00c4ff;
+      --danger: #ff375a;
+      --muted: #777;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #151515 0, #000 70%);
+      color: var(--primary);
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .scan {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.5) 50%),
+        linear-gradient(90deg, rgba(255,0,0,0.08), rgba(0,255,0,0.02), rgba(0,0,255,0.08));
+      background-size: 100% 2px, 3px 100%;
+      mix-blend-mode: soft-light;
+      opacity: 0.6;
+      z-index: 50;
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 55%, #000 100%);
+      z-index: 40;
+    }
+
+    .terminal {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top, #0b1014 0, #050709 60%);
+      border: 1px solid #0affb9;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      position: relative;
+    }
+
+    .term-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid #0affb9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, rgba(0,255,156,0.18), transparent);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary);
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    .term-body {
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .log-panel {
+      border-right: 1px solid #05362e;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .log-title {
+      font-size: 0.8rem;
+      color: #9bf7d9;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .log-window {
+      flex: 1;
+      border: 1px solid #0a3a34;
+      background: rgba(0,0,0,0.82);
+      padding: 14px;
+      overflow-y: auto;
+      font-size: 0.88rem;
+      position: relative;
+    }
+
+    .log-window::-webkit-scrollbar { width: 10px; }
+    .log-window::-webkit-scrollbar-track { background: #020304; }
+    .log-window::-webkit-scrollbar-thumb { background: #0affb9; border-radius: 5px; }
+
+    .log-line {
+      margin-bottom: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .log-tag {
+      color: var(--muted);
+      font-size: 0.7rem;
+      min-width: 85px;
+      flex-shrink: 0;
+    }
+
+    .msg-content {
+      flex: 1;
+      position: relative;
+    }
+
+    .sender {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .sender-a {
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+    }
+
+    .sender-b {
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .glitch-label {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+    }
+
+    .glitch-label::before,
+    .glitch-label::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      width: 100%;
+      top: 0;
+    }
+
+    .glitch-label::before {
+      left: 1px;
+      text-shadow: -1px 0 var(--accent2);
+      clip-path: inset(0 0 55% 0);
+      animation: glitch1 1.6s infinite linear alternate-reverse;
+    }
+
+    .glitch-label::after {
+      left: -1px;
+      text-shadow: 1px 0 var(--accent);
+      clip-path: inset(45% 0 0 0);
+      animation: glitch2 1.3s infinite linear alternate-reverse;
+    }
+
+    .glitch-label span {
+      color: #050709;
+      background: #050709;
+    }
+
+    .msg-text {
+      color: #d5fff1;
+      line-height: 1.5;
+    }
+
+    .msg-meta {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .system-line {
+      color: var(--accent2);
+      font-size: 0.82rem;
+      margin: 3px 0;
+    }
+
+    .censored {
+      background: #000;
+      color: transparent;
+      padding: 0 4px;
+      border-radius: 2px;
+      display: inline-block;
+      margin: 0 1px;
+      user-select: none;
+    }
+
+    .censored.glitch {
+      position: relative;
+    }
+
+    .censored.glitch::before,
+    .censored.glitch::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #000;
+    }
+
+    .censored.glitch::before {
+      mix-blend-mode: screen;
+      background: rgba(0,255,156,0.25);
+      animation: maskGlitch 2.3s infinite ease-in-out alternate;
+    }
+
+    .censored.glitch::after {
+      mix-blend-mode: screen;
+      background: rgba(255,47,110,0.35);
+      animation: maskGlitch 1.7s infinite ease-in-out alternate-reverse;
+    }
+
+    .side-panel {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: radial-gradient(circle at top, #071218 0, #020507 60%);
+      overflow-y: auto;
+    }
+
+    .side-panel::-webkit-scrollbar { width: 8px; }
+    .side-panel::-webkit-scrollbar-track { background: #020304; }
+    .side-panel::-webkit-scrollbar-thumb { background: #0affb9; border-radius: 4px; }
+
+    .side-box {
+      border: 1px solid #0a3a34;
+      background: rgba(0,0,0,0.88);
+      padding: 12px 14px;
+      font-size: 0.78rem;
+    }
+
+    .side-box h3 {
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #91ffe2;
+      border-bottom: 1px solid #06342e;
+      padding-bottom: 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 2px 6px;
+      border-radius: 2px;
+      border: 1px solid #1d705f;
+      color: #9bf7d9;
+      margin: 2px 4px 2px 0;
+    }
+
+    .risk {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .footer {
+      padding: 8px 16px;
+      border-top: 1px solid #0affb9;
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #020304;
+    }
+
+    .blink {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes glitch1 {
+      0% { transform: translate(0,0); }
+      20% { transform: translate(-1px,1px); }
+      40% { transform: translate(1px,-1px); }
+      60% { transform: translate(-1px,-2px); }
+      80% { transform: translate(2px,1px); }
+      100% { transform: translate(0,0); }
+    }
+
+    @keyframes glitch2 {
+      0% { transform: translate(0,0); }
+      20% { transform: translate(1px,-1px); }
+      40% { transform: translate(-1px,1px); }
+      60% { transform: translate(2px,0); }
+      80% { transform: translate(-2px,-1px); }
+      100% { transform: translate(0,0); }
+    }
+
+    @keyframes maskGlitch {
+      0% { clip-path: inset(0 0 0 0); }
+      25% { clip-path: inset(15% 0 60% 0); }
+      50% { clip-path: inset(55% 0 10% 0); }
+      75% { clip-path: inset(5% 0 70% 0); }
+      100% { clip-path: inset(35% 0 0 0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scan"></div>
+<div class="vignette"></div>
+
+<div class="terminal">
+  <div class="term-header">
+    <span><span class="status-dot"></span>LINK CRIPTOGRAFADO // NÓ CEGADO</span>
+    <span>OPERAÇÃO: DRACONIA // CLASSIFICAÇÃO NÍVEL 5</span>
+  </div>
+
+  <div class="term-body">
+    <div class="log-panel">
+      <div class="log-title">LOG DE CONVERSA – PARTICIPANTES REDATADOS – MODO REPRODUÇÃO LENTA</div>
+      <div class="log-window" id="logWindow"></div>
+    </div>
+
+    <div class="side-panel">
+      <div class="side-box">
+        <h3>DRACONIA // RESUMO</h3>
+        <p>Operação clandestina contra <span class="censored glitch">████████ BIOPHARMA</span>, codinome <strong>DRACONIA</strong>.</p>
+        <p>Droga sintética: <strong>DRK-ONIA</strong> ("GOTA") – exposição membranal controlada.</p>
+      </div>
+
+      <div class="side-box">
+        <h3>INFRAESTRUTURA</h3>
+        <p>• Complexo <strong>LAMIA</strong> (−1 a −4 + Nível E)<br>
+           • Linha <strong>HIDRA</strong> (H1–H3)<br>
+           • Nó urbano <strong>SERPENTÁRIO</strong></p>
+        <p style="margin-top:6px;"><span class="tag">SETENTRIONAL</span> <span class="tag">SANCTUM</span></p>
+      </div>
+
+      <div class="side-box">
+        <h3>ENTIDADES</h3>
+        <p>• <strong>O Visitante</strong> – figura sem rosto vista por usuários de GOTA<br>
+           • <strong>Serpente de Vidro</strong> – manifestação arquitetônica observada em HIDRA 3</p>
+      </div>
+
+      <div class="side-box">
+        <h3>OPERATIVOS</h3>
+        <p>Esquadrão SERPENTÁRIO (M.I.A.):<br>
+           VESPERT, TORCIDA, ALMIR, SEREIA, VULKAN</p>
+      </div>
+
+      <div class="side-box">
+        <h3>AVISOS</h3>
+        <p>• Log não arquivável oficialmente<br>
+           • Correlações com operações seladas<br>
+           • Risco de rastreio pela Congregação</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>// Clique em qualquer lugar para iniciar reprodução</span>
+    <span class="blink" id="footerStatus">[PAUSADO]</span>
+  </div>
+</div>
+
+<script>
+  const msgs = [
+    {t:"00:00:03", s:"SYS", text:"Canal cego estabelecido. Rota: Sanctum Veritatis → Nó Fantasma 973 → Bounce externo.", meta:"SISTEMA"},
+    {t:"00:00:09", s:"A", text:"...testa se a linha está limpa. Depois de Setentrional, não confio nem no silêncio.", meta:"ORIGEM DESCONHECIDA"},
+    {t:"00:00:17", s:"B", text:"Se alguém estivesse lendo, já teríamos sentido. DRACONIA assusta até hoje.", meta:"DESTINO DESCONHECIDO"},
+    {t:"00:00:26", s:"A", text:"Vamos recapitular desde o início. Tudo registrado, mesmo que vire tarja depois.", meta:"INTENÇÃO"},
+    {t:"00:00:34", s:"B", text:"DRACONIA começou como 'cooperação'. Ordo + <span class='censored glitch'>████████</span> querendo privatizar a Membrana.", meta:"ORIGEM"},
+    {t:"00:00:44", s:"A", text:"Nome real da empresa?", meta:"DETALHE"},
+    {t:"00:00:48", s:"B", text:"Papel: <span class='censored glitch'>DRACONIA THERAPEUTICS SA</span>. Corredor: 'os que engarrafam o Outro Lado'.", meta:"APELIDO"},
+    {t:"00:00:59", s:"A", text:"Engarrafar o Outro Lado em frasco âmbar de 10ml, com bula e código de barras.", meta:"ABSURDO"},
+    {t:"00:01:06", s:"B", text:"'GOTA' é quase poético. Uma gota de realidade errada misturada na nossa.", meta:"OBSERVAÇÃO"},
+    {t:"00:01:16", s:"A", text:"Você ainda lembra a fórmula-base?", meta:"TÉCNICO"},
+    {t:"00:01:21", s:"B", text:"Quimicamente não. Conceitualmente: solvente psicoativo + <span class='censored glitch'>condensado membranal</span> + rituais técnicos.", meta:"DRK-ONIA"},
+    {t:"00:01:33", s:"A", text:"'Rituais técnicos'...", meta:"ECO"},
+    {t:"00:01:37", s:"B", text:"Engenharia de campo + ocultismo aplicado. Kaaeste teria adorado, se não tivesse virado cinza.", meta:"REFERÊNCIA KAAESTE"},
+    {t:"00:01:48", s:"A", text:"Fases de efeito. Detalha.", meta:"PEDIDO"},
+    {t:"00:01:54", s:"B", text:"Fase 1: Pré-queda. Mundo 'respira' errado. Paredes aproximam um milímetro por piscada. Ruído branco interno.", meta:"FASE 1"},
+    {t:"00:02:05", s:"B", text:"Fase 2: Rachadura. Falhas visuais, padrões jurídicos flutuantes: balanças, martelos, bancos de réu.", meta:"FASE 2"},
+    {t:"00:02:17", s:"B", text:"Fase 3: Janela. 3 a 7 minutos de Outro Lado quase nítido. Entidades, luz-tentáculo, sombras articuladas.", meta:"FASE 3"},
+    {t:"00:02:29", s:"B", text:"Fase 4: Retorno. Nem sempre pro mesmo endereço. Alguns mais leves. Outros acompanhados. Alguns não voltam.", meta:"FASE 4"},
+    {t:"00:02:42", s:"A", text:"E Fase 5, a não oficial.", meta:"INSISTÊNCIA"},
+    {t:"00:02:47", s:"B", text:"Dependência. Da perspectiva, não da droga. Mundo sem véu vira vício. Você quer olhar de novo.", meta:"FASE 5"},
+    {t:"00:03:00", s:"A", text:"Quando virou de coleta pra contenção?", meta:"MUDANÇA"},
+    {t:"00:03:06", s:"B", text:"Quando vazou pro Serpentário.", meta:"SERPENTÁRIO"},
+    {t:"00:03:11", s:"B", text:"Abrigo inteiro recebeu microdoses como 'tratamento experimental'. Gente sem CPF, corpos descartáveis.", meta:"TESTE HUMANO"},
+    {t:"00:03:22", s:"B", text:"Começaram a descrever 'homem sem rosto' passeando, mesmo em noites diferentes.", meta:"PADRÃO"},
+    {t:"00:03:32", s:"A", text:"Homem sem rosto. Sempre ele.", meta:"LIGAÇÃO"},
+    {t:"00:03:37", s:"B", text:"'Visitante'. Só reagia a quem tinha GOTA no sangue. Outros viam borrão no canto do olho.", meta:"VISITANTE"},
+    {t:"00:03:48", s:"A", text:"Aí entra o Esquadrão SERPENTÁRIO?", meta:"TIMELINE"},
+    {t:"00:03:53", s:"B", text:"Sim. Cinco operativos, todos com exposição prévia à Membrana. Ideia: 'falar a língua' do Visitante.", meta:"EQUIPE"},
+    {t:"00:04:04", s:"A", text:"Em vez disso, viraram comida servida no ponto.", meta:"AMARGURA"},
+    {t:"00:04:10", s:"B", text:"Gravação mostra voz quebrando. Parte fala como agente, outra repete frase do outro lado.", meta:"GRAVAÇÃO"},
+    {t:"00:04:21", s:"B", text:"Última linha sincronizada: 'Ele encontrou a porta.' Cinco vozes, cinco lugares, mesma frase, mesma entonação.", meta:"FIM SERPENTÁRIO"},
+    {t:"00:04:34", s:"A", text:"E nenhuma era a voz do Visitante.", meta:"DETALHE"},
+    {t:"00:04:39", s:"B", text:"Depois disso, DRACONIA perde verniz científico. Vira ação militar. Fase LAMIA.", meta:"TRANSIÇÃO"},
+    {t:"00:04:47", s:"A", text:"LAMIA embaixo do parque tecnológico morto.", meta:"CONFIRMAÇÃO"},
+    {t:"00:04:52", s:"B", text:"Entrada oficial bloqueada. Entrada real: elevador de carga sem painel, cartão com selo Ordo.", meta:"ACESSO"},
+    {t:"00:05:02", s:"A", text:"Quantos níveis você lembra?", meta:"DETALHAMENTO"},
+    {t:"00:05:07", s:"B", text:"−1 recepção, −2 pesquisa, −3 HIDRA, −4 contenção. Nível E entre −3 e −4, piso que só aparece quando segura respiração.", meta:"NÍVEIS"},
+    {t:"00:05:20", s:"A", text:"Nível E guardava condensado cru?", meta:"TÉCNICO"},
+    {t:"00:05:25", s:"B", text:"Nível E guardava o que sobrou de quem não voltou sóbrio. Frascos de vidro de um lado, celas de plástico do outro.", meta:"HORROR"},
+    {t:"00:05:37", s:"A", text:"Você viu ou leu?", meta:"QUESTIONAMENTO"},
+    {t:"00:05:41", s:"B", text:"Porque <span class='censored glitch'>estava lá</span>.", meta:"CONFISSÃO"},
+    {t:"00:05:49", s:"A", text:"Operativo interno de DRACONIA?", meta:"SUSPEITA"},
+    {t:"00:05:54", s:"B", text:"Ou cobaia com crachá. Difícil separar.", meta:"AUTO-IRONIA"},
+    {t:"00:06:02", s:"A", text:"Vamos pro HIDRA. Linha de engarrafamento.", meta:"MUDANÇA"},
+    {t:"00:06:08", s:"B", text:"HIDRA 1: Síntese padrão. Reagentes químicos + microdoses antigas. GOTA fraca, mais alucinação que janela.", meta:"H1"},
+    {t:"00:06:19", s:"B", text:"HIDRA 2: Química + pulsos de campo projetados. Janelas estáveis, mas sangramento nasal pesado.", meta:"H2"},
+    {t:"00:06:30", s:"B", text:"HIDRA 3: Aposta suicida. Fluxo contínuo de condensado pingando sobre envase. Chuveiro de Outro Lado.", meta:"H3"},
+    {t:"00:06:43", s:"A", text:"H3 foi onde tudo desandou.", meta:"RESUMO"},
+    {t:"00:06:48", s:"B", text:"Foi onde a Serpente de Vidro apareceu pela primeira vez.", meta:"SEMENTE"},
+    {t:"00:06:55", s:"A", text:"Fala dela.", meta:"PEDIDO"},
+    {t:"00:07:00", s:"B", text:"Técnico-chefe via serpente de prédios, trilhos, antenas, fios. Enrolava na linha, olhando por janelas-olhos.", meta:"DESCRIÇÃO"},
+    {t:"00:07:13", s:"B", text:"Cada pingo de condensado no frasco engordava a Serpente. Como se alimentasse do produto.", meta:"INTERPRETAÇÃO"},
+    {t:"00:07:24", s:"A", text:"Metáfora ou relatório?", meta:"DÚVIDA"},
+    {t:"00:07:28", s:"B", text:"Desenhos viraram anexo. Marcados 'Efeito colateral estético'.", meta:"CINISMO"},
+    {t:"00:07:37", s:"A", text:"Até ela aparecer na câmera de segurança.", meta:"CRÍTICO"},
+    {t:"00:07:43", s:"B", text:"Frame único. Borrão de vidro e luz numa curva da esteira. Engenheiros: glitch. Técnicos: presságio. Ordo: oportunidade de estudo.", meta:"REAÇÕES"},
+    {t:"00:07:57", s:"A", text:"Aí DRACONIA vira ação.", meta:"MILITAR"},
+    {t:"00:08:02", s:"B", text:"Mandaram cortar cabeça, prender diretores, confiscar fórmulas. Quando o Esquadrão chega, metade do LAMIA está vazio.", meta:"ATRASO"},
+    {t:"00:08:14", s:"A", text:"Vazio como 'foram embora' ou como 'viraram parte do piso'?", meta:"TOM"},
+    {t:"00:08:20", s:"B", text:"Ambos. Laboratórios intactos, café quente. Outros com marcas de arrasto pra fendas que só existiam piscando devagar.", meta:"CENA"},
+    {t:"00:08:33", s:"A", text:"Você fala como quem lembra do cheiro.", meta:"OBSERVAÇÃO"},
+    {t:"00:08:38", s:"B", text:"Desinfetante, sangue velho, ozônio. Igual Setentrional, mas com mais luz fluorescente.", meta:"CONEXÃO"},
+    {t:"00:08:48", s:"A", text:"Setentrional foi lab a céu aberto. LAMIA, lab debaixo do tapete.", meta:"COMPARAÇÃO"},
+    {t:"00:08:55", s:"B", text:"E Sanctum Veritatis a gaveta onde enfiamos papéis que ninguém quer ler em voz alta.", meta:"SANCTUM"},
+    {t:"00:09:04", s:"A", text:"Quantos frascos constavam no inventário final?", meta:"NÚMEROS"},
+    {t:"00:09:09", s:"B", text:"216 registrados para destruição. 204 destruídos.", meta:"DADO"},
+    {t:"00:09:16", s:"A", text:"Doze desaparecidos.", meta:"CONCLUSÃO"},
+    {t:"00:09:20", s:"B", text:"Oficialmente: erro de contagem. Extraoficialmente: doze formas de manter janela aberta dentro do sistema.", meta:"INTERPRETAÇÃO"},
+    {t:"00:09:32", s:"A", text:"Ainda tem GOTA circulando na Ordo?", meta:"DIRETO"},
+    {t:"00:09:37", s:"B", text:"Tem gente que sabe fazer parecido sem fórmula completa. E gente fora que aprendeu olhando de longe.", meta:"AMPLIAÇÃO"},
+    {t:"00:09:49", s:"A", text:"Células dissidentes. Sanctum. Talvez Congregação.", meta:"MAPA"},
+    {t:"00:09:55", s:"B", text:"Congregação não precisa de droga pra ver. Mas visão sintética controlável aponta holofote nas pessoas certas.", meta:"HIPÓTESE"},
+    {t:"00:10:06", s:"A", text:"DRACONIA foi só sobre droga?", meta:"RETÓRICA"},
+    {t:"00:10:11", s:"B", text:"Não. Foi sobre controle de perspectiva. Quem vê o quê, quando, por quanto tempo, com qual narrativa depois.", meta:"SÍNTESE"},
+    {t:"00:10:23", s:"A", text:"Onde entra o Visitante?", meta:"RETORNO"},
+    {t:"00:10:28", s:"B", text:"Ele é colateral que aprendeu a usar a janela melhor que nós. DRACONIA ambulante.", meta:"DEFINIÇÃO"},
+    {t:"00:10:38", s:"A", text:"Você o viu?", meta:"PESSOAL"},
+    {t:"00:10:42", s:"B", text:"Vi onde ele tinha acabado de passar. Como se alguém puxasse cenário dois centímetros pro lado.", meta:"DESCRIÇÃO"},
+    {t:"00:10:53", s:"A", text:"A Serpente e o Visitante são a mesma coisa?", meta:"TEORIA"},
+    {t:"00:10:58", s:"B", text:"Acho que o Visitante é uma larva da Serpente. Ou um avatar. Ou só um reflexo que aprendeu a andar.", meta:"ESPECULAÇÃO"},
+    {t:"00:11:10", s:"A", text:"Você tem medo dele?", meta:"PESSOAL 2"},
+    {t:"00:11:14", s:"B", text:"Tenho medo de virar ele. De passar tempo demais olhando e esquecer de onde olho.", meta:"CONFISSÃO"},
+    {t:"00:11:26", s:"A", text:"Algum dia você vai escrever isso com seu nome verdadeiro?", meta:"QUESTÃO EXISTENCIAL"},
+    {t:"00:11:32", s:"B", text:"Nomes verdadeiros não pertencem a operações como DRACONIA. Pertencem a lápides. E eu ainda não escolhi minha pedra.", meta:"RESPOSTA"},
+    {t:"00:11:45", s:"A", text:"Você acha que DRACONIA pode acontecer de novo?", meta:"FUTURO"},
+    {t:"00:11:50", s:"B", text:"Já está acontecendo. Só com outro nome, outra empresa, outra droga. O ciclo não quebra, só muda de roupa.", meta:"PESSIMISMO"},
+    {t:"00:12:02", s:"A", text:"E o Sanctum sabe disso?", meta:"SANCTUM 2"},
+    {t:"00:12:07", s:"B", text:"Sanctum foi fundado por gente que sobreviveu a DRACONIA ou algo parecido. Eles não esperam que a Ordo mude. Eles criam alternativas.", meta:"CONTEXTO"},
+    {t:"00:12:20", s:"A", text:"Alternativas com GOTA?", meta:"ESPECÍFICO"},
+    {t:"00:12:24", s:"B", text:"Com o que conseguirem. GOTA, fendas naturais, rituais técnicos, sonhos lúcidos treinados. O Sanctum não é dogmático, é pragmático.", meta:"FILOSOFIA"},
+    {t:"00:12:38", s:"A", text:"Você faz parte do Sanctum?", meta:"ACUSAÇÃO SUAVE"},
+    {t:"00:12:43", s:"B", text:"Faço parte de quem ainda faz perguntas. Se isso me coloca lá, então sim.", meta:"RESPOSTA EVASIVA"},
+    {t:"00:12:55", s:"A", text:"Por que você confia em mim pra essa conversa?", meta:"CONFIANÇA"},
+    {t:"00:13:00", s:"B", text:"Porque você também sobreviveu a algo que não deveria. E porque ainda está aqui fazendo perguntas em vez de aceitar respostas prontas.", meta:"RECONHECIMENTO"},
+    {t:"00:13:14", s:"A", text:"Setentrional.", meta:"PALAVRA ÚNICA"},
+    {t:"00:13:18", s:"B", text:"Sim.", meta:"CONFIRMAÇÃO"},
+    {t:"00:13:23", s:"A", text:"Você acha que Setentrional e DRACONIA estão conectados?", meta:"TEORIA 2"},
+    {t:"00:13:29", s:"B", text:"Não acho. Tenho certeza. DRACONIA foi teste de laboratório. Setentrional foi teste de campo. Ambos sobre como colher medo pra alimentar algo maior.", meta:"AFIRMAÇÃO"},
+    {t:"00:13:44", s:"A", text:"Alimentar o quê?", meta:"PERGUNTA ÓBVIA"},
+    {t:"00:13:48", s:"B", text:"Se eu soubesse, não estaria aqui conversando num nó cego. Estaria correndo ou já teria virado combustível.", meta:"HONESTIDADE"},
+    {t:"00:14:01", s:"A", text:"A GOTA permite ver o que a Ordo esconde?", meta:"FUNCIONAL"},
+    {t:"00:14:06", s:"B", text:"Permite ver camadas. Nem todas são da Ordo. Algumas são anteriores. Algumas são paralelas. Mas sim, mostra o que não querem que vejamos.", meta:"RESPOSTA TÉCNICA"},
+    {t:"00:14:20", s:"A", text:"Você ainda tem GOTA?", meta:"DIRETO 2"},
+    {t:"00:14:25", s:"B", text:"...uma ampola. Guardada. Pra emergência que espero nunca usar.", meta:"CONFISSÃO HESITANTE"},
+    {t:"00:14:37", s:"A", text:"Você confia em si mesmo pra não usar?", meta:"PSICOLÓGICO"},
+    {t:"00:14:42", s:"B", text:"Não. Por isso guardo longe. Num lugar que preciso querer muito pra chegar.", meta:"AUTO-CONSCIÊNCIA"},
+    {t:"00:14:54", s:"SYS", text:"ALERTA: Picos de ruído detectados. Tentativa de rastreio externo em andamento.", meta:"SISTEMA"},
+    {t:"00:15:01", s:"A", text:"Congregação?", meta:"SUSPEITA"},
+    {t:"00:15:05", s:"B", text:"Ou algo usando a infraestrutura deles. Já vi entidades fazerem isso.", meta:"AMBIGUIDADE"},
+    {t:"00:15:16", s:"A", text:"Precisamos encerrar. Mas antes: se alguém achar GOTA hoje, você diria o quê?", meta:"ÚLTIMA PERGUNTA"},
+    {t:"00:15:23", s:"B", text:"Diria: se sua curiosidade vale mais que sua ancoragem, tome. Mas não reclame quando o véu olhar de volta.", meta:"CONSELHO"},
+    {t:"00:15:36", s:"A", text:"E se for um agente jovem acreditando servir 'o bem maior'?", meta:"VARIAÇÃO"},
+    {t:"00:15:42", s:"B", text:"Diria: lembra de Setentrional, de DRACONIA, do Tribunal. E guarda a ampola. A tentação já é experimento demais.", meta:"AVISO"},
+    {t:"00:15:56", s:"SYS", text:"Canal será fragmentado em 10... 9... 8...", meta:"CONTAGEM"},
+    {t:"00:16:04", s:"A", text:"Se alguém recompor esse log, faça melhor do que a gente. Ou erre em outra direção.", meta:"LEGADO"},
+    {t:"00:16:12", s:"B", text:"DRACONIA não acabou, só trocou de nome. Se sentir gosto de metal sem motivo, talvez tenha caminhado onde ela passou.", meta:"EPÍLOGO"},
+    {t:"00:16:23", s:"SYS", text:"Sessão encerrada. Log será espalhado em camadas residuais.", meta:"FIM"}
+  ];
+
+  const logWindow = document.getElementById('logWindow');
+  const footerStatus = document.getElementById('footerStatus');
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let started = false;
+  let msgIndex = 0;
+
+  function ping(type) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+
+    if (type === 'A') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(900, now);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.linearRampToValueAtTime(0.001, now + 0.08);
+      osc.start(); osc.stop(now + 0.08);
+    } else if (type === 'B') {
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(700, now);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.linearRampToValueAtTime(0.001, now + 0.1);
+      osc.start(); osc.stop(now + 0.1);
+    } else if (type === 'SYS') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(400, now);
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.linearRampToValueAtTime(0.001, now + 0.18);
+      osc.start(); osc.stop(now + 0.18);
+    }
+  }
+
+  function createLineBase(msg) {
+    const line = document.createElement('div');
+    line.className = 'log-line';
+
+    const tag = document.createElement('div');
+    tag.className = 'log-tag';
+    tag.textContent = `[${msg.t}]`;
+    line.appendChild(tag);
+
+    const content = document.createElement('div');
+    content.className = 'msg-content';
+
+    line.appendChild(content);
+    logWindow.appendChild(line);
+    logWindow.scrollTop = logWindow.scrollHeight;
+    return { line, content };
+  }
+
+  async function typeTextSlow(element, htmlText) {
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlText;
+    const finalText = temp.innerHTML;
+
+    element.innerHTML = "";
+    let i = 0;
+    while (i < finalText.length) {
+      element.innerHTML = finalText.slice(0, i + 1);
+      logWindow.scrollTop = logWindow.scrollHeight;
+      i++;
+
+      const base = 20;
+      const extra = Math.random() * 45;
+      await new Promise(res => setTimeout(res, base + extra));
+    }
+  }
+
+  async function playNextMessage() {
+    if (msgIndex >= msgs.length) {
+      footerStatus.textContent = "[REPRODUÇÃO ENCERRADA]";
+      return;
+    }
+
+    const msg = msgs[msgIndex++];
+    const { content } = createLineBase(msg);
+
+    if (msg.s === "SYS") {
+      const p = document.createElement('div');
+      p.className = 'system-line';
+      content.appendChild(p);
+      ping("SYS");
+      await typeTextSlow(p, msg.text);
+      if (msg.meta) {
+        const m = document.createElement('div');
+        m.className = 'msg-meta';
+        m.textContent = `// ${msg.meta}`;
+        content.appendChild(m);
+      }
+    } else {
+      const senderDiv = document.createElement('div');
+      senderDiv.className = 'sender ' + (msg.s === "A" ? 'sender-a' : 'sender-b');
+
+      const gl = document.createElement('span');
+      gl.className = 'glitch-label';
+      gl.dataset.label = '████████';
+      gl.innerHTML = '<span>████████</span>';
+      senderDiv.appendChild(gl);
+
+      content.appendChild(senderDiv);
+
+      const textDiv = document.createElement('div');
+      textDiv.className = 'msg-text';
+      content.appendChild(textDiv);
+
+      const metaDiv = document.createElement('div');
+      metaDiv.className = 'msg-meta';
+      if (msg.meta) metaDiv.textContent = `// ${msg.meta}`;
+      content.appendChild(metaDiv);
+
+      ping(msg.s);
+
+      await new Promise(res => setTimeout(res, 350 + Math.random() * 500));
+      await typeTextSlow(textDiv, msg.text);
+      await new Promise(res => setTimeout(res, 400 + Math.random() * 700));
+    }
+
+    playNextMessage();
+  }
+
+  document.body.addEventListener('click', () => {
+    if (started) return;
+    started = true;
+    audioCtx.resume();
+    footerStatus.textContent = "[REPRODUZINDO – DIGITAÇÃO LENTA]";
+    playNextMessage();
+  });
+</script>
+
+</body>
+</html>
