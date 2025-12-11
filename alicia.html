@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.L.I.C.I.A. // SYSTEM CORE</title>
+    
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Share+Tech+Mono&family=Syne+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #030000;
+            --primary: #ff0000;
+            --secondary: #4a0000;
+            --accent: #d4af37; /* Dourado Sanctum */
+            --text: #e0e0e0;
+            --glitch-width: 100vw;
+            --scan-color: rgba(255, 0, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Share Tech Mono', monospace; 
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        /* --- CRT & SCREEN EFFECTS --- */
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.4));
+            background-size: 100% 4px;
+            z-index: 999; pointer-events: none; opacity: 0.6;
+        }
+        
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            z-index: 998; pointer-events: none; opacity: 0.4;
+            animation: noiseAnim 0.5s infinite linear;
+        }
+
+        .vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, black 120%);
+            z-index: 997; pointer-events: none;
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .interface-container {
+            width: 80%; max-width: 1000px; height: 80vh;
+            border: 1px solid var(--secondary);
+            position: relative;
+            background: rgba(10, 0, 0, 0.8);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            display: flex; flex-direction: column;
+            transition: border-color 0.5s;
+        }
+
+        .header-bar {
+            border-bottom: 1px solid var(--secondary);
+            padding: 10px 20px;
+            display: flex; justify-content: space-between;
+            font-size: 0.8rem; color: var(--secondary);
+            text-transform: uppercase;
+        }
+
+        .main-screen {
+            flex: 1; position: relative;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- THE CORE (ALICIA) --- */
+        .core-circle {
+            width: 300px; height: 300px;
+            border: 2px solid rgba(255, 0, 0, 0.2);
+            border-radius: 50%;
+            position: absolute;
+            display: flex; justify-content: center; align-items: center;
+            transition: all 1s ease;
+        }
+
+        .core-inner {
+            width: 280px; height: 280px;
+            border: 1px dashed var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            animation: rotateSlow 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        .core-eye {
+            width: 50px; height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--primary), 0 0 60px var(--primary);
+            position: relative;
+            animation: pulse 4s infinite ease-in-out;
+            z-index: 10;
+        }
+        
+        .core-eye::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px; height: 10px; background: #fff;
+            border-radius: 50%; opacity: 0.8;
+        }
+
+        /* --- STAGE ELEMENTS --- */
+        
+        /* Stage 1: Terminal */
+        .terminal-input {
+            background: transparent; border: none; border-bottom: 2px solid var(--secondary);
+            color: var(--primary); font-family: 'Share Tech Mono', monospace;
+            font-size: 1.5rem; text-align: center; width: 300px;
+            margin-top: 250px; outline: none; text-transform: uppercase;
+            letter-spacing: 5px; opacity: 0; transition: opacity 1s;
+        }
+        
+        /* Stage 2: Nodes */
+        .node {
+            position: absolute; width: 15px; height: 15px;
+            border: 1px solid var(--secondary); background: #000;
+            border-radius: 50%; cursor: pointer; transition: 0.2s;
+        }
+        .node.active { background: var(--primary); box-shadow: 0 0 15px var(--primary); border-color: #fff; }
+
+        /* --- TEXT & GLITCH --- */
+        .status-text {
+            position: absolute; top: 20%;
+            font-family: 'Cinzel', serif; font-size: 2rem;
+            color: var(--text); text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            text-align: center; width: 100%;
+            pointer-events: none;
+        }
+
+        .glitch {
+            position: relative;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+        }
+        .glitch::before {
+            color: #0ff; z-index: -1; transform: translate(-2px, 0); animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            color: #f00; z-index: -2; transform: translate(2px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        /* --- AUDIO VISUALIZER (Fake bar) --- */
+        .audio-bar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+            background: var(--secondary);
+        }
+        .audio-bar::after {
+            content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+            background: var(--primary);
+            transition: width 0.1s;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes rotateSlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 40px var(--primary); } 100% { transform: scale(0.95); opacity: 0.7; } }
+        @keyframes glitch-anim-1 { 0% { clip-path: inset(20% 0 80% 0); } 100% { clip-path: inset(80% 0 10% 0); } }
+        @keyframes glitch-anim-2 { 0% { clip-path: inset(10% 0 60% 0); } 100% { clip-path: inset(40% 0 30% 0); } }
+        @keyframes noiseAnim { 0% { transform: translate(0,0); } 100% { transform: translate(-10%, -10%); } }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+
+        /* --- HIDDEN MESSAGE --- */
+        .hidden-log {
+            position: fixed; bottom: 10px; right: 10px; 
+            font-size: 0.6rem; color: #333; 
+            font-family: monospace; text-align: right;
+            z-index: 1000;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+    <div class="vignette"></div>
+
+    <div class="interface-container" id="mainContainer">
+        <div class="header-bar">
+            <span>// SANCTUM_CORE_V.0.9</span>
+            <span id="timer">00:00:00:00</span>
+            <span>STATUS: <span style="color:red" id="statusLabel">CRITICAL</span></span>
+        </div>
+
+        <div class="main-screen">
+            <!-- CANVAS FOR PARTICLES -->
+            <canvas id="particleCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+
+            <!-- THE CORE -->
+            <div class="core-circle" id="coreRing">
+                <div class="core-inner"></div>
+                <div class="core-eye" id="coreEye" onclick="startAudioContext()"></div>
+            </div>
+
+            <!-- TEXT DISPLAY -->
+            <div class="status-text glitch" id="mainText" data-text="A.L.I.C.I.A.">A.L.I.C.I.A.</div>
+
+            <!-- INPUT AREA -->
+            <input type="text" class="terminal-input" id="commandInput" placeholder="_AGUARDANDO" autocomplete="off" disabled>
+
+            <!-- NODES CONTAINER (STAGE 2) -->
+            <div id="nodesContainer" style="position: absolute; width: 100%; height: 100%; pointer-events: none;"></div>
+        </div>
+
+        <div class="audio-bar" id="audioViz"></div>
+    </div>
+
+    <div class="hidden-log" id="consoleLog">
+        > SYSTEM BOOT...<br>
+        > AUDIO DRIVER: MANUAL START REQUIRED<br>
+        > CLIQUE NO OLHO PARA INICIAR
+    </div>
+
+    <script>
+        // --- AUDIO ENGINE (WEB AUDIO API) ---
+        let audioCtx;
+        let oscillator;
+        let gainNode;
+        let isAudioStarted = false;
+
+        function startAudioContext() {
+            if (isAudioStarted) return;
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            
+            // Background Drone
+            const drone = audioCtx.createOscillator();
+            const droneGain = audioCtx.createGain();
+            drone.type = 'sawtooth';
+            drone.frequency.value = 50;
+            droneGain.gain.value = 0.05;
+            
+            // Filter para deixar som abafado
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 200;
+
+            drone.connect(filter);
+            filter.connect(droneGain);
+            droneGain.connect(audioCtx.destination);
+            drone.start();
+
+            isAudioStarted = true;
+            document.getElementById('consoleLog').innerHTML += "<br>> AUDIO: ONLINE";
+            playGlitchSound();
+            initStage1();
+        }
+
+        function playGlitchSound() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+            osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.2);
+            
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.2);
+        }
+
+        function playSuccessSound() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.5);
+            gain.gain.value = 0.1;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        // --- GAME LOGIC ---
+        let stage = 0;
+        const mainText = document.getElementById('mainText');
+        const input = document.getElementById('commandInput');
+        const coreEye = document.getElementById('coreEye');
+
+        // Stage 1: Awakening
+        function initStage1() {
+            stage = 1;
+            typeWriter("SISTEMA DORMENTE. COMANDO REQUERIDO.", mainText);
+            input.style.opacity = '1';
+            input.disabled = false;
+            input.focus();
+            input.placeholder = "DIGITE O COMANDO...";
+        }
+
+        input.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.toUpperCase();
+                playGlitchSound();
+                
+                if (stage === 1) {
+                    if (val === 'ACORDAR' || val === 'WAKE UP' || val === 'INICIAR') {
+                        successStage1();
+                    } else {
+                        failEffect();
+                        typeWriter("COMANDO INVALIDO. TENTE: ACORDAR", mainText);
+                        this.value = '';
+                    }
+                } else if (stage === 3) {
+                     if (val === 'ORDEM' || val === 'VERITATIS' || val === 'MEDO') {
+                        finalSequence();
+                    } else {
+                        failEffect();
+                        typeWriter("ACESSO NEGADO.", mainText);
+                        this.value = '';
+                    }
+                }
+            }
+        });
+
+        function successStage1() {
+            playSuccessSound();
+            stage = 2;
+            input.style.opacity = '0';
+            input.disabled = true;
+            typeWriter("CALIBRANDO SINCRONIA...", mainText);
+            coreEye.style.animation = "pulse 0.5s infinite ease-in-out"; // Fast pulse
+            setTimeout(initStage2, 2000);
+        }
+
+        // Stage 2: Sincronia (Click Nodes)
+        function initStage2() {
+            typeWriter("ESTABILIZE O NÚCLEO", mainText);
+            const container = document.getElementById('nodesContainer');
+            container.style.pointerEvents = "auto";
+            
+            // Criar nós ao redor do círculo
+            const radius = 180;
+            const centerX = container.offsetWidth / 2;
+            const centerY = container.offsetHeight / 2;
+            let activeNodes = 0;
+            const totalNodes = 5;
+
+            for (let i = 0; i < totalNodes; i++) {
+                let node = document.createElement('div');
+                node.className = 'node';
+                let angle = (i / totalNodes) * (2 * Math.PI);
+                let x = centerX + radius * Math.cos(angle) - 7.5;
+                let y = centerY + radius * Math.sin(angle) - 7.5;
+                
+                node.style.left = x + 'px';
+                node.style.top = y + 'px';
+                
+                // Piscar aleatório
+                node.style.animation = `pulse ${(Math.random() * 1 + 0.5)}s infinite`;
+                
+                node.onclick = function() {
+                    if (!this.classList.contains('active')) {
+                        this.classList.add('active');
+                        playGlitchSound();
+                        activeNodes++;
+                        if (activeNodes === totalNodes) {
+                            successStage2();
+                        }
+                    }
+                };
+                container.appendChild(node);
+            }
+        }
+
+        function successStage2() {
+            playSuccessSound();
+            document.getElementById('nodesContainer').innerHTML = ''; // Clear nodes
+            stage = 3;
+            typeWriter("SISTEMA ONLINE. IDENTIFIQUE-SE.", mainText);
+            setTimeout(() => {
+                input.value = '';
+                input.style.opacity = '1';
+                input.disabled = false;
+                input.placeholder = "QUEM SOMOS NÓS?";
+                input.focus();
+            }, 1500);
+        }
+
+        function finalSequence() {
+            playSuccessSound();
+            input.style.display = 'none';
+            mainText.setAttribute('data-text', "BEM VINDO MESTRE");
+            typeWriter("ACESSO TOTAL CONCEDIDO.", mainText);
+            document.getElementById('statusLabel').innerHTML = "CONNECTED";
+            document.getElementById('statusLabel').style.color = "#0f0";
+            
+            coreEye.style.background = "#fff";
+            coreEye.style.boxShadow = "0 0 100px #fff";
+            
+            document.body.style.background = "#fff";
+            setTimeout(() => {
+                document.body.style.transition = "background 3s";
+                document.body.style.background = "#000";
+                mainText.style.color = "#d4af37";
+                mainText.innerHTML = "SANCTUM VERITATIS";
+                // REDIRECIONAMENTO AUTOMÁTICO AQUI:
+                window.location.href = "arquivo_brayfog.html";
+            }, 2000);
+        }
+
+        // --- UTILS ---
+        function typeWriter(text, element) {
+            element.innerHTML = "";
+            element.setAttribute('data-text', text);
+            let i = 0;
+            let speed = 50;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    playGlitchSound(); // Tiny click
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        function failEffect() {
+            const container = document.getElementById('mainContainer');
+            container.style.animation = "shake 0.5s";
+            container.style.borderColor = "red";
+            setTimeout(() => {
+                container.style.animation = "";
+                container.style.borderColor = "#4a0000";
+            }, 500);
+        }
+
+        // --- PARTICLES CANVAS ---
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.color = Math.random() > 0.9 ? '#d4af37' : '#ff0000';
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        function initParticles() {
+            for(let i=0; i<50; i++) particles.push(new Particle());
+        }
+        function animateParticles() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            for(let i=0; i<particles.length; i++){
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        initParticles();
+        animateParticles();
+
+        // Timer
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('timer').innerText = now.toISOString().split('T')[1].split('.')[0] + ":" + Math.floor(Math.random()*99);
+        }, 100);
+
+    </script>
+</body>
+</html>

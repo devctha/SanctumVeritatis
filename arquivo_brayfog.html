@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dossiê #882: BRAYFOG // SANCTUM VERITATIS</title>
+    
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Share+Tech+Mono&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --bg-panel: #0f0f0f;
+            --danger: #ff0f0f; /* Vermelho Sangue Neon */
+            --warning: #ffaa00;
+            --text-primary: #e0e0e0;
+            --text-dim: #666;
+            --border: rgba(255, 255, 255, 0.1);
+            --redacted: #000;
+            --glass: rgba(10, 10, 10, 0.95);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--danger) var(--bg-dark); }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND FX --- */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1; pointer-events: none;
+        }
+        
+        .vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 60%, black 100%);
+            z-index: 100; pointer-events: none;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 4rem 2rem;
+            display: grid; grid-template-columns: 300px 1fr; gap: 4rem;
+        }
+
+        /* --- SIDEBAR (INFO CARD) --- */
+        .entity-card {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            padding: 0; position: sticky; top: 2rem; height: fit-content;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+        .entity-card:hover { border-color: var(--danger); box-shadow: 0 0 20px rgba(255, 15, 15, 0.1); }
+
+        .card-header {
+            background: #000; padding: 1rem; border-bottom: 2px solid var(--danger);
+            text-align: center;
+        }
+        .photo-frame {
+            width: 100%; height: 250px; background: #000;
+            position: relative; overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+        .photo-frame img {
+            width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.2);
+            opacity: 0.6; transition: 0.5s;
+        }
+        .photo-frame:hover img { opacity: 1; filter: grayscale(0%) contrast(1.1) sepia(50%) hue-rotate(-50deg); }
+        .photo-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZxeW94eDN2eHZxeW94eDN2eHZxeW94eDN2eH/3o7qE1YN7aQfaqBjWw/giphy.gif'); /* Noise GIF */
+            opacity: 0.1; pointer-events: none; mix-blend-mode: overlay;
+        }
+
+        .stats-grid { padding: 1.5rem; display: grid; gap: 1rem; font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; }
+        .stat-row { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 0.5rem; }
+        .stat-label { color: var(--text-dim); }
+        .stat-value { color: var(--danger); text-shadow: 0 0 5px rgba(255,0,0,0.4); }
+
+        .threat-level {
+            background: #1a0000; color: var(--danger); padding: 1rem; text-align: center;
+            font-weight: bold; border-top: 1px solid var(--border); letter-spacing: 2px;
+            animation: pulseThreat 2s infinite;
+        }
+
+        /* --- MAIN CONTENT (REPORT) --- */
+        .report-header {
+            border-bottom: 1px solid var(--border); padding-bottom: 2rem; margin-bottom: 3rem;
+            position: relative;
+        }
+        .report-header h1 {
+            font-family: 'Cinzel', serif; font-size: 3.5rem; letter-spacing: 5px; margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #fff, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .report-meta { font-family: 'Share Tech Mono', monospace; color: var(--text-dim); font-size: 0.9rem; }
+        
+        .classification-stamp {
+            position: absolute; top: 0; right: 0;
+            border: 2px solid var(--danger); color: var(--danger);
+            padding: 0.5rem 1.5rem; font-family: 'Share Tech Mono', monospace;
+            font-weight: bold; transform: rotate(-5deg); opacity: 0.8;
+            text-transform: uppercase; font-size: 1.2rem;
+            mix-blend-mode: difference;
+        }
+
+        .section-title {
+            font-family: 'Share Tech Mono', monospace; color: var(--danger);
+            font-size: 1.2rem; border-left: 3px solid var(--danger);
+            padding-left: 1rem; margin: 3rem 0 1.5rem 0; text-transform: uppercase;
+        }
+
+        p { margin-bottom: 1.5rem; text-align: justify; color: #ccc; }
+
+        /* --- REDACTED TEXT EFFECT --- */
+        .redacted {
+            background: var(--redacted); color: var(--redacted);
+            padding: 0 5px; cursor: help; user-select: none;
+            transition: 0.3s; position: relative;
+        }
+        .redacted:hover {
+            background: transparent; color: var(--danger); text-shadow: 0 0 8px red;
+        }
+        .redacted::before {
+            content: "█"; color: #000; position: absolute; left: 0; width: 100%; height: 100%;
+            opacity: 0; pointer-events: none;
+        }
+
+        /* --- AUDIO LOGS --- */
+        .audio-log {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
+            padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;
+            margin-bottom: 2rem; transition: 0.3s; cursor: pointer;
+        }
+        .audio-log:hover { background: rgba(255, 255, 255, 0.06); border-color: var(--danger); }
+        .play-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--danger);
+            display: flex; justify-content: center; align-items: center; color: var(--danger);
+            transition: 0.3s;
+        }
+        .audio-log:hover .play-btn { background: var(--danger); color: #000; box-shadow: 0 0 15px var(--danger); }
+        .wave-visual { height: 30px; flex: 1; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><path d="M0 10 Q 10 20 20 10 T 40 10 T 60 10 T 80 10 T 100 10" stroke="%23555" fill="none"/></svg>'); opacity: 0.5; }
+
+        /* --- FOOTER --- */
+        .footer-warning {
+            margin-top: 5rem; padding: 2rem; border: 1px dashed var(--danger);
+            text-align: center; font-family: 'Share Tech Mono', monospace;
+            color: var(--danger); opacity: 0.7; font-size: 0.8rem;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulseThreat { 0%, 100% { background: #1a0000; } 50% { background: #300000; } }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .entity-card { position: relative; top: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+    <div class="vignette"></div>
+
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside>
+            <div class="entity-card">
+                <div class="card-header">
+                    <span class="photo-overlay"></span>
+                    <!-- Imagem placeholder dark -->
+                    <div class="photo-frame">
+                        <img src="images/771f4e29-d73b-4cc5-9de9-7dd343ae2e5f.jpeg" alt="Entidade">
+                        <div class="photo-overlay"></div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-row">
+                        <span class="stat-label">CODENAME:</span>
+                        <span class="stat-value">BRAYFOG</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">ORIGEM:</span>
+                        <span class="stat-value">ALÉM-VÉU</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">AFINIDADE:</span>
+                        <span class="stat-value">MEDO / SANGUE</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">CLASSE:</span>
+                        <span class="stat-value">KETER-OMEGA</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">STATUS:</span>
+                        <span class="stat-value blinking">NÃO CONTIDO</span>
+                    </div>
+                </div>
+
+                <div class="threat-level">
+                    AMEAÇA EXISTENCIAL
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #444; text-align: right;">
+                DADOS CRIPTOGRAFADOS<br>
+                CHAVE: A.L.I.C.I.A.
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main>
+            <header class="report-header">
+                <div class="classification-stamp">ULTRA SECRETO</div>
+                <h1>ARQUIVO: BRAYFOG</h1>
+                <div class="report-meta">
+                    RELATÓRIO #882-BF // AUTOR: <span class="redacted">Conselheiro Eduard Hartmann</span> // DATA: 11/12/2025
+                </div>
+            </header>
+
+            <section>
+                <div class="section-title">01. DESCRIÇÃO PRELIMINAR</div>
+                <p>
+                    A entidade designada como <strong>"Brayfog"</strong> não possui forma física constante. Manifesta-se inicialmente como uma densa névoa cinzenta com cheiro característico de <span class="redacted">enxofre e ozônio</span>. Observadores relatam ouvir o som de "milhares de vozes sussurrando ao contrário" momentos antes de sua materialização completa.
+                </p>
+                <p>
+                    Diferente de outras criaturas do Outro Lado, o Brayfog não busca apenas consumir matéria orgânica; ele consome <strong>conceitos</strong>. Vítimas atacadas pela entidade não apenas morrem; elas são <span class="redacted">apagadas da memória coletiva</span>. Registros, fotos e lembranças sobre a vítima desaparecem gradualmente da realidade num raio de 50km.
+                </p>
+            </section>
+
+            <section>
+                <div class="section-title">02. COMPORTAMENTO E HABILIDADES</div>
+                <p>
+                    O Brayfog opera sob uma lógica de "caça cognitiva". Ele é atraído por indivíduos que possuem <span class="redacted">conhecimento proibido</span> sobre o Além-Véu. Quanto mais um agente sabe sobre a entidade, mais visível ele se torna para ela.
+                </p>
+                <ul style="list-style: none; padding-left: 1rem; color: #ccc;">
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i> <strong>Mimetismo Sonoro:</strong> Capaz de replicar vozes de entes queridos falecidos para atrair presas.</li>
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i> <strong>Distorção Espacial:</strong> Cria "bolsões" de não-realidade onde as leis da física (gravidade, tempo) não se aplicam.</li>
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-exclamation-triangle" style="color:var(--danger)"></i> <strong>Corrupção Biológica:</strong> O contato direto causa necrose acelerada e substituição de tecido ósseo por <span class="redacted">cristais negros pulsantes</span>.</li>
+                </ul>
+            </section>
+
+            <section>
+                <div class="section-title">03. REGISTRO DE INCIDENTE [SÃO FIRMO]</div>
+                <p>
+                    Durante a Operação Setentrional na Ilha de São Firmo, a equipe Alpha encontrou vestígios do Brayfog no subsolo do farol. O Agente <span class="redacted">Kian</span> tentou estabelecer comunicação ritualística. O resultado foi catastrófico.
+                </p>
+                
+                <!-- AUDIO LOG -->
+                <div class="audio-log" onclick="playAudioLog()">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                    <div style="flex: 1;">
+                        <div style="font-family: 'Share Tech Mono'; font-size: 0.8rem; color: var(--danger);">LOG DE ÁUDIO RECUPERADO #402</div>
+                        <div class="wave-visual"></div>
+                    </div>
+                    <div style="font-family: 'Share Tech Mono'; font-size: 0.8rem; color: #555;">00:42</div>
+                </div>
+
+                <p style="font-style: italic; border-left: 2px solid #333; padding-left: 1rem; color: #666;">
+                    Transcrição: "...não olhem para a luz vermelha. Ele não está no escuro, ele É o escuro entre as estrelas. O Brayfog... ele disse meu nome. Ele disse que <span class="redacted">o Santuário caiu</span>. Fujam enquanto ainda lembram quem são."
+                </p>
+            </section>
+
+            <section>
+                <div class="section-title">04. PROTOCOLOS DE CONTENÇÃO</div>
+                <p>
+                    <strong style="color: var(--danger);">NÃO HÁ MÉTODO DE CONTENÇÃO FÍSICA CONHECIDO.</strong>
+                </p>
+                <p>
+                    A única defesa eficaz é o <strong>Protocolo de Esquecimento</strong>. Agentes expostos devem passar por amnésicos de Classe A imediatamente. Se a entidade se manifestar, a área deve ser esterilizada com fogo grego e isolada da Membrana via Rituais de <span class="redacted">Distorção Temporal</span>.
+                </p>
+            </section>
+
+            <div class="footer-warning">
+                AVISO: A LEITURA DESTE ARQUIVO JÁ TORNOU VOCÊ UM ALVO POTENCIAL.<br>
+                MONITORE SUA SOMBRA. NÃO RESPONDA A SUSSURROS.
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simulação de Audio Log
+        function playAudioLog() {
+            const btn = document.querySelector('.play-btn');
+            const icon = btn.querySelector('i');
+            
+            if (icon.classList.contains('fa-play')) {
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-stop');
+                btn.style.background = 'var(--danger)';
+                btn.style.color = '#000';
+                
+                // Criar som de glitch/static
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+                
+                for (let i = 0; i < audioCtx.sampleRate * 2; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+                
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = noiseBuffer;
+                whiteNoise.loop = true;
+                
+                // Efeito bizarro
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = 50;
+                
+                whiteNoise.connect(gainNode);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                whiteNoise.start();
+                oscillator.start();
+                
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                
+                // Parar depois de alguns segundos
+                setTimeout(() => {
+                    whiteNoise.stop();
+                    oscillator.stop();
+                    icon.classList.remove('fa-stop');
+                    icon.classList.add('fa-play');
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 3000);
+            }
+        }
+
+        // Glitch effect aleatório no título
+        const title = document.querySelector('h1');
+        setInterval(() => {
+            if(Math.random() > 0.9) {
+                title.style.textShadow = `${Math.random()*4-2}px ${Math.random()*4-2}px 0px red`;
+                setTimeout(() => { title.style.textShadow = 'none'; }, 100);
+            }
+        }, 500);
+    </script>
+</body>
+</html>
