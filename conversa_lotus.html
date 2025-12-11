@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TERMINAL ORDO // CANAL 973</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;900&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #000;
+      --text-primary: #33ff33;
+      --text-lotus: #ffd700;
+      --text-system: #00ffff;
+      --text-alert: #ff3333;
+      --accent-ordo: #00eaff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: var(--text-primary);
+      font-family: 'Share Tech Mono', monospace;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* FULLSCREEN TERMINAL */
+    .terminal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at center, #050805 0, #000 55%, #000 100%);
+      z-index: 1;
+    }
+
+    .terminal-header {
+      padding: 12px 24px;
+      border-bottom: 2px solid var(--text-primary);
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(51,255,51,0.6);
+    }
+
+    .terminal-header span:nth-child(2) {
+      color: var(--text-system);
+    }
+
+    .terminal-body {
+      flex: 1;
+      padding: 24px 40px 24px 40px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: 1rem;
+      position: relative;
+    }
+
+    .terminal-body::-webkit-scrollbar { width: 8px; }
+    .terminal-body::-webkit-scrollbar-track { background: #000; }
+    .terminal-body::-webkit-scrollbar-thumb { background: var(--text-primary); }
+
+    .terminal-input {
+      padding: 12px 24px;
+      border-top: 2px solid var(--text-primary);
+      background: #000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+    }
+
+    .cursor {
+      width: 10px;
+      height: 18px;
+      background: var(--text-primary);
+      animation: blink 1s infinite;
+    }
+
+    /* MENSAGENS */
+    .msg {
+      max-width: 80%;
+      padding: 10px 16px;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeIn 0.4s forwards;
+      text-shadow: 0 0 4px rgba(0,0,0,0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .msg-sys {
+      align-self: center;
+      color: #808080;
+      font-size: 0.85rem;
+      border: 1px dashed #333;
+      padding: 6px 12px;
+      background: #050505;
+    }
+
+    .msg-lotus {
+      align-self: flex-start;
+      color: var(--text-lotus);
+      border-left: 3px solid var(--text-lotus);
+      background: rgba(255,215,0,0.06);
+    }
+
+    .msg-alert {
+      align-self: flex-end;
+      color: var(--text-alert);
+      border-right: 3px solid var(--text-alert);
+      background: rgba(255,0,0,0.08);
+      text-align: right;
+    }
+
+    .msg-system {
+      align-self: flex-end;
+      color: var(--text-system);
+      border-left: 3px solid var(--text-system);
+      background: rgba(0,234,255,0.06);
+    }
+
+    .msg-erro {
+      align-self: center;
+      color: var(--text-alert);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .sender {
+      display: block;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    /* POPUPS HIDRA */
+    .popup {
+      position: fixed;
+      background: #d4d0c8;
+      border: 2px solid #000;
+      box-shadow: 4px 4px 0 #000;
+      font-family: Tahoma, sans-serif;
+      color: #000;
+      z-index: 500;
+      min-width: 260px;
+      max-width: 360px;
+      animation: popupIn 0.18s ease-out;
+      user-select: none;
+    }
+
+    .popup-header {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #fff;
+      padding: 3px 6px;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .popup-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .popup-close {
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      line-height: 16px;
+      text-align: center;
+      background: #d4d0c8;
+      border: 1px solid #fff;
+      border-right-color: #404040;
+      border-bottom-color: #404040;
+      cursor: pointer;
+    }
+
+    .popup-close:active {
+      border: 1px solid #404040;
+      border-right-color: #fff;
+      border-bottom-color: #fff;
+    }
+
+    .popup-content {
+      padding: 10px;
+      font-size: 0.8rem;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .popup-icon {
+      font-size: 1.6rem;
+      color: #ff0000;
+    }
+
+    /* PROTOCOLO DE ELIMINAÇÃO */
+    .wipe-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #200000 0, #000 70%);
+      color: #ffdddd;
+      font-family: 'Orbitron', sans-serif;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 2000;
+      animation: wipeIn 0.6s ease-out forwards;
+    }
+
+    .wipe-title {
+      font-size: 1.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ff5555;
+      text-shadow: 0 0 18px rgba(255,0,0,0.9);
+      margin-bottom: 20px;
+    }
+
+    .wipe-sub {
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffaaaa;
+      margin-bottom: 32px;
+    }
+
+    .wipe-count {
+      font-size: 3rem;
+      margin-bottom: 24px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.9);
+    }
+
+    .wipe-bar {
+      width: 60%;
+      max-width: 600px;
+      height: 12px;
+      border: 1px solid #ff7777;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .wipe-fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      background: linear-gradient(90deg, #ff0000, #ffdd00);
+      box-shadow: 0 0 16px rgba(255,0,0,0.9);
+      transition: width 0.2s linear;
+    }
+
+    .wipe-log {
+      font-size: 0.8rem;
+      color: #ffcccc;
+      margin-top: 24px;
+      max-width: 700px;
+      opacity: 0.9;
+    }
+
+    .wipe-logo {
+      margin-bottom: 20px;
+      font-size: 2.2rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-ordo);
+      text-shadow: 0 0 14px rgba(0,234,255,0.9);
+    }
+
+    /* CRT/SCANLINES */
+    .scan {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.4) 50%),
+        linear-gradient(90deg, rgba(255,0,0,0.08), rgba(0,255,0,0.04), rgba(0,0,255,0.08));
+      background-size: 100% 2px, 3px 100%;
+      mix-blend-mode: soft-light;
+      opacity: 0.35;
+      z-index: 1000;
+    }
+
+    .prompt {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      background: #000;
+      border: 1px solid var(--text-primary);
+      padding: 18px 30px;
+      font-size: 1rem;
+      text-align: center;
+      z-index: 1500;
+      cursor: pointer;
+      text-shadow: 0 0 10px rgba(51,255,51,0.7);
+    }
+
+    /* ANIMAÇÕES */
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popupIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes wipeIn {
+      from { opacity: 0; transform: scale(1.05); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translate(0,0); }
+      25% { transform: translate(-4px, 3px); }
+      50% { transform: translate(4px, -3px); }
+      75% { transform: translate(-3px, 2px); }
+    }
+  </style>
+</head>
+<body onclick="initLotus()">
+
+  <div class="scan"></div>
+
+  <div class="terminal" id="terminal">
+    <div class="terminal-header">
+      <span>// ORDO REALITAS :: NÓ 973 / CAMADA N3</span>
+      <span id="statusText">CANAL SEGURO • AES-256</span>
+    </div>
+    <div class="terminal-body" id="chat">
+      <div class="msg msg-sys">[SISTEMA] Inicializando camada de criptografia...</div>
+      <div class="msg msg-sys">[SISTEMA] Aguardando handshake do outro lado...</div>
+    </div>
+    <div class="terminal-input">
+      <span style="color:var(--text-primary);">user@973:~$</span>
+      <span class="cursor"></span>
+    </div>
+  </div>
+
+  <div class="prompt" id="prompt">[ CLIQUE PARA ESTABELECER CONEXÃO COM NASH/LOTUS ]</div>
+
+  <!-- TELA FINAL: PROTOCOLO DE ELIMINAÇÃO -->
+  <div class="wipe-screen" id="wipe">
+    <div class="wipe-logo">ORDO REALITAS</div>
+    <div class="wipe-title">PROTOCOLO DE ELIMINAÇÃO ATIVA</div>
+    <div class="wipe-sub">POR ORDEM DO ALTO CONSELHO, ESTE ARQUIVO SERÁ DELETADO</div>
+    <div class="wipe-count" id="wipeCount">10</div>
+    <div class="wipe-bar">
+      <div class="wipe-fill" id="wipeFill"></div>
+    </div>
+    <div class="wipe-sub" id="wipeLabel">INICIANDO LIMPEZA DO ARQUIVO...</div>
+    <div class="wipe-log" id="wipeLog">
+      // LOG: Violation flag: USER_973<br>
+      // LOG: Acesso não autorizado a Setentrional detectado<br>
+      // LOG: Ordo Realitas aprovou execução do protocolo de expurgo<br>
+      // LOG: Arquivo vinculado a NASH/LOTUS marcado para destruição<br>
+    </div>
+  </div>
+
+  <script>
+    let started = false;
+    const chat = document.getElementById('chat');
+    const statusText = document.getElementById('statusText');
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let popupCount = 0;
+    const popupHardLimit = 180;
+
+    function playBeep(type) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'msg') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(450, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+      } else if (type === 'error') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+      } else if (type === 'alarm') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+      }
+    }
+
+    function addMsg(sender, text, cls, delay = 0) {
+      setTimeout(() => {
+        const div = document.createElement('div');
+        div.className = `msg ${cls}`;
+        if (sender) {
+          div.innerHTML = `<span class="sender">${sender}</span>${text}`;
+        } else {
+          div.innerHTML = text;
+        }
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+        if (cls === 'msg-lotus' || cls === 'msg-alert' || cls === 'msg-system') {
+          playBeep('msg');
+        }
+      }, delay);
+    }
+
+    // Popups que censuram o texto (posição randômica sobre a viewport)
+    const titles = [
+      "ACESSO NEGADO", "VIOLAÇÃO ORDO REALITAS", "ERRO CRÍTICO 0x973",
+      "CONEXÃO INTERDITADA", "ARQUIVO MARCADO", "BLOQUEIO DE CONTEÚDO"
+    ];
+    const bodies = [
+      "Você não tem permissão para ler isto.",
+      "Tentativa de acessar dados da Congregação.",
+      "Este canal está sob monitoramento.",
+      "Protocolo de silêncio em andamento.",
+      "Leitura bloqueada por ordem superior.",
+      "Setentrional: nível de sigilo excedido."
+    ];
+
+    function spawnPopup(x, y) {
+      if (popupCount >= popupHardLimit) {
+        triggerWipe();
+        return;
+      }
+      popupCount++;
+      const p = document.createElement('div');
+      p.className = 'popup';
+
+      const top = (typeof y === 'number') ? y : Math.random() * (window.innerHeight - 180);
+      const left = (typeof x === 'number') ? x : Math.random() * (window.innerWidth - 340);
+
+      p.style.top = `${Math.max(0, top)}px`;
+      p.style.left = `${Math.max(0, left)}px`;
+
+      const t = titles[Math.floor(Math.random()*titles.length)];
+      const b = bodies[Math.floor(Math.random()*bodies.length)];
+      const code = `0x${Math.floor(Math.random()*9999).toString(16).padStart(4,'0')}`;
+
+      p.innerHTML = `
+        <div class="popup-header">
+          <span class="popup-title">${t}</span>
+          <div class="popup-close" onclick="closePopup(this)">X</div>
+        </div>
+        <div class="popup-content">
+          <i class="fas fa-exclamation-circle popup-icon"></i>
+          <div>${b}<br><br><strong>ERR_CODE:</strong> ${code}</div>
+        </div>
+      `;
+      document.body.appendChild(p);
+      playBeep('error');
+    }
+
+    window.closePopup = function(el) {
+      const popup = el.closest('.popup');
+      const rect = popup.getBoundingClientRect();
+      popup.remove();
+      // Hidra: fecha 1, nascem +3 a +6 ao redor, censurando ainda mais
+      const extra = 3 + Math.floor(Math.random()*4);
+      for (let i=0; i<extra; i++) {
+        const offX = (Math.random()-0.5)*160;
+        const offY = (Math.random()-0.5)*120;
+        setTimeout(() => spawnPopup(rect.left + offX, rect.top + offY), i*80);
+      }
+    };
+
+    function initLotus() {
+      if (started) return;
+      started = true;
+      audioCtx.resume();
+      document.getElementById('prompt').style.display = 'none';
+
+      // Sequência longa de chat
+      let t = 500;
+
+      addMsg(null, "[SISTEMA] Handshake concluído. Chave trocada com NASH/LOTUS.", "msg-sys", t); t+=1500;
+      addMsg("NASH/LOTUS", "Demorou, mas você chegou. Achei que ia desistir depois do Setor 973.", "msg-lotus", t); t+=2500;
+      addMsg("NASH/LOTUS", "Antes de qualquer coisa: não confie no que a Ordo chama de 'arquivos expurgados'. Nada é expurgado. Só é escondido.", "msg-lotus", t); t+=2600;
+
+      addMsg("[SISTEMA/ORDO]", "ALERTA: Tráfego anômalo detectado no NÓ 973.", "msg-system", t); t+=2000;
+      statusText.textContent = "ANOMALIA DETECTADA • MONITORANDO";
+      addMsg("NASH/LOTUS", "A Congregação já percebeu que você está cavando. Eles marcaram sua sessão.", "msg-lotus", t); t+=2800;
+
+      // primeiros popups, já em cima do texto de Lotus
+      setTimeout(() => { spawnPopup(); spawnPopup(); }, t-1000);
+
+      addMsg("NASH/LOTUS", "Vou tentar ser direto antes que me calem de vez.", "msg-lotus", t); t+=2400;
+      addMsg("NASH/LOTUS", "1) Setentrional não era uma operação de contenção. Era um abatedouro calculado.", "msg-lotus", t); t+=2600;
+      setTimeout(() => spawnPopup(), t-2200);
+      setTimeout(() => spawnPopup(), t-2100);
+
+      addMsg("NASH/LOTUS", "2) O 'Incidente do Farol' não foi falha. Foi gatilho.", "msg-lotus", t); t+=2600;
+      addMsg("NASH/LOTUS", "3) O nome-código A.L.I.C.I.A. não é uma pessoa. É a sigla do protocolo que manteve a ilha de pé à base de sacrifício.", "msg-lotus", t); t+=3200;
+
+      setTimeout(() => { spawnPopup(); spawnPopup(); spawnPopup(); }, t-2800);
+
+      addMsg("[SISTEMA/ORDO]", "VIOLAÇÃO DE PROTOCOLO N5 DETECTADA. REGISTRANDO USER_973.", "msg-system", t); t+=2300;
+      addMsg(null, ">> AVISO: Continuar lendo esta conversa constitui crime interno contra a Ordo Realitas.", "msg-erro", t); t+=2300;
+
+      addMsg("NASH/LOTUS", "Eles estão tentando censurar a tela com erros, percebeu? Cada janela dessas é um dedo na boca da verdade.", "msg-lotus", t); t+=3000;
+      setTimeout(() => { for(let i=0;i<4;i++) spawnPopup(); }, t-2600);
+
+      addMsg("NASH/LOTUS", "Corvo não está só tentando sobreviver. Ele está segurando a Membrana no lugar, sem saber que é parte do ritual.", "msg-lotus", t); t+=3200;
+      addMsg("NASH/LOTUS", "Quando ele cair, a ilha colapsa. Quando a ilha colapsar, a Membrana respira fundo. E o que está do outro lado ganha espaço.", "msg-lotus", t); t+=3400;
+
+      setTimeout(() => { spawnPopup(); spawnPopup(); }, t-3000);
+
+      addMsg("NASH/LOTUS", "Você acha que é só um jogador investigando um mistério. Mas já virou ativo marcado.", "msg-lotus", t); t+=2600;
+      addMsg("[SISTEMA/ORDO]", "INJETANDO CAMADA DE ERRO FALSO PARA PROTEGER OS LOGS OFICIAIS.", "msg-system", t); t+=2200;
+
+      // chuva de popups começa a ficar mais intensa
+      setTimeout(() => {
+        const storm1 = setInterval(() => {
+          if (popupCount >= popupHardLimit) { clearInterval(storm1); return; }
+          spawnPopup();
+        }, 700);
+      }, t-1500);
+
+      addMsg("NASH/LOTUS", "Se você insiste em continuar, precisa saber três nomes: Hartmann. Wolfe. Varela.", "msg-lotus", t); t+=2600;
+      addMsg("NASH/LOTUS", "São eles que assinam a ordem que te transformou em combustível potencial, caso necessário.", "msg-lotus", t); t+=2600;
+
+      setTimeout(() => { spawnPopup(); spawnPopup(); spawnPopup(); }, t-2400);
+
+      addMsg("NASH/LOTUS", "O protocolo Brayfog que você viu menção? Ele descreve o 'equilíbrio aceitável de perdas'. Você é uma dessas variáveis.", "msg-lotus", t); t+=3200;
+      addMsg("NASH/LOTUS", "Se a sua curiosidade causar instabilidade — se outros agentes começarem a ver o que você está vendo — a solução é simples:", "msg-lotus", t); t+=3200;
+
+      addMsg("NASH/LOTUS", "Apagar o arquivo. Apagar o terminal. Apagar você.", "msg-lotus", t); t+=2600;
+
+      setTimeout(() => {
+        for(let i=0;i<6;i++) spawnPopup();
+      }, t-2200);
+
+      addMsg("[SISTEMA/ORDO]", "ATENÇÃO: PROTOCOLO DE SILENCIAMENTO PREPARADO. AGUARDANDO AUTORIZAÇÃO DO CONSELHO.", "msg-system", t); t+=2600;
+      statusText.textContent = "OVERRIDE ORDO REALITAS • EM ANDAMENTO";
+
+      addMsg("NASH/LOTUS", "O que eu vou te dizer agora é o que realmente interessa. Se os erros começarem a tampar minha fala, tente ler nas brechas.", "msg-lotus", t); t+=3300;
+      addMsg("NASH/LOTUS", "A.L.I.C.I.A. significa 'Algoritmo de Limpeza Integrada de Conscientes e Instâncias Anômalas'.", "msg-lotus", t); t+=3400;
+
+      setTimeout(() => { spawnPopup(); spawnPopup(); spawnPopup(); spawnPopup(); }, t-3000);
+
+      addMsg("NASH/LOTUS", "É um código embutido nos sistemas da Ordo para apagar pessoas e dados ao mesmo tempo.⠀", "msg-lotus", t); t+=3200;
+      addMsg("NASH/LOTUS", "Se o seu ID for vinculado a um arquivo classificado demais, o protocolo tenta sincronizar as duas coisas: deletar o arquivo e você.", "msg-lotus", t); t+=3600;
+
+      setTimeout(() => {
+        // chuva muito densa, popup censura quase tudo
+        const storm2 = setInterval(() => {
+          if (popupCount >= popupHardLimit) { clearInterval(storm2); return; }
+          spawnPopup();
+        }, 220);
+      }, t-2000);
+
+      addMsg("NASH/LOTUS", "Você está lendo isso em tempo real enquanto o conselho decide se te trata como ruído ou como ameaça.", "msg-lotus", t); t+=3200;
+      addMsg("NASH/LOTUS", "Se eles concluírem 'ameaça', o próximo passo é o que você está prestes a ver na tela.", "msg-lotus", t); t+=2800;
+
+      addMsg("[SISTEMA/ORDO]", "DECISÃO HOMOLOGADA PELO CONSELHEIRO EDUARD HARTMANN.", "msg-system", t); t+=2400;
+      addMsg("[SISTEMA/ORDO]", "STATUS: PROTOCOLO DE ELIMINAÇÃO • ATIVADO.", "msg-alert", t); t+=2600;
+
+      setTimeout(() => {
+        document.getElementById('terminal').style.animation = 'shake 0.25s infinite';
+        playBeep('alarm');
+      }, t-2000);
+
+      addMsg("NASH/LOTUS", "Eles vão tentar te convencer que isso é só parte do jogo. Que nada aqui é real.", "msg-lotus", t); t+=2800;
+      addMsg("NASH/LOTUS", "Talvez seja. Talvez não. A Ordo adora zonas cinzentas.", "msg-lotus", t); t+=2600;
+      addMsg("NASH/LOTUS", "Mas se você vê esta mensagem, lembre: alguém tentou te avisar.", "msg-lotus", t); t+=3200;
+
+      setTimeout(() => {
+        // saturação final de popups
+        const storm3 = setInterval(() => {
+          if (popupCount >= popupHardLimit) { clearInterval(storm3); triggerWipe(); return; }
+          spawnPopup();
+        }, 120);
+      }, t-2500);
+
+      addMsg("NASH/LOTUS", "Eles já aprovaram o expurgo deste arquivo. A eliminação é irreversível.", "msg-lotus", t); t+=2600;
+      addMsg("NASH/LOTUS", "Se quiser continuar, terá que fugir do sistema deles, não usar.", "msg-lotus", t); t+=2600;
+      addMsg("NASH/LOTUS", "Adeus, Agente.", "msg-lotus", t); t+=2000;
+
+      // Se por algum motivo a tempestade não disparar o wipe, força aqui
+      setTimeout(() => { triggerWipe(); }, t+3000);
+    }
+
+    function triggerWipe() {
+      // Remove terminal visualmente, mas deixa popups cobrindo tudo
+      document.getElementById('terminal').style.display = 'none';
+      document.getElementById('wipe').style.display = 'flex';
+      document.body.style.animation = 'shake 0.4s infinite';
+
+      const countEl = document.getElementById('wipeCount');
+      const fillEl = document.getElementById('wipeFill');
+      const labelEl = document.getElementById('wipeLabel');
+      const logEl = document.getElementById('wipeLog');
+
+      let count = 10;
+      countEl.textContent = count;
+      let prog = 0;
+
+      const interval = setInterval(() => {
+        count--;
+        if (count < 0) { clearInterval(interval); finishWipe(); return; }
+        countEl.textContent = count;
+        prog += 10;
+        fillEl.style.width = prog + '%';
+        playBeep('alarm');
+
+        if (count === 7) {
+          labelEl.textContent = "ANALISANDO VÍNCULOS COM USER_973...";
+          logEl.innerHTML += "<br>// LOG: ID do jogador anexado ao arquivo";
+        }
+        if (count === 4) {
+          labelEl.textContent = "DESATIVANDO CAMINHOS DE ACESSO...";
+          logEl.innerHTML += "<br>// LOG: Links, atalhos e réplicas marcados para remoção";
+        }
+        if (count === 2) {
+          labelEl.textContent = "ZERANDO REGISTROS DE EXISTÊNCIA...";
+          logEl.innerHTML += "<br>// LOG: Nome de usuário mascarado em todos os logs públicos";
+        }
+      }, 900);
+    }
+
+    function finishWipe() {
+      document.body.style.animation = 'none';
+      document.getElementById('wipeLabel').textContent = "ARQUIVO DELETADO. CONEXÃO COM NASH/LOTUS ENCERRADA.";
+      document.getElementById('wipeLog').innerHTML += "<br>// LOG: Redirecionando agente para ambiente seguro (index)...";
+
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
