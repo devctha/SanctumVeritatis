@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companhia 978 — Acesso Restrito</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #8B7830;
+            --deep-black: #0a0a0a;
+            --charcoal: #1a1a1a;
+            --burgundy: #4A0E0E;
+            --silver: #C0C0C0;
+            --cream: #F5F5DC;
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--deep-black);
+            color: var(--cream);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+        
+        /* LOADING SCREEN */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--deep-black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1.5s ease;
+        }
+        
+        #loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInLogo 2s ease forwards;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 2px;
+            background: rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: var(--gold);
+            animation: loadProgress 3s ease forwards;
+        }
+        
+        @keyframes fadeInLogo {
+            to { opacity: 1; }
+        }
+        
+        @keyframes loadProgress {
+            to { width: 100%; }
+        }
+        
+        /* NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0) 100%);
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            background: rgba(10,10,10,0.98);
+            padding: 1.5rem 5%;
+            box-shadow: 0 4px 30px rgba(212, 175, 55, 0.1);
+        }
+        
+        .nav-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-logo:hover {
+            text-shadow: 0 0 20px var(--gold);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 0.15rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* HERO SECTION */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, rgba(74,14,14,0.2) 0%, var(--deep-black) 70%);
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(212,175,55,0.03) 2px, rgba(212,175,55,0.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(212,175,55,0.03) 2px, rgba(212,175,55,0.03) 4px);
+            opacity: 0.3;
+            animation: subtleMove 20s ease infinite;
+        }
+        
+        @keyframes subtleMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10px, 10px); }
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+            letter-spacing: 0.5rem;
+            color: var(--silver);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+        
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: 7rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1s forwards;
+            text-shadow: 0 0 40px rgba(212,175,55,0.3);
+        }
+        
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--cream);
+            letter-spacing: 0.3rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.5s forwards;
+            font-style: italic;
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            color: rgba(245,245,220,0.7);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 2;
+            opacity: 0;
+            animation: fadeInUp 1s ease 2s forwards;
+        }
+        
+        .hero-divider {
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 3rem auto;
+            opacity: 0;
+            animation: fadeIn 1s ease 2.5s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                transform: translateY(30px);
+            }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        /* SECTION STYLING */
+        section {
+            min-height: 100vh;
+            padding: 8rem 5%;
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 0.3rem;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--silver);
+            margin-bottom: 4rem;
+            letter-spacing: 0.2rem;
+            font-style: italic;
+        }
+        
+        .section-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* ABOUT SECTION */
+        #about {
+            background: linear-gradient(180deg, var(--deep-black) 0%, rgba(26,26,26,0.5) 50%, var(--deep-black) 100%);
+        }
+        
+        .about-text {
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: var(--cream);
+            max-width: 1000px;
+            margin: 0 auto 3rem;
+            text-align: justify;
+            text-indent: 3rem;
+        }
+        
+        .about-text:first-of-type::first-letter {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--gold);
+            float: left;
+            line-height: 1;
+            margin: 0.1rem 0.5rem 0 0;
+            font-family: 'Cinzel', serif;
+        }
+        
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 5rem;
+        }
+        
+        .highlight-card {
+            background: rgba(26,26,26,0.8);
+            padding: 3rem 2rem;
+            border: 1px solid rgba(212,175,55,0.3);
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+        
+        .highlight-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(212,175,55,0.2);
+        }
+        
+        .highlight-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+        
+        .highlight-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            letter-spacing: 0.2rem;
+        }
+        
+        .highlight-desc {
+            color: rgba(245,245,220,0.8);
+            line-height: 1.8;
+        }
+        
+        /* FAMILIES SECTION */
+        #families {
+            background: radial-gradient(ellipse at top, rgba(74,14,14,0.1) 0%, var(--deep-black) 70%);
+        }
+        
+        .families-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .family-card {
+            background: linear-gradient(135deg, rgba(26,26,26,0.95) 0%, rgba(74,14,14,0.2) 100%);
+            padding: 3rem 2rem;
+            border: 1px solid rgba(212,175,55,0.2);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .family-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .family-card:hover::before {
+            left: 100%;
+        }
+        
+        .family-card:hover {
+            border-color: var(--gold);
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(212,175,55,0.3);
+        }
+        
+        .family-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            letter-spacing: 0.15rem;
+        }
+        
+        .family-tagline {
+            color: var(--silver);
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .family-preview {
+            color: rgba(245,245,220,0.7);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 4rem 5%;
+        }
+        
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(26,26,26,0.98) 0%, rgba(74,14,14,0.3) 100%);
+            border: 2px solid var(--gold);
+            max-width: 900px;
+            padding: 4rem;
+            position: relative;
+            box-shadow: 0 30px 90px rgba(212,175,55,0.3);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            transform: rotate(90deg);
+            text-shadow: 0 0 20px var(--gold);
+        }
+        
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            letter-spacing: 0.2rem;
+        }
+        
+        .modal-subtitle {
+            color: var(--silver);
+            font-style: italic;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+        
+        .modal-section {
+            margin-bottom: 2rem;
+        }
+        
+        .modal-section h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1rem;
+        }
+        
+        .modal-section p {
+            color: var(--cream);
+            line-height: 2;
+            text-align: justify;
+        }
+        
+        /* SQUADS SECTION */
+        #squads {
+            background: var(--deep-black);
+        }
+        
+        .squads-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .squad-card {
+            background: linear-gradient(135deg, rgba(26,26,26,0.9) 0%, rgba(10,10,10,0.95) 100%);
+            padding: 4rem 3rem;
+            border: 2px solid rgba(212,175,55,0.3);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .squad-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(212,175,55,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .squad-card:hover::after {
+            opacity: 1;
+        }
+        
+        .squad-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(212,175,55,0.2);
+        }
+        
+        .squad-symbol {
+            font-size: 4rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .squad-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 0.2rem;
+        }
+        
+        .squad-tagline {
+            text-align: center;
+            color: var(--silver);
+            font-style: italic;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .squad-description {
+            color: var(--cream);
+            line-height: 2;
+            text-align: justify;
+            margin-bottom: 2rem;
+        }
+        
+        .squad-specialties {
+            list-style: none;
+            color: rgba(245,245,220,0.8);
+        }
+        
+        .squad-specialties li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .squad-specialties li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+        
+        /* CONTACT SECTION */
+        #contact {
+            background: radial-gradient(ellipse at bottom, rgba(74,14,14,0.15) 0%, var(--deep-black) 70%);
+            text-align: center;
+        }
+        
+        .contact-warning {
+            background: rgba(74,14,14,0.3);
+            border: 2px solid var(--burgundy);
+            padding: 3rem;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+        
+        .contact-warning h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.2rem;
+        }
+        
+        .contact-warning p {
+            color: var(--cream);
+            line-height: 2;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-amount {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin: 2rem 0;
+            letter-spacing: 0.1rem;
+        }
+        
+        .contact-details {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: left;
+            color: var(--cream);
+            line-height: 2;
+        }
+        
+        .contact-details h4 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .contact-details p {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            border-left: 2px solid rgba(212,175,55,0.3);
+        }
+        
+        /* FOOTER */
+        footer {
+            background: var(--charcoal);
+            padding: 4rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(212,175,55,0.3);
+        }
+        
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            letter-spacing: 0.3rem;
+        }
+        
+        .footer-text {
+            color: var(--silver);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        
+        .footer-divider {
+            width: 300px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 2rem auto;
+        }
+        
+        .footer-copyright {
+            color: rgba(245,245,220,0.5);
+            font-size: 0.9rem;
+            letter-spacing: 0.1rem;
+        }
+        
+        /* SCROLL INDICATOR */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 3s forwards;
+        }
+        
+        .scroll-text {
+            color: var(--silver);
+            font-size: 0.8rem;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+        }
+        
+        .scroll-arrow {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, var(--gold), transparent);
+            animation: scrollAnim 2s ease infinite;
+        }
+        
+        @keyframes scrollAnim {
+            0%, 100% { opacity: 0; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(20px); }
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 968px) {
+            .hero-title { font-size: 4rem; }
+            .section-title { font-size: 2.5rem; }
+            .nav-links { gap: 1.5rem; }
+            .squads-container { grid-template-columns: 1fr; }
+            .about-highlights { grid-template-columns: 1fr; }
+            .families-grid { grid-template-columns: 1fr; }
+        }
+        
+        /* SOUND CONTROL */
+        .sound-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: rgba(26,26,26,0.9);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+        
+        .sound-toggle:hover {
+            background: var(--gold);
+            color: var(--deep-black);
+            box-shadow: 0 0 30px rgba(212,175,55,0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-logo">978</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-logo" onclick="scrollToSection('hero')">COMPANHIA 978</div>
+        <ul class="nav-links">
+            <li><a href="#about">A Organização</a></li>
+            <li><a href="#families">As Famílias</a></li>
+            <li><a href="#squads">Esquadrões</a></li>
+            <li><a href="#contact">Comunicação</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-subtitle">EST. 1647</div>
+            <h1 class="hero-title">COMPANHIA 978</h1>
+            <div class="hero-tagline">Tradição. Controle. Permanência.</div>
+            <p class="hero-description">
+                Por mais de três séculos, operamos nas sombras da História. 
+                Não respondemos a governos. Não prestamos contas a instituições. 
+                Servimos apenas àqueles que moldaram este mundo desde sempre.
+            </p>
+            <div class="hero-divider"></div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Desça</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">A Organização</h2>
+        <p class="section-subtitle">Extermínio. Contenção. Sigilo Absoluto.</p>
+        
+        <div class="section-content">
+            <p class="about-text">
+                A Companhia 978 não existe oficialmente. Não há registros públicos, documentação governamental ou qualquer rastro institucional que possa ser rastreado por meios convencionais. Operamos fora de toda jurisdição conhecida, executando contratos que envolvem ameaças classificadas, eventos anômalos e situações que desafiam qualquer protocolo estabelecido.
+            </p>
+            
+            <p class="about-text">
+                Fundada em 1647, sob o patrocínio direto das dinastias mais antigas da Europa, a Companhia foi concebida como instrumento definitivo de controle sobre fenômenos que não poderiam ser explicados ou contidos por meios tradicionais. Desde então, expandimos nossa atuação para todos os continentes, mantendo sempre a mesma filosofia: eliminar aquilo que ameaça a ordem estabelecida pelas 13 Grandes Famílias Paranormais.
+            </p>
+            
+            <p class="about-text">
+                Nossos operativos são recrutados entre os mais capacitados, treinados em instalações que não constam em mapas e equipados com recursos financeiros ilimitados. Cada missão é executada com precisão cirúrgica, cada incidente é ocultado com maestria absoluta. O mundo continua girando porque garantimos que certas verdades jamais venham à luz.
+            </p>
+            
+            <div class="about-highlights">
+                <div class="highlight-card">
+                    <div class="highlight-icon">◆</div>
+                    <div class="highlight-title">Poder Absoluto</div>
+                    <p class="highlight-desc">
+                        Recursos financeiros ilimitados provenientes das 13 Grandes Famílias. 
+                        Acesso irrestrito a toda infraestrutura necessária.
+                    </p>
+                </div>
+                
+                <div class="highlight-card">
+                    <div class="highlight-icon">◆</div>
+                    <div class="highlight-title">Sigilo Total</div>
+                    <p class="highlight-desc">
+                        Operações executadas sem deixar rastros. 
+                        Nenhuma investigação externa jamais chegou perto da verdade.
+                    </p>
+                </div>
+                
+                <div class="highlight-card">
+                    <div class="highlight-icon">◆</div>
+                    <div class="highlight-title">Tradição Secular</div>
+                    <p class="highlight-desc">
+                        Mais de 375 anos de operações ininterruptas. 
+                        Presentes em todos os grandes eventos da História moderna.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Families Section -->
+    <section id="families">
+        <h2 class="section-title">As 13 Grandes Famílias Paranormais</h2>
+        <p class="section-subtitle">As Verdadeiras Forças que Governam o Mundo</p>
+        
+        <div class="section-content">
+            <div class="families-grid">
+                <div class="family-card" onclick="openFamilyModal('draconia')">
+                    <h3 class="family-name">Casa Draconia</h3>
+                    <p class="family-tagline">A Família Original</p>
+                    <p class="family-preview">
+                        Fundadora da Companhia 978. Detentora dos segredos mais antigos. 
+                        Controle sobre eventos paranormais desde o século XII.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('rothschild')">
+                    <h3 class="family-name">Rothschild</h3>
+                    <p class="family-tagline">O Poder Financeiro</p>
+                    <p class="family-preview">
+                        Controle sobre sistemas bancários globais. Financiamento de guerras, 
+                        revoluções e contenções desde o século XVIII.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('rockefeller')">
+                    <h3 class="family-name">Rockefeller</h3>
+                    <p class="family-tagline">Energia e Indústria</p>
+                    <p class="family-preview">
+                        Monopólio sobre recursos estratégicos. Controle de infraestrutura 
+                        energética e industrial em escala planetária.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('morgan')">
+                    <h3 class="family-name">Morgan</h3>
+                    <p class="family-tagline">Capital e Influência</p>
+                    <p class="family-preview">
+                        J.P. Morgan — o banco oficial da Companhia. Gestão de patrimônios 
+                        ocultos e transações que não podem ser rastreadas.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('dupont')">
+                    <h3 class="family-name">DuPont</h3>
+                    <p class="family-tagline">Química e Armamento</p>
+                    <p class="family-preview">
+                        Desenvolvimento de armas especializadas e substâncias de contenção. 
+                        Expertise em neutralização química de ameaças anômalas.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('astor')">
+                    <h3 class="family-name">Astor</h3>
+                    <p class="family-tagline">Propriedade e Território</p>
+                    <p class="family-preview">
+                        Controle sobre propriedades estratégicas globais. 
+                        Acesso a locais onde incidentes paranormais são recorrentes.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('onassis')">
+                    <h3 class="family-name">Onassis</h3>
+                    <p class="family-tagline">Transporte e Logística</p>
+                    <p class="family-preview">
+                        Domínio sobre rotas marítimas e aéreas. Movimentação discreta 
+                        de operativos e equipamentos por todo o globo.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('kennedy')">
+                    <h3 class="family-name">Kennedy</h3>
+                    <p class="family-tagline">Política e Diplomacia</p>
+                    <p class="family-preview">
+                        Infiltração em estruturas governamentais. Capacidade de manipular 
+                        políticas públicas e decisões estratégicas.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('bush')">
+                    <h3 class="family-name">Bush</h3>
+                    <p class="family-tagline">Inteligência e Segurança</p>
+                    <p class="family-preview">
+                        Controle sobre agências de inteligência. Acesso a informações 
+                        classificadas e operações encobertas.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('windsor')">
+                    <h3 class="family-name">Windsor</h3>
+                    <p class="family-tagline">Realeza e Tradição</p>
+                    <p class="family-preview">
+                        A Família Real Britânica. Guardiões de segredos ancestrais 
+                        e artefatos de poder inestimável.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('habsburgo')">
+                    <h3 class="family-name">Habsburgo</h3>
+                    <p class="family-tagline">Império e Linhagem</p>
+                    <p class="family-preview">
+                        Dinastia europeia com séculos de domínio. Conexões profundas 
+                        com ordens religiosas e instituições milenares.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('medici')">
+                    <h3 class="family-name">Medici</h3>
+                    <p class="family-tagline">Arte e Conhecimento</p>
+                    <p class="family-preview">
+                        Patronos das artes e ciências ocultas. Custódia de manuscritos 
+                        proibidos e conhecimento hermético.
+                    </p>
+                </div>
+                
+                <div class="family-card" onclick="openFamilyModal('saud')">
+                    <h3 class="family-name">House of Saud</h3>
+                    <p class="family-tagline">Petróleo e Oriente</p>
+                    <p class="family-preview">
+                        Controle sobre recursos energéticos do Oriente Médio. 
+                        Acesso a regiões de alta incidência paranormal.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Squads Section -->
+    <section id="squads">
+        <h2 class="section-title">Esquadrões Operacionais</h2>
+        <p class="section-subtitle">Forças Especializadas da Companhia 978</p>
+        
+        <div class="section-content">
+            <div class="squads-container">
+                <div class="squad-card">
+                    <div class="squad-symbol">⚔</div>
+                    <h3 class="squad-name">CEÍFEROS</h3>
+                    <p class="squad-tagline">Extermínio e Contenção Extrema</p>
+                    <p class="squad-description">
+                        O Esquadrão Ceíferos 978 representa a força letal da Companhia. 
+                        Especializado em eliminação direta de ameaças de alto risco, 
+                        opera em cenários onde a contenção não é uma opção viável. 
+                        Cada operativo é treinado em combate extremo, armamento especializado 
+                        e protocolos de extermínio definitivo.
+                    </p>
+                    <ul class="squad-specialties">
+                        <li>Eliminação de entidades hostis</li>
+                        <li>Neutralização de eventos catastróficos</li>
+                        <li>Operações de risco extremo</li>
+                        <li>Resposta imediata a ameaças classe-A</li>
+                    </ul>
+                </div>
+                
+                <div class="squad-card">
+                    <div class="squad-symbol">⚜</div>
+                    <h3 class="squad-name">ROSAS</h3>
+                    <p class="squad-tagline">Investigação e Infiltração</p>
+                    <p class="squad-description">
+                        As Rosas são a face invisível da Companhia. Mestres em manipulação 
+                        social, inteligência e infiltração profunda. Atuam em ambientes 
+                        onde a força bruta é ineficaz — cortes políticas, círculos 
+                        empresariais, instituições religiosas. Cada Rosa é um agente 
+                        treinado em múltiplas identidades e operações de longo prazo.
+                    </p>
+                    <ul class="squad-specialties">
+                        <li>Infiltração em organizações-alvo</li>
+                        <li>Coleta de inteligência sensível</li>
+                        <li>Manipulação de narrativas públicas</li>
+                        <li>Operações encobertas de longa duração</li>
+                    </ul>
+                </div>
+                
+                <div class="squad-card">
+                    <div class="squad-symbol">⛨</div>
+                    <h3 class="squad-name">ESPINHOS</h3>
+                    <p class="squad-tagline">Defesa e Neutralização Estratégica</p>
+                    <p class="squad-description">
+                        Os Espinhos são a linha de defesa das 13 Grandes Famílias. 
+                        Especializados em escolta de alto risco, proteção de ativos 
+                        estratégicos e neutralização preventiva de ameaças. Cada Espinho 
+                        é um mestre em táticas defensivas, antecipação de riscos e 
+                        resposta tática imediata.
+                    </p>
+                    <ul class="squad-specialties">
+                        <li>Proteção de membros das Famílias</li>
+                        <li>Segurança de instalações críticas</li>
+                        <li>Neutralização preventiva de ameaças</li>
+                        <li>Escolta em zonas de alto risco</li>
+                    </ul>
+                </div>
+                
+                <div class="squad-card">
+                    <div class="squad-symbol">☥</div>
+                    <h3 class="squad-name">COLHEITADORES</h3>
+                    <p class="squad-tagline">Recuperação e Ocultamento</p>
+                    <p class="squad-description">
+                        Os Colheitadores são responsáveis pelo que vem depois. 
+                        Recuperação de artefatos, limpeza de cenas de incidentes, 
+                        ocultamento de evidências e manipulação de registros oficiais. 
+                        Garantem que nada do que a Companhia faz jamais seja descoberto. 
+                        São mestres em apagar rastros e reescrever a História.
+                    </p>
+                    <ul class="squad-specialties">
+                        <li>Recuperação de artefatos anômalos</li>
+                        <li>Limpeza forense completa</li>
+                        <li>Manipulação de registros oficiais</li>
+                        <li>Ocultamento de incidentes paranormais</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">Comunicação Oficial</h2>
+        <p class="section-subtitle">Restrições e Custos</p>
+        
+        <div class="section-content">
+            <div class="contact-warning">
+                <h3>PROTOCOLO DE CONTATO</h3>
+                <p>
+                    A Companhia 978 não aceita solicitações públicas. 
+                    Não respondemos a curiosos. Não negociamos com amadores.
+                </p>
+                <p>
+                    Para estabelecer qualquer forma de comunicação oficial, 
+                    é obrigatório o depósito inicial não reembolsável de:
+                </p>
+                <div class="contact-amount">US$ 1.500.000</div>
+                <p>
+                    O depósito deve ser realizado exclusivamente via J.P. Morgan, 
+                    em conta específica fornecida mediante verificação prévia de identidade.
+                </p>
+            </div>
+            
+            <div class="contact-details">
+                <h4>Condições Adicionais</h4>
+                <p>
+                    — Operações paranormais envolvendo ameaças classificadas: 
+                    custos calculados conforme nível de risco e sigilo exigido.
+                </p>
+                <p>
+                    — Missões especiais requisitadas diretamente pelas Famílias: 
+                    valores determinados pelo Conselho Interno.
+                </p>
+                <p>
+                    — Contratos de longa duração ou operações em múltiplas jurisdições: 
+                    negociação direta com representantes autorizados.
+                </p>
+                
+                <h4>Nota Final</h4>
+                <p>
+                    Este depósito funciona como filtro. Se o valor representa 
+                    um problema para você, então você não é nosso cliente. 
+                    A Companhia 978 atende apenas aqueles que compreendem o valor 
+                    do verdadeiro controle.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">COMPANHIA 978</div>
+        <p class="footer-text">Tradição. Controle. Permanência.</p>
+        <div class="footer-divider"></div>
+        <p class="footer-copyright">
+            EST. 1647 — Todas as operações são executadas sob sigilo absoluto. 
+            A Companhia 978 não mantém presença pública oficial.
+        </p>
+    </footer>
+
+    <!-- Modal for Family Details -->
+    <div id="familyModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeFamilyModal()">✕</span>
+            <h2 class="modal-title" id="modalFamilyName"></h2>
+            <p class="modal-subtitle" id="modalFamilyTagline"></p>
+            <div id="modalFamilyContent"></div>
+        </div>
+    </div>
+
+    <!-- Sound Toggle -->
+    <div class="sound-toggle" onclick="toggleSound()" title="Controlar áudio ambiente">
+        <span id="soundIcon">🔇</span>
+    </div>
+
+    <!-- Audio -->
+    <audio id="ambientSound" loop>
+        <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+    </audio>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('fade-out');
+            }, 3500);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Family Modal Data
+        const familiesData = {
+            draconia: {
+                name: 'Casa Draconia',
+                tagline: 'A Família Original',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A Casa Draconia é a mais antiga das 13 Grandes Famílias, com registros que remontam ao século XII. Fundadora da Companhia 978 em 1647, foi responsável por unificar as demais dinastias em torno de um propósito comum: controlar, conter e eliminar ameaças paranormais que pudessem desestabilizar o poder estabelecido.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Coordenação geral das operações da Companhia. Custódia de artefatos de poder inestimável. Conhecimento hermético e acesso a segredos perdidos das civilizações antigas.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>A Casa Draconia não participa da política ou economia moderna de forma direta. Seu poder é de outra natureza: controle sobre conhecimento proibido, rituais ancestrais e conexões com forças que não podem ser explicadas.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>A Casa Draconia detém voto decisivo no Conselho das 13 Famílias. É a única dinastia com autoridade para aprovar ou vetar operações de extremo sigilo.</p>
+                    </div>
+                `
+            },
+            rothschild: {
+                name: 'Rothschild',
+                tagline: 'O Poder Financeiro',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A família Rothschild consolidou seu poder no século XVIII através do controle de sistemas bancários na Europa. Financiaram guerras, revoluções e construíram impérios. Sua entrada no Conselho das 13 Famílias ocorreu em 1798, quando demonstraram capacidade de manipular economias inteiras.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Controle sobre bancos centrais, sistemas financeiros globais e fluxos de capital internacional. Capacidade de desestabilizar ou fortalecer economias conforme interesses estratégicos.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Rothschild são o motor financeiro da Companhia 978. Qualquer operação de grande escala é viabilizada através de seus recursos. Nenhuma transação jamais é rastreada.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Principais financiadores das operações. Garantem que a Companhia tenha acesso ilimitado a recursos, independentemente de custos.</p>
+                    </div>
+                `
+            },
+            rockefeller: {
+                name: 'Rockefeller',
+                tagline: 'Energia e Indústria',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A dinastia Rockefeller construiu seu império através do controle do petróleo no século XIX. Expandiram para indústria farmacêutica, educação e saúde pública. Seu ingresso no Conselho das 13 Famílias ocorreu em 1911.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Controle sobre recursos energéticos, infraestrutura industrial e desenvolvimento tecnológico. Influência sobre políticas de saúde pública e educação em escala global.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Rockefeller garantem que a Companhia tenha acesso a qualquer recurso material necessário — desde combustível para operações até tecnologia de ponta.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Fornecedores primários de recursos energéticos e tecnológicos. Controlam instalações secretas onde operações críticas são conduzidas.</p>
+                    </div>
+                `
+            },
+            morgan: {
+                name: 'Morgan',
+                tagline: 'Capital e Influência',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>J.P. Morgan consolidou seu poder através do controle bancário e investimentos em ferrovias, aço e eletricidade no final do século XIX. Sua família ingressou no Conselho das 13 Famílias em 1901.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Gestão de patrimônios ocultos, transações financeiras não rastreáveis e controle sobre grandes corporações globais.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>J.P. Morgan é o banco oficial da Companhia 978. Todo depósito inicial para comunicação com a organização é processado através de suas contas.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Responsáveis pela gestão financeira operacional. Garantem que todas as transações da Companhia permaneçam invisíveis para qualquer auditoria externa.</p>
+                    </div>
+                `
+            },
+            dupont: {
+                name: 'DuPont',
+                tagline: 'Química e Armamento',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A família DuPont iniciou sua ascensão no século XIX através da produção de pólvora e explosivos. Expandiram para química industrial e desenvolvimento de armamentos avançados.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Desenvolvimento de armas especializadas para contenção e extermínio de ameaças anômalas. Produção de substâncias químicas utilizadas em operações de limpeza.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os DuPont são os arsenalistas da Companhia 978. Qualquer armamento ou substância necessária para operações extremas é desenvolvida por seus laboratórios secretos.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Fornecedores exclusivos de tecnologia de contenção e armamento especializado para os esquadrões operacionais.</p>
+                    </div>
+                `
+            },
+            astor: {
+                name: 'Astor',
+                tagline: 'Propriedade e Território',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A família Astor construiu sua fortuna através de investimentos imobiliários em Nova York e Europa no século XIX. Controlam propriedades estratégicas em todo o mundo.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Controle sobre propriedades onde incidentes paranormais são recorrentes. Acesso a territórios restritos e locais de alta importância estratégica.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Astor garantem que a Companhia tenha acesso a qualquer local necessário para suas operações — desde mansões abandonadas até instalações militares desativadas.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Proprietários das instalações secretas onde operativos são treinados e ameaças são contidas.</p>
+                    </div>
+                `
+            },
+            onassis: {
+                name: 'Onassis',
+                tagline: 'Transporte e Logística',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A família Onassis construiu seu império através do controle de rotas marítimas e transporte de petróleo no século XX. Dominam logística global.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Controle sobre rotas de transporte marítimo e aéreo. Capacidade de mover operativos, equipamentos e artefatos para qualquer lugar do mundo sem deixar rastros.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Onassis garantem que a Companhia possa operar em qualquer continente com logística perfeita e sigilo absoluto.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Responsáveis pela movimentação discreta de todas as forças operacionais da Companhia.</p>
+                    </div>
+                `
+            },
+            kennedy: {
+                name: 'Kennedy',
+                tagline: 'Política e Diplomacia',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A família Kennedy consolidou sua influência através da política norte-americana no século XX. Infiltraram estruturas governamentais em múltiplos níveis.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Manipulação de políticas públicas, controle sobre decisões estratégicas governamentais e capacidade de influenciar eleições.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Kennedy garantem que a Companhia tenha cobertura política sempre que necessário — desde aprovação de operações até ocultamento de incidentes.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Facilitadores políticos que garantem que nenhuma investigação oficial chegue perto da verdade.</p>
+                    </div>
+                `
+            },
+            bush: {
+                name: 'Bush',
+                tagline: 'Inteligência e Segurança',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A família Bush construiu sua influência através de conexões com agências de inteligência dos EUA, incluindo a CIA. Controlam redes de espionagem global.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Acesso a informações classificadas, controle sobre operações encobertas e capacidade de manipular agências de inteligência.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Bush fornecem à Companhia acesso irrestrito a qualquer informação necessária — desde registros governamentais até vigilância em tempo real.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Responsáveis pela coleta de inteligência e neutralização de ameaças antes que se tornem públicas.</p>
+                    </div>
+                `
+            },
+            windsor: {
+                name: 'Windsor',
+                tagline: 'Realeza e Tradição',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A Família Real Britânica mantém tradições que remontam a séculos. Guardiões de segredos ancestrais e artefatos históricos de poder inestimável.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Custódia de artefatos paranormais, conhecimento hermético preservado por gerações e conexões com ordens secretas europeias.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Windsor representam continuidade e tradição dentro do Conselho. Sua palavra carrega peso histórico e autoridade ancestral.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Conselheiros históricos que garantem que as operações da Companhia respeitem protocolos ancestrais.</p>
+                    </div>
+                `
+            },
+            habsburgo: {
+                name: 'Habsburgo',
+                tagline: 'Império e Linhagem',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A Casa de Habsburgo governou impérios europeus por séculos. Mantêm conexões profundas com ordens religiosas e instituições milenares.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Influência sobre instituições religiosas, acesso a arquivos históricos proibidos e controle sobre artefatos sacros.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Habsburgo fornecem à Companhia acesso a conhecimento preservado em mosteiros, catedrais e arquivos secretos do Vaticano.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Guardiões de conhecimento hermético e facilitadores de operações que envolvem instituições religiosas.</p>
+                    </div>
+                `
+            },
+            medici: {
+                name: 'Medici',
+                tagline: 'Arte e Conhecimento',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A família Medici foi patrona das artes e ciências durante o Renascimento. Custodiaram manuscritos proibidos e conhecimento oculto por gerações.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Preservação de conhecimento hermético, custódia de manuscritos alquímicos e acesso a sociedades secretas italianas.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Medici fornecem à Companhia acesso a conhecimento que não pode ser encontrado em lugar algum — desde rituais antigos até fórmulas alquímicas.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Conselheiros intelectuais que garantem que operações envolvendo conhecimento proibido sejam conduzidas adequadamente.</p>
+                    </div>
+                `
+            },
+            saud: {
+                name: 'House of Saud',
+                tagline: 'Petróleo e Oriente',
+                content: `
+                    <div class="modal-section">
+                        <h3>História e Origem</h3>
+                        <p>A Casa de Saud consolidou seu poder através do controle sobre recursos energéticos do Oriente Médio no século XX. Dominam regiões de alta incidência paranormal.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Área de Atuação</h3>
+                        <p>Controle sobre petróleo, acesso a desertos e regiões isoladas onde fenômenos anômalos são frequentes.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Influência</h3>
+                        <p>Os Saud garantem que a Companhia tenha acesso irrestrito ao Oriente Médio — uma das regiões mais estratégicas para operações paranormais.</p>
+                    </div>
+                    <div class="modal-section">
+                        <h3>Relação com a Companhia 978</h3>
+                        <p>Facilitadores de operações em território árabe e fornecedores de recursos energéticos para missões de longa duração.</p>
+                    </div>
+                `
+            }
+        };
+
+        function openFamilyModal(familyKey) {
+            const family = familiesData[familyKey];
+            if (family) {
+                document.getElementById('modalFamilyName').textContent = family.name;
+                document.getElementById('modalFamilyTagline').textContent = family.tagline;
+                document.getElementById('modalFamilyContent').innerHTML = family.content;
+                document.getElementById('familyModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeFamilyModal() {
+            document.getElementById('familyModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.getElementById('familyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFamilyModal();
+            }
+        });
+
+        // Sound Control
+        let soundEnabled = false;
+        const ambientSound = document.getElementById('ambientSound');
+        const soundIcon = document.getElementById('soundIcon');
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            if (soundEnabled) {
+                ambientSound.play().catch(e => console.log('Audio play failed:', e));
+                soundIcon.textContent = '🔊';
+            } else {
+                ambientSound.pause();
+                soundIcon.textContent = '🔇';
+            }
+        }
+
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.family-card, .squad-card, .highlight-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
