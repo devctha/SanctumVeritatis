@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACESSO RESTRITO: CONSELHO ESCARLATE // RELÍQUIAS DE CONHECIMENTO</title>
+    <style>
+        :root {
+            --primary: #f5e6c8; /* pergaminho pálido */
+            --secondary: #b38f5b; /* dourado antigo */
+            --accent: #6a3a1a; /* marrom ritual */
+            --bg: #050308; /* fundo escuro */
+            --text: #f5f1e8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: text; }
+        
+        body {
+            background: radial-gradient(circle at top, #181018 0, #050308 50%, #000 100%);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.25;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.02) 0px,
+                rgba(255,255,255,0.02) 1px,
+                rgba(0,0,0,0.5) 2px,
+                rgba(0,0,0,0.5) 4px
+            );
+            z-index: 10;
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+            animation: scan 9s linear infinite;
+        }
+
+        .ink-bleed {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 20% 0%, rgba(80,40,20,0.35), transparent 55%),
+                        radial-gradient(circle at 80% 100%, rgba(20,40,80,0.35), transparent 55%);
+            opacity: 0.35;
+            z-index: 8;
+            pointer-events: none;
+            mix-blend-mode: multiply;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.7rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--primary);
+            text-shadow: 
+                0 0 8px rgba(0,0,0,0.8),
+                0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: "CONSELHO ESCARLATE";
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            color: rgba(255,255,255,0.08);
+            letter-spacing: 6px;
+            text-shadow: none;
+            mix-blend-mode: overlay;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #a89984;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .warning-box {
+            border: 1px solid var(--secondary);
+            background: rgba(20,10,5,0.8);
+            padding: 10px 15px;
+            color: var(--primary);
+            font-size: 0.75rem;
+            margin-bottom: 18px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .relics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        .relic-card {
+            border: 1px solid #3c2b1a;
+            background: radial-gradient(circle at top, #221511 0, #130c0a 50%, #070304 100%);
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .relic-card::before {
+            content: "";
+            position: absolute;
+            inset: -20%;
+            background-image: 
+                repeating-linear-gradient(
+                    45deg,
+                    rgba(255,255,255,0.03),
+                    rgba(255,255,255,0.03) 1px,
+                    transparent 2px,
+                    transparent 4px
+                );
+            opacity: 0;
+            transition: 0.5s;
+            mix-blend-mode: soft-light;
+        }
+
+        .relic-card:hover::before {
+            opacity: 1;
+        }
+
+        .relic-card:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 0 25px rgba(179,143,91,0.4);
+            transform: translateY(-4px);
+        }
+
+        .relic-icon {
+            font-size: 3.2rem;
+            text-align: center;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.9));
+            transition: 0.4s;
+        }
+
+        .relic-card:hover .relic-icon {
+            transform: scale(1.08) translateY(-4px);
+        }
+
+        .data-label {
+            color: #7c6f5f;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .relic-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            border-left: 3px solid var(--secondary);
+            padding-left: 10px;
+            text-transform: uppercase;
+        }
+
+        .encrypted-text {
+            color: #c9c0b0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            min-height: 80px;
+            position: relative;
+        }
+
+        .encrypted-text::after {
+            content: "█";
+            position: absolute;
+            right: 0;
+            bottom: -2px;
+            opacity: 0.4;
+            animation: caret 1s steps(1) infinite;
+        }
+
+        .origin-tag {
+            display: inline-block;
+            background: rgba(5,3,2,0.9);
+            color: #dcc6a2;
+            padding: 3px 9px;
+            font-size: 0.7rem;
+            margin-top: 14px;
+            border: 1px solid var(--secondary);
+            letter-spacing: 1px;
+        }
+
+        .aspect-tag {
+            float: right;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+        }
+
+        .demonlarium-section {
+            margin-top: 60px;
+            border-top: 1px dashed #4f3c2a;
+            padding-top: 20px;
+            opacity: 0.6;
+            transition: 0.8s;
+        }
+
+        .demonlarium-section:hover {
+            opacity: 1;
+        }
+
+        .demonlarium-section h3 {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .demonlarium-section p {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            max-width: 650px;
+            line-height: 1.7;
+            color: #e0d5c3;
+        }
+
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.96);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            width: 85%;
+            max-width: 680px;
+            border: 2px solid var(--secondary);
+            background: radial-gradient(circle, #221511 0, #0c0705 70%);
+            padding: 26px 26px 20px;
+            box-shadow: 0 0 45px rgba(0,0,0,0.9);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 6px;
+            right: 12px;
+            color: var(--secondary);
+            font-size: 1.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.15);
+        }
+
+        #modal-title {
+            color: var(--primary);
+            font-size: 1.35rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #3c2b1a;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        #modal-body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            color: #f5ebdc;
+            line-height: 1.7;
+        }
+
+        #modal-body strong {
+            color: var(--secondary);
+        }
+
+        .modal-status {
+            margin-top: 16px;
+            border: 1px solid #3c2b1a;
+            padding: 8px 10px;
+            font-size: 0.7rem;
+            color: #b3a48c;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        @keyframes caret {
+            0%, 50% { opacity: 0.4; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.1rem; letter-spacing: 3px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="ink-bleed"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="warning-box">
+                ⚠ PROTOCOLO K-N0W ATIVO // EXPOSIÇÃO ÀS RELÍQUIAS DE CONHECIMENTO PODE CORROMPER MEMÓRIAS E REALIDADES PESSOAIS.
+            </div>
+            <h1>CONSELHO ESCARLATE</h1>
+            <p class="subtitle">Arquivo: Relíquias de Conhecimento // Origem: Demonlarium</p>
+        </header>
+
+        <main class="relics-grid">
+            <!-- RELÍQUIA DE CONHECIMENTO 1 -->
+            <div class="relic-card" onclick="openModal('codex')">
+                <span class="data-label">Relíquia K-001 // Classe: Arquivo Vivo</span>
+                <span class="aspect-tag">Aspecto: Conhecimento</span>
+                <div class="relic-icon">📜</div>
+                <h2 class="relic-title">Codex da Membrana Partida</h2>
+                <p class="encrypted-text" data-original="Um livro cuja ordem das páginas muda toda vez que é aberto. Ele registra tudo que foi esquecido por alguém, em algum lugar. Ler o Codex devolve memórias perdidas, mas, em troca, apaga um conhecimento diferente, escolhido ao acaso.">
+                    [PÁGINA 404 NÃO ENCONTRADA] // ÍNDICE REORDENADO // MEMÓRIA SUBSTITUÍDA...
+                </p>
+                <div class="origin-tag">Recuperado em biblioteca que nunca constou em nenhum mapa ou registro.</div>
+            </div>
+
+            <!-- RELÍQUIA DE CONHECIMENTO 2 -->
+            <div class="relic-card" onclick="openModal('olho')">
+                <span class="data-label">Relíquia K-002 // Classe: Observador Absoluto</span>
+                <span class="aspect-tag">Aspecto: Conhecimento</span>
+                <div class="relic-icon">👁️</div>
+                <h2 class="relic-title">Olho Bibliotecário</h2>
+                <p class="encrypted-text" data-original="Um olho preservado em âmbar, sempre olhando para o próximo segredo ainda não descoberto. Ao ser implantado, permite ver anotações invisíveis na realidade: comentários, notas de rodapé e versões alternativas de eventos. Porém, o portador perde a capacidade de sonhar.">
+                    ANOTAÇÃO MARGINAL DETECTADA // [ACESSO PARCIAL] // SONHOS ARQUIVADOS...
+                </p>
+                <div class="origin-tag">Encontrado em sala de leitura que existia apenas entre 3h03 e 3h04.</div>
+            </div>
+
+            <!-- RELÍQUIA DE CONHECIMENTO 3 -->
+            <div class="relic-card" onclick="openModal('fio')">
+                <span class="data-label">Relíquia K-003 // Classe: Linguagem Primordial</span>
+                <span class="aspect-tag">Aspecto: Conhecimento</span>
+                <div class="relic-icon">🧵</div>
+                <h2 class="relic-title">Fio da Linguagem Primordial</h2>
+                <p class="encrypted-text" data-original="Um fio fino, quase translúcido, que pode ser costurado em textos, símbolos ou até na língua de alguém. Quem fala com o fio costurado consegue se comunicar com qualquer criatura — viva, morta ou além da membrana — mas cada conversa reescreve sutilmente a história de um termo ou conceito no mundo.">
+                    SINTAXE REORDENADA // VOCABULÁRIO REESCRITO // SIGNIFICADO ≠ ORIGEM...
+                </p>
+                <div class="origin-tag">Coletado em manuscrito que continuava escrevendo a si mesmo.</div>
+            </div>
+        </main>
+
+        <div class="demonlarium-section">
+            <h3>>> ANEXO: SUB-SETOR DE CONHECIMENTO DO DEMONLARIUM</h3>
+            <p>
+                O setor de Conhecimento do Demonlarium não é uma biblioteca, é uma ferida aberta na noção de saber. 
+                Lá, cada verdade vem acompanhada do cadáver de todas as versões que foram descartadas. 
+                As relíquias de Conhecimento são vazamentos dessa ferida: objetos que não apenas armazenam informação, 
+                mas a reescrevem ativamente, trocando o que você sabe pelo que o Outro Lado quer que você saiba.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body"></div>
+            <div class="modal-status">
+                STATUS: REFERÊNCIA CRUZADA // CONSULTA PERMITIDA APENAS SOB SUPERVISÃO DO CONSELHO ESCARLATE.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DECIPHER / "DIGITAÇÃO" EM TEMPO REAL
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789?!#%&";
+
+        document.querySelectorAll('.encrypted-text').forEach(element => {
+            const originalText = element.getAttribute('data-original');
+            let running = false;
+
+            element.addEventListener('mouseover', event => {
+                if (running) return;
+                running = true;
+                let iterations = 0;
+                let interval = setInterval(() => {
+                    event.target.innerText = originalText
+                        .split("")
+                        .map((letter, index) => {
+                            if (index < iterations) return originalText[index];
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join("");
+
+                    if (iterations >= originalText.length) {
+                        clearInterval(interval);
+                        running = false;
+                    }
+
+                    iterations += 0.4;
+                }, 30);
+            });
+        });
+
+        // CANVAS: "FLUXO DE TINTA / GLYPHS"
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const glyphs = "ᛃᚨᛟᚱᛞᛉᚾᚱᛇᚺᚠᛋᛞᚹ";
+
+        class InkGlyph {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 16 + 8;
+                this.speedY = (Math.random() * 0.6) + 0.2;
+                this.alpha = Math.random() * 0.4 + 0.1;
+                this.char = glyphs[Math.floor(Math.random() * glyphs.length)];
+            }
+            update() {
+                this.y += this.speedY;
+                if (this.y > canvas.height + 20) {
+                    this.y = -20;
+                }
+            }
+            draw() {
+                ctx.font = this.size + "px 'Courier New', monospace";
+                ctx.fillStyle = "rgba(245,230,200," + this.alpha + ")";
+                ctx.fillText(this.char, this.x, this.y);
+            }
+        }
+
+        const streams = [];
+        function initGlyphs() {
+            for (let i = 0; i < 80; i++) {
+                streams.push(new InkGlyph());
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            streams.forEach(g => {
+                g.update();
+                g.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        initGlyphs();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // MODAL
+        const modal = document.getElementById('modal-overlay');
+        const mTitle = document.getElementById('modal-title');
+        const mBody = document.getElementById('modal-body');
+
+        const db = {
+            'codex': {
+                t: 'CODEX DA MEMBRANA PARTIDA (K-001)',
+                b: `
+                    <strong>Origem conhecida:</strong> Resgatado de uma sala de arquivos que não constava em nenhuma planta oficial. 
+                    Após a remoção do Codex, a sala simplesmente deixou de existir.<br><br>
+                    <strong>Efeito Primário:</strong> Quando alguém lê uma passagem em voz alta, recupera uma memória esquecida 
+                    (ponto de trama, pista, trauma antigo ou informação perdida).<br><br>
+                    <strong>Custo Cognitivo:</strong> Ao final da leitura, o leitor esquece um outro conhecimento à escolha do Mestre 
+                    (uma perícia, um idioma, a solução de um mistério, um nome importante, etc.). O Codex decide o que é apagado.
+                `
+            },
+            'olho': {
+                t: 'OLHO BIBLIOTECÁRIO (K-002)',
+                b: `
+                    <strong>Procedimento de Vínculo:</strong> O olho deve substituir um dos olhos naturais do portador, cirurgicamente ou por manifestação paranormal.<br><br>
+                    <strong>Efeito Primário:</strong> O portador passa a enxergar "anotações" sobre o mundo: 
+                    rabiscos invisíveis em paredes, comentários flutuando ao lado de pessoas, pequenas notas de rodapé acima de objetos. 
+                    Essas notas podem revelar segredos, fraquezas, origens e futuras possibilidades.<br><br>
+                    <strong>Conseqüência:</strong> O portador perde completamente a capacidade de sonhar e, com o tempo, 
+                    começa a confundir essas notas com a realidade, sofrendo penalidades em testes sociais ao tentar diferenciar 
+                    o que as pessoas realmente disseram do que ele "leu" sobre elas.
+                `
+            },
+            'fio': {
+                t: 'FIO DA LINGUAGEM PRIMORDIAL (K-003)',
+                b: `
+                    <strong>Ativação:</strong> O fio deve ser costurado na língua, na ponta dos dedos ou diretamente em um texto importante.<br><br>
+                    <strong>Efeito Primário:</strong> Enquanto o fio estiver ativo, o portador consegue se comunicar com qualquer entidade: 
+                    humanos, animais, mortos, ecos, entidades do Outro Lado e até conceitos parcialmente conscientes (como "medo" ou "memória" de um lugar).<br><br>
+                    <strong>Reescrita Semântica:</strong> Cada diálogo realizado por meio do fio altera sutilmente o significado de um conceito no mundo. 
+                    Palavras podem mudar de sentido, símbolos antigos podem assumir novas interpretações, 
+                    e rituais conhecidos podem falhar porque a própria linguagem que os sustentava foi reprogramada.
+                `
+            }
+        };
+
+        function openModal(id) {
+            mTitle.innerText = db[id].t;
+            mBody.innerHTML = db[id].b;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal();
+        });
+
+        // "comentários" no console
+        console.log("%c CONSELHO ESCARLATE // RELÍQUIAS DE CONHECIMENTO", "color: #f5e6c8; font-size: 14px; font-weight: bold; background: #000; padding: 4px;");
+        console.log("Alguns arquivos não querem ser lidos. Eles querem ler você.");
+    </script>
+</body>
+</html>

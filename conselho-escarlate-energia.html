@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACESSO RESTRITO: CONSELHO ESCARLATE // RELÍQUIAS DE ENERGIA</title>
+    <style>
+        :root {
+            --primary: #00ffff; /* Ciano elétrico */
+            --secondary: #ff00ff; /* Magenta vibrante */
+            --accent: #9d00ff; /* Roxo neon */
+            --bg: #050510; /* Azul escuro profundo */
+            --text: #e8e8ff;
+            --chaos-gradient: linear-gradient(45deg, #00ffff, #ff00ff, #9d00ff, #00ff88);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        body {
+            background: radial-gradient(circle at center, #0a0a1f 0, #000000 70%);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* CUSTOM CURSOR */
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: 0.1s;
+            mix-blend-mode: difference;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.35;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 255, 0.03) 0px,
+                rgba(255, 0, 255, 0.03) 1px,
+                rgba(0, 0, 0, 0.4) 2px,
+                rgba(0, 0, 0, 0.4) 4px
+            );
+            z-index: 10;
+            pointer-events: none;
+            animation: scan 6s linear infinite;
+        }
+
+        .crt-flicker {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, rgba(0,255,255,0.08), rgba(255,0,255,0.05));
+            opacity: 0.15;
+            z-index: 9;
+            pointer-events: none;
+            animation: flicker 0.12s infinite;
+        }
+
+        .chaos-glow {
+            position: fixed;
+            inset: 0;
+            background: var(--chaos-gradient);
+            opacity: 0.03;
+            z-index: 8;
+            pointer-events: none;
+            animation: chaosShift 8s ease-in-out infinite;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.9rem;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            background: var(--chaos-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+            animation: textGlitch 3s infinite;
+        }
+
+        h1::after {
+            content: "CONSELHO ESCARLATE";
+            position: absolute;
+            left: 4px;
+            top: 0;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
+            animation: glitch 1.8s infinite linear alternate-reverse;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .warning-box {
+            border: 1px solid var(--accent);
+            background: rgba(157, 0, 255, 0.1);
+            padding: 12px 16px;
+            color: var(--primary);
+            font-size: 0.75rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: pulseWarning 2s ease-in-out infinite;
+        }
+
+        .relics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .relic-card {
+            border: 1px solid #1a1a3a;
+            background: linear-gradient(135deg, #0a0a1a 0%, #050510 50%, #000 100%);
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .relic-card::before {
+            content: "";
+            position: absolute;
+            inset: -100%;
+            background: conic-gradient(from 0deg, transparent 0 60%, rgba(0,255,255,0.2) 70%, transparent 80% 100%);
+            opacity: 0;
+            transition: 0.5s;
+            animation: rotateBorder 4s linear infinite;
+        }
+
+        .relic-card:hover::before {
+            opacity: 1;
+        }
+
+        .relic-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), 0 0 50px rgba(255, 0, 255, 0.2);
+            transform: translateY(-6px) scale(1.02);
+        }
+
+        .relic-icon {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 8px var(--primary));
+            transition: 0.4s;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        .relic-card:hover .relic-icon {
+            transform: scale(1.15) rotate(8deg);
+            filter: drop-shadow(0 0 18px var(--secondary)) drop-shadow(0 0 25px var(--accent));
+        }
+
+        .data-label {
+            color: #666;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .relic-title {
+            font-size: 1.45rem;
+            background: var(--chaos-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--accent);
+            padding-left: 10px;
+            text-transform: uppercase;
+        }
+
+        .encrypted-text {
+            color: #9090a8;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            min-height: 85px;
+            transition: color 0.3s;
+        }
+
+        .relic-card:hover .encrypted-text {
+            color: #d8d8ff;
+        }
+
+        .origin-tag {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.7);
+            color: #b0b0d0;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            margin-top: 14px;
+            border: 1px solid var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .aspect-tag {
+            float: right;
+            font-size: 0.7rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            text-shadow: 0 0 5px var(--primary);
+        }
+
+        .demonlarium-section {
+            margin-top: 60px;
+            border-top: 1px dashed #333;
+            padding-top: 20px;
+            opacity: 0.6;
+            transition: 0.8s;
+        }
+
+        .demonlarium-section:hover {
+            opacity: 1;
+        }
+
+        .demonlarium-section h3 {
+            background: var(--chaos-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .demonlarium-section p {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            max-width: 650px;
+            line-height: 1.7;
+            color: #b5b5c8;
+        }
+
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.96);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            width: 85%;
+            max-width: 660px;
+            border: 2px solid var(--accent);
+            background: radial-gradient(circle, #0f0f1f 0%, #000 80%);
+            padding: 28px;
+            box-shadow: 0 0 50px rgba(157, 0, 255, 0.6), 0 0 80px rgba(0, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 14px;
+            color: var(--primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            color: var(--secondary);
+            transform: scale(1.2);
+        }
+
+        #modal-title {
+            background: var(--chaos-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        #modal-body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            color: #d8d8ff;
+            line-height: 1.7;
+        }
+
+        #modal-body strong {
+            color: var(--primary);
+        }
+
+        .modal-status {
+            margin-top: 18px;
+            border: 1px solid #333;
+            padding: 9px 12px;
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes glitch {
+            0% { clip: rect(12px, 9999px, 75px, 0); transform: skew(0.4deg); }
+            20% { clip: rect(60px, 9999px, 18px, 0); transform: skew(0.3deg); }
+            40% { clip: rect(25px, 9999px, 82px, 0); transform: skew(0.1deg); }
+            60% { clip: rect(8px, 9999px, 95px, 0); transform: skew(0.6deg); }
+            80% { clip: rect(48px, 9999px, 30px, 0); transform: skew(0.2deg); }
+            100% { clip: rect(72px, 9999px, 15px, 0); transform: skew(0.5deg); }
+        }
+
+        @keyframes textGlitch {
+            0%, 90%, 100% { opacity: 1; }
+            92%, 94%, 96% { opacity: 0.8; }
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.12; }
+            15% { opacity: 0.2; }
+            50% { opacity: 0.15; }
+            100% { opacity: 0.12; }
+        }
+
+        @keyframes chaosShift {
+            0%, 100% { transform: rotate(0deg) scale(1.5); }
+            50% { transform: rotate(180deg) scale(1.8); }
+        }
+
+        @keyframes pulseWarning {
+            0%, 100% { box-shadow: 0 0 5px rgba(157, 0, 255, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
+        }
+
+        @keyframes rotateBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; letter-spacing: 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <div class="scanlines"></div>
+    <div class="crt-flicker"></div>
+    <div class="chaos-glow"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="warning-box">
+                ⚡ AVISO: INSTABILIDADE CAÓTICA DETECTADA // TRANSFORMAÇÕES IMPREVISÍVEIS EM CURSO // NÍVEL DE ENTROPIA: CRÍTICO
+            </div>
+            <h1>CONSELHO ESCARLATE</h1>
+            <p class="subtitle">Arquivo: Relíquias de Energia // Origem: Demonlarium</p>
+        </header>
+
+        <main class="relics-grid">
+            <!-- RELÍQUIA DE ENERGIA 1 -->
+            <div class="relic-card" onclick="openModal('cubo')">
+                <span class="data-label">Relíquia E-001 // Classe: Caos Transformador</span>
+                <span class="aspect-tag">Aspecto: Energia</span>
+                <div class="relic-icon">🎲</div>
+                <h2 class="relic-title">Cubo de Fractais Infinitos</h2>
+                <p class="encrypted-text" data-original="Um paradoxo geométrico que nunca assume a mesma forma duas vezes. Suas faces mudam cores, texturas e até dimensões. Segurar o cubo concede ao portador a habilidade de distorcer probabilidades, mas cada uso altera permanentemente uma lei física menor ao seu redor.">
+                    0x4F2A >> TRANSFORMAÇÃO_ATIVA :: ?!?!?! ... [DADOS CORROMPIDOS] ... ∞
+                </p>
+                <div class="origin-tag">Recuperado em zona de colapso de realidade temporal.</div>
+            </div>
+
+            <!-- RELÍQUIA DE ENERGIA 2 -->
+            <div class="relic-card" onclick="openModal('chave')">
+                <span class="data-label">Relíquia E-002 // Classe: Ignição Caótica</span>
+                <span class="aspect-tag">Aspecto: Energia</span>
+                <div class="relic-icon">🔑</div>
+                <h2 class="relic-title">Chave de Faísca Perpétua</h2>
+                <p class="encrypted-text" data-original="Uma chave feita de eletricidade solidificada. Ela não abre fechaduras físicas, mas abre 'possibilidades fechadas': caminhos impossíveis, decisões que nunca foram tomadas. Usar a chave força o universo a recalcular um evento passado, criando uma nova linha temporal caótica.">
+                    ERRO_404 :: REALIDADE NÃO ENCONTRADA ... ⚡ ... RECALCULANDO...
+                </p>
+                <div class="origin-tag">Encontrada flutuando em corredor entre dimensões.</div>
+            </div>
+
+            <!-- RELÍQUIA DE ENERGIA 3 -->
+            <div class="relic-card" onclick="openModal('prisma')">
+                <span class="data-label">Relíquia E-003 // Classe: Fragmentação de Existência</span>
+                <span class="aspect-tag">Aspecto: Energia</span>
+                <div class="relic-icon">💎</div>
+                <h2 class="relic-title">Prisma de Espectros Divergentes</h2>
+                <p class="encrypted-text" data-original="Ao ser ativado, divide o portador em múltiplas versões simultâneas de si mesmo, cada uma em um estado de energia diferente (elétrico, térmico, cinético). Todas as versões agem ao mesmo tempo, mas apenas uma sobrevive ao final da manifestação.">
+                    DIVISÃO_QUÂNTICA... EU + EU + EU = ??? ... QUAL É O REAL?
+                </p>
+                <div class="origin-tag">Coletado após experimento de fusão dimensional fracassado.</div>
+            </div>
+        </main>
+
+        <div class="demonlarium-section">
+            <h3>>> ANEXO: SUB-SETOR DE ENERGIA DO DEMONLARIUM</h3>
+            <p>
+                O setor de Energia do Demonlarium é uma tempestade eterna de possibilidades não realizadas. 
+                Nada ali permanece igual por mais de um instante. As leis da física são sugestões ignoradas, 
+                e as relíquias de Energia não foram criadas: elas se criaram a partir do próprio caos primordial. 
+                Trazê-las para a Realidade não foi um erro — foi uma aposta de que poderíamos controlar o incontrolável.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body"></div>
+            <div class="modal-status">
+                STATUS: CONTIDO COM INSTABILIDADE ACEITÁVEL // USO AUTORIZADO APENAS EM SITUAÇÕES DE EMERGÊNCIA CAÓTICA.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CUSTOM CURSOR
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // DECIPHER EFFECT
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*⚡∞?!";
+
+        document.querySelectorAll('.encrypted-text').forEach(element => {
+            const originalText = element.getAttribute('data-original');
+            let running = false;
+
+            element.addEventListener('mouseover', event => {
+                if (running) return;
+                running = true;
+                let iterations = 0;
+                let interval = setInterval(() => {
+                    event.target.innerText = originalText
+                        .split("")
+                        .map((letter, index) => {
+                            if (index < iterations) return originalText[index];
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join("");
+
+                    if (iterations >= originalText.length) {
+                        clearInterval(interval);
+                        running = false;
+                    }
+
+                    iterations += 0.6;
+                }, 25);
+            });
+        });
+
+        // CANVAS PARTICLES (ENERGY CHAOS)
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class EnergyParticle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 0.5;
+                this.speedX = (Math.random() * 2) - 1;
+                this.speedY = (Math.random() * 2) - 1;
+                const colors = ['#00ffff', '#ff00ff', '#9d00ff', '#00ff88', '#ff0088'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = Math.random() * 0.8 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // Chaotic bounce
+                if (Math.random() > 0.98) {
+                    this.speedX *= -1;
+                    this.speedY *= -1;
+                }
+
+                if (this.size > 0.2) this.size -= 0.01;
+                if (
+                    this.size <= 0.2 ||
+                    this.x < -20 || this.x > canvas.width + 20 ||
+                    this.y < -20 || this.y > canvas.height + 20
+                ) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+
+                // Electric trails
+                if (Math.random() > 0.95) {
+                    ctx.strokeStyle = this.color;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(
+                        this.x + (Math.random() * 20 - 10),
+                        this.y + (Math.random() * 20 - 10)
+                    );
+                    ctx.stroke();
+                }
+            }
+        }
+
+        const particles = [];
+        function initParticles() {
+            for (let i = 0; i < 150; i++) {
+                particles.push(new EnergyParticle());
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // MODAL SYSTEM
+        const modal = document.getElementById('modal-overlay');
+        const mTitle = document.getElementById('modal-title');
+        const mBody = document.getElementById('modal-body');
+
+        const db = {
+            'cubo': {
+                t: 'CUBO DE FRACTAIS INFINITOS (E-001)',
+                b: `
+                    <strong>Origem Conhecida:</strong> Capturado em zona de colapso de realidade onde duas dimensões se fundiram temporariamente.<br><br>
+                    <strong>Efeito Primário:</strong> O portador pode gastar 3 PE para rolar novamente qualquer dado (ataque, dano, perícia). 
+                    O cubo escolhe aleatoriamente qual resultado será usado (original ou nova rolagem).<br><br>
+                    <strong>Efeito Colateral:</strong> Cada uso do cubo altera permanentemente uma "regra menor" da realidade ao redor do portador 
+                    (ex: a gravidade fica 5% mais fraca, cores ficam levemente distorcidas, sons ecoam 0.2s após serem emitidos).
+                `
+            },
+            'chave': {
+                t: 'CHAVE DE FAÍSCA PERPÉTUA (E-002)',
+                b: `
+                    <strong>Procedimento de Ativação:</strong> A chave deve ser "inserida" em um momento de dúvida ou arrependimento (narrativamente). 
+                    Funciona como um reset de decisões.<br><br>
+                    <strong>Efeito Primário:</strong> Uma vez por sessão, permite "desfazer" uma ação realizada nos últimos 10 minutos de jogo. 
+                    O tempo retrocede para todos, mas apenas o portador mantém memória completa do que aconteceu.<br><br>
+                    <strong>Risco Caótico:</strong> Há 25% de chance de que a linha temporal não se estabilize corretamente, 
+                    gerando um evento aleatório extra (role na tabela de Caos do mestre).
+                `
+            },
+            'prisma': {
+                t: 'PRISMA DE ESPECTROS DIVERGENTES (E-003)',
+                b: `
+                    <strong>Ativação:</strong> O portador deve segurar o prisma contra a própria testa por 3 segundos enquanto diz "Eu sou múltiplo".<br><br>
+                    <strong>Efeito Primário:</strong> Cria 3 cópias temporárias do portador, cada uma representando um "estado de energia":
+                    <br>- <strong>Cópia Elétrica:</strong> +2 em Agilidade, ataca com dano elétrico adicional.
+                    <br>- <strong>Cópia Térmica:</strong> +2 em Vigor, imune a frio e fogo.
+                    <br>- <strong>Cópia Cinética:</strong> +2 em Força, pode atravessar paredes por 1 turno.
+                    <br><br>Todas agem simultaneamente por 1d4 turnos. Ao final, role 1d4: o número indica qual cópia sobrevive. As outras desaparecem com suas memórias.
+                `
+            }
+        };
+
+        function openModal(id) {
+            mTitle.innerText = db[id].t;
+            mBody.innerHTML = db[id].b;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal();
+        });
+
+        // CONSOLE EASTER EGG
+        console.log("%c⚡ CONSELHO ESCARLATE // RELÍQUIAS DE ENERGIA ⚡", "color: #00ffff; font-size: 15px; font-weight: bold; background: #000; padding: 5px;");
+        console.log("Sub-sistema de Energia conectado ao Demonlarium.");
+        console.log("O caos é inevitável. A mudança é a única constante.");
+        console.log("Você mudou " + Math.floor(Math.random() * 100) + " vezes desde que abriu esta página.");
+    </script>
+</body>
+</html>

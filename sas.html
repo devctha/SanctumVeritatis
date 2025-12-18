@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>SINTECH ARCHIVE SARCOPHAGUS • S.A.S</title>
+  <meta name="description" content="SINTECH ARCHIVE SARCOPHAGUS (S.A.S.) — interface de busca restrita." />
+
+  <!-- Fonte “terminal” (sem dependência externa de font files; usa monospace do sistema) -->
+  <style>
+    :root{
+      --bg0:#05060a;
+      --bg1:#060816;
+      --glass: rgba(10, 12, 20, .62);
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted:#7aa2f7;
+
+      --grid: rgba(86, 88, 240, .10);
+      --frame: rgba(168, 85, 247, .35);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.16);
+      --shadowO: 0 0 14px rgba(251,146,60,.12);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .12;
+      --noise-opacity: .07;
+      --flicker: .045;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 15%, rgba(168,85,247,.12), transparent 60%),
+        radial-gradient(900px 600px at 80% 30%, rgba(56,189,248,.10), transparent 58%),
+        radial-gradient(900px 600px at 55% 90%, rgba(34,197,94,.08), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    /* Fullscreen layout */
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(14px, 2vw, 22px);
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+      gap: clamp(12px, 1.6vw, 18px);
+      isolation:isolate;
+    }
+
+    /* CRT overlay layers */
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(100% 100% at 50% 50%, rgba(255,255,255,.05), transparent 60%),
+        linear-gradient(90deg, rgba(255,0,0,.025), transparent 25%, rgba(0,255,255,.018) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.55;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+
+    /* Scanlines (inspirado em técnicas com gradientes/máscara) */
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.55) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+      /* alternativa ao mask-image, mas a ideia é a mesma: linhas repetidas no container [web:2] */
+    }
+
+    @keyframes scanShift{
+      0%{ transform: translateY(0); }
+      100%{ transform: translateY(12px); }
+    }
+
+    /* Noise */
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      background-size: 220px 220px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.8s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-6px,4px,0); }
+      50%{ transform: translate3d(5px,-4px,0); }
+      75%{ transform: translate3d(-3px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    /* Subtle flicker */
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 5.2s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      41%{ opacity: calc(var(--flicker) * 1.2); }
+      42%{ opacity: 0; }
+      62%{ opacity: calc(var(--flicker) * .8); }
+      63%{ opacity: 0; }
+      86%{ opacity: calc(var(--flicker) * 1.35); }
+      87%{ opacity: 0; }
+    }
+
+    /* Header */
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(5,6,10,.42));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+
+    .toprow{
+      display:flex;
+      gap: 14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width: 220px;
+    }
+    .brand .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:700;
+      font-size: clamp(14px, 1.6vw, 16px);
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+    }
+    .brand .subtitle{
+      font-size: 12px;
+      color: rgba(219,234,254,.72);
+      line-height:1.35;
+    }
+
+    .status{
+      display:grid;
+      gap: 6px;
+      align-content:start;
+      justify-items:end;
+      text-align:right;
+      min-width: 220px;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.24);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowB);
+      font-size: 12px;
+      color: rgba(219,234,254,.80);
+      user-select:none;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(34,197,94,.55);
+    }
+
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.62);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,.25);
+      background: rgba(251,146,60,.08);
+      color: #ffe4c7;
+    }
+
+    /* Main panel */
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.64), rgba(3,6,18,.42));
+      border: 1px solid rgba(168,85,247,.18);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 0;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 40%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    .panelHead{
+      position:relative;
+      z-index:1;
+      padding: 16px 16px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+
+    .panelHead .label{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+
+    .legend{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+      font-size:12px;
+      color: rgba(219,234,254,.55);
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.28);
+    }
+    .tag b{
+      font-weight:700;
+      color: rgba(219,234,254,.80);
+    }
+
+    .panelBody{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 16px;
+      padding: 16px;
+      min-height: 0;
+    }
+
+    @media (max-width: 980px){
+      .panelBody{ grid-template-columns: 1fr; }
+      .status{ justify-items:start; text-align:left; }
+    }
+
+    /* Search block */
+    .searchBlock{
+      border-radius: 16px;
+      border: 1px solid rgba(34,197,94,.18);
+      background: rgba(2,6,23,.25);
+      box-shadow: var(--shadowG), inset 0 0 0 1px rgba(56,189,248,.08);
+      padding: 14px;
+      min-height: 0;
+      display:grid;
+      gap: 12px;
+      align-content:start;
+    }
+
+    .searchRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .searchRow input{
+      flex: 1 1 240px;
+      min-width: 200px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: rgba(3,6,18,.60);
+      color: var(--text);
+      outline:none;
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.08), var(--shadowV);
+      font-family: var(--mono);
+      font-size: 14px;
+      caret-color: var(--orange);
+    }
+    .searchRow input::placeholder{ color: rgba(219,234,254,.45); }
+
+    .btn{
+      flex: 0 0 auto;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(251,146,60,.26);
+      background:
+        linear-gradient(180deg, rgba(251,146,60,.20), rgba(239,68,68,.12));
+      color: #ffe4c7;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowO), var(--shadowR);
+      transition: transform .08s ease, filter .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .hint{
+      font-size: 12px;
+      color: rgba(219,234,254,.62);
+      line-height:1.45;
+    }
+    .hint .mono{
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+    }
+
+    /* Results list */
+    .results{
+      border-radius: 16px;
+      border: 1px solid rgba(56,189,248,.16);
+      background: rgba(2,6,23,.22);
+      box-shadow: var(--shadowB), inset 0 0 0 1px rgba(168,85,247,.06);
+      padding: 14px;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+      overflow:hidden;
+    }
+
+    .resultsHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+
+    .resultsHeader .count{
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.70);
+    }
+
+    .list{
+      overflow:auto;
+      padding-right: 6px;
+      border-radius: 12px;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+    }
+    .item{
+      position:relative;
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.10);
+      background: rgba(3,6,18,.35);
+      margin-bottom: 10px;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .12s ease, filter .12s ease;
+      outline:none;
+    }
+    .item:hover{
+      border-color: rgba(34,197,94,.22);
+      filter: brightness(1.08);
+    }
+    .item:active{ transform: translateY(1px); }
+
+    .sig{
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, rgba(168,85,247,.9), rgba(56,189,248,.6));
+      box-shadow: var(--shadowV), var(--shadowB);
+      margin-top: 4px;
+      flex: 0 0 auto;
+    }
+    .meta{
+      display:grid;
+      gap: 4px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .meta .name{
+      font-size: 13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .meta .desc{
+      font-size: 12px;
+      color: rgba(219,234,254,.62);
+      line-height:1.35;
+    }
+
+    .path{
+      font-size: 11px;
+      color: rgba(56,189,248,.70);
+      text-shadow: var(--shadowB);
+      white-space:nowrap;
+    }
+
+    /* Footer */
+    footer{
+      position:relative;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(239,68,68,.14);
+      background: rgba(2,6,23,.22);
+      box-shadow: var(--shadowR);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      overflow:hidden;
+    }
+    footer .left, footer .right{
+      font-size: 12px;
+      color: rgba(219,234,254,.62);
+    }
+    footer .right .warn{
+      color: rgba(251,146,60,.78);
+      text-shadow: var(--shadowO);
+    }
+
+    /* Intro modal */
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.58);
+      backdrop-filter: blur(7px);
+    }
+
+    .introCard{
+      width:min(920px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.88), rgba(3,6,18,.62));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 40px rgba(168,85,247,.18),
+        0 0 46px rgba(56,189,248,.12);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+
+    .introTop .mark{
+      display:grid;
+      gap: 6px;
+    }
+    .introTop .mark .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:700;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      font-size: 13px;
+    }
+    .introTop .mark .s{
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+    }
+
+    .introBody{
+      padding: 14px 16px 16px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .typebox{
+      border-radius: 16px;
+      border: 1px solid rgba(34,197,94,.18);
+      background: rgba(2,6,23,.22);
+      padding: 12px 12px;
+      box-shadow: var(--shadowG), inset 0 0 0 1px rgba(56,189,248,.06);
+      min-height: 160px;
+      overflow:auto;
+      font-size: 12px;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      white-space: pre-wrap;
+    }
+
+    .introActions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .ghost{
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowB);
+    }
+
+    .tiny{
+      font-size: 11px;
+      color: rgba(219,234,254,.55);
+      line-height:1.35;
+    }
+
+    /* Glitch title */
+    .glitch{
+      position:relative;
+      display:inline-block;
+    }
+    .glitch::before,
+    .glitch::after{
+      content: attr(data-text);
+      position:absolute;
+      left:0;
+      top:0;
+      opacity:.55;
+      pointer-events:none;
+    }
+    .glitch::before{
+      transform: translate(1px, -1px);
+      color: rgba(56,189,248,.8);
+      animation: glitchA 2.6s infinite linear;
+    }
+    .glitch::after{
+      transform: translate(-1px, 1px);
+      color: rgba(34,197,94,.7);
+      animation: glitchB 3.1s infinite linear;
+    }
+    @keyframes glitchA{
+      0%, 100%{ clip-path: inset(0 0 0 0); }
+      12%{ clip-path: inset(12% 0 74% 0); }
+      28%{ clip-path: inset(64% 0 12% 0); }
+      52%{ clip-path: inset(8% 0 78% 0); }
+      77%{ clip-path: inset(50% 0 22% 0); }
+    }
+    @keyframes glitchB{
+      0%, 100%{ clip-path: inset(0 0 0 0); }
+      18%{ clip-path: inset(70% 0 10% 0); }
+      33%{ clip-path: inset(14% 0 66% 0); }
+      61%{ clip-path: inset(42% 0 32% 0); }
+      84%{ clip-path: inset(6% 0 80% 0); }
+    }
+
+    /* Accessibility / reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .crt::after, .noise, .flicker, .glitch::before, .glitch::after{ animation:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header>
+      <div class="toprow">
+        <div class="brand">
+          <div class="title glitch" data-text="SINTECH ARCHIVE SARCOPHAGUS">SINTECH ARCHIVE SARCOPHAGUS</div>
+          <div class="subtitle">
+            Modo: <span style="color:rgba(34,197,94,.85);text-shadow:var(--shadowG)">Acesso restrito</span> •
+            Interface: <span style="color:rgba(56,189,248,.85);text-shadow:var(--shadowB)">S.A.S</span> •
+            Canal: <span style="color:rgba(251,146,60,.85);text-shadow:var(--shadowO)">Terminal</span>
+          </div>
+        </div>
+
+        <div class="status">
+          <div class="pill"><span class="dot"></span><span>LINK STABLE • NODE SYNC</span></div>
+          <div class="kbd">Atalhos: <code>/</code> foco • <code>Enter</code> buscar • <code>Esc</code> limpar</div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="panelHead">
+        <div class="label">SAS QUERY INTERFACE</div>
+        <div class="legend">
+          <span class="tag"><b style="color:rgba(168,85,247,.9)">VIOLET</b> protocolo</span>
+          <span class="tag"><b style="color:rgba(56,189,248,.9)">BLUE</b> index</span>
+          <span class="tag"><b style="color:rgba(34,197,94,.9)">GREEN</b> autorizado</span>
+          <span class="tag"><b style="color:rgba(239,68,68,.9)">RED</b> risco</span>
+          <span class="tag"><b style="color:rgba(251,146,60,.9)">ORANGE</b> tráfego</span>
+        </div>
+      </div>
+
+      <div class="panelBody">
+        <section class="searchBlock" aria-label="Busca">
+          <div class="hint">
+            Digite um termo conhecido (ex.: <span class="mono">setentrional</span>) para abrir o arquivo na pasta
+            <span class="mono">SAS Results/</span>. Termos desconhecidos geram resultados “fantasma”.
+          </div>
+
+          <div class="searchRow">
+            <input id="q" autocomplete="off" spellcheck="false" placeholder="S.A.S > inserir termo..." />
+            <button class="btn" id="btnSearch">Executar</button>
+            <button class="ghost" id="btnRandom">Ruído</button>
+          </div>
+
+          <div class="hint tiny" id="sysLine">
+            SYS: cache frio • criptografia cosmética ativa • logs: inexistentes • operador: anônimo
+          </div>
+
+          <div class="hint tiny">
+            Dica: clique em um resultado para abrir. “Ruído” injeta telemetria falsa (visual) para dopamina.
+          </div>
+        </section>
+
+        <section class="results" aria-label="Resultados">
+          <div class="resultsHeader">
+            <div class="count">SAS RESULTS • <span id="count">0</span> entradas</div>
+            <div class="kbd">Acesso: <code>LOCAL</code> • Modo: <code>REDIRECT</code></div>
+          </div>
+
+          <div class="list" id="list" tabindex="0" aria-label="Lista de resultados">
+            <!-- Results injected here -->
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="left">S.A.S • build: NIGHTSHADE • viewport: adaptive • rendering: CRT overlay</div>
+      <div class="right"><span class="warn">AVISO:</span> se você não “conhece o termo”, você não deveria estar aqui.</div>
+    </footer>
+  </div>
+
+  <!-- Intro (sempre que abrir) -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução S.A.S">
+    <div class="introCard">
+      <div class="introTop">
+        <div class="mark">
+          <div class="h glitch" data-text="S.A.S HANDSHAKE / INIT">S.A.S HANDSHAKE / INIT</div>
+          <div class="s">Autenticação simbólica • varredura de ambiente • sincronização de índice local</div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>SESSION OPEN</span></div>
+      </div>
+
+      <div class="introBody">
+        <div class="typebox" id="typebox"></div>
+
+        <div class="introActions">
+          <button class="btn" id="btnEnter">Entrar</button>
+          <button class="ghost" id="btnSkip">Pular</button>
+          <div class="tiny">Pressione <strong>Enter</strong> para entrar ou <strong>Esc</strong> para pular.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Redirecionamento simples por JS via window.location [web:10]
+    const ROUTES = [
+      {
+        term: "setentrional",
+        title: "SETENTRIONAL",
+        desc: "Arquivo vinculado • diretório de investigações • índice parcial.",
+        path: "SAS Results/setentrional.html"
+      },
+      // Adicione mais:
+      // { term:"prometheus", title:"PROMETHEUS FOUNDATION", desc:"...", path:"SAS Results/prometheus.html" }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    const q = $("q");
+    const list = $("list");
+    const count = $("count");
+    const sysLine = $("sysLine");
+
+    const intro = $("intro");
+    const typebox = $("typebox");
+
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+    function normalize(s){
+      return (s || "").toString().trim().toLowerCase();
+    }
+
+    function escapeHTML(str){
+      return str.replace(/[&<>"']/g, (m) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    function setSys(text){
+      sysLine.textContent = "SYS: " + text;
+    }
+
+    function dopaminePulse(){
+      // Micro “dopamina”: variações de opacidade + mensagens, sem poluir UX
+      const lines = [
+        "cache quente • índice oscilante • ruído aplicado",
+        "handshake mantido • checksum ok • eco residual",
+        "canal estável • latência fantasma • tráfego mascarado",
+        "permissões: ambíguas • observador: ausente • sinal: vivo",
+        "injeção visual ativa • rastros: neutralizados • modo: subterrâneo"
+      ];
+      setSys(lines[Math.floor(Math.random()*lines.length)]);
+      document.documentElement.style.setProperty("--scan-opacity", (0.08 + Math.random()*0.10).toFixed(2));
+      document.documentElement.style.setProperty("--noise-opacity", (0.05 + Math.random()*0.08).toFixed(2));
+      document.documentElement.style.setProperty("--flicker", (0.03 + Math.random()*0.06).toFixed(3));
+      // volta suave após um tempo
+      setTimeout(() => {
+        document.documentElement.style.setProperty("--scan-opacity", ".12");
+        document.documentElement.style.setProperty("--noise-opacity", ".07");
+        document.documentElement.style.setProperty("--flicker", ".045");
+        setSys("cache frio • criptografia cosmética ativa • logs: inexistentes • operador: anônimo");
+      }, 1200);
+    }
+
+    function renderResults(items, query){
+      list.innerHTML = "";
+      count.textContent = String(items.length);
+
+      if(!items.length){
+        const ghost = [
+          {
+            title: "NO MATCH / GHOST INDEX",
+            desc: `Nenhuma entrada mapeada para "${query}". Tente um termo conhecido.`,
+            path: "SAS Results/∅"
+          },
+          {
+            title: "SUGESTÃO",
+            desc: "Digite: setentrional",
+            path: "SAS Results/setentrional.html"
+          }
+        ];
+
+        ghost.forEach((g) => {
+          const el = document.createElement("div");
+          el.className = "item";
+          el.tabIndex = 0;
+          el.innerHTML = `
+            <div class="sig"></div>
+            <div class="meta">
+              <div class="name">${escapeHTML(g.title)}</div>
+              <div class="desc">${escapeHTML(g.desc)}</div>
+              <div class="path">${escapeHTML(g.path)}</div>
+            </div>
+          `;
+          el.addEventListener("click", dopaminePulse);
+          el.addEventListener("keydown", (e) => { if(e.key === "Enter") dopaminePulse(); });
+          list.appendChild(el);
+        });
+        return;
+      }
+
+      items.forEach((it) => {
+        const el = document.createElement("div");
+        el.className = "item";
+        el.tabIndex = 0;
+        el.innerHTML = `
+          <div class="sig"></div>
+          <div class="meta">
+            <div class="name">${escapeHTML(it.title)}</div>
+            <div class="desc">${escapeHTML(it.desc)}</div>
+            <div class="path">${escapeHTML(it.path)}</div>
+          </div>
+        `;
+
+        const go = () => {
+          dopaminePulse();
+          // Pequeno atraso para sentir o "click"
+          setTimeout(() => {
+            // pode trocar por location.replace(...) se quiser não deixar histórico [web:10]
+            window.location.href = it.path;
+          }, 220);
+        };
+
+        el.addEventListener("click", go);
+        el.addEventListener("keydown", (e) => { if(e.key === "Enter") go(); });
+
+        list.appendChild(el);
+      });
+    }
+
+    function search(){
+      const query = normalize(q.value);
+      if(!query){
+        renderResults([], "");
+        return;
+      }
+
+      const hits = ROUTES.filter(r => r.term === query || r.title.toLowerCase().includes(query));
+      renderResults(hits, query);
+      dopaminePulse();
+    }
+
+    // Intro typing
+    const bootLines = [
+      "[S.A.S] initiating secure shell…",
+      "[S.A.S] loading local index…",
+      "[S.A.S] verifying operator imprint…",
+      "[S.A.S] applying chroma separation…",
+      "[S.A.S] scanline raster: engaged",
+      "[S.A.S] access model: KNOW-TERM",
+      "[S.A.S] warning: unknown queries generate ghosts",
+      "",
+      "Digite um termo conhecido para abrir um arquivo dentro de:",
+      "  /SAS Results/",
+      "",
+      "Termo recomendado:",
+      "  setentrional",
+      "",
+      "Pressione ENTER para entrar."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+
+      const tick = () => {
+        if(i >= bootLines.length) return;
+        typebox.textContent += bootLines[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        const base = 36;
+        const jitter = Math.random()*90;
+        setTimeout(tick, base + jitter);
+      };
+      tick();
+    }
+
+    function closeIntro(focusSearch=true){
+      intro.style.display = "none";
+      if(focusSearch){
+        q.focus();
+        q.setSelectionRange(q.value.length, q.value.length);
+      }
+      dopaminePulse();
+    }
+
+    // Events
+    $("btnSearch").addEventListener("click", search);
+    $("btnRandom").addEventListener("click", dopaminePulse);
+
+    $("btnEnter").addEventListener("click", () => closeIntro(true));
+    $("btnSkip").addEventListener("click", () => closeIntro(true));
+
+    window.addEventListener("keydown", (e) => {
+      if(intro.style.display !== "none"){
+        if(e.key === "Enter") closeIntro(true);
+        if(e.key === "Escape") closeIntro(true);
+        return;
+      }
+
+      if(e.key === "/"){
+        e.preventDefault();
+        q.focus();
+      }
+      if(e.key === "Enter"){
+        if(document.activeElement === q || document.activeElement === list) search();
+      }
+      if(e.key === "Escape"){
+        q.value = "";
+        renderResults([], "");
+        setSys("limpo • aguardando termo • sem rastros");
+      }
+    });
+
+    q.addEventListener("input", () => {
+      // Sugestão em tempo real bem leve
+      const query = normalize(q.value);
+      if(query.length === 0){
+        setSys("cache frio • criptografia cosmética ativa • logs: inexistentes • operador: anônimo");
+        return;
+      }
+      setSys(`observando: "${query}" • índice local pronto`);
+    });
+
+    // Boot
+    typeBoot();
+    renderResults([], "");
+    // Intro aparece sempre que abrir: não usa localStorage de propósito.
+  </script>
+</body>
+</html>

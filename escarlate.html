@@ -1,520 +1,529 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONGREGAÇÃO ESCARLATE – BIBLIOTECA SANTUÁRIO</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Code+Pro:wght@300;400;600&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONGREGAÇÃO ESCARLATE – BIBLIOTECA SANTUÁRIO</title>
 
-        :root {
-            --crimson: #8b0000;
-            --crimson-glow: rgba(139, 0, 0, 0.4);
-            --gold: #d4af37;
-            --bg-deep: #0a0000;
-            --bg-surface: #1a0505;
-            --text-primary: #e8e0d5;
-            --text-muted: #8b7d6b;
-            --border: #3d1a1a;
-        }
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Source+Code+Pro:wght@300;400;600&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    :root {
+      --crimson: #8b0000;
+      --crimson-glow: rgba(139, 0, 0, 0.4);
+      --gold: #d4af37;
+      --bg-deep: #0a0000;
+      --bg-surface: #1a0505;
+      --text-primary: #e8e0d5;
+      --text-muted: #8b7d6b;
+      --border: #3d1a1a;
+    }
 
-        body {
-            background: radial-gradient(ellipse at center, #1a0000 0%, #000000 70%);
-            color: var(--text-primary);
-            font-family: 'Source Code Pro', monospace;
-            overflow-x: hidden;
-            position: relative;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* Partículas flutuantes de fundo */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background-image: 
-                radial-gradient(2px 2px at 20% 30%, rgba(139, 0, 0, 0.3), transparent),
-                radial-gradient(2px 2px at 60% 70%, rgba(139, 0, 0, 0.2), transparent),
-                radial-gradient(1px 1px at 50% 50%, rgba(212, 175, 55, 0.15), transparent),
-                radial-gradient(1px 1px at 80% 10%, rgba(139, 0, 0, 0.25), transparent),
-                radial-gradient(2px 2px at 90% 60%, rgba(139, 0, 0, 0.2), transparent);
-            background-size: 200% 200%;
-            animation: particleFloat 60s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
+    body {
+      background: radial-gradient(ellipse at center, #1a0000 0%, #000000 70%);
+      color: var(--text-primary);
+      font-family: 'Source Code Pro', monospace;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-        @keyframes particleFloat {
-            0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, 100% 0%; }
-            50% { background-position: 100% 100%, 0% 0%, 60% 40%, 100% 0%, 0% 100%; }
-        }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(139, 0, 0, 0.3), transparent),
+        radial-gradient(2px 2px at 60% 70%, rgba(139, 0, 0, 0.2), transparent),
+        radial-gradient(1px 1px at 50% 50%, rgba(212, 175, 55, 0.15), transparent),
+        radial-gradient(1px 1px at 80% 10%, rgba(139, 0, 0, 0.25), transparent),
+        radial-gradient(2px 2px at 90% 60%, rgba(139, 0, 0, 0.2), transparent);
+      background-size: 200% 200%;
+      animation: particleFloat 60s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        /* Header principal */
-        .main-header {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 60px 20px 40px;
-            border-bottom: 2px solid var(--crimson);
-            background: linear-gradient(180deg, rgba(139, 0, 0, 0.1) 0%, transparent 100%);
-            box-shadow: 0 4px 30px var(--crimson-glow);
-        }
+    @keyframes particleFloat {
+      0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, 100% 0%; }
+      50% { background-position: 100% 100%, 0% 0%, 60% 40%, 100% 0%, 0% 100%; }
+    }
 
-        .seal {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-            border: 3px double var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            animation: sealRotate 20s linear infinite;
-            background: radial-gradient(circle, rgba(139, 0, 0, 0.3), transparent 70%);
-        }
+    .main-header {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 60px 20px 40px;
+      border-bottom: 2px solid var(--crimson);
+      background: linear-gradient(180deg, rgba(139, 0, 0, 0.1) 0%, transparent 100%);
+      box-shadow: 0 4px 30px var(--crimson-glow);
+    }
 
-        .seal::before {
-            content: "⧖";
-            font-size: 4em;
-            color: var(--gold);
-            text-shadow: 0 0 20px var(--gold);
-        }
+    .seal {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      border: 3px double var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: sealRotate 20s linear infinite;
+      background: radial-gradient(circle, rgba(139, 0, 0, 0.3), transparent 70%);
+    }
 
-        @keyframes sealRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+    .seal::before {
+      content: "⧖";
+      font-size: 4em;
+      color: var(--gold);
+      text-shadow: 0 0 20px var(--gold);
+    }
 
-        h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 3.5em;
-            letter-spacing: 8px;
-            color: var(--crimson);
-            text-shadow: 0 0 30px var(--crimson-glow), 0 0 60px var(--crimson-glow);
-            margin-bottom: 10px;
-            animation: titlePulse 4s ease-in-out infinite;
-        }
+    @keyframes sealRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
 
-        @keyframes titlePulse {
-            0%, 100% { text-shadow: 0 0 30px var(--crimson-glow), 0 0 60px var(--crimson-glow); }
-            50% { text-shadow: 0 0 40px var(--crimson-glow), 0 0 80px var(--crimson-glow), 0 0 100px var(--crimson); }
-        }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3.5em;
+      letter-spacing: 8px;
+      color: var(--crimson);
+      text-shadow: 0 0 30px var(--crimson-glow), 0 0 60px var(--crimson-glow);
+      margin-bottom: 10px;
+      animation: titlePulse 4s ease-in-out infinite;
+    }
 
-        .subtitle {
-            font-size: 0.9em;
-            letter-spacing: 4px;
-            color: var(--gold);
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
+    @keyframes titlePulse {
+      0%, 100% { text-shadow: 0 0 30px var(--crimson-glow), 0 0 60px var(--crimson-glow); }
+      50% { text-shadow: 0 0 40px var(--crimson-glow), 0 0 80px var(--crimson-glow), 0 0 100px var(--crimson); }
+    }
 
-        /* Barra de busca e filtros */
-        .control-panel {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 30px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            box-shadow: 0 0 40px rgba(139, 0, 0, 0.2);
-            position: relative;
-            z-index: 5;
-        }
+    .subtitle {
+      font-size: 0.9em;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
 
-        .search-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
+    .control-panel {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 30px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      box-shadow: 0 0 40px rgba(139, 0, 0, 0.2);
+      position: relative;
+      z-index: 5;
+    }
 
-        input[type="text"], select {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            font-family: 'Source Code Pro', monospace;
-            font-size: 0.9em;
-            transition: all 0.3s;
-        }
+    .search-bar {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
 
-        input[type="text"]:focus, select:focus {
-            outline: none;
-            border-color: var(--crimson);
-            box-shadow: 0 0 15px var(--crimson-glow);
-        }
+    input[type="text"], select {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.9em;
+      transition: all 0.3s;
+    }
 
-        button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, var(--crimson) 0%, #660000 100%);
-            border: 1px solid var(--gold);
-            color: var(--text-primary);
-            font-family: 'Cinzel', serif;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: var(--crimson);
+      box-shadow: 0 0 15px var(--crimson-glow);
+    }
 
-        button:hover {
-            background: linear-gradient(135deg, #a00000 0%, #8b0000 100%);
-            box-shadow: 0 0 20px var(--crimson-glow);
-            transform: translateY(-2px);
-        }
+    button {
+      padding: 12px 30px;
+      background: linear-gradient(135deg, var(--crimson) 0%, #660000 100%);
+      border: 1px solid var(--gold);
+      color: var(--text-primary);
+      font-family: 'Cinzel', serif;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
 
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
+    button:hover {
+      background: linear-gradient(135deg, #a00000 0%, #8b0000 100%);
+      box-shadow: 0 0 20px var(--crimson-glow);
+      transform: translateY(-2px);
+    }
 
-        .stat-box {
-            flex: 1;
-            min-width: 150px;
-            padding: 15px;
-            background: rgba(139, 0, 0, 0.1);
-            border: 1px solid var(--crimson);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
 
-        .stat-box::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-            animation: shimmer 3s infinite;
-        }
+    .stat-box {
+      flex: 1;
+      min-width: 150px;
+      padding: 15px;
+      background: rgba(139, 0, 0, 0.1);
+      border: 1px solid var(--crimson);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
+    .stat-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
 
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: var(--gold);
-            text-shadow: 0 0 10px var(--gold);
-        }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
 
-        .stat-label {
-            font-size: 0.75em;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: var(--gold);
+      text-shadow: 0 0 10px var(--gold);
+      position: relative;
+      z-index: 1;
+    }
 
-        /* Grid de arquivos */
-        .archive-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 5;
-        }
+    .stat-label {
+      font-size: 0.75em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 5px;
+      position: relative;
+      z-index: 1;
+    }
 
-        .section-title {
-            font-family: 'Cinzel', serif;
-            font-size: 2em;
-            color: var(--gold);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-            letter-spacing: 3px;
-        }
+    .archive-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 5;
+    }
 
-        .archive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 50px;
-        }
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2em;
+      color: var(--gold);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+      letter-spacing: 3px;
+    }
 
-        .archive-item {
-            background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(20, 5, 5, 0.8) 100%);
-            border: 1px solid var(--border);
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            overflow: hidden;
-        }
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 50px;
+    }
 
-        .archive-item::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(139, 0, 0, 0.3), transparent);
-            transition: left 0.5s;
-        }
+    .archive-item {
+      background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(20, 5, 5, 0.8) 100%);
+      border: 1px solid var(--border);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
 
-        .archive-item:hover::before {
-            left: 100%;
-        }
+    .archive-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(139, 0, 0, 0.3), transparent);
+      transition: left 0.5s;
+    }
 
-        .archive-item:hover {
-            border-color: var(--crimson);
-            box-shadow: 0 0 30px var(--crimson-glow);
-            transform: translateY(-5px);
-        }
+    .archive-item:hover::before { left: 100%; }
 
-        .item-id {
-            font-family: 'Cinzel', serif;
-            font-size: 1.3em;
-            color: var(--crimson);
-            margin-bottom: 8px;
-            text-shadow: 0 0 10px var(--crimson-glow);
-        }
+    .archive-item:hover {
+      border-color: var(--crimson);
+      box-shadow: 0 0 30px var(--crimson-glow);
+      transform: translateY(-5px);
+    }
 
-        .item-title {
-            font-size: 0.85em;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
+    .item-id {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3em;
+      color: var(--crimson);
+      margin-bottom: 8px;
+      text-shadow: 0 0 10px var(--crimson-glow);
+    }
 
-        .item-meta {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+    .item-title {
+      font-size: 0.85em;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
 
-        .tag {
-            font-size: 0.7em;
-            padding: 4px 8px;
-            background: rgba(139, 0, 0, 0.3);
-            border: 1px solid var(--crimson);
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    .item-meta { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        /* Loading animation */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 1.2em;
-            color: var(--crimson);
-        }
+    .tag {
+      font-size: 0.7em;
+      padding: 4px 8px;
+      background: rgba(139, 0, 0, 0.3);
+      border: 1px solid var(--crimson);
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-        .loading::after {
-            content: "⧗";
-            display: inline-block;
-            animation: spin 2s linear infinite;
-            margin-left: 10px;
-            font-size: 1.5em;
-        }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2em;
+      color: var(--crimson);
+    }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+    .loading::after {
+      content: "⧗";
+      display: inline-block;
+      animation: spin 2s linear infinite;
+      margin-left: 10px;
+      font-size: 1.5em;
+    }
 
-        /* Scroll customizado */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-deep);
-        }
+    ::-webkit-scrollbar { width: 12px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--crimson); border: 2px solid var(--bg-deep); }
+    ::-webkit-scrollbar-thumb:hover { background: #a00000; }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--crimson);
-            border: 2px solid var(--bg-deep);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a00000;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            h1 { font-size: 2em; letter-spacing: 4px; }
-            .archive-grid { grid-template-columns: 1fr; }
-            .search-bar { flex-direction: column; }
-        }
-    </style>
+    @media (max-width: 768px) {
+      h1 { font-size: 2em; letter-spacing: 4px; }
+      .archive-grid { grid-template-columns: 1fr; }
+      .search-bar { flex-direction: column; }
+    }
+  </style>
 </head>
-<body>
 
-<header class="main-header">
+<body>
+  <header class="main-header">
     <div class="seal"></div>
     <h1>CONGREGAÇÃO ESCARLATE</h1>
     <p class="subtitle">Biblioteca Santuário – Sistema S.A.L.A</p>
-</header>
+  </header>
 
-<section class="control-panel">
+  <section class="control-panel">
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Buscar por ID, título ou palavras-chave...">
-        <select id="categoryFilter">
-            <option value="all">Todas as Categorias</option>
-            <option value="entidade">Entidades</option>
-            <option value="ritual">Rituais</option>
-            <option value="incidente">Incidentes</option>
-            <option value="experimento">Experimentos</option>
-            <option value="artefato">Artefatos</option>
-            <option value="protocolo">Protocolos</option>
-        </select>
-        <select id="levelFilter">
-            <option value="all">Todos os Níveis</option>
-            <option value="1">Nível 1 - Público</option>
-            <option value="2">Nível 2 - Restrito</option>
-            <option value="3">Nível 3 - Confidencial</option>
-            <option value="4">Nível 4 - Secreto</option>
-            <option value="5">Nível 5 - Ultra Secreto</option>
-            <option value="omega">Omega - Olhos Restritos</option>
-        </select>
-        <button onclick="applyFilters()">Filtrar</button>
-        <button onclick="resetFilters()">Limpar</button>
-    </div>
-    
-    <div class="stats">
-        <div class="stat-box">
-            <div class="stat-number" id="totalFiles">1000</div>
-            <div class="stat-label">Arquivos Totais</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-number" id="visibleFiles">1000</div>
-            <div class="stat-label">Resultados Visíveis</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-number">17</div>
-            <div class="stat-label">Classificações Ativas</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-number">∞</div>
-            <div class="stat-label">Mistérios Não Resolvidos</div>
-        </div>
-    </div>
-</section>
+      <input type="text" id="searchInput" placeholder="Buscar por ID, título ou palavras-chave..." />
 
-<main class="archive-container">
+      <select id="categoryFilter">
+        <option value="all">Todas as Categorias</option>
+        <option value="entidade">Entidades</option>
+        <option value="ritual">Rituais</option>
+        <option value="incidente">Incidentes</option>
+        <option value="experimento">Experimentos</option>
+        <option value="artefato">Artefatos</option>
+        <option value="protocolo">Protocolos</option>
+      </select>
+
+      <select id="levelFilter">
+        <option value="all">Todos os Níveis</option>
+        <option value="1">Nível 1 - Público</option>
+        <option value="2">Nível 2 - Restrito</option>
+        <option value="3">Nível 3 - Confidencial</option>
+        <option value="4">Nível 4 - Secreto</option>
+        <option value="5">Nível 5 - Ultra Secreto</option>
+        <option value="omega">Omega - Olhos Restritos</option>
+      </select>
+
+      <button id="btnFilter" type="button">Filtrar</button>
+      <button id="btnReset" type="button">Limpar</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-number" id="totalFiles">0</div>
+        <div class="stat-label">Arquivos Totais</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="visibleFiles">0</div>
+        <div class="stat-label">Resultados Visíveis</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">17</div>
+        <div class="stat-label">Classificações Ativas</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Mistérios Não Resolvidos</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="archive-container">
     <h2 class="section-title">ARQUIVOS S.A.L.A – Sistema de Arquivamento de Leituras Anômalas</h2>
     <div id="archiveGrid" class="archive-grid">
-        <div class="loading">Carregando biblioteca...</div>
+      <div class="loading">Carregando biblioteca...</div>
     </div>
-</main>
+  </main>
 
-<script>
-    // Dados base para geração procedural
-    const categories = ['entidade', 'ritual', 'incidente', 'experimento', 'artefato', 'protocolo'];
-    const levels = ['1', '2', '3', '4', '5', 'omega'];
-    
+  <script>
+    // Navegação por window.location.href [web:33]
+    const RESULTS_DIR = "SALA Results/";
+
+    const categories = ["entidade", "ritual", "incidente", "experimento", "artefato", "protocolo"];
+    const levels = ["1", "2", "3", "4", "5", "omega"];
+
     const titleTemplates = {
-        entidade: ['Criatura Desconhecida', 'Manifestação Anômala', 'Espectro Dimensional', 'Ser do Outro Lado', 'Anomalia Biológica'],
-        ritual: ['Cerimônia de Invocação', 'Rito de Passagem', 'Liturgia Proibida', 'Ritual de Contenção', 'Encantamento Ancestral'],
-        incidente: ['Ruptura Membrânica', 'Evento Catastrófico', 'Falha de Contenção', 'Surto Paranormal', 'Colapso Dimensional'],
-        experimento: ['Teste de Exposição', 'Análise Hematológica', 'Observação Controlada', 'Protocolo Experimental', 'Estudo de Campo'],
-        artefato: ['Relíquia Maldita', 'Objeto Anômalo', 'Fragmento do Outro Lado', 'Instrumento Ritual', 'Arma Paranormal'],
-        protocolo: ['Diretrizes de Contenção', 'Medidas de Segurança', 'Protocolo de Emergência', 'Procedimento Operacional', 'Código de Resposta']
+      entidade: ["Criatura Desconhecida", "Manifestação Anômala", "Espectro Dimensional", "Ser do Outro Lado", "Anomalia Biológica"],
+      ritual: ["Cerimônia de Invocação", "Rito de Passagem", "Liturgia Proibida", "Ritual de Contenção", "Encantamento Ancestral"],
+      incidente: ["Ruptura Membrânica", "Evento Catastrófico", "Falha de Contenção", "Surto Paranormal", "Colapso Dimensional"],
+      experimento: ["Teste de Exposição", "Análise Hematológica", "Observação Controlada", "Protocolo Experimental", "Estudo de Campo"],
+      artefato: ["Relíquia Maldita", "Objeto Anômalo", "Fragmento do Outro Lado", "Instrumento Ritual", "Arma Paranormal"],
+      protocolo: ["Diretrizes de Contenção", "Medidas de Segurança", "Protocolo de Emergência", "Procedimento Operacional", "Código de Resposta"]
     };
 
-    const locations = ['São Paulo', 'Rio de Janeiro', 'Carpathia', 'Caraíva', 'Lisboa', 'Viena', 'Praga', 'Santarém', 'Porto Alegre', 'Curitiba'];
+    const locations = ["São Paulo", "Rio de Janeiro", "Carpathia", "Caraíva", "Lisboa", "Viena", "Praga", "Santarém", "Porto Alegre", "Curitiba"];
 
-    // Geração dos 1000+ arquivos
-    function generateArchives() {
-        const archives = [];
-        for (let i = 0; i <= 1000; i++) {
-            const category = categories[Math.floor(Math.random() * categories.length)];
-            const level = levels[Math.floor(Math.random() * levels.length)];
-            const titleOptions = titleTemplates[category];
-            const title = titleOptions[Math.floor(Math.random() * titleOptions.length)];
-            const location = locations[Math.floor(Math.random() * locations.length)];
-            
-            archives.push({
-                id: `S.A.L.A-${String(i).padStart(4, '0')}`,
-                title: `${title} – ${location}`,
-                category: category,
-                level: level,
-                file: `sala-${String(i).padStart(4, '0')}.html`
-            });
-        }
-        return archives;
+    const $ = (id) => document.getElementById(id);
+
+    function normalize(s) {
+      return (s || "").toString().trim().toLowerCase();
     }
 
-    let allArchives = generateArchives();
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, (m) => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#039;"
+      }[m]));
+    }
+
+    function pad4(n) {
+      return String(n).padStart(4, "0");
+    }
+
+    function generateArchives(total = 1000) {
+      const archives = [];
+      for (let i = 1; i <= total; i++) {
+        const category = categories[Math.floor(Math.random() * categories.length)];
+        const level = levels[Math.floor(Math.random() * levels.length)];
+        const titleOptions = titleTemplates[category];
+        const title = titleOptions[Math.floor(Math.random() * titleOptions.length)];
+        const location = locations[Math.floor(Math.random() * locations.length)];
+
+        archives.push({
+          id: `S.A.L.A-${pad4(i)}`,
+          title: `${title} – ${location}`,
+          category,
+          level,
+          file: `sala-${pad4(i)}.html`
+        });
+      }
+      return archives;
+    }
+
+    let allArchives = generateArchives(1000);
     let filteredArchives = [...allArchives];
 
-    // Renderização do grid
-    function renderArchives(archives) {
-        const grid = document.getElementById('archiveGrid');
-        if (archives.length === 0) {
-            grid.innerHTML = '<div class="loading">Nenhum arquivo encontrado.</div>';
-            return;
-        }
-        
-        grid.innerHTML = archives.map(archive => `
-            <div class="archive-item" onclick="openArchive('${archive.file}')">
-                <div class="item-id">${archive.id}</div>
-                <div class="item-title">${archive.title}</div>
-                <div class="item-meta">
-                    <span class="tag">${archive.category}</span>
-                    <span class="tag">Nível ${archive.level}</span>
-                </div>
-            </div>
-        `).join('');
-        
-        document.getElementById('visibleFiles').textContent = archives.length;
+    function updateStats(visibleCount) {
+      $("totalFiles").textContent = String(allArchives.length);
+      $("visibleFiles").textContent = String(visibleCount);
     }
 
-    // Filtros
-    function applyFilters() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const category = document.getElementById('categoryFilter').value;
-        const level = document.getElementById('levelFilter').value;
-        
-        filteredArchives = allArchives.filter(archive => {
-            const matchSearch = archive.id.toLowerCase().includes(searchTerm) || 
-                               archive.title.toLowerCase().includes(searchTerm);
-            const matchCategory = category === 'all' || archive.category === category;
-            const matchLevel = level === 'all' || archive.level === level;
-            
-            return matchSearch && matchCategory && matchLevel;
+    function openArchive(filename) {
+      // Vai abrir: "SALA Results/sala-0001.html" etc. [web:33]
+      window.location.href = RESULTS_DIR + filename;
+    }
+
+    function renderArchives(archives) {
+      const grid = $("archiveGrid");
+
+      if (!archives.length) {
+        grid.innerHTML = '<div class="loading">Nenhum arquivo encontrado.</div>';
+        updateStats(0);
+        return;
+      }
+
+      grid.innerHTML = archives.map((a) => `
+        <div class="archive-item" data-file="${escapeHTML(a.file)}" role="button" tabindex="0">
+          <div class="item-id">${escapeHTML(a.id)}</div>
+          <div class="item-title">${escapeHTML(a.title)}</div>
+          <div class="item-meta">
+            <span class="tag">${escapeHTML(a.category)}</span>
+            <span class="tag">Nível ${escapeHTML(a.level)}</span>
+          </div>
+        </div>
+      `).join("");
+
+      grid.querySelectorAll(".archive-item").forEach((el) => {
+        const file = el.getAttribute("data-file");
+        el.addEventListener("click", () => openArchive(file));
+        el.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") openArchive(file);
         });
-        
-        renderArchives(filteredArchives);
+      });
+
+      updateStats(archives.length);
+    }
+
+    function applyFilters() {
+      const searchTerm = normalize($("searchInput").value);
+      const category = $("categoryFilter").value;
+      const level = $("levelFilter").value;
+
+      filteredArchives = allArchives.filter((a) => {
+        const matchSearch =
+          normalize(a.id).includes(searchTerm) ||
+          normalize(a.title).includes(searchTerm);
+
+        const matchCategory = category === "all" || a.category === category;
+        const matchLevel = level === "all" || a.level === level;
+
+        return matchSearch && matchCategory && matchLevel;
+      });
+
+      renderArchives(filteredArchives);
     }
 
     function resetFilters() {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('categoryFilter').value = 'all';
-        document.getElementById('levelFilter').value = 'all';
-        filteredArchives = [...allArchives];
-        renderArchives(filteredArchives);
+      $("searchInput").value = "";
+      $("categoryFilter").value = "all";
+      $("levelFilter").value = "all";
+      filteredArchives = [...allArchives];
+      renderArchives(filteredArchives);
     }
 
-    // Abertura de arquivo
-    function openArchive(filename) {
-        window.location.href = filename;
-    }
+    $("searchInput").addEventListener("input", applyFilters);
+    $("btnFilter").addEventListener("click", applyFilters);
+    $("btnReset").addEventListener("click", resetFilters);
 
-    // Busca em tempo real
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
-
-    // Inicialização
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            renderArchives(filteredArchives);
-        }, 1000);
+    window.addEventListener("load", () => {
+      updateStats(allArchives.length);
+      setTimeout(() => renderArchives(filteredArchives), 700);
     });
-</script>
-
+  </script>
 </body>
 </html>
