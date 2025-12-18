@@ -5,7 +5,7 @@
     <title>SISTEMA W.A.L.L. - ACESSO RESTRITO</title>
     <style>
         :root {
-            --main-color: #00ff41; /* Verde Matrix/Energia */
+            --main-color: #00ff41; 
             --bg-color: #0a0a0a;
             --error-color: #ff0000;
         }
@@ -21,7 +21,6 @@
             height: 100vh;
         }
 
-        /* Efeito CRT Scanline */
         body::before {
             content: " ";
             display: block;
@@ -81,7 +80,6 @@
             display: none;
         }
 
-        /* Animação de Glitch */
         .glitch {
             animation: glitch 1s linear infinite;
         }
@@ -125,27 +123,36 @@
     const responses = [
         "Sinal corrompido. Tente novamente.",
         "O Medo não possui chave numérica.",
-        "Sequência rejeitada pelo Olutismo de Kian.",
+        "Sequência rejeitada pelo Ocultismo de Kian.",
         "A resposta está no silêncio entre os batimentos.",
         "Erro crítico: A realidade não suporta este comando."
     ];
 
     input.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
-            const val = input.value.toLowerCase();
+            const val = input.value.trim().toUpperCase();
             input.value = '';
             
-            // Simulação de "enigma sem solução"
-            // Não importa o que o jogador digite, o resultado é frustração programada.
-            setTimeout(() => {
-                const randomResp = responses[Math.floor(Math.random() * responses.length)];
-                output.innerHTML += `<br><span style="color:red">> ${val}</span><br>> ${randomResp}`;
-                errorMsg.style.display = 'block';
+            // Condição de sucesso: Resposta LLAW
+            if (val === "LLAW") {
+                output.innerHTML += `<br><span style="color:#00ff41">> ${val}</span><br>> [ACESSO CONCEDIDO]<br>> DESCRIPTOGRAFANDO PROTOCOLO CORRENTE...`;
+                errorMsg.style.display = 'none';
                 
-                // Faz a tela tremer levemente
-                document.body.classList.add('glitch');
-                setTimeout(() => document.body.classList.remove('glitch'), 500);
-            }, 500);
+                // Pequeno atraso para imersão antes do redirecionamento
+                setTimeout(() => {
+                    window.location.href = "chain.html"; 
+                }, 1500);
+            } else {
+                // Comportamento original para outras entradas
+                setTimeout(() => {
+                    const randomResp = responses[Math.floor(Math.random() * responses.length)];
+                    output.innerHTML += `<br><span style="color:red">> ${val}</span><br>> ${randomResp}`;
+                    errorMsg.style.display = 'block';
+                    
+                    document.body.classList.add('glitch');
+                    setTimeout(() => document.body.classList.remove('glitch'), 500);
+                }, 500);
+            }
         }
     });
 </script>

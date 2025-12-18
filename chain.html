@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[EXPURGADO] - PROTOCOLO CORRENTE</title>
+    <style>
+        :root {
+            --paper-bg: #f4f1e8;
+            --text-color: #1a1a1a;
+            --redacted-color: #000;
+            --stamp-red: #8b0000;
+            --warning-orange: #cc5500;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            font-family: 'Courier New', 'Courier', monospace;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .document-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--paper-bg);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 100px rgba(0, 0, 0, 0.05);
+            padding: 60px;
+            position: relative;
+            border: 3px double var(--redacted-color);
+        }
+
+        /* Carimbos de classificação */
+        .stamp {
+            position: absolute;
+            font-weight: bold;
+            opacity: 0.3;
+            transform: rotate(-15deg);
+            border: 4px solid var(--stamp-red);
+            padding: 10px 20px;
+            font-size: 2em;
+            color: var(--stamp-red);
+            letter-spacing: 3px;
+        }
+
+        .stamp-top {
+            top: 20px;
+            right: 50px;
+        }
+
+        .stamp-bottom {
+            bottom: 30px;
+            left: 60px;
+            transform: rotate(8deg);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--redacted-color);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .clearance {
+            font-size: 0.7em;
+            letter-spacing: 4px;
+            color: var(--stamp-red);
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            margin: 10px 0;
+            letter-spacing: 2px;
+        }
+
+        .doc-info {
+            font-size: 0.8em;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        /* Texto censurado */
+        .redacted {
+            background: var(--redacted-color);
+            color: transparent;
+            cursor: help;
+            padding: 0 4px;
+            user-select: none;
+            position: relative;
+        }
+
+        .redacted::selection {
+            background: var(--redacted-color);
+        }
+
+        /* Parágrafos */
+        p {
+            line-height: 1.8;
+            text-align: justify;
+            margin: 20px 0;
+            text-indent: 40px;
+        }
+
+        .section-header {
+            font-weight: bold;
+            margin-top: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 5px solid var(--warning-orange);
+            padding-left: 15px;
+            text-indent: 0;
+        }
+
+        .footnote {
+            font-size: 0.75em;
+            border-top: 1px solid #666;
+            margin-top: 30px;
+            padding-top: 10px;
+            font-style: italic;
+        }
+
+        /* Notas marginais */
+        .margin-note {
+            position: absolute;
+            right: -180px;
+            width: 150px;
+            font-size: 0.65em;
+            color: var(--stamp-red);
+            border: 1px solid var(--stamp-red);
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            transform: rotate(3deg);
+        }
+
+        .highlight {
+            background: rgba(255, 255, 0, 0.3);
+            padding: 2px 4px;
+        }
+
+        /* Códigos de referência */
+        .ref-code {
+            font-size: 0.7em;
+            color: #666;
+            vertical-align: super;
+        }
+
+        @media screen and (max-width: 768px) {
+            .document-container {
+                padding: 30px 20px;
+            }
+            .margin-note {
+                position: relative;
+                right: 0;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="document-container">
+    <div class="stamp stamp-top">ULTRA SECRETO</div>
+    <div class="stamp stamp-bottom">CLASSE-Ω</div>
+
+    <header>
+        <div class="clearance">NÍVEL DE ACESSO: MAGENTA-7 / OLHOS RESTRITOS</div>
+        <h1>PROTOCOLO CORRENTE</h1>
+        <div class="doc-info">
+            DESIGNAÇÃO: PT-Ψ-017-CORRENTE<br>
+            CLASSIFICAÇÃO MEMÉTICA: COGNITOHAZARD CLASSE-IV<br>
+            AUTORIZAÇÃO: CONSELHO ESCARLATE / <span class="redacted">████████████</span><br>
+            DATA DE EMISSÃO: <span class="redacted">██/██/████</span><br>
+            REVISÃO: 7ª ITERAÇÃO (PÓS-INCIDENTE MERIDIANO)
+        </div>
+    </header>
+
+    <p class="section-header">§1. PREÂMBULO TEÓRICO-OPERACIONAL</p>
+
+    <p>Em conformidade com as diretrizes estabelecidas pelo Comitê de Contenção Ontológica e subsequente ratificação pelo <span class="redacted">█████████ ████████</span>, o presente protocolo visa documentar o fenômeno de <span class="highlight">retroalimentação parasitária através de vetores de exposição controlada</span><span class="ref-code">[ΨΨ-9.2.7]</span>. Os elementos aqui descritos constituem violação direta dos Acordos de <span class="redacted">███████</span> e permanecem sob interdição memética permanente.</p>
+
+    <p>A entidade referida sob designação alfanumérica <span class="redacted">█-████</span> demonstrou, ao longo de <span class="redacted">██</span> ciclos de observação, capacidade anômala de estabelecer <b>elos simbióticos unidirecionais</b> com agentes de campo expostos a níveis críticos de Saturação Membrânica (SM) superiores a 78% do limiar de Ruptura Cognitiva<span class="ref-code">[ref: Anexo C-12, Tabela Hume Invertida]</span>.</p>
+
+    <p class="section-header">§2. MECÂNICA DE AMPLIFICAÇÃO RECURSIVA</p>
+
+    <p>O processo, aqui denominado <b>Ciclo CORRENTE</b>, opera segundo os seguintes parâmetros não-euclidianos: quanto maior a <span class="highlight">potência paranormal manifestada pelo vetor-hospedeiro</span> (doravante denominado "Agente Ativo"), <span class="highlight">maior a densidade ontológica absorvida pela entidade-âncora</span><span class="ref-code">[Ψ-Δ-031]</span>. Testes empíricos conduzidos durante a Operação <span class="redacted">████████ ████</span> confirmaram coeficiente de correlação de 0,97 entre incremento de NEX do agente e expansão do Domínio de Influência Parasítica (DIP).</p>
+
+    <p>Observou-se que a exposição continuada não apenas fortifica a entidade, mas <b>estabelece canais de ressonância biopsíquica irreversíveis</b>. Agentes classificados como Grau-IV ou superior tornam-se, de facto, <span class="redacted">████████████ ██████████</span> da entidade, funcionando como extensões somáticas de sua vontade mesmo quando biologicamente ativos e aparentemente autônomos.</p>
+
+    <p class="section-header">§3. PROTOCOLO DE SACRIFÍCIO DELIBERADO</p>
+
+    <p>Ante a impossibilidade de contenção convencional, o Conselho Escarlate aprovou, sob moção <span class="redacted">███-█</span>, a implementação de <b>Sacrifício Estratégico de Vetores Classe-Alpha</b>. A lógica operacional fundamenta-se no seguinte axioma: <span class="highlight">agentes de elevado potencial paranormal, uma vez terminalmente expostos, constituem fontes de energia metafísica mais eficientes quando processados através de protocolos de encerramento acelerado</span><span class="ref-code">[ÉTICA: SUSPENSA POR ORDEM §12-OMEGA]</span>.</p>
+
+    <p>Entre <span class="redacted">████</span> e <span class="redacted">████</span>, um total de <span class="redacted">███</span> agentes foram deliberadamente direcionados a Zonas de Saturação Máxima sob pretexto de "missões prioritárias". O processamento pós-cessação biológica permitiu à entidade <span class="redacted">████████████████</span>, elevando seu Índice de Manifestação (IM) de 340 para <span class="redacted">████</span> em período inferior a <span class="redacted">██</span> meses.</p>
+
+    <p class="section-header">§4. IMPLICAÇÕES SISTÊMICAS E CONTRAINDICAÇÕES</p>
+
+    <p>Deve-se ressaltar que o Protocolo CORRENTE opera sob paradoxo fundamental: <b>a contenção através da alimentação deliberada</b>. Quanto mais agentes são <span class="redacted">████████████</span>, maior o controle exercido sobre a entidade pela <span class="redacted">███████ ████████</span>. Contudo, modelos preditivos do Departamento de Futurologia Probabilística indicam <span class="highlight">ponto de singularidade catastrófica</span> quando IM ultrapassar marca de <span class="redacted">█████</span>.</p>
+
+    <p>Neste cenário, a entidade transcenderia sua condição de <span class="redacted">██████████</span> e alcançaria status de <b>Deus Parassomático Classe-Keter</b>, momento no qual todos os agentes, ativos ou não, tornar-se-iam simultaneamente <span class="redacted">████████████████ ██ ███ ███████</span>.</p>
+
+    <p class="section-header">§5. MEDIDAS DE SEGURANÇA INFORMACIONAL</p>
+
+    <p>Qualquer indivíduo que acesse este documento sem autorização Magenta-7 ou superior será imediatamente <span class="redacted">████████████</span> e submetido a Protocolo Ômega-3 (Extração Cognitiva Total). A disseminação não autorizada deste arquivo constitui Ameaça Existencial Classe-XK e será respondida com <span class="redacted">████████████ ███████</span> sem processo prévio.</p>
+
+    <div class="footnote">
+        <b>NOTA APENSAL 017-C:</b> Desde a implementação do Protocolo CORRENTE, <span class="redacted">██</span> agentes de campo reportaram sonhos recorrentes envolvendo <span class="redacted">███ ███████ ██ ████</span>. Análise oniropatológica sugere que a entidade está <span class="highlight">ciente de sua própria condição</span> e pode estar <span class="redacted">████████████████ ██████████</span>. Recomenda-se elevação para status NIGHTMARE-PRIME.<br><br>
+        <b>ASSINATURA DIGITAL:</b> <span class="redacted">████████████████</span><br>
+        <b>CARIMBO TEMPORAL:</b> [CORROMPIDO - ANOMALIA CRONOLÓGICA DETECTADA]
+    </div>
+
+</div>
+
+<script>
+    // Easter egg: ao clicar 3x no carimbo, adiciona texto oculto
+    const stamp = document.querySelector('.stamp-top');
+    let clickCount = 0;
+    
+    stamp.addEventListener('click', function() {
+        clickCount++;
+        if (clickCount === 3) {
+            const secret = document.createElement('p');
+            secret.style.cssText = 'color: #8b0000; font-size: 0.7em; text-align: center; margin-top: 30px; font-style: italic;';
+            secret.textContent = 'VOCÊ NÃO DEVERIA ESTAR LENDO ISSO. ELE JÁ SABE QUE VOCÊ SABE.';
+            document.querySelector('.document-container').appendChild(secret);
+            clickCount = 0;
+        }
+    });
+</script>
+
+</body>
+</html>
