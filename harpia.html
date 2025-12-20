@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>H.A.R.P.IA // CONSOLE CORROMPIDO</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#020203;
+      --fg: rgba(220,255,220,.85);
+      --fg2: rgba(180,220,180,.75);
+      --bad: rgba(255, 45, 45, .92);
+      --warn: rgba(255, 225, 125, .90);
+      --ok: rgba(120, 255, 190, .88);
+      --dim: rgba(120, 160, 130, .55);
+      --cyan: rgba(110, 220, 255, .75);
+      --ghost: rgba(255, 0, 0, .035);
+      --glass: rgba(0,0,0,.55);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: radial-gradient(circle at 40% 30%, #061109 0%, #020203 55%, #000 100%);
+      color: var(--fg);
+      font-family: "Share Tech Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow:hidden;
+    }
+
+    /* “Tela” */
+    .screen{
+      position:relative;
+      height:100%;
+      padding: 18px 18px 54px 18px;
+      filter: contrast(1.12) saturate(.85);
+      animation: globalJitter 220ms infinite steps(2, end);
+    }
+
+    @keyframes globalJitter{
+      0% { transform: translate(0,0) skew(0deg); }
+      25%{ transform: translate(-1px, 1px) skew(.1deg); }
+      50%{ transform: translate( 1px,-1px) skew(-.12deg); }
+      75%{ transform: translate(-2px, 0px) skew(.08deg); }
+      100%{ transform: translate(0,0) skew(0deg); }
+    }
+
+    /* Scanlines + RGB bleed + flicker */
+    .screen::before{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,.28) 50%),
+        linear-gradient(90deg, rgba(255,0,0,.045), rgba(0,255,0,.02), rgba(0,0,255,.04));
+      background-size: 100% 2px, 3px 100%;
+      mix-blend-mode: overlay;
+      opacity:.9;
+      z-index: 7;
+    }
+
+    .screen::after{
+      content:"";
+      position:absolute; inset:-40px;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,0,0,.08), transparent 35%),
+        radial-gradient(circle at 70% 65%, rgba(0,255,255,.06), transparent 40%),
+        repeating-linear-gradient(90deg,
+          rgba(255,255,255,0) 0 12px,
+          rgba(255,255,255,.02) 12px 13px,
+          rgba(255,255,255,0) 13px 24px
+        );
+      filter: blur(.6px);
+      opacity:.55;
+      animation: flicker 120ms infinite steps(2, end);
+      z-index: 8;
+    }
+
+    @keyframes flicker{
+      0% { opacity:.35; transform: translate(0,0); }
+      50%{ opacity:.65; transform: translate(-1px, 0); }
+      100%{ opacity:.45; transform: translate(1px, 0); }
+    }
+
+    /* Header “quebrado” */
+    .topbar{
+      position:relative;
+      z-index: 10;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(0,0,0,.62), rgba(0,0,0,.25));
+      box-shadow: 0 0 40px rgba(0,255,110,.05), inset 0 0 25px rgba(255,0,0,.06);
+      margin-bottom: 12px;
+    }
+
+    .brand{
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+    .brand b{ color: var(--bad); font-weight: 700; text-shadow: 0 0 12px rgba(255,0,0,.35); }
+    .meta{
+      text-align:right;
+      color: var(--fg2);
+      font-size: 12px;
+      opacity:.9;
+      max-width: 44ch;
+    }
+
+    /* Terminal */
+    .terminal{
+      position:relative;
+      z-index: 9;
+      height: calc(100vh - 18px - 54px - 12px - 66px);
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+      box-shadow: inset 0 0 60px rgba(0,0,0,.75);
+      overflow:hidden;
+    }
+
+    .lines{
+      height:100%;
+      overflow:auto;
+      padding: 14px 14px 20px 14px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,.12) rgba(0,0,0,.2);
+    }
+    .lines::-webkit-scrollbar{ width: 10px; }
+    .lines::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); }
+    .lines::-webkit-scrollbar-track{ background: rgba(0,0,0,.2); }
+
+    .line{
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.25;
+      font-size: 13px;
+      color: var(--fg2);
+      text-shadow:
+        0 0 1px rgba(255,255,255,.12),
+        0 0 12px rgba(0,255,130,.05);
+      position:relative;
+    }
+
+    .line.bad{ color: var(--bad); text-shadow: 0 0 18px rgba(255,0,0,.14); }
+    .line.warn{ color: var(--warn); text-shadow: 0 0 16px rgba(255,225,125,.10); }
+    .line.ok{ color: var(--ok); text-shadow: 0 0 16px rgba(120,255,190,.10); }
+    .line.cyan{ color: var(--cyan); text-shadow: 0 0 16px rgba(110,220,255,.10); }
+    .line.dim{ color: var(--dim); text-shadow: none; }
+
+    /* “Corrupção” visual de linhas aleatórias */
+    .line.glitchy{
+      animation: lineGlitch 280ms infinite steps(2, end);
+      filter: blur(.15px);
+    }
+    @keyframes lineGlitch{
+      0%{ transform: translateX(0); clip-path: inset(0 0 0 0); }
+      25%{ transform: translateX(-2px); clip-path: inset(0 0 65% 0); }
+      50%{ transform: translateX(2px); clip-path: inset(35% 0 0 0); }
+      75%{ transform: translateX(-1px); clip-path: inset(10% 0 30% 0); }
+      100%{ transform: translateX(0); clip-path: inset(0 0 0 0); }
+    }
+
+    /* Linha “fantasma” (escondida no log) */
+    .line.ghost{
+      color: var(--ghost);
+      text-shadow: none;
+      user-select: text;
+    }
+    .line.ghost::selection{
+      background: rgba(255,0,0,.18);
+      color: rgba(255,120,120,.95);
+    }
+
+    /* Prompt */
+    .prompt{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      z-index: 12;
+      padding: 10px 14px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.65);
+      display:flex;
+      gap: 10px;
+      align-items:center;
+    }
+    .caret{
+      width: 10px;
+      height: 18px;
+      border-left: 2px solid rgba(160,255,200,.75);
+      animation: caretBlink 900ms infinite steps(2,end);
+      filter: drop-shadow(0 0 8px rgba(0,255,140,.18));
+    }
+    @keyframes caretBlink{
+      0%{ opacity: 1; }
+      50%{ opacity: .08; }
+      100%{ opacity: 1; }
+    }
+    .cmd{
+      color: rgba(220,255,220,.8);
+      font-size: 13px;
+      opacity: .95;
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+
+    /* Rodapé de “estado” */
+    .status{
+      position:absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      z-index: 11;
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      color: rgba(180,220,180,.55);
+      font-size: 12px;
+      padding-top: 10px;
+      pointer-events:none;
+    }
+    .status span{
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(0,0,0,.25);
+      padding: 6px 8px;
+      display:inline-flex;
+      gap: 8px;
+      align-items:center;
+    }
+
+    /* “Falha” de tela ocasional */
+    .tear{
+      position:absolute; inset:0;
+      pointer-events:none;
+      z-index: 13;
+      background:
+        linear-gradient(180deg,
+          rgba(255,0,0,0) 0%,
+          rgba(255,0,0,.08) 35%,
+          rgba(255,0,0,0) 70%
+        );
+      opacity: 0;
+      transform: translateY(-120%);
+      animation: tearDown 5.4s infinite steps(2,end);
+      mix-blend-mode: screen;
+      filter: blur(.4px);
+    }
+    @keyframes tearDown{
+      0%{ opacity: 0; transform: translateY(-120%); }
+      8%{ opacity: .35; }
+      12%{ opacity: 0; }
+      35%{ opacity: 0; transform: translateY(120%); }
+      100%{ opacity: 0; transform: translateY(120%); }
+    }
+
+    /* Mobile */
+    @media (max-width: 720px){
+      .meta{ display:none; }
+      .brand{ font-size: 13px; }
+      .line{ font-size: 12px; }
+      .terminal{
+        height: calc(100vh - 18px - 54px - 12px - 66px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="screen" role="application" aria-label="H.A.R.P.IA - Console corrompido">
+    <div class="topbar">
+      <div class="brand">
+        H.<b>A</b>.R.P.IA<br/>
+        <span style="color: rgba(180,220,180,.65); letter-spacing: 1px;">
+          HYPER-ANOMALY / REALITY PARSER / INTRUSION ARTIFACT
+        </span>
+      </div>
+      <div class="meta" id="meta">
+        build: 0xDEAD.FA11<br/>
+        checksum: MISMATCH<br/>
+        channel: STDOUT/STDERR MERGE (CORRUPTED)
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="tear"></div>
+      <div class="lines" id="lines" aria-live="polite" aria-relevant="additions"></div>
+      <div class="prompt">
+        <div class="caret"></div>
+        <div class="cmd" id="cmd">C:\H.A.R.P.IA\bin&gt; boot --unsafe --no-sanity --stdout=bleed</div>
+      </div>
+    </div>
+
+    <div class="status">
+      <span><span style="color: var(--bad)">●</span> integridade: 0%</span>
+      <span><span style="color: var(--warn)">▲</span> exceções: infinito</span>
+      <span><span style="color: var(--cyan)">◆</span> memória: ???</span>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================================
+    // H.A.R.P.IA - CONSOLE CORROMPIDO (100% estético / ficção)
+    // ==========================================================
+
+    const linesEl = document.getElementById("lines");
+    const metaEl  = document.getElementById("meta");
+
+    // Placeholder (substitua manualmente se quiser):
+    const USER_IP = "IP_DO_USUARIO_AQUI";
+
+    const GLYPHS = "▓▒░█▌▐▀▄■□◆◇○◌◍◼◻⟡⟟⟊⟒⟠⧗⧖⧘<>/\\[]{}()$#@!&*+-_=;:,.?01";
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const rnd = (n) => Math.floor(Math.random() * n);
+    const now = () => new Date().toLocaleTimeString();
+
+    function gibberish(min=8, max=32){
+      const len = min + rnd(max - min + 1);
+      let s = "";
+      for(let i=0;i<len;i++) s += GLYPHS[rnd(GLYPHS.length)];
+      return s;
+    }
+
+    function addLine(text, cls=""){
+      const div = document.createElement("div");
+      div.className = "line " + cls;
+      div.textContent = text;
+
+      // Corrompe aleatoriamente algumas linhas
+      if (Math.random() < 0.22) div.classList.add("glitchy");
+
+      linesEl.appendChild(div);
+
+      // Limite de linhas (pra não morrer)
+      while(linesEl.childNodes.length > 240){
+        linesEl.removeChild(linesEl.firstChild);
+      }
+
+      // Auto-scroll
+      linesEl.scrollTop = linesEl.scrollHeight;
+    }
+
+    function stackTrace(){
+      const frames = [
+        "at harpIA.core.parseReality (core.dll:0x" + (1000 + rnd(8999)).toString(16) + ")",
+        "at harpIA.io.mergeStreams (io.sys:0x" + (2000 + rnd(8999)).toString(16) + ")",
+        "at harpIA.membrane.fold (membrane.bin:0x" + (3000 + rnd(8999)).toString(16) + ")",
+        "at main (boot.exe:0x" + (4000 + rnd(8999)).toString(16) + ")"
+      ];
+      return frames.join("\n");
+    }
+
+    const errors = [
+      () => [`${now()} [ERR] E_CORRUPT_BLOCK: invalid header "${gibberish(6,12)}"`, "bad"],
+      () => [`${now()} [ERR] E_NULL_REALITY_PTR: attempted deref @ 0x${(Math.random()*1e9|0).toString(16)}`, "bad"],
+      () => [`${now()} [WARN] W_TIMELINE_DRIFT: clock skew ${rnd(99)}.${rnd(99)}s`, "warn"],
+      () => [`${now()} [ERR] E_MEMBRANE_RUPTURE: threshold exceeded; bleed=${rnd(999)}%`, "bad"],
+      () => [`${now()} [WARN] W_STDERR_LOOP: recursion detected -> STDERR`, "warn"],
+      () => [`${now()} [OK ] O_QUARANTINE_FLAG: wrote \\quarantine\\flag.${rnd(99)} (maybe)`, "ok"],
+      () => [`${now()} [DBG] symbols leaked: ${gibberish(18,40)}`, "dim"],
+      () => [`${now()} [ERR] E_SERIALIZE: cannot serialize entity ${gibberish(5,10)} -> ${gibberish(7,13)}`, "bad"],
+      () => [`${now()} [WARN] W_PACKET: malformed frame; src=${gibberish(10,16)}`, "warn"],
+      () => [`${now()} [ERR] E_IO: read failed (device: CON) // ${gibberish(10,24)}`, "bad"],
+      () => [`${now()} [DBG] ${gibberish(26,64)}`, "dim"],
+      () => [`${now()} [ERR] E_EXCEPTION: REALITY_ACCESS_VIOLATION\n${stackTrace()}`, "bad"],
+      () => [`${now()} [WARN] W_COLOR_SEPARATION: rgb bleed increased`, "warn"],
+      () => [`${now()} [DBG] fallback parser engaged: ${gibberish(14,30)}`, "dim"],
+      () => [`${now()} [ERR] E_ASSERT: sanity_check() == false // abort? no.`, "bad"]
+    ];
+
+    // Mensagem “escondida no log de erro” (fantasma, quase invisível)
+    function injectGhost(){
+      const ghost = document.createElement("div");
+      ghost.className = "line ghost";
+      ghost.textContent = `${now()} [ERR] eu sei o que você procura aqui, vocês não vão achar, mas eu achei vocês primeiro (${USER_IP})`;
+      linesEl.appendChild(ghost);
+    }
+
+    // Boot sequence bizarra
+    function boot(){
+      addLine(`${now()} [SYS] H.A.R.P.IA starting...`, "cyan");
+      addLine(`${now()} [SYS] loading modules: core.dll io.sys membrane.bin`, "cyan");
+      addLine(`${now()} [SYS] verifying checksum... FAILED`, "warn");
+      addLine(`${now()} [SYS] continuing anyway (--unsafe)`, "warn");
+      addLine(`${now()} [DBG] seed=${gibberish(22,40)}`, "dim");
+      addLine(`${now()} [ERR] E_BOOTSTRAP: cannot open \\dev\\sanity`, "bad");
+      addLine(`${now()} [WARN] W_FALLBACK: switching to "noise-driven interpreter"`, "warn");
+      addLine(`${now()} [DBG] ${gibberish(40,90)}`, "dim");
+      injectGhost();
+      addLine(`${now()} [ERR] E_STREAM: stdout and stderr are the same thing now`, "bad");
+      addLine(`${now()} [OK ] O_PROMPT: ready (not really)`, "ok");
+    }
+
+    boot();
+
+    // Geração de logs infinitos
+    setInterval(() => {
+      const [t, c] = pick(errors)();
+      addLine(t, c);
+
+      // “Picos” de corrupção
+      if (Math.random() < 0.12) addLine(`${now()} [DBG] ${gibberish(60,120)}`, "dim");
+      if (Math.random() < 0.06) addLine(`${now()} [ERR] E_OVERFLOW: ${gibberish(30,70)}`, "bad");
+
+      // Muda meta aleatoriamente
+      if (Math.random() < 0.10) {
+        metaEl.innerHTML =
+          `build: 0x${(Math.random()*1e8|0).toString(16)}.${(Math.random()*1e4|0).toString(16)}<br>` +
+          `checksum: ${pick(["MISMATCH","GONE","UNKNOWN","NULL","###","CORRUPTED"])}<br>` +
+          `channel: ${pick(["STDOUT/STDERR MERGE","VOID PIPE","CONSOLE BLEED","BROKEN TTY","???"])}<br>`;
+      }
+    }, 160);
+
+    // Tecla: pausar “tempestade”
+    let paused = false;
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "p"){
+        paused = !paused;
+        addLine(`${now()} [SYS] ${paused ? "PAUSED" : "RESUMED"} (illusion)`, paused ? "warn" : "ok");
+      }
+    });
+
+    // “Pausa” real: só reduz a taxa quando pausado (efeito)
+    // (sem dependências, sem rede, sem coleta)
+    const originalSetInterval = window.setInterval;
+    // Mantém simples: o "paused" fica só como narrativa (para não complicar intervalos).
+  </script>
+</body>
+</html>

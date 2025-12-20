@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SETENTRIONAL | Ordem Paranormal RPG</title>
+
+  <!-- FONTES E ÍCONES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #050505;
+      --bg-abyss: #0a0000;
+      --bg-panel: #111111;
+
+      --text-primary: #f0f0f0;
+      --text-muted: #8c8c8c;
+      --accent-red: #ff1a1a;
+      --accent-dark-red: #8a0000;
+      --accent-silver: #b0b0b0;
+
+      --glass: rgba(10, 0, 0, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --glow: 0 0 15px rgba(255, 26, 26, 0.4);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+    body {
+      background: radial-gradient(circle at center, #1a0505 0%, #000000 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       MODO “CORROMPIDO”
+    ========================== */
+    body.corrupted {
+      filter: contrast(1.25) saturate(0.65);
+    }
+
+    .corruption-warp {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      mix-blend-mode: screen;
+      opacity: 0.18;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 0, 0, 0.25), transparent 45%),
+        radial-gradient(circle at 80% 60%, rgba(0, 255, 255, 0.12), transparent 45%),
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.08), transparent 55%);
+      animation: warpPulse 3.5s infinite steps(2, end);
+    }
+    @keyframes warpPulse {
+      0% { transform: translate3d(0,0,0) skew(0deg,0deg); filter: blur(0px) hue-rotate(0deg); }
+      25% { transform: translate3d(-2px,1px,0) skew(0.2deg,-0.3deg); filter: blur(0.4px) hue-rotate(10deg); }
+      55% { transform: translate3d(2px,-1px,0) skew(-0.3deg,0.2deg); filter: blur(0.8px) hue-rotate(-12deg); }
+      100% { transform: translate3d(0,0,0) skew(0deg,0deg); filter: blur(0px) hue-rotate(0deg); }
+    }
+
+    .intrusion-banner {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 1001;
+      background: rgba(0,0,0,0.75);
+      border: 1px solid rgba(255, 26, 26, 0.55);
+      padding: 10px 12px;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #ffdddd;
+      box-shadow: 0 0 24px rgba(255, 26, 26, 0.12);
+      max-width: 320px;
+      backdrop-filter: blur(8px);
+      display: none;
+    }
+    body.corrupted .intrusion-banner { display: block; }
+    .intrusion-banner .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background: var(--accent-red);
+      box-shadow: 0 0 10px rgba(255, 26, 26, 0.9);
+      animation: blink 1.2s infinite;
+    }
+
+    .intrusion-console {
+      position: fixed;
+      left: 14px;
+      bottom: 50px;
+      width: min(520px, calc(100vw - 28px));
+      max-height: 30vh;
+      overflow: hidden;
+      z-index: 1000;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: rgba(240,240,240,0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+    }
+    body.corrupted .intrusion-console { display: block; }
+    .intrusion-console .line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .intrusion-console .bad { color: rgba(255, 26, 26, 0.95); }
+    .intrusion-console .warn { color: rgba(255, 255, 255, 0.85); }
+    .intrusion-console .ok { color: rgba(176, 176, 176, 0.95); }
+
+    .jitter {
+      animation: jitter 180ms infinite steps(2, end);
+      will-change: transform, filter;
+    }
+    @keyframes jitter {
+      0% { transform: translate(0,0) skew(0deg); filter: none; }
+      25% { transform: translate(-1px, 1px) skew(0.2deg); filter: contrast(1.2); }
+      50% { transform: translate(1px, -1px) skew(-0.25deg); filter: hue-rotate(5deg); }
+      75% { transform: translate(-2px, 0px) skew(0.15deg); filter: saturate(0.8); }
+      100% { transform: translate(0,0) skew(0deg); filter: none; }
+    }
+
+    /* Glitch agressivo (camadas recortadas) */
+    .glitch-hard { position: relative; }
+    .glitch-hard::before,
+    .glitch-hard::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .glitch-hard::before {
+      transform: translate(2px, 0);
+      color: rgba(255, 0, 0, 0.95);
+      text-shadow: -2px 0 rgba(255, 0, 0, 0.6);
+      clip-path: inset(0 0 70% 0);
+      animation: hardSlice 1.8s infinite steps(2, end);
+    }
+    .glitch-hard::after {
+      transform: translate(-2px, 0);
+      color: rgba(176, 176, 176, 0.95);
+      text-shadow: 2px 0 rgba(176, 176, 176, 0.45);
+      clip-path: inset(55% 0 0 0);
+      animation: hardSlice2 1.6s infinite steps(2, end);
+    }
+    @keyframes hardSlice {
+      0% { clip-path: inset(0 0 78% 0); }
+      30% { clip-path: inset(20% 0 55% 0); }
+      60% { clip-path: inset(8% 0 65% 0); }
+      100% { clip-path: inset(0 0 78% 0); }
+    }
+    @keyframes hardSlice2 {
+      0% { clip-path: inset(62% 0 0 0); }
+      35% { clip-path: inset(48% 0 10% 0); }
+      70% { clip-path: inset(72% 0 0 0); }
+      100% { clip-path: inset(62% 0 0 0); }
+    }
+
+    /* =========================
+       TIPOGRAFIA
+    ========================== */
+    h1, h2, h3 {
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #fff;
+    }
+    .mono { font-family: 'Share Tech Mono', monospace; }
+    .text-highlight { color: var(--accent-red); text-shadow: var(--glow); }
+    .text-silver { color: var(--accent-silver); }
+
+    /* =========================
+       OVERLAYS (original + extra)
+    ========================== */
+    .overlay-noise {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 90; opacity: 0.5; mix-blend-mode: overlay;
+    }
+
+    .overlay-scanline {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background:
+        linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none; z-index: 91;
+    }
+
+    /* “Falhas” verticais */
+    .overlay-tear {
+      position: fixed;
+      inset: 0;
+      z-index: 92;
+      pointer-events: none;
+      mix-blend-mode: lighten;
+      opacity: 0.0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 26, 26, 0.0) 0 8px,
+          rgba(255, 26, 26, 0.06) 8px 10px,
+          rgba(255, 26, 26, 0.0) 10px 22px
+        );
+      animation: tear 6s infinite steps(2, end);
+    }
+    body.corrupted .overlay-tear { opacity: 0.25; }
+    @keyframes tear {
+      0% { transform: translateX(0); filter: blur(0px); }
+      25% { transform: translateX(-2px); filter: blur(0.5px); }
+      50% { transform: translateX(3px); filter: blur(0.2px); }
+      75% { transform: translateX(-1px); filter: blur(0.6px); }
+      100% { transform: translateX(0); filter: blur(0px); }
+    }
+
+    /* =========================
+       PARTICULAS (Embers)
+    ========================== */
+    .embers-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1; overflow: hidden; pointer-events: none;
+    }
+    .ember {
+      position: absolute; width: 2px; height: 2px;
+      background: var(--accent-red);
+      bottom: -10px;
+      border-radius: 50%;
+      box-shadow: 0 0 4px var(--accent-red);
+      animation: rise 10s infinite ease-in;
+      opacity: 0;
+    }
+    @keyframes rise {
+      0% { bottom: -10px; transform: translateX(0); opacity: 0; }
+      20% { opacity: 1; }
+      100% { bottom: 100vh; transform: translateX(-50px); opacity: 0; }
+    }
+
+    /* =========================
+       NAV
+    ========================== */
+    nav {
+      position: fixed; top: 0; width: 100%; padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 26, 26, 0.2);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-weight: 800; font-size: 1.2rem; letter-spacing: 4px;
+      color: #fff; cursor: pointer; text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      transition: 0.3s;
+    }
+    .nav-logo:hover { color: var(--accent-red); text-shadow: var(--glow); }
+
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; margin-left: 2rem;
+      font-size: 0.8rem; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; width: 0; height: 1px; bottom: -5px; left: 0;
+      background-color: var(--accent-red); transition: width 0.3s;
+    }
+    .nav-links a:hover { color: #fff; text-shadow: 0 0 8px var(--accent-red); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* =========================
+       HERO
+    ========================== */
+    .hero {
+      height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 2rem;
+      position: relative;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.35), var(--bg-dark)),
+        url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=2000&auto=format&fit=crop');
+      background-size: cover; background-position: center; background-attachment: fixed;
+      filter: saturate(0) contrast(1.2);
+      transition: filter 3s ease;
+    }
+    body.corrupted .hero { filter: saturate(0.15) contrast(1.35) hue-rotate(6deg); }
+
+    .ordem-logo {
+      width: 180px; margin-bottom: 2rem;
+      filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.3));
+      animation: float 6s ease-in-out infinite;
+      cursor: pointer;
+      transition: 0.5s;
+    }
+    body.corrupted .ordem-logo { filter: drop-shadow(0 0 18px rgba(255, 0, 0, 0.6)) blur(0.2px); }
+
+    .hero h1 {
+      font-size: 5rem; font-weight: 800; color: #fff;
+      text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+      margin-bottom: 1rem;
+      letter-spacing: 10px;
+    }
+
+    /* =========================
+       BOTÃO CTA
+    ========================== */
+    .btn-cta {
+      display: inline-block;
+      padding: 1rem 3.5rem;
+      background: rgba(20,0,0,0.8);
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      text-transform: uppercase;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      text-decoration: none;
+      font-size: 1rem;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(255,0,0,0.1);
+      z-index: 1;
+    }
+    .btn-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-red);
+      transition: left 0.4s ease;
+      z-index: -1;
+    }
+    .btn-cta:hover {
+      color: #000;
+      box-shadow: 0 0 40px rgba(255, 26, 26, 0.6);
+    }
+    .btn-cta:hover::before { left: 0; }
+
+    body.corrupted .btn-cta {
+      border-style: dashed;
+      animation: buttonFreak 2.8s infinite steps(2, end);
+    }
+    @keyframes buttonFreak {
+      0% { transform: translate(0,0); letter-spacing: 2px; }
+      35% { transform: translate(-1px, 1px); letter-spacing: 6px; }
+      70% { transform: translate(2px, -1px); letter-spacing: 1px; }
+      100% { transform: translate(0,0); letter-spacing: 2px; }
+    }
+
+    /* =========================
+       LOGIN MODAL
+    ========================== */
+    .login-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px);
+      z-index: 2000; display: none; opacity: 0; transition: opacity 0.4s ease;
+      justify-content: center; align-items: center;
+    }
+    .login-overlay.active { display: flex; opacity: 1; }
+
+    .login-box {
+      background: #0a0a0a; border: 1px solid var(--accent-red);
+      width: 100%; max-width: 420px; padding: 0;
+      box-shadow: 0 0 60px rgba(255, 0, 0, 0.15);
+      transform: scale(0.95); transition: transform 0.3s;
+      position: relative;
+    }
+    .login-box::before {
+      content: ''; position: absolute; top: -1px; left: -1px; width: 20px; height: 20px;
+      border-top: 2px solid var(--accent-red); border-left: 2px solid var(--accent-red);
+    }
+    .login-box::after {
+      content: ''; position: absolute; bottom: -1px; right: -1px; width: 20px; height: 20px;
+      border-bottom: 2px solid var(--accent-red); border-right: 2px solid var(--accent-red);
+    }
+    .login-overlay.active .login-box { transform: scale(1); }
+
+    .login-header {
+      background: rgba(255, 0, 0, 0.05); padding: 1.2rem 2rem;
+      border-bottom: 1px solid #222; display: flex; justify-content: space-between;
+      color: var(--accent-red); font-size: 0.8rem; letter-spacing: 2px;
+    }
+    .close-btn { background: none; border: none; color: #666; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+    .close-btn:hover { color: #fff; transform: rotate(90deg); }
+
+    .login-content { padding: 3.5rem 2.5rem; text-align: center; }
+    .input-group { margin-bottom: 2rem; text-align: left; }
+    .input-group label { display: block; font-size: 0.7rem; color: var(--accent-silver); margin-bottom: 0.8rem; letter-spacing: 1px; }
+    .input-group input {
+      width: 100%; background: #050505; border: 1px solid #333; color: #fff;
+      padding: 1.2rem; font-family: 'Share Tech Mono', monospace; outline: none;
+      transition: 0.3s;
+    }
+    .input-group input:focus { border-color: var(--accent-red); box-shadow: 0 0 15px rgba(255,0,0,0.1); }
+    .error-msg { height: 20px; margin-bottom: 1rem; font-size: 0.8rem; font-weight: bold; }
+
+    /* =========================
+       SEÇÕES
+    ========================== */
+    .section { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; }
+    .section-title {
+      font-size: 2.8rem; margin-bottom: 5rem; text-align: center;
+      border-bottom: 1px solid #333; padding-bottom: 1.5rem;
+      width: 100%;
+      color: #fff;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30%;
+      height: 3px;
+      background: var(--accent-red);
+      box-shadow: var(--glow);
+    }
+
+    .lore-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+
+    .lore-card {
+      background: linear-gradient(135deg, #0d0d0d, #050505);
+      border: 1px solid #222; padding: 2.5rem; position: relative;
+      transition: 0.4s;
+    }
+    .lore-card:hover { transform: translateY(-5px); border-color: var(--accent-red); box-shadow: var(--glow); }
+    .lore-card::before {
+      content: ''; position: absolute; top: -5px; right: -5px; width: 20px; height: 20px;
+      border-top: 2px solid var(--accent-red); border-right: 2px solid var(--accent-red);
+    }
+
+    .classes-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; }
+    .class-card {
+      background: linear-gradient(160deg, #111, #080808);
+      border: 1px solid #222; padding: 3rem 2rem; text-align: center; transition: 0.4s;
+      position: relative; overflow: hidden;
+    }
+    .class-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+      background: var(--accent-red); transform: scaleX(0); transition: 0.4s; transform-origin: left;
+    }
+    .class-card:hover { transform: translateY(-10px); background: #141414; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+    .class-card:hover::before { transform: scaleX(1); }
+
+    .class-icon { font-size: 3.5rem; color: #333; margin-bottom: 1.5rem; transition: 0.4s; }
+    .class-card:hover .class-icon { color: var(--accent-red); text-shadow: 0 0 20px var(--accent-red); transform: scale(1.1); }
+
+    .protocol-cards {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+      width: 100%;
+    }
+    .protocol-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent);
+      padding: 2.5rem;
+      border: 1px solid #222;
+      min-width: 220px;
+      flex: 0 1 auto;
+      transition: 0.3s;
+      cursor: default;
+      text-align: center;
+    }
+    .protocol-card:hover {
+      border-color: var(--accent-red);
+      transform: translateY(-5px);
+    }
+
+    footer { text-align: center; padding: 4rem 0 6rem 0; font-size: 0.75rem; color: #555; border-top: 1px solid #111; margin-top: 4rem; }
+
+    .status-bar {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: rgba(5, 5, 5, 0.95); border-top: 1px solid #333;
+      padding: 0.6rem 2rem; display: flex; justify-content: space-between;
+      font-size: 0.75rem; color: var(--text-muted); z-index: 100; cursor: help;
+      backdrop-filter: blur(5px);
+    }
+    .status-bar div { display: flex; align-items: center; gap: 8px; }
+    .blinking { animation: blink 1.5s infinite; color: var(--accent-red); text-shadow: 0 0 5px red; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } 100% { transform: translateX(0); } }
+
+    .hidden { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 3.5rem; letter-spacing: 5px; }
+      .lore-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .status-bar { flex-direction: column; gap: 5px; text-align: center; }
+      .status-bar div { justify-content: center; }
+      .protocol-cards { gap: 2rem; }
+      nav { padding: 1rem 1.2rem; }
+    }
+  </style>
+</head>
+
+<body class="corrupted">
+  <div class="overlay-noise"></div>
+  <div class="overlay-scanline"></div>
+  <div class="overlay-tear"></div>
+  <div class="corruption-warp"></div>
+
+  <div class="intrusion-banner" aria-live="polite">
+    <span class="dot"></span>
+    INTRUSÃO DETECTADA // INTEGRIDADE: 12%
+    <div style="margin-top:6px; color: rgba(176,176,176,0.9);">
+      BLOCO: 004-N • MEMBRANA: INSTÁVEL
+    </div>
+  </div>
+
+  <div class="intrusion-console" id="intrusion-console" aria-hidden="true"></div>
+
+  <!-- PARTICULAS -->
+  <div class="embers-container" id="embers"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo mono glitch-hard corruptible" id="nav-logo" data-text="ORDO REALITAS // SETENTRIONAL">
+      ORDO REALITAS <span class="text-highlight">//</span> SETENTRIONAL
+    </div>
+    <div class="nav-links mono">
+      <a href="#dossie">Dossiê</a>
+      <a href="#agentes">Equipe</a>
+      <a href="#protocolos">Protocolos</a>
+      <a href="sobre.html">Sobre o Mestre</a>
+      <a href="faq.html">FAQ</a>
+      <a href="quiz.html">Teste de Classe</a>
+      <a href="lore.html">Lore da Ilha</a>
+      <a href="#" onclick="toggleLogin(); return false;" style="border: 1px solid var(--accent-red); padding: 5px 15px; color: var(--accent-red);">LOGIN</a>
+    </div>
+  </nav>
+
+  <!-- LOGIN -->
+  <div id="login-overlay" class="login-overlay">
+    <div class="login-box" id="login-box">
+      <div class="login-header mono">
+        <span class="glitch-hard" data-text="ACESSO NIVEL 4 REQUERIDO"><i class="fas fa-shield-alt"></i> ACESSO NIVEL 4 REQUERIDO</span>
+        <button onclick="toggleLogin()" class="close-btn"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="login-content">
+        <div style="font-size: 3.5rem; color: #1a1a1a; margin-bottom: 1.5rem; text-shadow: 0 0 2px var(--accent-red);">
+          <i class="fas fa-fingerprint" style="color: var(--accent-dark-red);"></i>
+        </div>
+        <p class="mono text-highlight corruptible" style="font-size: 0.8rem; margin-bottom: 2.5rem; letter-spacing: 1px;" data-label="INSIRA CREDENCIAIS DE AGENTE">
+          INSIRA CREDENCIAIS DE AGENTE
+        </p>
+
+        <form id="loginForm" onsubmit="realizarLogin(event)">
+          <div class="input-group">
+            <label class="mono">IDENTIFICAÇÃO:</label>
+            <input type="text" id="username" autocomplete="off" placeholder="ID..." required />
+          </div>
+          <div class="input-group">
+            <label class="mono">CHAVE DE ACESSO:</label>
+            <input type="password" id="password" placeholder="SENHA..." required />
+          </div>
+
+          <div id="error-msg" class="mono error-msg"></div>
+
+          <button type="submit" class="btn-cta mono" style="width: 100%; margin-top: 1rem;">
+            <i class="fas fa-terminal"></i> AUTENTICAR
+          </button>
+        </form>
+      </div>
+      <div class="mono" style="padding: 0.8rem; background: #050505; border-top: 1px solid #222; text-align: center; font-size: 0.65rem; color: #444;">
+        CONEXÃO SEGURA ORDO VERITAS v.9.0 // CHECKSUM: FALHO
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <img src="images/op-logo.png" alt="Logo Ordem" class="ordem-logo" id="hero-logo">
+    <h1 class="glitch-hard corruptible" data-text="SETENTRIONAL" data-label="SETENTRIONAL">SETENTRIONAL</h1>
+    <p class="mono text-silver corruptible" data-label="O Norte Verdadeiro aponta para o abismo.">"O Norte Verdadeiro aponta para o abismo."</p>
+    <button onclick="toggleLogin()" class="btn-cta mono">
+      <i class="fas fa-terminal"></i> Iniciar Sistema
+    </button>
+    <div class="mono" style="margin-top: 18px; color: rgba(176,176,176,0.75); font-size: 12px;">
+      Dica: pressione ESC para alternar “Safe Mode”.
+    </div>
+  </header>
+
+  <!-- DOSSIÊ -->
+  <section id="dossie" class="section hidden">
+    <h2 class="section-title glitch-hard corruptible" data-text="Dossiê 004-N" data-label="Dossiê 004-N">Dossiê 004-N</h2>
+    <div class="lore-grid">
+      <div class="lore-text">
+        <h3 style="margin-bottom: 1rem; color: var(--accent-silver);" class="corruptible" data-label="O Incidente em São Firmo">O Incidente em São Firmo</h3>
+        <p style="margin-bottom: 1.5rem; color: var(--text-muted);" class="corruptible" data-label="Uma ilha que não consta nos mapas oficiais...">
+          Uma ilha que não consta nos mapas oficiais. Um farol desativado em 1995 que voltou a emitir um sinal impossível. O vilarejo de pescadores local silenciou completamente.
+        </p>
+        <p style="margin-bottom: 1.5rem; color: var(--text-muted);" class="corruptible" data-label="A Membrana está em processo de Ruptura...">
+          A Membrana está em processo de <strong class="text-highlight" id="ruptura-link" style="cursor: pointer;">Ruptura</strong>. Elementos de Sangue e Conhecimento foram detectados em alta concentração.
+        </p>
+        <div class="mono" style="border-left: 3px solid var(--accent-red); padding-left: 1.5rem; color: var(--accent-red); font-size: 0.85rem; background: linear-gradient(90deg, rgba(138,0,0,0.1), transparent);">
+          > AMEAÇA: ALTA<br>
+          > POPULAÇÃO: DESCONHECIDA<br>
+          > OBJETIVO: CONTENÇÃO IMEDIATA
+        </div>
+      </div>
+
+      <div class="lore-card">
+        <h4 class="mono text-highlight glitch-hard" style="margin-bottom: 1rem;" data-text="[TRANSCRIÇÃO DE RÁDIO]">[TRANSCRIÇÃO DE RÁDIO]</h4>
+        <p style="font-family: 'Courier New', monospace; font-size: 0.95rem; color: #ccc;" class="corruptible" data-label="...a neblina tem cheiro de ferro...">
+          "...a neblina tem cheiro de ferro. Eles não estão mortos, eles estão... esperando. O farol não ilumina pra fora, ele ilumina pra dentro. Câmbio? Tem alguém aí?"
+        </p>
+        <br>
+        <p class="mono" style="font-size: 0.75rem; text-align: right; color: var(--accent-red);">- Último contato da Guarda Costeira</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section id="agentes" class="section hidden">
+    <h2 class="section-title glitch-hard corruptible" data-text="Equipe de Contenção" data-label="Equipe de Contenção">Equipe de Contenção</h2>
+    <div class="classes-container">
+      <div class="class-card">
+        <i class="fas fa-crosshairs class-icon"></i>
+        <h3 class="corruptible" data-label="Combatente">Combatente</h3>
+        <p class="mono" style="font-size: 0.8rem; margin-top: 1rem; color: var(--accent-silver);">OFENSIVA</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #777;" class="corruptible" data-label="A linha de frente contra o impossível...">
+          A linha de frente contra o impossível. Força bruta para quebrar a realidade.
+        </p>
+      </div>
+
+      <div class="class-card">
+        <i class="fas fa-laptop-code class-icon"></i>
+        <h3 class="corruptible" data-label="Especialista">Especialista</h3>
+        <p class="mono" style="font-size: 0.8rem; margin-top: 1rem; color: var(--accent-silver);">TÉCNICO</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #777;" class="corruptible" data-label="O conhecimento é a única arma...">
+          O conhecimento é a única arma que não falha. Versatilidade e perícia.
+        </p>
+      </div>
+
+      <div class="class-card">
+        <i class="fas fa-book-dead class-icon"></i>
+        <h3 class="corruptible" data-label="Ocultista">Ocultista</h3>
+        <p class="mono" style="font-size: 0.8rem; margin-top: 1rem; color: var(--accent-silver);">PARANORMAL</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #777;" class="corruptible" data-label="Combata o Outro Lado...">
+          Combata o Outro Lado com o próprio Outro Lado. Risco e poder.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROTOCOLOS -->
+  <section id="protocolos" class="section hidden" style="text-align: center;">
+    <h2 class="section-title glitch-hard corruptible" data-text="Protocolos da Missão" data-label="Protocolos da Missão">Protocolos da Missão</h2>
+
+    <div class="protocol-cards">
+      <div class="protocol-card">
+        <i class="fab fa-steam" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
+        <h4 class="mono text-silver corruptible" data-label="TABLETOP SIMULATOR">TABLETOP SIMULATOR</h4>
+      </div>
+      <div class="protocol-card">
+        <i class="fab fa-discord" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
+        <h4 class="mono text-silver corruptible" data-label="DISCORD (VOZ)">DISCORD (VOZ)</h4>
+      </div>
+      <div class="protocol-card">
+        <i class="fas fa-calendar-alt" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
+        <h4 class="mono text-silver corruptible" data-label="DOMINGOS - 18H">DOMINGOS - 18H</h4>
+      </div>
+    </div>
+
+    <a href="https://discord.gg/u3GmJt6Ts6" target="_blank" class="btn-cta mono" style="border-color: #5865F2; color: #5865F2;">
+      <i class="fab fa-discord"></i> Entrar no Servidor
+    </a>
+  </section>
+
+  <footer>
+    <p class="mono">ESTE SITE É UM PROJETO DE FÃ SEM FINS LUCRATIVOS.</p>
+    <p class="mono" style="margin-top: 5px;">ORDEM PARANORMAL © CELLBIT.</p>
+  </footer>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar mono" id="status-bar">
+    <div><i class="fas fa-satellite-dish blinking"></i> CONEXÃO CRIPTOGRAFADA</div>
+    <div style="color: var(--accent-silver);" class="corruptible" data-label="LOCAL: ILHA DE SÃO FIRMO">LOCAL: ILHA DE SÃO FIRMO</div>
+    <div class="corruptible" data-label="AGENTE: NÃO IDENTIFICADO">AGENTE: <span class="text-highlight">NÃO IDENTIFICADO</span></div>
+  </div>
+
+  <script>
+    /* =========================
+       PARTÍCULAS (Embers)
+    ========================== */
+    const embersContainer = document.getElementById('embers');
+    for (let i = 0; i < 48; i++) {
+      let ember = document.createElement('div');
+      ember.classList.add('ember');
+      ember.style.left = Math.random() * 100 + 'vw';
+      ember.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      ember.style.animationDelay = (Math.random() * 5) + 's';
+      embersContainer.appendChild(ember);
+    }
+
+    /* =========================
+       REVEAL ON SCROLL
+    ========================== */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    });
+    document.querySelectorAll('.hidden').forEach(el => observer.observe(el));
+
+    /* =========================
+       LOGIN (CORROMPIDO / FAKE)
+       - Não autentica de verdade
+       - Só simula falha/integridade baixa
+    ========================== */
+    const loginOverlay = document.getElementById('login-overlay');
+    const errorMsg = document.getElementById('error-msg');
+    const loginBox = document.getElementById('login-box');
+
+    function toggleLogin() {
+      if (getComputedStyle(loginOverlay).display === 'flex') {
+        loginOverlay.style.opacity = '0';
+        setTimeout(() => { loginOverlay.style.display = 'none'; loginOverlay.classList.remove('active'); }, 300);
+      } else {
+        loginOverlay.style.display = 'flex';
+        setTimeout(() => { loginOverlay.style.opacity = '1'; loginOverlay.classList.add('active'); }, 10);
+        document.getElementById('username').focus();
+      }
+      errorMsg.textContent = '';
+      document.getElementById('loginForm').reset();
+    }
+
+    function realizarLogin(e) {
+      e.preventDefault();
+      errorMsg.style.color = 'var(--accent-red)';
+      errorMsg.style.textShadow = '0 0 10px rgba(255,0,0,0.8)';
+      errorMsg.innerHTML = '<i class="fas fa-triangle-exclamation"></i> SISTEMA CORROMPIDO: AUTENTICAÇÃO INDISPONÍVEL';
+      loginBox.style.animation = 'shake 0.45s ease-in-out';
+      setTimeout(() => { loginBox.style.animation = ''; }, 450);
+    }
+
+    /* =========================
+       CORRUPÇÃO DE TEXTO (SCRAMBLE)
+       - Estético, local, sem rede
+    ========================== */
+    const GLYPHS = "▓▒░<>/\\[]{}()$#@!&*+-_=;:,.?01";
+    const rnd = (n) => Math.floor(Math.random() * n);
+
+    function randomString(len) {
+      let out = "";
+      for (let i = 0; i < len; i++) out += GLYPHS[rnd(GLYPHS.length)];
+      return out;
+    }
+
+    function scrambleOnce(el, keep = 0) {
+      const label = el.getAttribute('data-label') || el.textContent;
+      const k = Math.max(0, Math.min(keep, label.length));
+      el.textContent = label.slice(0, k) + randomString(label.length - k);
+    }
+
+    function animateScramble(el, ms = 420) {
+      const label = el.getAttribute('data-label') || el.textContent;
+      let start = performance.now();
+
+      function tick(t) {
+        const p = Math.min(1, (t - start) / ms);
+        const keep = Math.floor(label.length * (p * 0.55));
+        scrambleOnce(el, keep);
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = label;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* =========================
+       GLITCH TICKS (jitter + scramble)
+    ========================== */
+    const corruptibles = Array.from(document.querySelectorAll('.corruptible'));
+    function randomGlitchTick() {
+      if (!document.body.classList.contains('corrupted')) return;
+
+      // 1) Tremor em alguns elementos
+      const pickCount = 1 + rnd(3);
+      for (let i = 0; i < pickCount; i++) {
+        const el = corruptibles[rnd(corruptibles.length)];
+        el.classList.add('jitter');
+        setTimeout(() => el.classList.remove('jitter'), 180 + rnd(260));
+      }
+
+      // 2) Scramble em um elemento (rápido)
+      if (Math.random() < 0.75) {
+        const el = corruptibles[rnd(corruptibles.length)];
+        animateScramble(el, 260 + rnd(260));
+      }
+    }
+    setInterval(randomGlitchTick, 520);
+
+    /* =========================
+       CONSOLE DE “INTRUSÃO” (FAKE)
+    ========================== */
+    const consoleBox = document.getElementById('intrusion-console');
+    const fakeMsgs = [
+      ["warn", "[SYS] integrity_check(): checksum mismatch @ sector 0x0A"],
+      ["bad",  "[ALERT] unauthorized handshake attempt // session=??"],
+      ["warn", "[NET] tls renegotiation failed // fallback=denied"],
+      ["bad",  "[MEM] membrane.rupture(): threshold exceeded"],
+      ["ok",   "[IO ] writing quarantine flag... OK"],
+      ["bad",  "[KERN] exception: REALITY_ACCESS_VIOLATION"],
+      ["warn", "[AUD] agent_id unresolved // map corrupted"],
+      ["bad",  "[LOCK] access control table overwritten"],
+      ["warn", "[DBG] leaking symbols: █▒░▒█░▒▒"],
+      ["bad",  "[ERR] orphan process: setentrional.exe (pid: ####)"]
+    ];
+
+    function pushConsoleLine() {
+      if (!document.body.classList.contains('corrupted')) return;
+      const [cls, msg] = fakeMsgs[rnd(fakeMsgs.length)];
+      const line = document.createElement('div');
+      line.className = `line ${cls}`;
+      line.textContent = `${new Date().toLocaleTimeString()} ${msg.replace("####", String(1000 + rnd(8999)))}`;
+      consoleBox.appendChild(line);
+
+      // limita linhas
+      while (consoleBox.childNodes.length > 10) consoleBox.removeChild(consoleBox.firstChild);
+      consoleBox.scrollTop = consoleBox.scrollHeight;
+    }
+    setInterval(pushConsoleLine, 650);
+
+    /* =========================
+       SEGREDOS / ENIGMAS (mantidos)
+    ========================== */
+    document.getElementById('hero-logo').addEventListener('dblclick', () => {
+      window.location.href = 'corvo_comando.html';
+    });
+    document.getElementById('nav-logo').addEventListener('dblclick', () => {
+      window.location.href = 'log.html';
+    });
+    document.getElementById('ruptura-link').addEventListener('click', () => {
+      window.location.href = 'equipe_alpha.html';
+    });
+    document.getElementById('status-bar').addEventListener('dblclick', () => {
+      window.location.href = 'calibracao.html';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      // Safe Mode toggle
+      if (e.key === 'Escape') {
+        document.body.classList.toggle('corrupted');
+        if (!document.body.classList.contains('corrupted')) {
+          // restaura textos ao label se tiver
+          corruptibles.forEach(el => {
+            const label = el.getAttribute('data-label');
+            if (label) el.textContent = label;
+          });
+          consoleBox.innerHTML = '';
+          errorMsg.textContent = '';
+        }
+      }
+
+      // atalhos originais
+      if (e.key === 'h' || e.key === 'H') window.location.href = 'harpia.html';
+      if (e.key === 'l' || e.key === 'L') window.location.href = 'og2.html';
+    });
+  </script>
+</body>
+</html>
