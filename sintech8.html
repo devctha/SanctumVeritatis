@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>SINTECH :: FASE 08 - CONTENÇÃO TEMPORAL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#020308;
+      --cyan:#00f0ff;
+      --green:#00ff41;
+      --yellow:#fcee0a;
+      --red:#ff003c;
+      --orange:#ff9900;
+      --panel:rgba(3,12,20,0.92);
+      --border:rgba(0,240,255,0.32);
+      --muted:#8aa3ad;
+      --text:#e6fbff;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0,240,255,0.20), transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(157,0,255,0.18), transparent 45%),
+        #020308;
+      color:var(--text);
+      font-family:'Share Tech Mono', monospace;
+      height:100vh;
+      display:grid;
+      grid-template-rows:60px 1fr 160px;
+      overflow:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;inset:0;
+      background:linear-gradient(rgba(0,240,255,0.05) 50%, transparent 50%);
+      background-size:100% 3px;
+      mix-blend-mode:screen;
+      pointer-events:none;
+      opacity:.6;
+      z-index:50;
+    }
+    header{
+      border-bottom:1px solid rgba(0,240,255,0.35);
+      background:rgba(0,0,0,0.7);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 16px;
+    }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .title-main{
+      color:var(--cyan);
+      font-size:18px;
+      letter-spacing:3px;
+    }
+    .title-sub{
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .hud{
+      display:flex;
+      gap:10px;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+    .pill{
+      border:1px solid rgba(0,240,255,0.25);
+      padding:6px 10px;
+      background:rgba(0,0,0,0.55);
+      min-width:130px;
+    }
+    .pill b{color:var(--cyan);}
+    #entropyVal{color:var(--red);}
+
+    #main{
+      padding:10px;
+      display:grid;
+      grid-template-columns: 380px 1fr 360px;
+      gap:10px;
+      min-height:0;
+    }
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      box-shadow:0 0 35px rgba(0,240,255,0.18);
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+      position:relative;
+    }
+    .panelHeader{
+      padding:8px 10px;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      font-size:11px;
+      text-transform:uppercase;
+      color:var(--muted);
+      letter-spacing:2px;
+      display:flex;
+      justify-content:space-between;
+    }
+    .panelBody{
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:0;
+    }
+
+    /* LEFT: TEMPORAL GRID CONTROL */
+    .statRow{
+      display:flex;
+      justify-content:space-between;
+      font-size:12px;
+      padding:6px 8px;
+      border:1px solid rgba(255,255,255,0.06);
+      background:rgba(0,0,0,0.5);
+      color:var(--muted);
+    }
+    .statRow span:last-child{
+      color:var(--text);
+    }
+
+    .gridHint{
+      font-size:11px;
+      color:var(--muted);
+      line-height:1.4;
+      border:1px dashed rgba(255,255,255,0.12);
+      padding:8px;
+      background:rgba(0,0,0,0.35);
+    }
+
+    #nodeGrid{
+      margin-top:6px;
+      border:1px solid rgba(0,240,255,0.35);
+      background:rgba(0,0,0,0.7);
+      display:grid;
+      grid-template-columns: repeat(6,1fr);
+      gap:4px;
+      padding:6px;
+      user-select:none;
+    }
+    .node{
+      height:40px;
+      border:1px solid rgba(255,255,255,0.1);
+      background:rgba(0,0,0,0.7);
+      position:relative;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      color:var(--muted);
+      overflow:hidden;
+    }
+    .node::before{
+      content:"";
+      position:absolute;inset:0;
+      background:radial-gradient(circle, rgba(0,240,255,0.18) 0, transparent 55%);
+      opacity:0;
+      transition:opacity .2s;
+    }
+    .node.active{
+      border-color:var(--cyan);
+      color:var(--cyan);
+    }
+    .node.active::before{opacity:1;}
+    .node.path{
+      border-color:var(--green);
+      color:var(--green);
+      box-shadow:0 0 12px rgba(0,255,65,0.55) inset;
+    }
+    .node.trap{
+      border-color:var(--red);
+      color:var(--red);
+    }
+    .nodeStart::after,.nodeEnd::after{
+      content:attr(data-tag);
+      position:absolute;
+      top:2px;left:4px;
+      font-size:9px;
+      color:var(--yellow);
+    }
+
+    .btnRow{
+      display:flex;
+      gap:6px;
+      margin-top:6px;
+    }
+    .btn{
+      flex:1;
+      font-family:inherit;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      border:1px solid rgba(0,240,255,0.3);
+      background:linear-gradient(to bottom, #061320, #040a12);
+      color:var(--cyan);
+      padding:6px 4px;
+      cursor:pointer;
+      transition:.15s;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 16px rgba(0,240,255,0.4);
+    }
+    .btn:disabled{
+      opacity:.3;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+    .btn.danger{border-color:rgba(255,0,60,0.5); color:var(--red);}
+    .btn.secondary{border-color:rgba(255,255,255,0.25); color:var(--muted);}
+
+    /* CENTER: TIME STREAM VISUAL + DIALOGUE */
+    #centerVis{
+      position:relative;
+      overflow:hidden;
+    }
+    #timeCanvas{
+      width:100%;
+      height:100%;
+      display:block;
+      background:radial-gradient(circle at 50% 20%, rgba(0,240,255,0.2),transparent 40%), #020309;
+    }
+    #dialogueBox{
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:10px;
+      background:rgba(0,0,0,0.78);
+      border:1px solid rgba(0,240,255,0.35);
+      padding:10px;
+      font-size:13px;
+    }
+    #dlgSpeaker{
+      font-size:11px;
+      color:var(--cyan);
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin-bottom:4px;
+    }
+    #dlgText{color:var(--text);}
+    #choiceList{
+      margin-top:8px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .choiceBtn{
+      background:rgba(0,0,0,0.9);
+      border:1px solid rgba(255,255,255,0.18);
+      color:var(--text);
+      font-size:11px;
+      padding:6px;
+      text-align:left;
+      cursor:pointer;
+      transition:.15s;
+    }
+    .choiceBtn:hover{
+      background:rgba(0,240,255,0.12);
+      border-color:rgba(0,240,255,0.5);
+    }
+
+    /* RIGHT: TERMINAL + ENTROPY REACTOR */
+    #terminal{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+    #termOutput{
+      flex:1;
+      background:#020309;
+      border:1px solid rgba(255,255,255,0.08);
+      padding:8px;
+      font-size:11px;
+      overflow:auto;
+      color:#9fb2c0;
+    }
+    .line{margin-bottom:3px;}
+    .sys{color:var(--cyan);}
+    .err{color:var(--red);}
+    .ok{color:var(--green);}
+    .event{color:var(--yellow);}
+    #termInputRow{
+      display:flex;
+      margin-top:4px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(0,0,0,0.7);
+      padding:4px 6px;
+      align-items:center;
+      font-size:11px;
+    }
+    #prompt{color:var(--cyan); margin-right:4px;}
+    #cmd{
+      flex:1;
+      background:transparent;
+      border:none;
+      color:var(--text);
+      font-family:inherit;
+      font-size:11px;
+      outline:none;
+    }
+
+    .reactor{
+      margin-top:8px;
+      border:1px solid rgba(255,255,255,0.12);
+      padding:6px;
+      background:rgba(0,0,0,0.5);
+    }
+    .bar{
+      height:10px;
+      background:#111;
+      border:1px solid rgba(255,255,255,0.15);
+      margin-top:4px;
+      position:relative;
+    }
+    .barFill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--green), var(--yellow), var(--red));
+      transition:width .2s linear;
+    }
+
+    footer{
+      border-top:1px solid rgba(255,255,255,0.1);
+      background:#000;
+      padding:8px 12px;
+      font-size:11px;
+      color:var(--muted);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    footer ul{list-style:none;}
+    footer li{margin-bottom:2px;}
+
+    @media(max-width:1100px){
+      body{grid-template-rows:60px auto auto;}
+      #main{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="title">
+    <div class="title-main">SINTECH // FASE 08</div>
+    <div class="title-sub">PROCEDIMENTO: CONTENÇÃO TEMPORAL</div>
+  </div>
+  <div class="hud">
+    <div class="pill">TEMPO <b id="timeHud">10:00</b></div>
+    <div class="pill">ENTROPIA <b id="entropyVal">0%</b></div>
+    <div class="pill">CIRCUITO <b id="circuitVal">0/1</b></div>
+  </div>
+</header>
+
+<section id="main">
+  <!-- LEFT: GRID CONTROL -->
+  <aside class="panel">
+    <div class="panelHeader">
+      <span>MALHA DE NÓS TEMPORAIS</span>
+      <span>6x6</span>
+    </div>
+    <div class="panelBody">
+      <div class="statRow"><span>NÓS ATIVOS</span><span id="activeCount">0/12</span></div>
+      <div class="statRow"><span>TRILHA CONTÍNUA</span><span id="pathStatus">NÃO</span></div>
+      <div class="gridHint">
+        Objetivo: ativar exatamente 12 nós para formar um caminho contínuo do <span style="color:var(--green)">INÍCIO</span> ao <span style="color:var(--green)">FIM</span>, sem passar por TRAPAS (vermelhos) e sem criar ramos mortos.<br>
+        Clique para alternar nós. Use <b>VALIDAR CAMINHO</b> quando achar que fechou o circuito.
+      </div>
+      <div id="nodeGrid"></div>
+      <div class="btnRow">
+        <button class="btn" id="btnRandomize">embaralhar nós</button>
+        <button class="btn secondary" id="btnClear">limpar</button>
+      </div>
+      <div class="btnRow">
+        <button class="btn" id="btnValidate">validar caminho</button>
+        <button class="btn danger" id="btnForcePulse">pulso bruto</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER: VISUAL + DIALOGUE -->
+  <section class="panel">
+    <div class="panelHeader">
+      <span>FLUXO TEMPORAL</span>
+      <span id="eventLabel">ESTÁVEL</span>
+    </div>
+    <div id="centerVis">
+      <canvas id="timeCanvas"></canvas>
+      <div id="dialogueBox">
+        <div id="dlgSpeaker">SISTEMA:</div>
+        <div id="dlgText">Nó raiz preso em loop. Você deve selar a malha temporal antes que a entropia ultrapasse 100%.</div>
+        <div id="choiceList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: TERMINAL -->
+  <aside class="panel">
+    <div class="panelHeader">
+      <span>TERMINAL :: LINGUAGEM DE CONTENÇÃO</span>
+      <span>SET / PULSE / LOCK</span>
+    </div>
+    <div class="panelBody" id="terminal">
+      <div id="termOutput"></div>
+      <div id="termInputRow">
+        <span id="prompt">root@sintech-8:~$</span>
+        <input id="cmd" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="reactor">
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--muted);">Reator de Entropia</div>
+        <div class="bar"><div class="barFill" id="entropyBar"></div></div>
+        <div style="font-size:10px; margin-top:4px;">
+          SET i,j ON|OFF  &mdash; ativa/desativa nó<br>
+          PULSE [fraco|médio|forte]  &mdash; tenta drenar entropia<br>
+          LOCK PATH  &mdash; congela malha atual (risco alto)
+        </div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<footer>
+  <div>
+    <div style="text-transform:uppercase; letter-spacing:2px; margin-bottom:4px;">REGRAS IMPLÍCITAS</div>
+    <ul>
+      <li>- Exatamente 12 nós ativos.</li>
+      <li>- Caminho único entre início e fim.</li>
+      <li>- Nenhuma TRAPA ativa.</li>
+      <li>- LOCK só é seguro com entropia &lt; 40%.</li>
+    </ul>
+  </div>
+  <div>
+    <div style="text-transform:uppercase; letter-spacing:2px; margin-bottom:4px;">COMANDOS ÚTEIS</div>
+    <ul>
+      <li>- help, hint, status</li>
+      <li>- scan grid, scan entropy</li>
+      <li>- undo (reverte última alteração de nó)</li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  // ---------- STATE ----------
+  const GRID_SIZE = 6;
+  const MAX_ACTIVE = 12;
+  const TOTAL_TIME = 600; // 10 minutos
+  const state = {
+    time: TOTAL_TIME,
+    entropy: 0,
+    grid: [],
+    start: {r:0,c:0},
+    end: {r:GRID_SIZE-1, c:GRID_SIZE-1},
+    activeHistory: [],
+    circuitLocked:false,
+    circuitValid:false,
+    eventMode:'stable', // stable, fissure, loop, echo
+    dialogueStep:0
+  };
+
+  const nodeGrid = document.getElementById('nodeGrid');
+  const activeCountEl = document.getElementById('activeCount');
+  const pathStatusEl = document.getElementById('pathStatus');
+  const timeHud = document.getElementById('timeHud');
+  const entropyVal = document.getElementById('entropyVal');
+  const entropyBar = document.getElementById('entropyBar');
+  const circuitVal = document.getElementById('circuitVal');
+  const eventLabel = document.getElementById('eventLabel');
+
+  const termOut = document.getElementById('termOutput');
+  const cmdInput = document.getElementById('cmd');
+
+  const dlgSpeaker = document.getElementById('dlgSpeaker');
+  const dlgText = document.getElementById('dlgText');
+  const choiceList = document.getElementById('choiceList');
+
+  // ---------- AUDIO ----------
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function tone(freq, dur=0.1, type='sine', vol=0.08){
+    try{
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      g.gain.setValueAtTime(vol, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + dur);
+    }catch(e){}
+  }
+
+  // ---------- GRID ----------
+  function initGrid(){
+    nodeGrid.innerHTML = '';
+    state.grid = [];
+    for(let r=0;r<GRID_SIZE;r++){
+      const row = [];
+      for(let c=0;c<GRID_SIZE;c++){
+        const node = {
+          r,c,
+          active:false,
+          trap:false
+        };
+        row.push(node);
+
+        const div = document.createElement('div');
+        div.className = 'node';
+        div.dataset.r = r;
+        div.dataset.c = c;
+
+        if(r===state.start.r && c===state.start.c){
+          div.classList.add('nodeStart');
+          div.dataset.tag = 'INÍCIO';
+          node.active = true;
+        }
+        if(r===state.end.r && c===state.end.c){
+          div.classList.add('nodeEnd');
+          div.dataset.tag = 'FIM';
+          node.active = true;
+        }
+
+        div.addEventListener('click', ()=>toggleNode(r,c));
+        nodeGrid.appendChild(div);
+      }
+      state.grid.push(row);
+    }
+    randomizeTraps();
+    syncGridUI();
+    state.activeHistory = [];
+  }
+
+  function randomizeTraps(){
+    // marca algumas TRAPAS aleatórias (mas nunca início/fim)
+    for(let i=0;i<6;i++){
+      const r = Math.floor(Math.random()*GRID_SIZE);
+      const c = Math.floor(Math.random()*GRID_SIZE);
+      if((r===state.start.r && c===state.start.c)||(r===state.end.r&&c===state.end.c)) continue;
+      state.grid[r][c].trap = true;
+    }
+  }
+
+  function toggleNode(r,c, fromCommand=false){
+    if(state.circuitLocked) return;
+    const node = state.grid[r][c];
+    if(r===state.start.r && c===state.start.c) return;
+    if(r===state.end.r && c===state.end.c) return;
+    if(node.trap && !node.active){
+      // Ativar trap = penalidade maior
+      log(`TRAPA ATIVADA em (${r+1},${c+1}). Entropia sobe.`, 'err');
+      changeEntropy(10);
+    }
+    node.active = !node.active;
+    state.activeHistory.push({r,c});
+    syncGridUI();
+    if(!fromCommand) tone(node.active?780:220,0.04,'square',0.06);
+  }
+
+  function syncGridUI(){
+    let active = 0;
+    for(let r=0;r<GRID_SIZE;r++){
+      for(let c=0;c<GRID_SIZE;c++){
+        const node = state.grid[r][c];
+        const el = nodeElement(r,c);
+        el.classList.remove('active','trap','path');
+        if(node.trap) el.classList.add('trap');
+        if(node.active) el.classList.add('active');
+      }
+    }
+    // highlight current continuous path preview
+    const path = computePath();
+    path.forEach(p=>{
+      const el = nodeElement(p.r,p.c);
+      el.classList.add('path');
+    });
+
+    state.grid.forEach(row=>row.forEach(n=>{ if(n.active) active++; }));
+    activeCountEl.textContent = `${active}/${MAX_ACTIVE}`;
+    state.circuitValid = validateCircuit();
+    pathStatusEl.textContent = state.circuitValid ? 'SIM' : 'NÃO';
+    pathStatusEl.style.color = state.circuitValid ? 'var(--green)' : 'var(--muted)';
+  }
+
+  function nodeElement(r,c){
+    return nodeGrid.querySelector(`.node[data-r="${r}"][data-c="${c}"]`);
+  }
+
+  function computePath(){
+    // BFS/DFS from start using only active nodes, return one path (if any)
+    const visited = Array(GRID_SIZE).fill(0).map(()=>Array(GRID_SIZE).fill(false));
+    const parent = Array(GRID_SIZE).fill(0).map(()=>Array(GRID_SIZE).fill(null));
+    const q = [];
+    q.push(state.start);
+    visited[state.start.r][state.start.c] = true;
+
+    const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+
+    while(q.length){
+      const cur = q.shift();
+      if(cur.r===state.end.r && cur.c===state.end.c) break;
+      for(const [dr,dc] of dirs){
+        const nr = cur.r+dr, nc = cur.c+dc;
+        if(nr<0||nc<0||nr>=GRID_SIZE||nc>=GRID_SIZE) continue;
+        const n = state.grid[nr][nc];
+        if(!n.active) continue;
+        if(n.trap) continue;
+        if(visited[nr][nc]) continue;
+        visited[nr][nc] = true;
+        parent[nr][nc] = cur;
+        q.push({r:nr,c:nc});
+      }
+    }
+
+    if(!visited[state.end.r][state.end.c]) return [];
+
+    // reconstruct
+    const path = [];
+    let cur = state.end;
+    while(cur){
+      path.push(cur);
+      cur = parent[cur.r][cur.c];
+    }
+    return path.reverse();
+  }
+
+  function validateCircuit(){
+    // regras:
+    // - início/fim ativos (garantido)
+    // - exatamente MAX_ACTIVE nós ativos
+    // - existe caminho (computePath) que usa todos os nós ativos (ou pelo menos nenhum ramo "solto")
+    let activeNodes = [];
+    for(let r=0;r<GRID_SIZE;r++){
+      for(let c=0;c<GRID_SIZE;c++){
+        const n = state.grid[r][c];
+        if(n.active){
+          activeNodes.push({r,c});
+          if(n.trap) return false;
+        }
+      }
+    }
+    if(activeNodes.length !== MAX_ACTIVE) return false;
+    const path = computePath();
+    if(path.length === 0) return false;
+    if(path.length !== activeNodes.length) return false;
+    return true;
+  }
+
+  function clearGrid(){
+    state.grid.forEach(row=>row.forEach(n=>{
+      if((n.r===state.start.r && n.c===state.start.c) || (n.r===state.end.r && n.c===state.end.c)) n.active = true;
+      else n.active = false;
+    }));
+    state.activeHistory = [];
+    syncGridUI();
+  }
+
+  function undoLast(){
+    if(state.activeHistory.length === 0 || state.circuitLocked) return;
+    const last = state.activeHistory.pop();
+    const node = state.grid[last.r][last.c];
+    node.active = !node.active;
+    syncGridUI();
+    log(`UNDO: nó (${last.r+1},${last.c+1}) revertido.`, 'sys');
+  }
+
+  // ---------- TERMINAL ----------
+  function log(msg, cls=''){
+    const div = document.createElement('div');
+    div.className = `line ${cls}`;
+    div.textContent = msg;
+    termOut.appendChild(div);
+    termOut.scrollTop = termOut.scrollHeight;
+  }
+
+  function cmdHelp(){
+    log("Comandos:",'sys');
+    log("  help               - lista comandos",'sys');
+    log("  status             - mostra estado atual",'sys');
+    log("  hint               - dica contextual",'sys');
+    log("  set i,j on|off     - ativa/desativa nó (1-6 indexado)",'sys');
+    log("  pulse fraco|medio|forte",'sys');
+    log("  lock path          - tenta travar malha atual",'sys');
+    log("  scan grid          - analisa malha e riscos",'sys');
+    log("  scan entropy       - leitura de entropia",'sys');
+    log("  undo               - reverte última alteração de nó",'sys');
+  }
+
+  function cmdStatus(){
+    log(`Tempo restante: ${formatTime(state.time)}`,'sys');
+    log(`Entropia: ${state.entropy.toFixed(1)}%`,'sys');
+    log(`Circuito válido: ${state.circuitValid ? 'SIM':'NÃO'}`,'sys');
+    log(`Malha travada: ${state.circuitLocked ? 'SIM':'NÃO'}`,'sys');
+  }
+
+  function cmdHint(){
+    if(state.entropy>60){
+      log("HINT: Entropia alta. Use PULSE FRACO em sequência, não FORTE.", 'event');
+    }else if(!state.circuitValid){
+      log("HINT: Ativos demais ou de menos. Exatamente 12 nós, caminho sem bifurcações.", 'event');
+    }else if(state.circuitValid && !state.circuitLocked){
+      log("HINT: Com entropia abaixo de ~40%, LOCK PATH é relativamente seguro.", 'event');
+    }else{
+      log("HINT: Malha parece consistente, resta apenas estabilizar entropia.", 'event');
+    }
+  }
+
+  function parseCommand(text){
+    const raw = text.trim();
+    if(!raw) return;
+    log(`root@sintech-8:~$ ${raw}`);
+    const parts = raw.toLowerCase().split(/\s+/);
+    const base = parts[0];
+
+    if(base === 'help') return cmdHelp();
+    if(base === 'status') return cmdStatus();
+    if(base === 'hint') return cmdHint();
+    if(base === 'undo') return undoLast();
+
+    if(base === 'scan'){
+      if(parts[1] === 'grid') return scanGrid();
+      if(parts[1] === 'entropy') return scanEntropy();
+      return log("Uso: scan grid | scan entropy",'err');
+    }
+
+    if(base === 'set'){
+      // set i,j on/off  (1-indexed)
+      if(parts.length<3) return log("Uso: set i,j on|off",'err');
+      const coord = parts[1].split(',');
+      if(coord.length!==2) return log("Coordenadas inválidas. Use i,j de 1 a 6.",'err');
+      const i = parseInt(coord[0],10)-1;
+      const j = parseInt(coord[1],10)-1;
+      if(isNaN(i)||isNaN(j)||i<0||j<0||i>=GRID_SIZE||j>=GRID_SIZE) return log("Coordenadas fora da malha.",'err');
+      const mode = parts[2];
+      const node = state.grid[i][j];
+      const wantOn = (mode === 'on');
+      if(wantOn === node.active) return log("Nó já está nesse estado.",'sys');
+      toggleNode(i,j, true);
+      log(`Nó (${i+1},${j+1}) setado para ${wantOn?'ON':'OFF'}.`,'ok');
+      changeEntropy(1.5); // cada set gera pequena entropia
+      return;
+    }
+
+    if(base === 'pulse'){
+      const strength = parts[1] || 'fraco';
+      return doPulse(strength);
+    }
+
+    if(base === 'lock'){
+      if(parts[1] === 'path') return doLock();
+      return log("Uso: lock path",'err');
+    }
+
+    log(`Comando desconhecido: ${base}`,'err');
+  }
+
+  function scanGrid(){
+    const path = computePath();
+    const active = [];
+    const traps = [];
+    for(let r=0;r<GRID_SIZE;r++){
+      for(let c=0;c<GRID_SIZE;c++){
+        const n = state.grid[r][c];
+        if(n.active) active.push(`${r+1},${c+1}`);
+        if(n.trap && n.active) traps.push(`${r+1},${c+1}`);
+      }
+    }
+    log(`NÓS ATIVOS (${active.length}): ${active.join(' | ')}`,'sys');
+    if(traps.length) log(`ALERTA: TRAPAS ATIVAS em ${traps.join(' ; ')}`,'err');
+    log(`Caminho do início até fim usa ${path.length} nós.`, 'sys');
+  }
+
+  function scanEntropy(){
+    log(`Entropia: ${state.entropy.toFixed(1)}%. ${(state.entropy>70)?'*** ZONA DE RISCO ***':''}`,'event');
+  }
+
+  function doPulse(strength){
+    if(!['fraco','medio','forte'].includes(strength)){
+      return log("Uso: pulse fraco|medio|forte",'err');
+    }
+    if(state.entropy<=0){
+      log("Entropia já mínima. Pulso teria pouco efeito.",'sys');
+      return;
+    }
+    tone(900,0.06,'square',0.09);
+    if(strength==='fraco'){
+      // sempre seguro, mas baixa pouco
+      const delta = (5 + Math.random()*4);
+      log(`PULSE FRACO: drenagem ~${delta.toFixed(1)}%.`, 'ok');
+      changeEntropy(-delta);
+    }else if(strength==='medio'){
+      // bom se circuito válido; péssimo se inválido
+      if(state.circuitValid){
+        const delta = (14 + Math.random()*6);
+        log(`PULSE MÉDIO: circuito conduziu carga, drenagem ~${delta.toFixed(1)}%.`, 'ok');
+        changeEntropy(-delta);
+      }else{
+        const up = (8 + Math.random()*8);
+        log(`PULSE MÉDIO: circuito falho, entropia subiu ~${up.toFixed(1)}%.`, 'err');
+        changeEntropy(up);
+      }
+    }else{
+      // forte: só presta se circuito válido E entropia < 50
+      if(state.circuitValid && state.entropy<50){
+        const delta = (35 + Math.random()*10);
+        log(`PULSE FORTE: drenagem massiva ~${delta.toFixed(1)}%.`, 'ok');
+        changeEntropy(-delta);
+      }else{
+        const up = (20 + Math.random()*15);
+        log(`PULSE FORTE: malha saturada, entropia explodiu ~${up.toFixed(1)}%.`, 'err');
+        changeEntropy(up);
+      }
+    }
+  }
+
+  function doLock(){
+    if(!state.circuitValid){
+      log("LOCK falhou: circuito inválido.",'err');
+      changeEntropy(12);
+      return;
+    }
+    if(state.circuitLocked){
+      log("Malha já está travada.",'sys');
+      return;
+    }
+    tone(300,0.15,'sawtooth',0.12);
+    log("LOCK PATH: tentando fixar malha atual...",'event');
+    // chance de sucesso depende da entropia
+    const e = state.entropy;
+    let successChance = 0;
+    if(e<20) successChance = 0.95;
+    else if(e<40) successChance = 0.8;
+    else if(e<60) successChance = 0.55;
+    else if(e<80) successChance = 0.3;
+    else successChance = 0.1;
+
+    if(Math.random()<successChance){
+      state.circuitLocked = true;
+      log("LOCK bem-sucedido. Malha fixada. Entropia estabiliza lentamente.","ok");
+      circuitVal.textContent = '1/1';
+    }else{
+      log("LOCK falhou. FISSURA criada. Entropia em ascensão.",'err');
+      changeEntropy(18);
+      triggerEvent('fissure');
+    }
+  }
+
+  function changeEntropy(delta){
+    state.entropy += delta;
+    if(state.entropy<0) state.entropy = 0;
+    if(state.entropy>120) state.entropy = 120;
+    entropyVal.textContent = `${state.entropy.toFixed(1)}%`;
+    entropyBar.style.width = `${Math.min(state.entropy,100)}%`;
+    if(state.entropy>=100){
+      gameOver("ENTROPIA ACIMA DE 100%. LINHA TEMPORAL COLAPSADA.");
+    }
+  }
+
+  function formatTime(t){
+    const m = String(Math.floor(t/60)).padStart(2,'0');
+    const s = String(t%60).padStart(2,'0');
+    return `${m}:${s}`;
+  }
+
+  // ---------- TIME & EVENTS ----------
+  function tick(){
+    if(state.time<=0) {
+      if(state.circuitLocked && state.entropy<60){
+        win();
+      }else{
+        gameOver("TEMPO ESGOTADO ANTES DA CONTENÇÃO.");
+      }
+      return;
+    }
+    state.time--;
+    timeHud.textContent = formatTime(state.time);
+
+    // entropia sobe um pouco por segundo
+    let baseRise = 0.12;
+    if(state.eventMode==='fissure') baseRise += 0.08;
+    if(state.eventMode==='loop') baseRise += 0.05;
+    changeEntropy(baseRise);
+
+    // eventos aleatórios
+    if(Math.random()<0.07){
+      randomEvent();
+    }
+
+    // diálogo reativo simples
+    narrativeTick();
+  }
+
+  function randomEvent(){
+    const roll = Math.random();
+    if(roll<0.33) triggerEvent('fissure');
+    else if(roll<0.66) triggerEvent('loop');
+    else triggerEvent('echo');
+  }
+
+  function triggerEvent(mode){
+    state.eventMode = mode;
+    if(mode==='stable') eventLabel.textContent = 'ESTÁVEL';
+    if(mode==='fissure'){
+      eventLabel.textContent = 'FISSURA';
+      eventLabel.style.color = 'var(--red)';
+      log("EVENTO: FISSURA TEMPORAL - TRAPAS podem mudar de lugar.",'event');
+      // move 1 trap
+      moveRandomTrap();
+    }
+    if(mode==='loop'){
+      eventLabel.textContent = 'LOOP';
+      eventLabel.style.color = 'var(--yellow)';
+      log("EVENTO: LOOP - histórico de UNDO limitado.",'event');
+      if(state.activeHistory.length>5){
+        state.activeHistory = state.activeHistory.slice(-5);
+      }
+    }
+    if(mode==='echo'){
+      eventLabel.textContent = 'ECO';
+      eventLabel.style.color = 'var(--cyan)';
+      log("EVENTO: ECO - último PULSE ecoará levemente (± entropia).",'event');
+      // pequeno jitter na entropia
+      changeEntropy((Math.random()-0.5)*4);
+    }
+
+    // volta pra estável depois de alguns segundos
+    setTimeout(()=>{
+      state.eventMode = 'stable';
+      eventLabel.textContent = 'ESTÁVEL';
+      eventLabel.style.color = 'var(--muted)';
+    }, 6000);
+  }
+
+  function moveRandomTrap(){
+    // pega uma trap ativa ou qualquer trap e move para outro nó
+    const traps = [];
+    const empty = [];
+    for(let r=0;r<GRID_SIZE;r++){
+      for(let c=0;c<GRID_SIZE;c++){
+        const n = state.grid[r][c];
+        if((r===state.start.r&&c===state.start.c)||(r===state.end.r&&c===state.end.c)) continue;
+        if(n.trap) traps.push(n);
+        else empty.push(n);
+      }
+    }
+    if(traps.length && empty.length){
+      const oldTrap = traps[Math.floor(Math.random()*traps.length)];
+      const target = empty[Math.floor(Math.random()*empty.length)];
+      oldTrap.trap = false;
+      target.trap = true;
+      syncGridUI();
+    }
+  }
+
+  // ---------- NARRATIVA ----------
+  const dialogues = [
+    {
+      check: ()=> state.time<TOTAL_TIME-10,
+      speaker:"VOID-WALKER",
+      text:"A linha não é reta. Ela dobra. Se você errar, voltamos para o mesmo ponto… sem lembrar que já estivemos aqui.",
+      choices:[
+        {label:"Repetição cria estabilidade. Segure.", effect:()=>changeEntropy(-3)},
+        {label:"Se quebrar o loop, você sente dor. Continua?", effect:()=>changeEntropy(4)}
+      ]
+    },
+    {
+      check: ()=> state.entropy>50 && state.dialogueStep===1,
+      speaker:"SISTEMA",
+      text:"Entropia em zona de risco. Pulsos fortes serão caóticos.",
+      choices:[
+        {label:"Confirmar: só usar PULSE FRACO e MÉDIO.", effect:()=>log("PROTOCOLO: pulsos fortes desautorizados (mas o sistema não vai impedir você).",'sys')},
+        {label:"Ignorar. Risco faz parte da simulação.", effect:()=>changeEntropy(5)}
+      ]
+    },
+    {
+      check: ()=> state.circuitValid && !state.circuitLocked && state.dialogueStep===2,
+      speaker:"VOID-WALKER",
+      text:"Consigo ver o caminho. Ele passa pelo início e pelo fim ao mesmo tempo.",
+      choices:[
+        {label:"Travamos agora. Aceita a forma que ela tem.", effect:()=>doLock()},
+        {label:"Mais uma volta. Talvez exista uma malha mais limpa.", effect:()=>changeEntropy(6)}
+      ]
+    }
+  ];
+
+  function narrativeTick(){
+    if(state.dialogueStep>=dialogues.length) return;
+    const d = dialogues[state.dialogueStep];
+    if(d && d.check()){
+      dlgSpeaker.textContent = d.speaker + ":";
+      dlgText.textContent = d.text;
+      choiceList.innerHTML = '';
+      d.choices.forEach((ch,idx)=>{
+        const btn = document.createElement('button');
+        btn.className = 'choiceBtn';
+        btn.textContent = `> ${ch.label}`;
+        btn.onclick = ()=>{
+          ch.effect();
+          state.dialogueStep++;
+          choiceList.innerHTML = '';
+        };
+        choiceList.appendChild(btn);
+      });
+    }
+  }
+
+  // ---------- VIZUALIZAÇÃO TIME STREAM ----------
+  const canvas = document.getElementById('timeCanvas');
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas(){
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  let tVis = 0;
+  function drawTimeStream(){
+    requestAnimationFrame(drawTimeStream);
+    tVis += 0.02;
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const w = canvas.width, h = canvas.height;
+
+    // background grid lines
+    ctx.strokeStyle = 'rgba(0,240,255,0.12)';
+    ctx.lineWidth = 1;
+    for(let y=0;y<h;y+=24){
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      ctx.lineTo(w,y);
+      ctx.stroke();
+    }
+    for(let x=0;x<w;x+=40){
+      ctx.beginPath();
+      ctx.moveTo(x,0);
+      ctx.lineTo(x,h);
+      ctx.stroke();
+    }
+
+    // main time curve
+    ctx.beginPath();
+    const baseY = h*0.5;
+    for(let x=0;x<w;x++){
+      const progress = x / w;
+      const amp = 20 + state.entropy*0.3;
+      const y = baseY + Math.sin(progress*10 + tVis*1.4) * amp +
+                Math.sin(progress*32 + tVis*3.3)*(state.eventMode==='fissure'?6:3);
+      if(x===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle = (state.entropy>70 ? 'rgba(255,0,60,0.9)' : 'rgba(0,240,255,0.8)');
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // pulses dots
+    for(let i=0;i<40;i++){
+      const px = ((tVis*60 + i*30) % w);
+      const py = baseY + Math.sin((px/w)*10 + tVis*1.4)* (20 + state.entropy*0.3);
+      ctx.fillStyle = (i%2===0)?'rgba(0,255,65,0.9)':'rgba(252,238,10,0.9)';
+      ctx.beginPath();
+      ctx.arc(px,py,2.3,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+  drawTimeStream();
+
+  // ---------- WIN / FAIL ----------
+  function gameOver(reason){
+    clearInterval(tickInterval);
+    cmdInput.disabled = true;
+    tone(80,0.3,'sawtooth',0.15);
+    setTimeout(()=>tone(60,0.4,'square',0.12), 300);
+
+    document.body.innerHTML = `
+      <div style="height:100vh; display:flex; align-items:center; justify-content:center; background:#000; color:#ff003c; font-family:'Share Tech Mono', monospace; text-align:center; padding:20px;">
+        <div style="max-width:800px;">
+          <h1 style="letter-spacing:4px; margin-bottom:10px;">FALHA NA CONTENÇÃO</h1>
+          <p style="color:#fdd;">${reason}</p>
+          <p style="color:#889; margin-top:10px;">A linha temporal colapsa e recomeça do mesmo ponto. Você só lembra do som.</p>
+          <button onclick="location.reload()" style="margin-top:20px; padding:10px 18px; background:transparent; border:1px solid #fff; color:#fff; cursor:pointer;">
+            REINICIAR FASE 08
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function win(){
+    clearInterval(tickInterval);
+    cmdInput.disabled = true;
+    tone(440,0.15,'sine',0.1);
+    setTimeout(()=>tone(554,0.15,'sine',0.1),120);
+    setTimeout(()=>tone(659,0.25,'sine',0.1),240);
+
+    document.body.innerHTML = `
+      <div style="height:100vh; display:flex; align-items:center; justify-content:center; background:#000; color:#00f0ff; font-family:'Share Tech Mono', monospace; text-align:center; padding:20px;">
+        <div style="max-width:900px;">
+          <h1 style="letter-spacing:4px; margin-bottom:10px;">FASE 08 CONCLUÍDA</h1>
+          <p style="color:#e6fbff; margin-bottom:12px;">
+            A malha temporal foi contida. A entropia estabilizou antes do colapso.
+          </p>
+          <p style="color:#8ad0ff; margin-bottom:20px;">
+            VOID-WALKER deixou de ser apenas um ponto na linha do tempo. Agora ele é o observador da própria linha.
+          </p>
+          <a href="sintech9.html" style="display:inline-block; padding:10px 18px; border:1px solid #fff; color:#fff; text-decoration:none; margin-top:10px;">
+            CONTINUAR PARA FASE 09
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  // ---------- INIT ----------
+  initGrid();
+  log("BOOT: Contenção temporal inicializada.",'sys');
+  log("Use 'help' para lista de comandos.",'sys');
+
+  const tickInterval = setInterval(tick, 1000);
+
+  cmdInput.focus();
+  cmdInput.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){
+      const text = cmdInput.value;
+      cmdInput.value = '';
+      parseCommand(text);
+    }
+  });
+
+  // clique inicial para desbloquear áudio em alguns navegadores
+  document.addEventListener('click', ()=>{
+    try{ if(audioCtx.state==='suspended') audioCtx.resume(); }catch(e){}
+  }, {once:true});
+</script>
+</body>
+</html>
