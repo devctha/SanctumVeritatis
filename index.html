@@ -6,15 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
+
     <!-- FONTES E ÍCONES -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
 
     <!-- ÁUDIO AMBIENTE -->
     <audio id="bg-audio" loop>
         <source src="https://cdn.pixabay.com/download/audio/2021/09/01/audio_1f8b9b0488.mp3?filename=dark-ambient-background-9822.mp3" type="audio/mpeg">
     </audio>
+
 
 
     <style>
@@ -33,7 +36,9 @@
         }
 
 
+
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
 
 
         body {
@@ -44,9 +49,11 @@
         }
 
 
+
         .serif { font-family: 'Cinzel', serif; }
         .mono { font-family: 'Share Tech Mono', monospace; }
         .italic { font-family: 'Playfair Display', serif; font-style: italic; }
+
 
 
         /* TEXTURAS */
@@ -58,6 +65,7 @@
             position: fixed; inset: 0; z-index: 0; pointer-events: none;
             background: radial-gradient(circle at center, transparent 40%, #000 90%);
         }
+
 
 
         /* PARTÍCULAS FLUTUANTES */
@@ -79,6 +87,7 @@
         }
 
 
+
         /* === CAPA DE ENTRADA === */
         #cover {
             position: fixed; inset: 0; z-index: 9999;
@@ -87,6 +96,7 @@
             transition: opacity 1.2s ease, visibility 1.2s ease;
         }
         #cover.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
 
 
         .cover-seal {
@@ -113,6 +123,7 @@
         }
 
 
+
         .cover-title {
             margin-top: 2.5rem; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 6px;
             animation: fadeIn 2s ease-in-out;
@@ -127,6 +138,7 @@
         }
 
 
+
         .cover-btn {
             margin-top: 3rem; padding: 1rem 3rem;
             border: 1px solid var(--gold); background: transparent; color: var(--gold);
@@ -139,6 +151,7 @@
             box-shadow: 0 0 50px rgba(216,180,106,0.7);
             transform: scale(1.05);
         }
+
 
 
         /* HEADER */
@@ -156,6 +169,7 @@
             from { opacity: 0; transform: translateY(-100%); }
             to { opacity: 1; transform: translateY(0); }
         }
+
 
 
         .brand {
@@ -190,6 +204,7 @@
         }
 
 
+
         nav a {
             margin-left: 1.8rem; font-size: 0.8rem; text-decoration: none;
             color: var(--muted); text-transform: uppercase; letter-spacing: 2px;
@@ -208,6 +223,7 @@
         nav a.primary-cta:hover {
             background: var(--gold); color: #050509; box-shadow: 0 0 30px rgba(216,180,106,0.35);
         }
+
 
 
         /* HERO */
@@ -231,6 +247,7 @@
         }
 
 
+
         .pillar-bg {
             position: absolute; inset: 0; z-index: -3;
             background-image: url('https://images.unsplash.com/photo-1529424301806-4be0bb154e3b?q=80&w=1800&auto=format&fit=crop');
@@ -243,6 +260,7 @@
             from { transform: scale(1) translateY(0); }
             to { transform: scale(1.1) translateY(-20px); }
         }
+
 
 
         .hero-panel {
@@ -266,6 +284,7 @@
         .hero-panel:hover::after { bottom: -15px; right: -15px; }
 
 
+
         .hero-kicker {
             font-size: 0.8rem; color: var(--muted); letter-spacing: 4px;
             text-transform: uppercase; margin-bottom: 1rem;
@@ -281,6 +300,7 @@
             font-size: 0.95rem; color: var(--muted); margin-bottom: 2rem;
         }
         .hero-quote em { color: var(--gold); }
+
 
 
         .hero-actions {
@@ -306,6 +326,7 @@
         }
 
 
+
         .hero-secondary {
             border: 1px solid #3b342c; padding: 0.9rem 1.7rem;
             color: var(--muted);
@@ -314,6 +335,7 @@
         .hero-secondary:hover {
             border-color: var(--gold); color: var(--text);
         }
+
 
 
         .hero-audio {
@@ -337,6 +359,7 @@
         }
 
 
+
         .hero-aside {
             background: linear-gradient(145deg, rgba(8,7,10,0.95), rgba(10,6,8,0.98));
             border: 1px solid var(--border);
@@ -346,6 +369,7 @@
             transition: 0.4s;
         }
         .hero-aside:hover { box-shadow: 0 30px 80px rgba(0,0,0,1); transform: translateY(-8px); }
+
 
 
         .seal {
@@ -386,6 +410,7 @@
         .aside-link:hover { text-decoration: underline; color: #fff; }
 
 
+
         /* SEÇÃO OPERAÇÕES EM DESTAQUE */
         .section {
             padding: 4rem 2rem 5rem 2rem;
@@ -402,6 +427,7 @@
         .section-header p { font-size: 0.85rem; color: var(--muted); }
 
 
+
         .feature-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
             margin-bottom: 3rem;
@@ -416,6 +442,7 @@
         .feature-card:hover { transform: translateY(-10px); box-shadow: 0 30px 80px rgba(0,0,0,1); }
 
 
+
         .feature-img {
             height: 240px; background-size: cover; background-position: center;
             filter: grayscale(100%) contrast(1.2); transition: 0.6s;
@@ -426,6 +453,7 @@
             background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.9));
         }
         .feature-card:hover .feature-img { filter: grayscale(0%) contrast(1.05); }
+
 
 
         .feature-body { padding: 2rem; position: relative; }
@@ -440,6 +468,10 @@
             color: #ff4444;
             animation: urgentPulse 2s ease-in-out infinite;
         }
+        .feature-tag.classified {
+            border-color: #8b4789;
+            color: #c084be;
+        }
         @keyframes urgentPulse {
             0%, 100% { box-shadow: 0 0 10px rgba(255,68,68,0.3); }
             50% { box-shadow: 0 0 20px rgba(255,68,68,0.6); }
@@ -449,6 +481,7 @@
             font-size: 0.8rem; color: var(--muted); margin-bottom: 1.2rem;
         }
         .feature-body p { font-size: 0.9rem; color: #c5bdad; margin-bottom: 1.8rem; }
+
 
 
         .feature-btn {
@@ -468,6 +501,7 @@
             color: #050509;
             box-shadow: 0 0 30px rgba(216,180,106,0.5);
         }
+
 
 
         .founders-panel {
@@ -491,6 +525,7 @@
         .founders-panel a:hover { text-decoration: underline; color: #fff; }
 
 
+
         /* STATS SECTION */
         .stats-section {
             padding: 5rem 2rem;
@@ -512,6 +547,7 @@
         }
 
 
+
         /* RODAPÉ */
         footer {
             border-top: 1px solid #111;
@@ -520,6 +556,7 @@
             color: #5a5447;
             text-align: center;
         }
+
 
 
         @media (max-width: 960px) {
@@ -535,12 +572,15 @@
 <body>
 
 
+
 <div class="noise"></div>
 <div class="vignette"></div>
 
 
+
 <!-- PARTÍCULAS FLUTUANTES -->
 <div class="particles" id="particles"></div>
+
 
 
 <!-- CAPA DE ENTRADA -->
@@ -550,6 +590,7 @@
     <p class="cover-subtitle mono">Ordo da Verdade Velada</p>
     <button class="cover-btn" id="enterBtn">Atravessar o Véu</button>
 </div>
+
 
 
 <header>
@@ -562,12 +603,14 @@
     </div>
     <nav class="mono">
         <a href="setentrional2.html">Operação Setentrional</a>
+        <a href="reivindicacao.html">Operação Reivindicação</a>
         <a href="fundadores.html">Fundadores</a>
         <a href="sobre.html">Briefing</a>
         <a href="regras.html">Protocolos</a>
         <a href="https://discord.gg/u3GmJt6Ts6" target="_blank" class="primary-cta">Ingressar no Sanctum</a>
     </nav>
 </header>
+
 
 
 <section class="hero">
@@ -586,10 +629,12 @@
             </p>
 
 
+
             <div class="hero-actions">
                 <a href="setentrional2.html" class="hero-btn">Entrar na Operação Setentrional</a>
                 <a href="fundadores.html" class="hero-btn hero-secondary">Conhecer o Alto Conselho</a>
             </div>
+
 
 
             <div class="hero-audio mono">
@@ -597,6 +642,7 @@
                 <span>Tema ambiente do Sanctum</span>
             </div>
         </div>
+
 
 
         <aside class="hero-aside">
@@ -613,17 +659,19 @@
 </section>
 
 
+
 <section class="section">
     <div class="section-header">
         <div>
             <h2 class="serif">Operações em Andamento</h2>
-            <p>Duas cicatrizes abertas sob a guarda do Sanctum Veritatis.</p>
+            <p>Três cicatrizes abertas sob a guarda do Sanctum Veritatis.</p>
         </div>
         <div class="mono" style="font-size:0.8rem; color:var(--muted); text-align:right;">
-            OPERAÇÕES ATIVAS: 02<br>
+            OPERAÇÕES ATIVAS: 03<br>
             URGÊNCIA: NÍVEIS VARIADOS
         </div>
     </div>
+
 
 
     <div class="feature-grid">
@@ -646,6 +694,25 @@
         </article>
 
         <article class="feature-card">
+            <div class="feature-img" style="background-image:url('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1400&auto=format&fit=crop'); filter: brightness(0.6) saturate(0.9) contrast(1.2);"></div>
+            <div class="feature-body">
+                <span class="feature-tag classified mono">SIGILO MÁXIMO</span>
+                <h3 class="serif">Operação Reivindicação</h3>
+                <div class="feature-meta mono">
+                    <span><i class="fas fa-flask"></i> Alvo: Bio Genesis Corp</span> ·
+                    <span>Agentes NEX 5+</span>
+                </div>
+                <p>
+                    Infiltração em instalação corporativa para recuperação de substância classificada "LM". 
+                    Permite experiência controlada do Outro Lado. Prioridade: amostras, documentação técnica 
+                    e identificação de fonte estabilizadora. Quarentena esperada.
+                </p>
+                <a href="reivindicacao.html" class="feature-btn">Acessar Briefing Operacional</a>
+            </div>
+        </article>
+
+
+        <article class="feature-card">
             <div class="feature-img" style="background-image:url('https://images.unsplash.com/photo-1483347756197-71ef80e95f73?q=80&w=1400&auto=format&fit=crop'); filter: brightness(0.7) saturate(0.8) contrast(1.3);"></div>
             <div class="feature-body">
                 <span class="feature-tag urgent mono">URGENTE</span>
@@ -665,6 +732,7 @@
     </div>
 
 
+
     <aside class="founders-panel">
         <h3 class="mono">O Conselho por Trás do Véu</h3>
         <p>
@@ -680,6 +748,7 @@
 </section>
 
 
+
 <section class="stats-section">
     <div class="stats-grid">
         <div class="stat-item">
@@ -687,7 +756,7 @@
             <p>Fundadores</p>
         </div>
         <div class="stat-item">
-            <h3 class="mono">02</h3>
+            <h3 class="mono">03</h3>
             <p>Operações Ativas</p>
         </div>
         <div class="stat-item">
@@ -696,6 +765,7 @@
         </div>
     </div>
 </section>
+
 
 
 <footer>
@@ -707,6 +777,7 @@
 </footer>
 
 
+
 <script>
     // CAPA DE ENTRADA
     const cover = document.getElementById('cover');
@@ -714,6 +785,7 @@
     enterBtn.addEventListener('click', () => {
         cover.classList.add('hidden');
     });
+
 
 
     // PARTÍCULAS FLUTUANTES
@@ -728,10 +800,12 @@
     }
 
 
+
     // ÁUDIO AMBIENTE
     const audioEl = document.getElementById('bg-audio');
     const audioToggle = document.getElementById('audioToggle');
     let audioPlaying = false;
+
 
 
     audioToggle.addEventListener('click', () => {
@@ -752,12 +826,14 @@
     });
 
 
+
     audioEl.addEventListener('ended', () => {
         audioPlaying = false;
         audioToggle.classList.remove('active');
         audioToggle.querySelector('i').classList.remove('fa-pause');
         audioToggle.querySelector('i').classList.add('fa-play');
     });
+
 
 
     // ACESSO OCULTO AO SETOR 973
@@ -771,6 +847,7 @@
         lastClick = now;
     });
 </script>
+
 
 
 </body>
