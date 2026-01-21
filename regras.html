@@ -2,303 +2,539 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SETENTRIONAL // REGRAS DA MESA</title>
+    <title>Protocolo de Regras | Sanctum Veritatis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- FONTES E ÍCONES -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-dark: #050505;
-            --bg-panel: #0f0f0f;
-            --text-primary: #e0e0e0;
-            --text-muted: #888888;
-            --accent-gold: #d4af37;
-            --accent-red: #8a0000;
-            --border: rgba(255,255,255,0.1);
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --bg-elevated: #1a1a24;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7f;
+            --accent: #00d9ff;
+            --accent-secondary: #7b2cbf;
+            --accent-glow: rgba(0, 217, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(0, 217, 255, 0.3);
+            --danger: #ff3366;
+            --warning: #ffb800;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            background: radial-gradient(circle at top, #101010 0, #050505 45%, #000 100%);
+            background: var(--bg-primary);
             color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             line-height: 1.7;
             overflow-x: hidden;
         }
 
-        /* TEXTURAS */
-        .overlay-noise {
-            position: fixed; inset: 0;
+        /* BACKGROUND EFFECTS */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
             pointer-events: none;
-            z-index: 5;
-            opacity: 0.25;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
-        }
-        .overlay-scanline {
-            position: fixed; inset: 0;
-            pointer-events: none;
-            z-index: 6;
-            background: linear-gradient(to bottom,
-                rgba(255,255,255,0) 0,
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.25) 50%,
-                rgba(0,0,0,0.25) 100%);
-            background-size: 100% 4px;
-            mix-blend-mode: soft-light;
         }
 
-        /* HEADER SUPERIOR */
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.03) 50%, rgba(0,0,0,0.03));
+            background-size: 100% 4px;
+            opacity: 0.5;
+        }
+
+        /* HEADER */
         header {
             position: sticky;
             top: 0;
-            z-index: 20;
-            background: rgba(5,5,5,0.96);
-            backdrop-filter: blur(12px);
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 1.2rem 3rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .logo {
-            font-family: 'Share Tech Mono', monospace;
+            font-family: 'Orbitron', sans-serif;
             font-size: 0.9rem;
-            letter-spacing: 3px;
-        }
-        .logo span { color: var(--accent-gold); }
-        .header-right a {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.75rem;
-            text-decoration: none;
-            color: var(--text-muted);
-            margin-left: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
-        .header-right a:hover { color: var(--accent-gold); }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .header-nav a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-nav a:hover {
+            color: var(--accent);
+        }
 
         /* HERO */
         .hero {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem 2rem 2rem;
             position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 3rem 3rem;
         }
-        .hero-title {
+
+        .hero-header {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
-        .hero h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 2.6rem;
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 3px;
-        }
-        .tag {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.7rem;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            padding: 0.3rem 0.7rem;
-            text-transform: uppercase;
-        }
-        .hero p {
-            max-width: 800px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-        .hero-callout {
-            margin-top: 1.5rem;
-            border-left: 2px solid var(--accent-gold);
-            padding-left: 1rem;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--accent-gold);
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* CONTEÚDO PRINCIPAL */
+        .hero-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border-accent);
+            background: var(--accent-glow);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-description {
+            max-width: 900px;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-callout {
+            max-width: 900px;
+            padding: 1.5rem 2rem;
+            border-left: 3px solid var(--accent);
+            background: var(--accent-glow);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* LAYOUT */
         .layout {
-            max-width: 1200px;
-            margin: 0 auto 4rem auto;
-            padding: 0 2rem 4rem 2rem;
-            display: grid;
-            grid-template-columns: minmax(0, 2.2fr) minmax(260px, 0.9fr);
-            gap: 2rem;
             position: relative;
             z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem 6rem;
+            display: grid;
+            grid-template-columns: minmax(0, 2.5fr) minmax(280px, 1fr);
+            gap: 3rem;
         }
 
-        /* SUMÁRIO */
+        /* SIDEBAR */
         .sidebar {
             position: sticky;
-            top: 100px;
+            top: 120px;
             align-self: flex-start;
-            background: rgba(10,10,10,0.9);
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
             border: 1px solid var(--border);
-            padding: 1.5rem 1.4rem;
-        }
-        .sidebar h3 {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            color: var(--accent-gold);
-        }
-        .toc-list {
-            list-style: none;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.75rem;
-        }
-        .toc-list li {
-            margin-bottom: 0.4rem;
-        }
-        .toc-list a {
-            color: var(--text-muted);
-            text-decoration: none;
-        }
-        .toc-list a:hover {
-            color: var(--accent-gold);
+            padding: 2rem;
         }
 
-        /* BLOCOS DE REGRAS */
-        .section-block {
-            background: rgba(10,10,10,0.9);
-            border: 1px solid var(--border);
-            margin-bottom: 2rem;
-            padding: 1.75rem 1.8rem;
-            position: relative;
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
+
+        .sidebar-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 0.8rem;
+        }
+
+        .toc-list a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: 0.3s;
+            display: block;
+            padding: 0.3rem 0;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sidebar-note {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 2px solid var(--accent);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .sidebar-note strong {
+            color: var(--accent);
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        /* SECTION BLOCKS */
+        .section-block {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            transition: 0.3s;
+        }
+
         .section-block::before {
             content: '';
             position: absolute;
-            top: -6px;
-            right: -6px;
-            width: 22px;
-            height: 22px;
-            border-top: 2px solid var(--accent-gold);
-            border-right: 2px solid var(--accent-gold);
-            opacity: 0.7;
-        }
-        .section-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-        .section-sub {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-bottom: 1.4rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .rules-list {
-            list-style: none;
-            font-size: 0.9rem;
-        }
-        .rules-list li {
-            margin-bottom: 0.7rem;
-            padding-left: 1.8rem;
-            position: relative;
-        }
-        .rules-list li::before {
-            content: "■";
-            position: absolute;
+            top: 0;
             left: 0;
-            top: 0.2rem;
-            font-size: 0.55rem;
-            color: var(--accent-gold);
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: 0.3s;
         }
-        .rule-tag {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.7rem;
+
+        .section-block:hover::before {
+            opacity: 1;
+        }
+
+        .section-block::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-top: 2px solid var(--accent);
+            border-right: 2px solid var(--accent);
+            opacity: 0.5;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
             text-transform: uppercase;
-            color: var(--accent-gold);
-        }
-        .rule-body {
-            display: block;
-            margin-top: 0.1rem;
+            letter-spacing: 2px;
             color: var(--text-primary);
+            margin-bottom: 0.8rem;
         }
 
-        /* AVISOS */
-        .callout {
-            border-left: 3px solid var(--accent-red);
-            background: rgba(138,0,0,0.08);
-            padding: 0.9rem 1rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 1rem;
-        }
-        .callout strong {
-            color: var(--accent-red);
-            text-transform: uppercase;
-            font-family: 'Share Tech Mono', monospace;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem 1rem 3rem 1rem;
+        .section-subtitle {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
             color: var(--text-muted);
-            border-top: 1px solid #111;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
         }
 
-        @media (max-width: 960px) {
+        /* RULES LIST */
+        .rules-list {
+            list-style: none;
+        }
+
+        .rules-list li {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .rules-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
+        .rule-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .rule-body {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* CALLOUT */
+        .callout {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 51, 102, 0.08);
+            border-left: 3px solid var(--danger);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .callout strong {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--danger);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        /* FOOTER */
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* SCROLL TO TOP */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-elevated);
+            border: 2px solid var(--border);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translateY(-5px);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
             .layout {
                 grid-template-columns: 1fr;
             }
-            header { padding: 1rem 1.5rem; }
-            .hero { padding: 3rem 1.5rem 1.5rem 1.5rem; }
-            .sidebar { position: static; }
+
+            .sidebar {
+                position: static;
+                order: -1;
+            }
+
+            .hero {
+                padding: 4rem 2rem 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .layout {
+                padding: 0 2rem 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .layout {
+                padding: 0 1.5rem 3rem;
+                gap: 2rem;
+            }
+
+            .section-block {
+                padding: 2rem 1.5rem;
+            }
+
+            .rules-list li {
+                padding-left: 1.5rem;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
     </style>
 </head>
 <body>
 
-<div class="overlay-noise"></div>
-<div class="overlay-scanline"></div>
+<div class="grid-bg"></div>
+<div class="noise"></div>
+<div class="scanlines"></div>
 
 <header>
     <div class="logo">
-        ORDO REALITAS <span>//</span> SETENTRIONAL
+        Sanctum Veritatis <span>//</span> Protocolos
     </div>
-    <div class="header-right">
-        <a href="index.html"><i class="fas fa-arrow-left"></i> Voltar ao Dossiê</a>
+    <div class="header-nav">
+        <a href="index.html">
+            <i class="fas fa-arrow-left"></i> Voltar ao Sanctum
+        </a>
     </div>
 </header>
 
-<section class="hero">
-    <div class="hero-title">
-        <h1>PROTOCOLO DE REGRAS</h1>
-        <div class="tag">Operação São Firmo</div>
+<section class="hero fade-in">
+    <div class="hero-header">
+        <h1 class="hero-title">Protocolo de Regras</h1>
+        <div class="hero-tag">Operações</div>
     </div>
-    <p>
-        Este documento define como o jogo funciona na mesa de SETENTRIONAL: o que é esperado de cada jogador, 
+    
+    <p class="hero-description">
+        Este documento define como o jogo funciona nas mesas da Sanctum Veritatis: o que é esperado de cada jogador, 
         como os testes são feitos, quando cenas podem ser interrompidas e onde estão os limites que não devem ser cruzados. 
         É um acordo de operação para garantir diversão, segurança e terror na medida certa.
     </p>
+    
     <div class="hero-callout">
-        > Nenhuma história vale mais do que o conforto das pessoas na mesa. As regras existem para proteger a mesa, não para engessá-la.
+        Nenhuma história vale mais do que o conforto das pessoas na mesa. As regras existem para proteger a mesa, não para engessá-la.
     </div>
 </section>
 
 <main class="layout">
-    <!-- COLUNA PRINCIPAL -->
+    <!-- CONTEÚDO PRINCIPAL -->
     <div>
 
         <!-- 1. FUNDAMENTOS DA MESA -->
         <section id="fundamentos" class="section-block">
             <h2 class="section-title">Fundamentos da Mesa</h2>
-            <div class="section-sub">O que todo agente precisa saber antes de pisar na Ilha</div>
+            <div class="section-subtitle">O que todo agente precisa saber antes de pisar em uma operação.</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 01 — A mesa vem antes da missão.</span>
@@ -310,7 +546,7 @@
                 </li>
                 <li>
                     <span class="rule-tag">Regra 03 — O Mestre não é inimigo.</span>
-                    <span class="rule-body">O Mestre cria obstáculos, não tenta “ganhar” dos jogadores; o objetivo é construir tensão, não provar um ponto.</span>
+                    <span class="rule-body">O Mestre cria obstáculos, não tenta "ganhar" dos jogadores; o objetivo é construir tensão, não provar um ponto.</span>
                 </li>
                 <li>
                     <span class="rule-tag">Regra 04 — Jogador decide, personagem sofre.</span>
@@ -329,6 +565,7 @@
                     <span class="rule-body">Dentro do jogo, o personagem pode mentir; fora dele, as informações combinadas com o Mestre e outros jogadores são tratadas com honestidade.</span>
                 </li>
             </ul>
+            
             <div class="callout">
                 <strong>Atenção:</strong> Se algum comportamento estiver prejudicando a diversão do grupo, a conversa será feita fora de jogo. Persistindo, o jogador pode ser desconvidado da campanha.
             </div>
@@ -337,7 +574,8 @@
         <!-- 2. ESTRUTURA DE EPISÓDIO -->
         <section id="estrutura" class="section-block">
             <h2 class="section-title">Estrutura de Episódio</h2>
-            <div class="section-sub">Como a sessão normalmente flui</div>
+            <div class="section-subtitle">Como a sessão normalmente flui</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 08 — Abertura rápida.</span>
@@ -365,7 +603,8 @@
         <!-- 3. REGRAS DE NARRATIVA -->
         <section id="narrativa" class="section-block">
             <h2 class="section-title">Regras de Narrativa</h2>
-            <div class="section-sub">Como contar a história sem brigar com o dado</div>
+            <div class="section-subtitle">Como contar a história sem brigar com o dado</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 13 — Declare intenção antes de rolar.</span>
@@ -373,7 +612,7 @@
                 </li>
                 <li>
                     <span class="rule-tag">Regra 14 — Falha ainda move a história.</span>
-                    <span class="rule-body">Testes falhos não travam a trama; em vez de “não acontece nada”, algo pior, mais caro ou mais demorado acontece.</span>
+                    <span class="rule-body">Testes falhos não travam a trama; em vez de "não acontece nada", algo pior, mais caro ou mais demorado acontece.</span>
                 </li>
                 <li>
                     <span class="rule-tag">Regra 15 — Ninguém narra o fracasso do outro.</span>
@@ -401,7 +640,8 @@
         <!-- 4. SISTEMA E ROLAGENS -->
         <section id="sistema" class="section-block">
             <h2 class="section-title">Sistema e Rolagens</h2>
-            <div class="section-sub">Quando rolar, como rolar e quando não rolar</div>
+            <div class="section-subtitle">Quando rolar, como rolar e quando não rolar</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 20 — Dado aparece quando há risco.</span>
@@ -437,7 +677,8 @@
         <!-- 5. SEGURANÇA E LIMITES -->
         <section id="seguranca" class="section-block">
             <h2 class="section-title">Segurança e Limites</h2>
-            <div class="section-sub">Ferramentas para manter o terror saudável</div>
+            <div class="section-subtitle">Ferramentas para manter o terror saudável</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 27 — Conteúdo sensível é avisado.</span>
@@ -453,7 +694,7 @@
                 </li>
                 <li>
                     <span class="rule-tag">Regra 30 — Não se usa trauma real como arma.</span>
-                    <span class="rule-body">Histórias pessoais compartilhadas pelos jogadores não são usadas depois para “pegar mais pesado” com eles na ficção.</span>
+                    <span class="rule-body">Histórias pessoais compartilhadas pelos jogadores não são usadas depois para "pegar mais pesado" com eles na ficção.</span>
                 </li>
                 <li>
                     <span class="rule-tag">Regra 31 — Não há punição por recuar.</span>
@@ -469,11 +710,12 @@
         <!-- 6. CONDUTA ENTRE JOGADORES -->
         <section id="conduta" class="section-block">
             <h2 class="section-title">Conduta Entre Jogadores</h2>
-            <div class="section-sub">O que nunca fazer — dentro e fora de personagem</div>
+            <div class="section-subtitle">O que nunca fazer — dentro e fora de personagem</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 33 — Zero tolerância a preconceito.</span>
-                    <span class="rule-body">Comentários racistas, machistas, LGBTfóbicos ou ofensivos não são permitidos, nem “só como piada”, nem via personagem.</span>
+                    <span class="rule-body">Comentários racistas, machistas, LGBTfóbicos ou ofensivos não são permitidos, nem "só como piada", nem via personagem.</span>
                 </li>
                 <li>
                     <span class="rule-tag">Regra 34 — PvP só com consentimento claro.</span>
@@ -481,7 +723,7 @@
                 </li>
                 <li>
                     <span class="rule-tag">Regra 35 — Não invalide a agência alheia.</span>
-                    <span class="rule-body">Evite dizer aos outros o que seus personagens “deveriam” fazer; ofereça sugestões, não ordens.</span>
+                    <span class="rule-body">Evite dizer aos outros o que seus personagens "deveriam" fazer; ofereça sugestões, não ordens.</span>
                 </li>
                 <li>
                     <span class="rule-tag">Regra 36 — Não jogue por cima da fala.</span>
@@ -501,7 +743,8 @@
         <!-- 7. JOGO ONLINE / FERRAMENTAS -->
         <section id="online" class="section-block">
             <h2 class="section-title">Jogo Online e Ferramentas</h2>
-            <div class="section-sub">Etiquetas para Discord, bots e TTS</div>
+            <div class="section-subtitle">Etiquetas para Discord, bots e TTS</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 39 — Microfone é parte da imersão.</span>
@@ -533,13 +776,15 @@
         <!-- 8. REGRA DE OURO -->
         <section id="ouro" class="section-block">
             <h2 class="section-title">Regra de Ouro da Operação</h2>
-            <div class="section-sub">Quando todas as outras falham</div>
+            <div class="section-subtitle">Quando todas as outras falham</div>
+            
             <ul class="rules-list">
                 <li>
                     <span class="rule-tag">Regra 45 — A história é de todo mundo.</span>
                     <span class="rule-body">Se seguir uma regra literalmente destruir a diversão do grupo, a regra pode ser dobrada, reescrita ou descartada em favor de uma solução conversada.</span>
                 </li>
             </ul>
+            
             <div class="callout">
                 <strong>Em resumo:</strong> ninguém está aqui para vencer o jogo; estamos aqui para construir, juntos, uma história de terror que valha a pena lembrar.
             </div>
@@ -549,7 +794,9 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <h3><i class="fas fa-list-ul"></i> Sumário Rápido</h3>
+        <h3 class="sidebar-title">
+            <i class="fas fa-list-ul"></i> Sumário Rápido
+        </h3>
         <ul class="toc-list">
             <li><a href="#fundamentos">Fundamentos da Mesa</a></li>
             <li><a href="#estrutura">Estrutura de Episódio</a></li>
@@ -560,16 +807,79 @@
             <li><a href="#online">Jogo Online e Ferramentas</a></li>
             <li><a href="#ouro">Regra de Ouro</a></li>
         </ul>
-        <div class="callout" style="margin-top:1.5rem;">
-            <strong>Dica:</strong> use esta página como documento vivo. Ajuste, acrescente ou remova regras conforme o grupo evoluir.
+        
+        <div class="sidebar-note">
+            <strong>Dica:</strong> Use esta página como documento vivo. Ajuste, acrescente ou remova regras conforme o grupo evoluir.
         </div>
     </aside>
 </main>
 
 <footer>
-    SETENTRIONAL é um projeto de fã, sem fins lucrativos. Ordem Paranormal © Cellbit.<br>
-    Layout inspirado em templates modernos de sites de RPG e dark mode para leitura confortável.
+    <p class="footer-text">
+        Sanctum Veritatis é um projeto de fã, sem fins lucrativos. Ordem Paranormal © Cellbit.<br>
+        Sanctum Veritatis - Onde as regras protegem a história.
+    </p>
 </footer>
+
+<div class="scroll-top" id="scrollTop">
+    <i class="fas fa-chevron-up"></i>
+</div>
+
+<script>
+    // SCROLL TO TOP
+    const scrollTop = document.getElementById('scrollTop');
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+            scrollTop.classList.add('visible');
+        } else {
+            scrollTop.classList.remove('visible');
+        }
+    });
+
+    scrollTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // SMOOTH SCROLL PARA LINKS DA TOC
+    document.querySelectorAll('.toc-list a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) {
+                const offset = 100;
+                const targetPosition = target.offsetTop - offset;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // HIGHLIGHT ACTIVE SECTION NA TOC
+    const sections = document.querySelectorAll('.section-block');
+    const tocLinks = document.querySelectorAll('.toc-list a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.scrollY >= (sectionTop - 150)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        tocLinks.forEach(link => {
+            link.style.color = 'var(--text-secondary)';
+            if (link.getAttribute('href').substring(1) === current) {
+                link.style.color = 'var(--accent)';
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
