@@ -3,290 +3,894 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOBRE O MESTRE | Astra "Corvo"</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Sobre o Mestre | Astra "Corvo"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg: #030303;
-            --gold: #d4af37;
-            --gold-dim: rgba(212, 175, 55, 0.1);
-            --text: #e0e0e0;
-            --accent: #8a0000;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --bg-elevated: #1a1a24;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7f;
+            --accent: #00d9ff;
+            --accent-secondary: #7b2cbf;
+            --accent-glow: rgba(0, 217, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(0, 217, 255, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background: var(--bg-primary);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
-        h1, h2, h3 { font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 2px; }
-        .mono { font-family: 'Share Tech Mono', monospace; }
-        .italic { font-family: 'Playfair Display', serif; font-style: italic; }
-
-        /* --- BACKGROUND FX --- */
-        .feathers-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://www.transparenttextures.com/patterns/black-scales.png');
-            opacity: 0.3; z-index: -1;
+        /* BACKGROUND EFFECTS */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+            pointer-events: none;
         }
-        
-        /* --- NAV --- */
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.5) 120%);
+        }
+
+        /* NAV */
         nav {
-            padding: 2rem; display: flex; justify-content: space-between; align-items: center;
-            position: absolute; width: 100%; z-index: 100;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .nav-back { color: var(--gold); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
-        .nav-back:hover { color: #fff; letter-spacing: 1px; }
 
-        /* --- HERO SECTION --- */
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-back {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-back:hover {
+            color: var(--accent);
+        }
+
+        /* HERO */
         .hero {
-            min-height: 100vh; display: flex; align-items: center; justify-content: center;
-            position: relative; padding: 2rem;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 70%);
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 3rem 4rem;
         }
 
         .hero-content {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1200px; align-items: center;
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 5rem;
+            align-items: center;
         }
 
-        .profile-frame {
+        .hero-text {
             position: relative;
-            border: 1px solid var(--gold);
-            padding: 10px;
-        }
-        
-        .profile-frame::before, .profile-frame::after {
-            content: ''; position: absolute; width: 20px; height: 20px;
-            border: 2px solid var(--gold); transition: 0.5s;
-        }
-        .profile-frame::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
-        .profile-frame::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
-        
-        .profile-img {
-            width: 100%; height: auto; filter: grayscale(100%) contrast(120%);
-            transition: 0.5s; display: block;
-        }
-        .profile-frame:hover .profile-img { filter: grayscale(0%) sepia(20%); }
-
-        .hero-text h1 { font-size: 4rem; line-height: 0.9; margin-bottom: 1rem; }
-        .hero-text .subtitle { color: var(--gold); font-size: 1.2rem; margin-bottom: 2rem; display: block; }
-        
-        /* --- LEGACY SECTION --- */
-        .section { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
-        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 4rem; color: #fff; }
-        .section-title span { border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
-
-        .legacy-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem; text-align: center;
-        }
-        .legacy-card {
-            background: linear-gradient(145deg, #0a0a0a, #050505);
-            padding: 2rem; border: 1px solid #222; transition: 0.3s;
-        }
-        .legacy-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .legacy-icon { font-size: 2rem; color: #555; margin-bottom: 1rem; }
-        .legacy-card:hover .legacy-icon { color: var(--gold); }
-
-        /* --- THE CRAFT (Production Value) --- */
-        .craft-container {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
-            border: 1px solid #222; margin-top: 4rem;
-        }
-        .craft-img {
-            background: url('https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?q=80&w=1000&auto=format&fit=crop'); /* Imagem genérica de arte/mesa */
-            background-size: cover; background-position: center; min-height: 400px;
-            filter: grayscale(100%); transition: 0.5s;
-        }
-        .craft-content:hover + .craft-img, .craft-img:hover { filter: grayscale(0%); }
-
-        .craft-content {
-            padding: 4rem; background: #080808; display: flex; flex-direction: column; justify-content: center;
         }
 
-        /* Fake Audio Player Visual */
-        .audio-visual {
-            margin-top: 2rem; padding: 1rem; border: 1px solid #333;
-            display: flex; align-items: center; gap: 1rem;
-        }
-        .play-btn { 
-            width: 40px; height: 40px; background: var(--gold); 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            color: black; cursor: pointer; transition: 0.2s;
-        }
-        .play-btn:hover { transform: scale(1.1); background: #fff; }
-        
-        .sound-wave { 
-            height: 20px; flex-grow: 1; 
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20" viewBox="0 0 100 20"><path d="M0 10 L5 2 L10 18 L15 5 L20 15 L25 8 L30 12" stroke="%23555" fill="none"/></svg>'); 
-            background-size: contain; 
-            opacity: 0.5;
-        }
-        /* Classe para animar a onda quando tocando */
-        .sound-wave.playing {
-            animation: waveMove 1s linear infinite;
-            opacity: 1;
-            filter: drop-shadow(0 0 5px var(--gold));
-        }
-        @keyframes waveMove {
-            from { background-position: 0 0; }
-            to { background-position: 100px 0; }
+        .hero-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
         }
 
-        /* --- MANIFESTO (Cellbit Comparison) --- */
-        .manifesto {
-            text-align: center; padding: 6rem 2rem;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1515595967223-f9fa59af5a3b?q=80&w=2000&auto=format&fit=crop');
-            background-attachment: fixed; background-size: cover;
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
         }
-        .manifesto p { max-width: 700px; margin: 0 auto 1.5rem auto; font-size: 1.1rem; color: #ccc; }
-        .highlight { color: var(--gold); font-weight: bold; }
 
-        /* --- CTA --- */
-        .cta-section { text-align: center; padding: 4rem 2rem; }
-        .gold-btn {
-            display: inline-block; padding: 1rem 3rem; background: transparent;
-            border: 1px solid var(--gold); color: var(--gold); text-decoration: none;
-            font-family: 'Share Tech Mono'; font-weight: bold; text-transform: uppercase;
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-quote {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-description {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .hero-tag-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: 0.3s;
         }
-        .gold-btn:hover { background: var(--gold); color: #000; box-shadow: 0 0 30px rgba(212,175,55,0.4); }
+
+        .hero-tag-item:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* PROFILE FRAME */
+        .profile-frame {
+            position: relative;
+            border: 2px solid var(--accent);
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
+        }
+
+        .profile-frame::before,
+        .profile-frame::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--accent);
+            transition: 0.5s;
+        }
+
+        .profile-frame::before {
+            top: -8px;
+            left: -8px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .profile-frame::after {
+            bottom: -8px;
+            right: -8px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .profile-frame:hover::before {
+            top: -12px;
+            left: -12px;
+        }
+
+        .profile-frame:hover::after {
+            bottom: -12px;
+            right: -12px;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(60%);
+            transition: 0.5s;
+        }
+
+        .profile-frame:hover .profile-img {
+            filter: grayscale(0%);
+        }
+
+        /* LEGACY SECTION */
+        .section {
+            position: relative;
+            z-index: 10;
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            display: inline-block;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .section-description {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* LEGACY GRID */
+        .legacy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .legacy-card {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+        }
+
+        .legacy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .legacy-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-accent);
+        }
+
+        .legacy-card:hover::before {
+            opacity: 1;
+        }
+
+        .legacy-icon {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .legacy-card:hover .legacy-icon {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .legacy-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .legacy-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CRAFT SECTION */
+        .craft-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .craft-img {
+            background: url('https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            min-height: 500px;
+            filter: grayscale(80%);
+            transition: 0.5s;
+            position: relative;
+        }
+
+        .craft-img::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, var(--bg-secondary));
+        }
+
+        .craft-content:hover + .craft-img,
+        .craft-img:hover {
+            filter: grayscale(0%);
+        }
+
+        .craft-content {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
+            border: 1px solid var(--border);
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .craft-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .craft-intro {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .craft-item {
+            margin-bottom: 2rem;
+        }
+
+        .craft-item h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .craft-item p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* AUDIO PLAYER */
+        .audio-visual {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .audio-info {
+            flex-grow: 1;
+        }
+
+        .audio-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .sound-wave {
+            height: 30px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--border),
+                var(--border) 2px,
+                transparent 2px,
+                transparent 10px
+            );
+            opacity: 0.3;
+            transition: 0.3s;
+        }
+
+        .sound-wave.playing {
+            opacity: 1;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--accent),
+                var(--accent) 2px,
+                transparent 2px,
+                transparent 10px
+            );
+            animation: waveMove 1s linear infinite;
+        }
+
+        @keyframes waveMove {
+            from { background-position: 0 0; }
+            to { background-position: 10px 0; }
+        }
+
+        /* MANIFESTO */
+        .manifesto {
+            position: relative;
+            z-index: 10;
+            padding: 6rem 3rem;
+            text-align: center;
+            background: linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+                        url('https://images.unsplash.com/photo-1515595967223-f9fa59af5a3b?q=80&w=2000&auto=format&fit=crop');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .manifesto-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
+            padding: 4rem;
+            border: 1px solid var(--border-accent);
+            backdrop-filter: blur(10px);
+        }
+
+        .manifesto-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 2.5rem;
+        }
+
+        .manifesto-content p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .manifesto-highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .manifesto-quote {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 6rem 3rem;
+        }
+
+        .cta-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            transform: translateX(-100%);
+            transition: 0.4s;
+            z-index: -1;
+        }
+
+        .cta-btn:hover {
+            color: var(--bg-primary);
+        }
+
+        .cta-btn:hover::before {
+            transform: translateX(0);
+        }
+
+        /* FOOTER */
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
 
         /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .craft-container {
+                grid-template-columns: 1fr;
+            }
+
+            .craft-img {
+                min-height: 300px;
+            }
+
+            .section {
+                padding: 4rem 2rem;
+            }
+
+            .craft-container {
+                padding: 0 2rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .hero-content { grid-template-columns: 1fr; text-align: center; }
-            .hero-text h1 { font-size: 2.5rem; }
-            .craft-container { grid-template-columns: 1fr; }
-            .profile-frame { max-width: 300px; margin: 0 auto; }
+            nav {
+                padding: 1rem 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-quote {
+                font-size: 1.1rem;
+            }
+
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .craft-content {
+                padding: 2.5rem;
+            }
+
+            .manifesto-content {
+                padding: 2.5rem;
+            }
+
+            .manifesto-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .manifesto-content p {
+                font-size: 1rem;
+            }
+
+            .manifesto-quote {
+                font-size: 1.1rem;
+            }
+
+            .audio-visual {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .craft-container {
+                padding: 0 1.5rem;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
     </style>
 </head>
 <body>
 
-    <div class="feathers-bg"></div>
+    <div class="grid-bg"></div>
+    <div class="noise"></div>
+    <div class="vignette"></div>
 
     <nav>
-        <div class="mono">ASTRA <span style="color:var(--gold)">//</span> CORVO</div>
-        <a href="index.html" class="nav-back mono"><i class="fas fa-arrow-left"></i> VOLTAR À MISSÃO</a>
+        <div class="nav-logo">Astra <span>//</span> Corvo</div>
+        <a href="index.html" class="nav-back">
+            <i class="fas fa-arrow-left"></i> Voltar ao Sanctum
+        </a>
     </nav>
 
     <!-- HERO -->
-    <header class="hero">
+    <header class="hero fade-in">
         <div class="hero-content">
             <div class="hero-text">
-                <span class="mono" style="color: #666; letter-spacing: 3px;">MESTRE DE JOGO</span>
-                <h1>ASTRA<br><span style="color: var(--gold);">CORVO</span></h1>
-                <span class="italic subtitle">"Eu não narro histórias. Eu construo traumas e glórias."</span>
-                <p style="color: #888; margin-bottom: 2rem;">
+                <div class="hero-tag">Mestre de Jogo</div>
+                <h1 class="hero-title">
+                    ASTRA<br>
+                    <span class="highlight">CORVO</span>
+                </h1>
+                <p class="hero-quote">
+                    "Eu não narro histórias. Eu construo traumas e glórias."
+                </p>
+                <p class="hero-description">
                     Especialista em narrativas densas e horror psicológico. Trazendo 10 anos de experiência em sistemas complexos para o universo de Ordem Paranormal.
                 </p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <span class="mono" style="border: 1px solid #333; padding: 5px 10px; font-size: 0.8rem;">NARRATIVA DENSA</span>
-                    <span class="mono" style="border: 1px solid #333; padding: 5px 10px; font-size: 0.8rem;">HORROR</span>
-                    <span class="mono" style="border: 1px solid #333; padding: 5px 10px; font-size: 0.8rem;">IMERSÃO</span>
+                <div class="hero-tags">
+                    <span class="hero-tag-item">Narrativa Densa</span>
+                    <span class="hero-tag-item">Horror</span>
+                    <span class="hero-tag-item">Imersão Total</span>
                 </div>
             </div>
             
             <div class="profile-frame">
-                <!-- FOTO DO MESTRE -->
-                <img src="images/0127.png" alt="Foto do Mestre" class="profile-img">
+                <img src="images/0127.png" alt="Astra Corvo" class="profile-img">
             </div>
         </div>
     </header>
 
     <!-- LEGACY -->
     <section class="section">
-        <h2 class="section-title"><span>O LEGADO</span></h2>
-        <p style="text-align: center; margin-bottom: 3rem; color: #888;">
-            Antes de tocar a Realidade, eu manipulei reinos e galáxias. Minha experiência não vem de assistir streams, vem de conduzir mesas reais por uma década.
-        </p>
+        <div class="section-header">
+            <h2 class="section-title">O Legado</h2>
+            <p class="section-description">
+                Antes de tocar a Realidade, eu manipulei reinos e galáxias. Minha experiência não vem de assistir streams, vem de conduzir mesas reais por uma década.
+            </p>
+        </div>
         
         <div class="legacy-grid">
             <div class="legacy-card">
                 <i class="fas fa-crown legacy-icon"></i>
-                <h3 style="font-size: 1rem;">GAME OF THRONES</h3>
-                <p style="font-size: 0.8rem; color: #777; margin-top: 0.5rem;">Intriga política letal. Nenhuma aliança é eterna.</p>
+                <h3>Game of Thrones</h3>
+                <p>Intriga política letal. Nenhuma aliança é eterna.</p>
             </div>
             <div class="legacy-card">
                 <i class="fas fa-wine-glass legacy-icon"></i>
-                <h3 style="font-size: 1rem;">VAMPIRO: A MÁSCARA</h3>
-                <p style="font-size: 0.8rem; color: #777; margin-top: 0.5rem;">Drama pessoal e o horror de se tornar um monstro.</p>
+                <h3>Vampiro: A Máscara</h3>
+                <p>Drama pessoal e o horror de se tornar um monstro.</p>
             </div>
             <div class="legacy-card">
                 <i class="fas fa-rocket legacy-icon"></i>
-                <h3 style="font-size: 1rem;">MOTHERSHIP</h3>
-                <p style="font-size: 0.8rem; color: #777; margin-top: 0.5rem;">Ficção científica e terror onde sobreviver é a única vitória.</p>
+                <h3>Mothership</h3>
+                <p>Ficção científica e terror onde sobreviver é a única vitória.</p>
             </div>
             <div class="legacy-card">
                 <i class="fas fa-dragon legacy-icon"></i>
-                <h3 style="font-size: 1rem;">D&D + HOMEBREW</h3>
-                <p style="font-size: 0.8rem; color: #777; margin-top: 0.5rem;">Criação de mundos do zero com mecânicas próprias.</p>
+                <h3>D&D + Homebrew</h3>
+                <p>Criação de mundos do zero com mecânicas próprias.</p>
             </div>
         </div>
     </section>
 
     <!-- CRAFT & PRODUCTION -->
-    <section class="section" style="padding: 0; max-width: 1200px;">
-        <div class="craft-container">
-            <div class="craft-img"></div>
-            <div class="craft-content">
-                <h2 style="color: #fff; margin-bottom: 1rem;">A PRODUÇÃO</h2>
-                <p style="color: #aaa; margin-bottom: 2rem;">
-                    Uma mesa paga exige mais do que apenas uma voz. Eu trago uma experiência audiovisual completa.
-                </p>
+    <div class="craft-container">
+        <div class="craft-content">
+            <h2>A Produção</h2>
+            <p class="craft-intro">
+                Uma mesa paga exige mais do que apenas uma voz. Eu trago uma experiência audiovisual completa.
+            </p>
 
-                <h3 style="color: var(--gold); font-size: 1.1rem; margin-top: 1rem;"><i class="fas fa-paint-brush"></i> ARTE PRÓPRIA</h3>
-                <p style="font-size: 0.9rem; color: #888;">Mapas, Handouts e Tokens editados ou criados especificamente para a campanha Setentrional.</p>
+            <div class="craft-item">
+                <h3>
+                    <i class="fas fa-paint-brush"></i>
+                    Arte Própria
+                </h3>
+                <p>Mapas, Handouts e Tokens editados ou criados especificamente para a campanha Setentrional.</p>
+            </div>
 
-                <h3 style="color: var(--gold); font-size: 1.1rem; margin-top: 2rem;"><i class="fas fa-music"></i> TRILHA SONORA AUTORAL</h3>
-                <p style="font-size: 0.9rem; color: #888;">Temas compostos exclusivamente para os momentos de tensão da nossa mesa.</p>
-                
-                <div class="audio-visual">
-                    <div class="play-btn" id="playTrigger"><i class="fas fa-play"></i></div>
-                    <div class="mono" style="font-size: 0.7rem; color: #666;">TEMA: "NEBLINA DE SÃO FIRMO"</div>   
+            <div class="craft-item">
+                <h3>
+                    <i class="fas fa-music"></i>
+                    Trilha Sonora Autoral
+                </h3>
+                <p>Temas compostos exclusivamente para os momentos de tensão da nossa mesa.</p>
+            </div>
+            
+            <div class="audio-visual">
+                <div class="play-btn" id="playTrigger">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="audio-info">
+                    <div class="audio-title">Tema: "Neblina de São Firmo"</div>
                     <div class="sound-wave" id="soundWave"></div>
                 </div>
             </div>
         </div>
-    </section>
+        <div class="craft-img"></div>
+    </div>
 
     <!-- MANIFESTO -->
     <section class="manifesto">
-        <div style="max-width: 800px; margin: 0 auto; background: rgba(0,0,0,0.6); padding: 3rem; border: 1px solid #333; backdrop-filter: blur(5px);">
-            <h2 style="color: var(--gold); margin-bottom: 2rem;">A REALIDADE DA MESA</h2>
+        <div class="manifesto-content">
+            <h2>A Realidade da Mesa</h2>
             <p>
-                Nós sabemos que o padrão do <span class="highlight">Cellbit</span> e de sua equipe é inalcançável para produções independentes. Eles têm equipes de dezenas de pessoas e orçamentos milionários.
+                Nós sabemos que o padrão do <span class="manifesto-highlight">Cellbit</span> e de sua equipe é inalcançável para produções independentes. Eles têm equipes de dezenas de pessoas e orçamentos milionários.
             </p>
             <p>
                 Mas uma superprodução é feita para ser <em>assistida</em> por milhares.
-                <br>A minha produção é feita para ser <strong>vivida</strong> por você.
+                A minha produção é feita para ser <strong>vivida</strong> por você.
             </p>
-            <p class="italic" style="color: #fff; font-size: 1.3rem; margin-top: 2rem;">
-                "Eu não prometo atores da Globo. Eu prometo que o <strong>SEU</strong> personagem será o protagonista da história mais aterrorizante da sua vida."
+            <p class="manifesto-quote">
+                "Eu não prometo atores da Globo. Eu prometo que o SEU personagem será o protagonista da história mais aterrorizante da sua vida."
             </p>
         </div>
     </section>
 
     <!-- CTA -->
     <section class="cta-section">
-        <h2 style="margin-bottom: 1rem;">Setentrional Aguarda</h2>
-        <p style="margin-bottom: 3rem; color: #888;">As vagas são limitadas. A imersão é garantida.</p>
-        <a href="index.html" class="gold-btn">GARANTIR MINHA VAGA</a>
+        <h2>Sanctum Veritatis Aguarda</h2>
+        <p>As vagas são limitadas. A imersão é garantida.</p>
+        <a href="index.html" class="cta-btn">Garantir Minha Vaga</a>
     </section>
 
-    <footer style="text-align: center; padding: 2rem; border-top: 1px solid #111; color: #444; font-size: 0.8rem;">
-        &copy; 2025 Astra "Corvo" Productions.
+    <footer>
+        <p class="footer-text">© 2025 Astra "Corvo" // Sanctum Veritatis</p>
     </footer>
 
-    <!-- AUDIO PLAYER OCULTO -->
-    <!-- Coloque o LINK da sua música gerada pelo Suno aqui no 'src' -->
+    <!-- AUDIO PLAYER -->
     <audio id="themeAudio" src="images/1.mp3"></audio>
 
     <script>
@@ -312,7 +916,6 @@
             }
         });
 
-        // Reseta o botão quando a música acabar
         audio.addEventListener('ended', () => {
             isPlaying = false;
             icon.classList.remove('fa-pause');
