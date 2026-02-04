@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>Alto Conselho | Sanctum Veritatis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- FONTES -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         :root {
             --bg-primary: #0a0a0f;
@@ -25,10 +25,10 @@
             --couple: #ff3366;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         html { scroll-behavior: smooth; }
@@ -46,7 +46,7 @@
             position: fixed;
             inset: 0;
             z-index: 0;
-            background-image: 
+            background-image:
                 linear-gradient(var(--border) 1px, transparent 1px),
                 linear-gradient(90deg, var(--border) 1px, transparent 1px);
             background-size: 50px 50px;
@@ -94,9 +94,7 @@
             text-transform: uppercase;
         }
 
-        .logo span {
-            color: var(--accent);
-        }
+        .logo span { color: var(--accent); }
 
         .back-link {
             font-family: 'JetBrains Mono', monospace;
@@ -111,9 +109,7 @@
             gap: 0.5rem;
         }
 
-        .back-link:hover {
-            color: var(--accent);
-        }
+        .back-link:hover { color: var(--accent); }
 
         /* HERO SECTION */
         .hero {
@@ -142,10 +138,7 @@
             letter-spacing: 20px;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
+        .hero-content { position: relative; z-index: 2; }
 
         .hero-tag {
             font-family: 'JetBrains Mono', monospace;
@@ -216,9 +209,7 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
         }
 
-        .founder-card:hover::before {
-            opacity: 1;
-        }
+        .founder-card:hover::before { opacity: 1; }
 
         /* IMAGE SECTION */
         .card-img-wrapper {
@@ -229,9 +220,7 @@
             transition: 0.5s;
         }
 
-        .founder-card:hover .card-img-wrapper {
-            filter: grayscale(0%);
-        }
+        .founder-card:hover .card-img-wrapper { filter: grayscale(0%); }
 
         .founder-img {
             width: 100%;
@@ -240,9 +229,7 @@
             transition: 0.5s;
         }
 
-        .founder-card:hover .founder-img {
-            transform: scale(1.05);
-        }
+        .founder-card:hover .founder-img { transform: scale(1.05); }
 
         .img-overlay {
             position: absolute;
@@ -279,9 +266,7 @@
         }
 
         /* CARD CONTENT */
-        .card-content {
-            padding: 2.5rem;
-        }
+        .card-content { padding: 2.5rem; }
 
         .founder-role {
             font-family: 'JetBrains Mono', monospace;
@@ -361,9 +346,7 @@
             transition: 0.4s;
         }
 
-        .founder-card:hover .corner-mark {
-            opacity: 0.6;
-        }
+        .founder-card:hover .corner-mark { opacity: 0.6; }
 
         .corner-tl {
             top: 12px;
@@ -409,9 +392,7 @@
                 letter-spacing: 5px;
             }
 
-            .hero {
-                min-height: 50vh;
-            }
+            .hero { min-height: 50vh; }
         }
 
         @media (max-width: 768px) {
@@ -421,26 +402,18 @@
                 gap: 1rem;
             }
 
-            .hero {
-                padding: 6rem 1.5rem 3rem;
-            }
+            .hero { padding: 6rem 1.5rem 3rem; }
 
-            .hero-title {
-                font-size: 2.5rem;
-            }
+            .hero-title { font-size: 2.5rem; }
 
             .founders-container {
                 padding: 2rem 1.5rem 3rem;
                 gap: 2rem;
             }
 
-            .card-img-wrapper {
-                height: 300px;
-            }
+            .card-img-wrapper { height: 300px; }
 
-            .card-content {
-                padding: 2rem;
-            }
+            .card-content { padding: 2rem; }
 
             .founder-name {
                 font-size: 1.6rem;
@@ -451,28 +424,18 @@
 
         /* ANIMATIONS */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
-        }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
 
         .stagger-1 { animation-delay: 0.1s; }
         .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
     </style>
 </head>
-<body>
 
+<body>
     <div class="grid-bg"></div>
     <div class="noise"></div>
     <div class="vignette"></div>
@@ -494,21 +457,21 @@
     </section>
 
     <div class="founders-container">
-        
+
         <!-- CARD 1: CORVO -->
         <article class="founder-card fade-in stagger-1">
             <div class="corner-mark corner-tl"></div>
             <div class="corner-mark corner-br"></div>
-            
+
             <div class="relation-badge">
                 <i class="fas fa-heart"></i> Casal Fundador
             </div>
-            
+
             <div class="card-img-wrapper">
                 <img src="images/0127.png" class="founder-img" alt="Corvo">
                 <div class="img-overlay"></div>
             </div>
-            
+
             <div class="card-content">
                 <div class="founder-role">Líder & Mestre Principal</div>
                 <h2 class="founder-name">
@@ -534,16 +497,16 @@
         <article class="founder-card fade-in stagger-2">
             <div class="corner-mark corner-tl"></div>
             <div class="corner-mark corner-br"></div>
-            
+
             <div class="relation-badge">
                 <i class="fas fa-heart"></i> Casal Fundador
             </div>
-            
+
             <div class="card-img-wrapper">
                 <img src="images/F09F93B820ashleyosborn.png" class="founder-img" alt="Mariposa">
                 <div class="img-overlay"></div>
             </div>
-            
+
             <div class="card-content">
                 <div class="founder-role">Administração & Lore</div>
                 <h2 class="founder-name">
@@ -564,75 +527,10 @@
             </div>
         </article>
 
-        <!-- CARD 3: NOIR -->
-        <article class="founder-card fade-in stagger-3">
-            <div class="corner-mark corner-tl"></div>
-            <div class="corner-mark corner-br"></div>
-            
-            <div class="relation-badge ally">
-                <i class="fas fa-shield-alt"></i> Aliado do Círculo
-            </div>
-            
-            <div class="card-img-wrapper">
-                <img src="images/pixai-1858734046755700388-1.png" class="founder-img" alt="Noir">
-                <div class="img-overlay"></div>
-            </div>
-            
-            <div class="card-content">
-                <div class="founder-role">Investigação & Regras</div>
-                <h2 class="founder-name">
-                    Noir
-                    <span class="founder-age">(23)</span>
-                </h2>
-                <p class="founder-bio">
-                    O especialista em sistemas. Amigo de longa data do casal, Noir traz o rigor mecânico para a mesa. Mestre em criar mistérios investigativos onde cada detalhe importa.
-                </p>
-                <div class="systems-label">Sistemas Dominados:</div>
-                <div class="systems-list">
-                    <span class="sys-tag">Ordem Paranormal</span>
-                    <span class="sys-tag">Tormenta</span>
-                    <span class="sys-tag">D&D 5e</span>
-                </div>
-            </div>
-        </article>
-
-        <!-- CARD 4: EPICGRAIL -->
-        <article class="founder-card fade-in stagger-4">
-            <div class="corner-mark corner-tl"></div>
-            <div class="corner-mark corner-br"></div>
-            
-            <div class="relation-badge ally">
-                <i class="fas fa-shield-alt"></i> Aliado do Círculo
-            </div>
-            
-            <div class="card-img-wrapper">
-                <img src="images/0fcce7c17ec8f0c65d91c540f9adad85.jpg" class="founder-img" alt="EpicGrail">
-                <div class="img-overlay"></div>
-            </div>
-            
-            <div class="card-content">
-                <div class="founder-role">Narrativa & Mundo</div>
-                <h2 class="founder-name">
-                    EpicGrail
-                    <span class="founder-age">(21)</span>
-                </h2>
-                <p class="founder-bio">
-                    O mais jovem, porém um veterano em construção de mundos épicos. Traz a grandiosidade da fantasia medieval adaptada para o horror moderno. O braço direito do grupo em grandes campanhas.
-                </p>
-                <div class="systems-label">Sistemas Dominados:</div>
-                <div class="systems-list">
-                    <span class="sys-tag">D&D 5e</span>
-                    <span class="sys-tag">Game of Thrones</span>
-                    <span class="sys-tag">Ordem Paranormal</span>
-                </div>
-            </div>
-        </article>
-
     </div>
 
     <footer>
         <p class="footer-text">Sanctum Veritatis // Arquivo de Pessoal Confidencial</p>
     </footer>
-
 </body>
 </html>
