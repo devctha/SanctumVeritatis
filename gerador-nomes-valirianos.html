@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de Nomes Valirianos — A Queda de Valyria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gold:#c9a84c;--gold-lt:#e8d5a3;--gold-dk:#8a6e2f;--bg:#080808;--bg2:#0e0a07;--bg3:#120908;--text:#d4c5a9;--text-lt:#f0e8d8;--border:rgba(201,168,76,.22);--panel:rgba(10,7,5,.8);--blue:#7ea2d1;--red:#b45149;--green:#6ba06b}
+    html{scroll-behavior:smooth}
+    body{font-family:"EB Garamond",serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0805}::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px}
+    #ember-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+    nav{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;z-index:100;background:linear-gradient(to bottom,rgba(8,8,8,.98),rgba(8,8,8,0));backdrop-filter:blur(4px);border-bottom:1px solid var(--border);transition:background .3s}
+    nav.scrolled{background:rgba(8,5,3,.97)}
+    .nav-left,.nav-right{display:flex;align-items:center;gap:1rem}
+    .nav-logo,.nav-link,.eyebrow,.section-eyebrow,.control-label,.stat-label,.pill,.btn,.footer-link,.table th,.tiny{font-family:"Cinzel",serif}
+    .nav-logo,.nav-link{text-decoration:none;letter-spacing:.16em;text-transform:uppercase}
+    .nav-logo{font-size:.82rem;color:var(--gold);font-weight:700}
+    .nav-link{font-size:.64rem;color:var(--text)} .nav-link:hover,.footer-link:hover{color:var(--gold)}
+    @media(max-width:980px){.nav-right{display:none}}
+
+    #hero{position:relative;min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 4rem;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 125% 60% at 50% 110%,rgba(139,0,0,.42) 0%,transparent 70%),radial-gradient(ellipse 90% 45% at 50% 100%,rgba(255,69,0,.16) 0%,transparent 65%),url("https://images2.alphacoders.com/132/1329016.jpg") center/cover no-repeat;filter:brightness(.23) saturate(1.08)}
+    .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,8,.28) 0%,rgba(8,8,8,0) 35%,rgba(8,8,8,.85) 85%,rgba(8,8,8,1) 100%)}
+    .hero-inner{position:relative;z-index:2;max-width:1020px}
+    .eyebrow{font-size:.68rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;opacity:0;animation:fadeUp 1s .25s forwards}
+    .hero-title{font-family:"Cinzel Decorative",serif;font-size:clamp(2.1rem,5.8vw,4.6rem);line-height:1.08;color:#fff;text-shadow:0 0 70px rgba(201,168,76,.45),0 5px 22px rgba(0,0,0,.85);opacity:0;animation:fadeUp 1s .5s forwards}
+    .hero-title span{display:block;background:linear-gradient(135deg,var(--gold-lt) 0%,var(--gold) 52%,#a07a20 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-divider{width:190px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:1.55rem auto;opacity:0;animation:fadeUp 1s .8s forwards}
+    .hero-desc{max-width:780px;margin:0 auto;font-size:1.05rem;line-height:1.9;color:var(--text-lt);font-style:italic;opacity:0;animation:fadeUp 1s 1s forwards}
+    .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem;opacity:0;animation:fadeUp 1s 1.2s forwards}
+
+    .btn{font-size:.64rem;letter-spacing:.19em;text-transform:uppercase;padding:.88rem 1.2rem;border:1px solid var(--border);background:rgba(201,168,76,.04);color:var(--gold);cursor:pointer;text-decoration:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:.45rem}
+    .btn:hover{background:rgba(201,168,76,.12);transform:translateY(-1px)}
+    .btn.primary{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:#0a0805;border-color:transparent;font-weight:700}
+    .btn.danger{border-color:rgba(180,81,73,.32);color:#e3a29d;background:rgba(180,81,73,.08)}
+
+    .stripe{background:linear-gradient(90deg,transparent,rgba(201,168,76,.08),transparent);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.58rem 0;overflow:hidden;position:relative;z-index:1}
+    .stripe-inner{font-family:"Cinzel",serif;font-size:.6rem;letter-spacing:.35em;color:rgba(201,168,76,.45);text-transform:uppercase;white-space:nowrap;display:inline-block;animation:marquee 34s linear infinite}
+
+    .page{max-width:1380px;margin:0 auto;padding:2rem 2rem 6rem;position:relative;z-index:1}
+    .section{margin-top:1.25rem}
+    .card{border:1px solid var(--border);background:var(--panel);padding:1.35rem;position:relative;overflow:hidden}
+    .card::before{content:"";position:absolute;top:0;left:0;width:100%;height:1px;background:linear-gradient(to right,var(--gold),transparent)}
+    .section-eyebrow{font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}
+    .section-title{font-family:"Cinzel Decorative",serif;font-size:1.65rem;color:var(--gold-lt);line-height:1.15}
+    .section-line{width:100%;height:1px;background:linear-gradient(to right,var(--gold-dk),transparent);margin-top:.8rem}
+    .lead{font-size:1rem;line-height:1.78;color:var(--text);margin-top:1rem}
+
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+    @media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.stats{grid-template-columns:1fr}}
+    .stat{border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1rem;position:relative}
+    .stat::before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--gold),transparent)}
+    .stat-value{font-family:"Cinzel Decorative",serif;font-size:1.8rem;color:var(--gold);line-height:1;margin-bottom:.45rem}
+    .stat-label{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,76,.58);margin-bottom:.35rem}
+    .stat-text{font-size:.92rem;line-height:1.55;color:var(--text)}
+
+    .generator-grid{display:grid;grid-template-columns:380px 1fr;gap:1.2rem}
+    @media(max-width:1080px){.generator-grid{grid-template-columns:1fr}}
+    .controls{display:flex;flex-direction:column;gap:1rem}
+    .control-block{border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1rem}
+    .control-label{display:block;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+    select,input[type=number],input[type=text],textarea{width:100%;background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.18);color:var(--text-lt);padding:.8rem .9rem;font-size:1rem;font-family:"EB Garamond",serif;outline:none;transition:.2s}
+    select:focus,input[type=number]:focus,input[type=text]:focus,textarea:focus{border-color:rgba(201,168,76,.55);background:rgba(201,168,76,.07)}
+    .option-row{display:flex;gap:.65rem;align-items:flex-start;line-height:1.5;font-size:.95rem;color:var(--text);margin-top:.55rem}
+    .option-row input{width:auto;accent-color:#c9a84c;margin-top:.18rem}
+    .helper{font-size:.88rem;color:rgba(212,197,169,.72);line-height:1.55;margin-top:.45rem}
+    .controls .btn{width:100%}
+
+    .result-shell{display:flex;flex-direction:column;gap:1rem}
+    .result-hero{border:1px solid var(--border);background:linear-gradient(180deg,rgba(201,168,76,.06),rgba(201,168,76,.02));padding:1.4rem;min-height:150px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+    .result-name{font-family:"Cinzel Decorative",serif;font-size:clamp(2rem,4vw,3.1rem);line-height:1.1;color:var(--gold-lt);margin-bottom:.45rem;text-shadow:0 0 24px rgba(201,168,76,.24)}
+    .result-sub{font-size:1rem;line-height:1.7;color:var(--text)}
+    .result-actions{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}
+    .pill-row{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:center;margin-top:.75rem}
+    .pill{display:inline-flex;align-items:center;padding:.42rem .6rem;border:1px solid rgba(201,168,76,.24);background:rgba(201,168,76,.05);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+    .pill.blue{border-color:rgba(126,162,209,.28);background:rgba(126,162,209,.08);color:#bcd0ec}
+    .pill.red{border-color:rgba(180,81,73,.32);background:rgba(180,81,73,.08);color:#e3a29d}
+    .pill.green{border-color:rgba(107,160,107,.3);background:rgba(107,160,107,.08);color:#b9deb9}
+
+    .generated-grid,.favorites-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    @media(max-width:1000px){.generated-grid,.favorites-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.generated-grid,.favorites-grid{grid-template-columns:1fr}}
+    .name-card{border:1px solid var(--border);background:rgba(10,7,5,.78);padding:1rem;display:flex;flex-direction:column;gap:.65rem;transition:.2s}
+    .name-card:hover{transform:translateY(-3px);border-color:rgba(201,168,76,.42);background:rgba(201,168,76,.05)}
+    .name-main{font-family:"Cinzel",serif;font-size:1.02rem;line-height:1.35;color:var(--gold-lt)}
+    .name-meta{font-size:.92rem;line-height:1.6;color:var(--text)}
+    .name-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.15rem}
+    .name-actions .btn{padding:.68rem .8rem;font-size:.56rem;flex:1}
+
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media(max-width:900px){.two-col{grid-template-columns:1fr}}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    @media(max-width:980px){.steps{grid-template-columns:1fr}}
+    .step{border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1.1rem}
+    .step-num{font-family:"Cinzel Decorative",serif;font-size:1.9rem;line-height:1;color:rgba(201,168,76,.2);margin-bottom:.55rem}
+    .step-title{font-family:"Cinzel",serif;font-size:.76rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.35rem}
+    .step p{font-size:.97rem;line-height:1.68;color:var(--text)}
+
+    .table-wrap{overflow:auto;border:1px solid var(--border);background:rgba(201,168,76,.02)}
+    table{width:100%;border-collapse:collapse;min-width:720px}
+    .table th{font-size:.61rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,.06);padding:.88rem .9rem;text-align:left;border-bottom:1px solid var(--gold-dk)}
+    .table td{padding:.8rem .9rem;border-bottom:1px solid rgba(201,168,76,.08);vertical-align:top;color:var(--text);font-size:.95rem;line-height:1.55}
+    .table tr:hover td{background:rgba(201,168,76,.04)}
+
+    .empty{padding:1.2rem;border:1px dashed rgba(201,168,76,.25);text-align:center;color:rgba(212,197,169,.68);font-size:.98rem;line-height:1.65}
+    .toast{position:fixed;right:18px;bottom:18px;z-index:120;background:rgba(8,6,4,.96);border:1px solid var(--border);color:var(--gold-lt);padding:.9rem 1rem;font-family:"Cinzel",serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
+    .toast.show{opacity:1;transform:translateY(0)}
+    footer{background:#050303;border-top:1px solid var(--border);padding:2.3rem 2rem;text-align:center;position:relative;z-index:1;margin-top:2rem}
+    .footer-logo{font-family:"Cinzel Decorative",serif;font-size:.92rem;color:var(--gold);letter-spacing:.12em;margin-bottom:.65rem}
+    footer p{font-size:.77rem;line-height:1.72;color:rgba(212,197,169,.4)}
+    .footer-link{color:rgba(201,168,76,.48);text-decoration:none}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes marquee{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+  </style>
+</head>
+<body>
+<canvas id="ember-canvas"></canvas>
+
+<nav id="navbar">
+  <div class="nav-left">
+    <a href="index.html" class="nav-link">Início</a>
+    <a href="ficha.html" class="nav-link">Ficha</a>
+    <a href="#hero" class="nav-logo">Nomes Valirianos</a>
+  </div>
+  <div class="nav-right">
+    <a href="#gerador" class="nav-link">Gerador</a>
+    <a href="#como-funciona" class="nav-link">Como Funciona</a>
+    <a href="#referencias" class="nav-link">Referências</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">A Queda de Valyria — Ferramenta de Campanha</p>
+    <h1 class="hero-title">Gerador de nomes <span>valirianos</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">Esta ferramenta combina prefixos e sufixos inspirados em nomes valirianos conhecidos, separa sonoridades mais nobres das mais dracônicas e permite gerar nomes únicos para personagens, rivais, ramos de casa, cavaleiros, bastardos e sobreviventes do Doom.</p>
+    <div class="hero-actions">
+      <a href="#gerador" class="btn primary">Abrir Gerador</a>
+      <a href="#como-funciona" class="btn">Ver Regras</a>
+    </div>
+  </div>
+</section>
+
+<div class="stripe"><span class="stripe-inner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ae · Dae · Rhae · Vae · Jaehae · Viserys · Rhaenyra · Daenerys · Syrax · Vhagar · Caraxes · Vermithor · Prefixo + Sufixo · Corte Valyriana · Sonoridade Dracônica &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+
+<main class="page">
+  <section class="section card">
+    <p class="section-eyebrow">Visão Geral</p>
+    <h2 class="section-title">O que o gerador faz</h2>
+    <div class="section-line"></div>
+    <p class="lead">O gerador parte de uma lógica simples: ele junta um <strong>prefixo</strong> e um <strong>sufixo</strong> de sonoridade valiriana para formar um primeiro nome. Como o material-base mistura nomes de pessoas, nomes de dragões e alguns casos ambíguos, a página traz filtros para você decidir se quer um resultado mais elegante, mais dracônico, mais experimental ou mais adequado para personagens jogáveis.</p>
+  </section>
+
+  <section class="section stats" id="statsSection">
+    <div class="stat"><div class="stat-value" id="prefixCount">0</div><div class="stat-label">Prefixos</div><div class="stat-text">Partículas iniciais usadas para começar cada nome.</div></div>
+    <div class="stat"><div class="stat-value" id="suffixCount">0</div><div class="stat-label">Sufixos</div><div class="stat-text">Partículas finais que fecham a sonoridade do nome.</div></div>
+    <div class="stat"><div class="stat-value" id="comboCount">0</div><div class="stat-label">Combinações Brutas</div><div class="stat-text">Número total de nomes possíveis antes de aplicar filtros extras.</div></div>
+    <div class="stat"><div class="stat-value" id="canonCount">0</div><div class="stat-label">Canônicos Rastreados</div><div class="stat-text">Nomes conhecidos que o gerador reconhece como referência.</div></div>
+    <div class="stat"><div class="stat-value" id="dragonCount">0</div><div class="stat-label">Nomes de Dragão</div><div class="stat-text">Nomes usados como referência de sonoridade mais bestial ou imponente.</div></div>
+  </section>
+
+  <section class="section generator-grid" id="gerador">
+    <div class="controls">
+      <div class="card">
+        <p class="section-eyebrow">Gerador</p>
+        <h2 class="section-title">Configuração</h2>
+        <div class="section-line"></div>
+        <div class="control-block" style="margin-top:1rem">
+          <label class="control-label">Estilo</label>
+          <select id="styleSelect">
+            <option value="all">Total / Misturado</option>
+            <option value="court">Corte Valyriana</option>
+            <option value="exile">Exílico / Campanha</option>
+            <option value="dragon">Dracônico</option>
+          </select>
+          <div class="helper">Cada estilo muda quais prefixos e sufixos entram no sorteio, priorizando sonoridades diferentes.</div>
+        </div>
+        <div class="control-block">
+          <label class="control-label">Quantidade</label>
+          <select id="quantitySelect">
+            <option value="1">1 nome</option>
+            <option value="3">3 nomes</option>
+            <option value="5" selected>5 nomes</option>
+            <option value="8">8 nomes</option>
+            <option value="12">12 nomes</option>
+          </select>
+        </div>
+        <div class="control-block">
+          <label class="control-label">Filtros</label>
+          <label class="option-row"><input type="checkbox" id="experimentalToggle" checked><span>Incluir prefixos experimentais e mistos.</span></label>
+          <label class="option-row"><input type="checkbox" id="canonicalToggle" checked><span>Permitir nomes que coincidam com referências canônicas conhecidas.</span></label>
+          <label class="option-row"><input type="checkbox" id="ambiguousToggle" checked><span>Bloquear nomes marcados como ambíguos ou não valirianos.</span></label>
+          <label class="option-row"><input type="checkbox" id="uniqueToggle" checked><span>Evitar repetição dentro da mesma rolagem.</span></label>
+        </div>
+        <div class="control-block">
+          <button class="btn primary" id="generateBtn" type="button">Gerar Nomes</button>
+          <button class="btn" id="generateOneBtn" type="button" style="margin-top:.7rem">Gerar Destaque Único</button>
+          <button class="btn danger" id="clearResultsBtn" type="button" style="margin-top:.7rem">Limpar Resultados</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-eyebrow">Compositor Manual</p>
+        <h2 class="section-title">Monte o nome à mão</h2>
+        <div class="section-line"></div>
+        <div class="control-block" style="margin-top:1rem">
+          <label class="control-label">Prefixo</label>
+          <select id="manualPrefix"></select>
+        </div>
+        <div class="control-block">
+          <label class="control-label">Sufixo</label>
+          <select id="manualSuffix"></select>
+        </div>
+        <button class="btn primary" id="composeBtn" type="button">Compor Nome</button>
+        <div class="helper">Útil quando você já sabe o começo que quer, como <em>Rhae-</em>, <em>Dae-</em> ou <em>Vae-</em>, e só precisa testar finais diferentes.</div>
+      </div>
+    </div>
+
+    <div class="result-shell">
+      <div class="result-hero">
+        <div class="result-name" id="highlightName">Rhaenor</div>
+        <div class="result-sub" id="highlightMeta">Clique em gerar para montar nomes novos ou use o compositor manual para escolher cada parte.</div>
+        <div class="pill-row" id="highlightPills"></div>
+        <div class="result-actions">
+          <button class="btn" id="copyHighlightBtn" type="button">Copiar Destaque</button>
+          <button class="btn" id="favoriteHighlightBtn" type="button">Favoritar Destaque</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="section-eyebrow">Resultados</p>
+        <h2 class="section-title">Lista Gerada</h2>
+        <div class="section-line"></div>
+        <div id="resultsGrid" class="generated-grid" style="margin-top:1rem"></div>
+      </div>
+
+      <div class="card">
+        <p class="section-eyebrow">Favoritos</p>
+        <h2 class="section-title">Banco de nomes da campanha</h2>
+        <div class="section-line"></div>
+        <div class="helper" style="margin-top:1rem">Use favoritos para guardar nomes de personagens, pretendentes, bastardos, rivais, conselheiros, comandantes e herdeiros de ramos menores.</div>
+        <div id="favoritesGrid" class="favorites-grid" style="margin-top:1rem"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section card" id="como-funciona">
+    <p class="section-eyebrow">Explicação</p>
+    <h2 class="section-title">Como o gerador funciona</h2>
+    <div class="section-line"></div>
+    <div class="steps" style="margin-top:1rem">
+      <div class="step"><div class="step-num">01</div><div class="step-title">Prefixo</div><p>O primeiro bloco dá a identidade geral da sonoridade. Prefixos como <strong>Dae</strong>, <strong>Rhae</strong>, <strong>Vae</strong> e <strong>Jae</strong> tendem a soar mais nobres, familiares e reconhecíveis.</p></div>
+      <div class="step"><div class="step-num">02</div><div class="step-title">Sufixo</div><p>O segundo bloco dá o fechamento do nome. Finais como <strong>-nerys</strong>, <strong>-nyra</strong> e <strong>-nys</strong> soam mais cortesãos, enquanto <strong>-raxes</strong>, <strong>-mithor</strong> e <strong>-xes</strong> puxam para uma impressão mais dracônica ou agressiva.</p></div>
+      <div class="step"><div class="step-num">03</div><div class="step-title">Filtro</div><p>Depois da combinação, o gerador aplica filtros opcionais: excluir nomes ambíguos, aceitar ou não coincidências com nomes conhecidos e permitir ou cortar grupos mais experimentais.</p></div>
+    </div>
+    <div class="two-col" style="margin-top:1rem">
+      <div class="card" style="padding:1rem;background:rgba(201,168,76,.03)">
+        <p class="section-eyebrow">Leitura prática</p>
+        <p class="lead" style="margin-top:0">Para personagens de casa, use <strong>Corte Valyriana</strong>. Para sobreviventes, bastardos, navegadores, ramos quebrados e gente marcada pelo exílio, o modo <strong>Exílico</strong> costuma gerar resultados mais variados. Para montarias, dragões, títulos rituais ou nomes de guerra, o modo <strong>Dracônico</strong> funciona melhor.</p>
+      </div>
+      <div class="card" style="padding:1rem;background:rgba(201,168,76,.03)">
+        <p class="section-eyebrow">Cuidado de campanha</p>
+        <p class="lead" style="margin-top:0">Como a base mistura nomes humanos e nomes de dragão, alguns resultados ficam belos e outros ficam estranhos de propósito. Isso não é erro do gerador: é parte da própria fonte de combinações. Por isso a página separa estilos e deixa você filtrar o que entra no sorteio.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section card" id="referencias">
+    <p class="section-eyebrow">Referências da Ferramenta</p>
+    <h2 class="section-title">Pools usados neste Gerador</h2>
+    <div class="section-line"></div>
+    <div class="table-wrap" style="margin-top:1rem">
+      <table class="table">
+        <thead>
+          <tr><th>Grupo</th><th>Uso no gerador</th><th>Observação</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Prefixos nobres</strong></td><td>Ae, Ar, Au, Bae, Cor, Dae, Gae, Hae, Jae, Jaehae, Lae, Luce, Mae, Nae, Rha, Rhae, Sae, Va, Vae e Vise.</td><td>Base mais segura para nomes de personagem jogável.</td></tr>
+          <tr><td><strong>Prefixos mistos</strong></td><td>Elae, Helae, Jacae, Monte, Shae, Valae e Vale.</td><td>Soam mais específicos, raros ou derivados de ramos menos usuais.</td></tr>
+          <tr><td><strong>Prefixos dracônicos</strong></td><td>Bale, Ca, Me, Sy, Te, Ty, Ur, Ver e Vha.</td><td>Mais úteis para nomes ferozes, de dragão, apelidos de guerra ou linhagens excêntricas.</td></tr>
+          <tr><td><strong>Sufixos suaves</strong></td><td>-la, -lora, -na, -naera, -nara, -nerys, -nora, -nya, -nyra, -nys, -rea, -ryn e -rys.</td><td>Mais frequentes em nomes que soam aristocráticos ou elegantes.</td></tr>
+          <tr><td><strong>Sufixos ásperos</strong></td><td>-gar, -gon, -gor, -kar, -max, -mithor, -rax, -raxes, -than e -xes.</td><td>Mais pesados, agressivos ou ritualizados.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-logo">Gerador de Nomes Valirianos</div>
+  <p>
+    Ferramenta de apoio para <em>A Queda de Valyria</em>, feita para criar nomes jogáveis e coerentes com o tom da campanha.<br>
+    Projeto de fãs sem fins lucrativos.<br><br>
+    <a class="footer-link" href="index.html">Início</a> &nbsp;|&nbsp;
+    <a class="footer-link" href="ficha.html">Ficha</a> &nbsp;|&nbsp;
+    <a class="footer-link" href="guia-universo.html">Guia do Universo</a>
+  </p>
+</footer>
+
+<div id="toast" class="toast">Copiado</div>
+
+<script>
+  const PREFIXES = [
+    {v:'Ae',g:'noble'},{v:'Ar',g:'noble'},{v:'Au',g:'noble'},{v:'Bae',g:'noble'},{v:'Bale',g:'dragon'},{v:'Ca',g:'dragon'},{v:'Cor',g:'noble'},
+    {v:'Dae',g:'noble'},{v:'Elae',g:'mixed'},{v:'Gae',g:'noble'},{v:'Helae',g:'mixed'},{v:'Hae',g:'noble'},{v:'Jacae',g:'mixed'},
+    {v:'Jae',g:'noble'},{v:'Jaehae',g:'noble'},{v:'Lae',g:'noble'},{v:'Luce',g:'noble'},{v:'Mae',g:'noble'},{v:'Me',g:'dragon'},
+    {v:'Monte',g:'mixed'},{v:'Nae',g:'noble'},{v:'Rha',g:'noble'},{v:'Rhae',g:'noble'},{v:'Sae',g:'noble'},{v:'Shae',g:'mixed'},
+    {v:'Sy',g:'dragon'},{v:'Te',g:'dragon'},{v:'Ty',g:'dragon'},{v:'Ur',g:'dragon'},{v:'Va',g:'noble'},{v:'Vae',g:'noble'},
+    {v:'Valae',g:'mixed'},{v:'Vale',g:'mixed'},{v:'Ver',g:'dragon'},{v:'Vha',g:'dragon'},{v:'Vise',g:'noble'}
+  ];
+  const SUFFIXES = ['gar','gal','gel','gelle','gon','gor','kar','l','la','larr','leys','lla','lon','lor','lora','lys','lyx','max','mion','mithor','mon','mond','na','naera','nar','nara','nerys','nor','nora','nya','nyra','nys','ra','rax','raxes','rea','rion','ron','rra','ryn','rys','than','xes'];
+  const SOFT_SUFFIXES = new Set(['la','leys','lla','lora','na','naera','nara','nerys','nora','nya','nyra','nys','rea','ryn','rys','ra']);
+  const HARD_SUFFIXES = new Set(['gar','gal','gel','gelle','gon','gor','kar','max','mithor','rax','raxes','than','xes']);
+  const CANONICAL_NAMES = new Set([
+    'Aegon','Aegor','Aelor','Aelora','Aelyx','Aemon','Aemond','Aenar','Aenys','Aerea','Aerion','Aeryn','Aerys','Aethan','Aurion','Baela','Baelon','Baelor','Calla','Corlys',
+    'Daella','Daemion','Daemon','Daena','Daenaera','Daenerys','Daenora','Daenys','Daeron','Elaena','Gael','Gaemon','Haegon','Jacaerys','Laena','Laenor','Lucerys',
+    'Maegelle','Maegon','Maegor','Maelor','Maelys','Monterys','Naerys','Rhalla','Rhaegar','Rhaegel','Rhaella','Rhaena','Rhaenyra','Rhaenys','Saera','Shaena','Shaera',
+    'Valarr','Vaegon','Vaella','Vaemond','Valaena','Valerion','Visenya','Viserra','Viserys'
+  ]);
+  const DRAGON_NAMES = new Set(['Arrax','Balerion','Caraxes','Meleys','Meraxes','Rhaegal','Syrax','Terrax','Tyraxes','Urrax','Vermax','Vermithor','Vhagar','Viserion']);
+  const BLOCKED_NAMES = new Set(['Aeron','Arryn','Bael','Daegon','Shae','Symon','Symond','Tyrion','Varys']);
+  const FAVORITES_KEY = 'aqv_valyrian_name_favorites_v1';
+
+  const manualPrefix = document.getElementById('manualPrefix');
+  const manualSuffix = document.getElementById('manualSuffix');
+  const resultsGrid = document.getElementById('resultsGrid');
+  const favoritesGrid = document.getElementById('favoritesGrid');
+  const highlightName = document.getElementById('highlightName');
+  const highlightMeta = document.getElementById('highlightMeta');
+  const highlightPills = document.getElementById('highlightPills');
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  let currentHighlight = null;
+
+  function showToast(msg){toast.textContent = msg;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),1600)}
+  function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+  function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+  function loadFavorites(){try{return JSON.parse(localStorage.getItem(FAVORITES_KEY)||'[]')}catch(e){return []}}
+  function saveFavorites(items){localStorage.setItem(FAVORITES_KEY, JSON.stringify(items))}
+
+  function populateManualSelects(){
+    PREFIXES.forEach(p=>{
+      const o=document.createElement('option');o.value=p.v;o.textContent=`${p.v}-`;manualPrefix.appendChild(o);
+    });
+    SUFFIXES.forEach(s=>{
+      const o=document.createElement('option');o.value=s;o.textContent=`-${s}`;manualSuffix.appendChild(o);
+    });
+    manualPrefix.value='Rhae';
+    manualSuffix.value='nyra';
+  }
+
+  function getFilters(){
+    return {
+      style: document.getElementById('styleSelect').value,
+      qty: parseInt(document.getElementById('quantitySelect').value,10),
+      experimental: document.getElementById('experimentalToggle').checked,
+      allowCanonical: document.getElementById('canonicalToggle').checked,
+      blockAmbiguous: document.getElementById('ambiguousToggle').checked,
+      unique: document.getElementById('uniqueToggle').checked
+    };
+  }
+
+  function getPools(filters){
+    let prefixes = [...PREFIXES];
+    let suffixes = [...SUFFIXES];
+
+    if(!filters.experimental){prefixes = prefixes.filter(p=>p.g !== 'mixed')}
+
+    if(filters.style === 'court'){
+      prefixes = prefixes.filter(p=>p.g !== 'dragon');
+      suffixes = suffixes.filter(s=>!['rax','raxes','mithor','max','xes'].includes(s));
+    }
+    if(filters.style === 'exile'){
+      prefixes = prefixes.filter(p=>p.g !== 'dragon' || ['Ver','Vha'].includes(p.v));
+      suffixes = suffixes.filter(s=>!['gelle'].includes(s));
+    }
+    if(filters.style === 'dragon'){
+      prefixes = prefixes.filter(p=>p.g === 'dragon' || ['Rha','Rhae','Vise','Me'].includes(p.v));
+      suffixes = suffixes.filter(s=>HARD_SUFFIXES.has(s) || ['rion','ron','l','lys','lyx'].includes(s));
+    }
+
+    return {prefixes, suffixes};
+  }
+
+  function analyzeName(name, prefixObj, suffix){
+    const pills=[];
+    if(prefixObj.g==='noble') pills.push({t:'nobre',c:''});
+    if(prefixObj.g==='mixed') pills.push({t:'misto',c:'blue'});
+    if(prefixObj.g==='dragon') pills.push({t:'dracônico',c:'red'});
+    if(CANONICAL_NAMES.has(name)) pills.push({t:'canônico',c:'green'});
+    if(DRAGON_NAMES.has(name)) pills.push({t:'dragão',c:'red'});
+    if(BLOCKED_NAMES.has(name)) pills.push({t:'ambíguo',c:'blue'});
+    if(!CANONICAL_NAMES.has(name) && !DRAGON_NAMES.has(name) && !BLOCKED_NAMES.has(name)) pills.push({t:'novo',c:''});
+    const tone = HARD_SUFFIXES.has(suffix) ? 'sonoridade pesada' : SOFT_SUFFIXES.has(suffix) ? 'sonoridade suave' : 'sonoridade neutra';
+    return {pills, tone};
+  }
+
+  function updateHighlight(entry){
+    currentHighlight = entry;
+    highlightName.textContent = entry.name;
+    const group = entry.prefix.g==='dragon' ? 'mais dracônico' : entry.prefix.g==='mixed' ? 'mais raro' : 'mais cortesão';
+    highlightMeta.textContent = `${entry.prefix.v}- + -${entry.suffix} • ${group} • ${entry.analysis.tone}`;
+    highlightPills.innerHTML = '';
+    entry.analysis.pills.forEach(p=>{
+      const el=document.createElement('span');el.className=`pill ${p.c||''}`;el.textContent=p.t;highlightPills.appendChild(el);
+    });
+  }
+
+  function renderResults(entries){
+    resultsGrid.innerHTML='';
+    if(!entries.length){resultsGrid.innerHTML='<div class="empty" style="grid-column:1/-1">Nenhum nome gerado com os filtros atuais. Tente permitir nomes canônicos, ativar prefixos mistos ou mudar o estilo.</div>';return}
+    entries.forEach(entry=>{
+      const card=document.createElement('div');card.className='name-card';
+      const pillHtml=entry.analysis.pills.map(p=>`<span class="pill ${p.c||''}">${p.t}</span>`).join('');
+      card.innerHTML=`<div class="name-main">${entry.name}</div><div class="name-meta">${entry.prefix.v}- + -${entry.suffix} • ${entry.analysis.tone}</div><div class="pill-row" style="justify-content:flex-start">${pillHtml}</div><div class="name-actions"><button class="btn copy-btn" data-name="${entry.name}">Copiar</button><button class="btn fav-btn" data-name="${entry.name}" data-prefix="${entry.prefix.v}" data-suffix="${entry.suffix}">Favoritar</button><button class="btn focus-btn" data-name="${entry.name}">Destacar</button></div>`;
+      card.querySelector('.copy-btn').addEventListener('click',()=>copyText(entry.name));
+      card.querySelector('.fav-btn').addEventListener('click',()=>addFavorite(entry));
+      card.querySelector('.focus-btn').addEventListener('click',()=>updateHighlight(entry));
+      resultsGrid.appendChild(card);
+    });
+  }
+
+  function renderFavorites(){
+    const favorites=loadFavorites();
+    favoritesGrid.innerHTML='';
+    if(!favorites.length){favoritesGrid.innerHTML='<div class="empty" style="grid-column:1/-1">Nenhum favorito salvo ainda. Gere nomes e guarde os que combinarem com sua campanha.</div>';return}
+    favorites.forEach((entry,idx)=>{
+      const analysis=entry.analysis || analyzeName(entry.name, entry.prefix, entry.suffix);
+      const pillHtml=analysis.pills.map(p=>`<span class="pill ${p.c||''}">${p.t}</span>`).join('');
+      const card=document.createElement('div');card.className='name-card';
+      card.innerHTML=`<div class="name-main">${entry.name}</div><div class="name-meta">${entry.prefix.v}- + -${entry.suffix}</div><div class="pill-row" style="justify-content:flex-start">${pillHtml}</div><div class="name-actions"><button class="btn fav-copy">Copiar</button><button class="btn fav-use">Destacar</button><button class="btn danger fav-remove">Remover</button></div>`;
+      card.querySelector('.fav-copy').addEventListener('click',()=>copyText(entry.name));
+      card.querySelector('.fav-use').addEventListener('click',()=>updateHighlight({name:entry.name,prefix:entry.prefix,suffix:entry.suffix,analysis}));
+      card.querySelector('.fav-remove').addEventListener('click',()=>{const arr=loadFavorites();arr.splice(idx,1);saveFavorites(arr);renderFavorites();showToast('Favorito removido')});
+      favoritesGrid.appendChild(card);
+    });
+  }
+
+  function addFavorite(entry){
+    const favorites=loadFavorites();
+    if(favorites.some(f=>f.name===entry.name)){showToast('Já está nos favoritos');return}
+    favorites.unshift({name:entry.name,prefix:entry.prefix,suffix:entry.suffix,analysis:entry.analysis});
+    saveFavorites(favorites.slice(0,30));
+    renderFavorites();
+    showToast('Nome favoritado');
+  }
+
+  async function copyText(text){
+    try{await navigator.clipboard.writeText(text);showToast('Nome copiado')}catch(e){showToast('Não foi possível copiar')}
+  }
+
+  function isAllowed(name, filters){
+    if(filters.blockAmbiguous && BLOCKED_NAMES.has(name)) return false;
+    if(!filters.allowCanonical && (CANONICAL_NAMES.has(name) || DRAGON_NAMES.has(name))) return false;
+    return true;
+  }
+
+  function buildEntry(prefixObj, suffix){
+    const name = capitalize(prefixObj.v + suffix);
+    return {name, prefix:prefixObj, suffix, analysis:analyzeName(name, prefixObj, suffix)};
+  }
+
+  function generateNames(qtyOverride=null){
+    const filters=getFilters();
+    const {prefixes, suffixes}=getPools(filters);
+    const qty=qtyOverride || filters.qty;
+    const results=[];
+    const seen=new Set();
+    let attempts=0;
+    while(results.length < qty && attempts < 1200){
+      attempts++;
+      const prefix=pick(prefixes);
+      const suffix=pick(suffixes);
+      const entry=buildEntry(prefix, suffix);
+      if(!isAllowed(entry.name, filters)) continue;
+      if(filters.unique && seen.has(entry.name)) continue;
+      seen.add(entry.name);
+      results.push(entry);
+    }
+    if(results.length) updateHighlight(results[0]);
+    renderResults(results);
+  }
+
+  function composeManual(){
+    const prefixValue = manualPrefix.value;
+    const suffixValue = manualSuffix.value;
+    const prefixObj = PREFIXES.find(p=>p.v===prefixValue);
+    const entry = buildEntry(prefixObj, suffixValue);
+    updateHighlight(entry);
+    renderResults([entry]);
+    showToast('Nome composto');
+  }
+
+  function updateStats(){
+    const filters=getFilters();
+    const {prefixes, suffixes}=getPools(filters);
+    document.getElementById('prefixCount').textContent = prefixes.length;
+    document.getElementById('suffixCount').textContent = suffixes.length;
+    document.getElementById('comboCount').textContent = prefixes.length * suffixes.length;
+    document.getElementById('canonCount').textContent = CANONICAL_NAMES.size;
+    document.getElementById('dragonCount').textContent = DRAGON_NAMES.size;
+  }
+
+  function clearResults(){
+    resultsGrid.innerHTML='<div class="empty" style="grid-column:1/-1">Resultados limpos. Gere novos nomes quando quiser.</div>';
+    highlightName.textContent='Rhaenor';
+    highlightMeta.textContent='Clique em gerar para montar nomes novos ou use o compositor manual para escolher cada parte.';
+    highlightPills.innerHTML='';
+    currentHighlight=null;
+    showToast('Resultados limpos');
+  }
+
+  document.getElementById('generateBtn').addEventListener('click',()=>generateNames());
+  document.getElementById('generateOneBtn').addEventListener('click',()=>generateNames(1));
+  document.getElementById('composeBtn').addEventListener('click',composeManual);
+  document.getElementById('clearResultsBtn').addEventListener('click',clearResults);
+  document.getElementById('copyHighlightBtn').addEventListener('click',()=>currentHighlight?copyText(currentHighlight.name):showToast('Nada para copiar'));
+  document.getElementById('favoriteHighlightBtn').addEventListener('click',()=>currentHighlight?addFavorite(currentHighlight):showToast('Nada para favoritar'));
+  ['styleSelect','quantitySelect','experimentalToggle','canonicalToggle','ambiguousToggle','uniqueToggle'].forEach(id=>document.getElementById(id).addEventListener('change',updateStats));
+
+  populateManualSelects();
+  updateStats();
+  renderFavorites();
+  generateNames(5);
+
+  const canvas=document.getElementById('ember-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,embers=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  function createEmber(){return{x:Math.random()*W,y:H+10,r:Math.random()*2.1+.5,vx:(Math.random()-.5)*.6,vy:-(Math.random()*1.05+.35),alpha:Math.random()*.45+.22,life:0,maxLife:Math.random()*320+150}}
+  for(let i=0;i<48;i++){const e=createEmber();e.y=Math.random()*H;e.life=Math.random()*e.maxLife;embers.push(e)}
+  function anim(){ctx.clearRect(0,0,W,H);embers.forEach((e,i)=>{e.life++;e.x+=e.vx+Math.sin(e.life*.03)*.35;e.y+=e.vy;const p=e.life/e.maxLife;const a=e.alpha*(1-Math.pow(p,2));ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,${55+Math.floor(p*75)},0,${a})`;ctx.fill();if(e.life>=e.maxLife||e.y<-20)embers[i]=createEmber()});requestAnimationFrame(anim)}anim();
+  const navbar=document.getElementById('navbar');window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>40));
+</script>
+</body>
+</html>
