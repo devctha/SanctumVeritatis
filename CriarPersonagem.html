@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Criação de Ficha — A Queda de Valyria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --gold:    #c9a84c;
+      --gold-lt: #e8d5a3;
+      --gold-dk: #8a6e2f;
+      --crimson: #8b0000;
+      --ember:   #ff4500;
+      --bg:      #080808;
+      --bg2:     #0e0a07;
+      --bg3:     #100808;
+      --text:    #d4c5a9;
+      --text-lt: #f0e8d8;
+      --border:  rgba(201,168,76,0.22);
+      --green:   rgba(100,180,80,0.85);
+      --red:     rgba(220,60,60,0.85);
+    }
+
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:"EB Garamond",serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:#0a0805; }
+    ::-webkit-scrollbar-thumb { background:var(--gold-dk); border-radius:3px; }
+
+    /* CANVAS */
+    #ember-canvas {
+      position:fixed; top:0; left:0;
+      width:100%; height:100%;
+      pointer-events:none; z-index:0;
+    }
+
+    /* NAV */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 2.5rem; height:64px;
+      background:linear-gradient(to bottom,rgba(8,8,8,0.98),rgba(8,8,8,0));
+      backdrop-filter:blur(4px);
+      border-bottom:1px solid var(--border);
+      transition:background 0.3s;
+    }
+    nav.scrolled { background:rgba(8,5,3,0.97); }
+    .nav-logo {
+      font-family:"Cinzel",serif; font-size:0.82rem;
+      font-weight:700; letter-spacing:0.18em;
+      color:var(--gold); text-transform:uppercase; text-decoration:none;
+    }
+    .nav-back {
+      font-family:"Cinzel",serif; font-size:0.68rem;
+      letter-spacing:0.18em; text-transform:uppercase;
+      color:var(--text); text-decoration:none;
+      display:flex; align-items:center; gap:0.5rem;
+      transition:color 0.2s;
+    }
+    .nav-back:hover { color:var(--gold); }
+    .nav-back svg { width:14px; height:14px; }
+    .nav-links { display:flex; gap:1.6rem; list-style:none; }
+    .nav-links a {
+      font-family:"Cinzel",serif; font-size:0.66rem;
+      letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--text); text-decoration:none; transition:color 0.2s;
+    }
+    .nav-links a:hover { color:var(--gold); }
+    @media(max-width:900px){ .nav-links { display:none; } }
+
+    /* HERO */
+    #hero {
+      position:relative; min-height:62vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; overflow:hidden;
+      padding:7rem 2rem 5rem;
+    }
+    .hero-bg {
+      position:absolute; inset:0; z-index:0;
+      background:
+        radial-gradient(ellipse 120% 55% at 50% 110%,rgba(139,0,0,0.4) 0%,transparent 70%),
+        radial-gradient(ellipse 80% 45% at 50% 100%,rgba(255,69,0,0.15) 0%,transparent 65%),
+        url("https://images2.alphacoders.com/132/1329016.jpg") center/cover no-repeat;
+      filter:brightness(0.32) saturate(1.1);
+    }
+    .hero-bg::after {
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(to bottom,
+        rgba(8,8,8,0.3) 0%,
+        rgba(8,8,8,0.0) 30%,
+        rgba(8,8,8,0.7) 80%,
+        rgba(8,8,8,1) 100%);
+    }
+    .hero-inner { position:relative; z-index:2; max-width:860px; }
+    .hero-eyebrow {
+      font-family:"Cinzel",serif; font-size:0.68rem;
+      letter-spacing:0.45em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:1.2rem;
+      opacity:0; animation:fadeUp 1s 0.3s forwards;
+    }
+    .hero-title {
+      font-family:"Cinzel Decorative",serif;
+      font-size:clamp(2rem,6vw,4.5rem);
+      font-weight:900; line-height:1.1;
+      color:#fff;
+      text-shadow:0 0 60px rgba(201,168,76,0.4),0 4px 20px rgba(0,0,0,0.8);
+      opacity:0; animation:fadeUp 1s 0.55s forwards;
+    }
+    .hero-title span {
+      display:block;
+      background:linear-gradient(135deg,var(--gold-lt) 0%,var(--gold) 50%,#a07a20 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .hero-divider {
+      width:160px; height:1px;
+      background:linear-gradient(to right,transparent,var(--gold),transparent);
+      margin:1.8rem auto;
+      opacity:0; animation:fadeUp 1s 0.8s forwards;
+    }
+    .hero-desc {
+      font-size:clamp(0.97rem,2vw,1.18rem);
+      line-height:1.85; color:var(--text-lt);
+      max-width:640px; margin:0 auto; font-style:italic;
+      opacity:0; animation:fadeUp 1s 1s forwards;
+    }
+
+    /* STEP NAV */
+    .step-nav {
+      position:relative; z-index:1;
+      background:var(--bg2);
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      padding:0; overflow-x:auto;
+    }
+    .step-nav-inner {
+      display:flex; max-width:1100px;
+      margin:0 auto; padding:0 2rem;
+    }
+    .step-nav-item {
+      font-family:"Cinzel",serif; font-size:0.62rem;
+      letter-spacing:0.14em; text-transform:uppercase;
+      color:rgba(212,197,169,0.5); text-decoration:none;
+      padding:1.1rem 1.2rem;
+      border-bottom:2px solid transparent;
+      white-space:nowrap; transition:color 0.2s,border-color 0.2s;
+    }
+    .step-nav-item:hover { color:var(--gold); border-bottom-color:var(--gold-dk); }
+
+    /* MAIN WRAPPER */
+    .page-wrap {
+      max-width:1060px;
+      margin:0 auto;
+      padding:0 2rem 6rem;
+      position:relative; z-index:1;
+    }
+
+    /* STEP SECTION */
+    .step-section {
+      padding-top:5rem;
+      margin-bottom:0.5rem;
+    }
+
+    .step-header {
+      display:flex; align-items:flex-start; gap:1.6rem;
+      margin-bottom:2.8rem;
+    }
+    .step-badge {
+      flex-shrink:0;
+      width:56px; height:56px;
+      border:1px solid var(--gold-dk);
+      display:flex; align-items:center; justify-content:center;
+      font-family:"Cinzel Decorative",serif;
+      font-size:1.3rem; color:var(--gold);
+      background:rgba(201,168,76,0.05);
+      position:relative;
+    }
+    .step-badge::before {
+      content:"";
+      position:absolute; top:-4px; left:-4px; right:-4px; bottom:-4px;
+      border:1px solid rgba(201,168,76,0.12);
+    }
+    .step-meta { flex:1; }
+    .step-eyebrow {
+      font-family:"Cinzel",serif; font-size:0.62rem;
+      letter-spacing:0.4em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:0.4rem;
+    }
+    .step-title {
+      font-family:"Cinzel",serif; font-size:clamp(1.2rem,3vw,1.9rem);
+      font-weight:700; color:var(--gold-lt);
+      line-height:1.2;
+    }
+    .step-divider {
+      width:100%; height:1px; margin-top:0.9rem;
+      background:linear-gradient(to right,var(--gold-dk),transparent);
+    }
+
+    /* CONTENT */
+    .step-content { display:flex; flex-direction:column; gap:1.4rem; }
+
+    .prose {
+      font-size:1.05rem; line-height:1.9;
+      color:var(--text);
+    }
+    .prose strong { color:var(--gold-lt); font-weight:600; }
+    .prose em { color:var(--text-lt); }
+
+    /* CALLOUT BOXES */
+    .callout {
+      border-left:3px solid;
+      padding:1.1rem 1.4rem;
+      font-size:0.97rem;
+      line-height:1.75;
+      color:var(--text);
+    }
+    .callout.warning {
+      border-color:#c9a84c;
+      background:rgba(201,168,76,0.06);
+    }
+    .callout.danger {
+      border-color:#8b0000;
+      background:rgba(139,0,0,0.08);
+    }
+    .callout.tip {
+      border-color:#4a7a4a;
+      background:rgba(74,122,74,0.07);
+    }
+    .callout.info {
+      border-color:rgba(100,140,200,0.5);
+      background:rgba(100,140,200,0.05);
+    }
+    .callout-label {
+      font-family:"Cinzel",serif; font-size:0.65rem;
+      letter-spacing:0.3em; text-transform:uppercase;
+      margin-bottom:0.5rem; display:block;
+    }
+    .callout.warning .callout-label { color:var(--gold); }
+    .callout.danger  .callout-label { color:#c0504d; }
+    .callout.tip     .callout-label { color:#7aba7a; }
+    .callout.info    .callout-label { color:#7aaad4; }
+
+    /* EXAMPLE BOX */
+    .example-box {
+      border:1px solid var(--border);
+      padding:1.4rem 1.6rem;
+      background:rgba(10,7,5,0.7);
+      position:relative;
+    }
+    .example-box::before {
+      content:"Exemplo";
+      position:absolute; top:-0.6rem; left:1.2rem;
+      font-family:"Cinzel",serif; font-size:0.6rem;
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:var(--gold-dk); background:var(--bg);
+      padding:0 0.5rem;
+    }
+    .example-box p {
+      font-size:0.97rem; line-height:1.75;
+      color:var(--text);
+    }
+    .example-box code {
+      font-family:"Courier New",monospace;
+      font-size:0.92rem; color:var(--gold-lt);
+      background:rgba(201,168,76,0.08);
+      padding:0.1rem 0.4rem;
+      border:1px solid rgba(201,168,76,0.15);
+    }
+
+    /* FORMULA BOX */
+    .formula-box {
+      border:1px solid rgba(201,168,76,0.35);
+      padding:1.2rem 1.8rem;
+      background:rgba(201,168,76,0.04);
+      text-align:center;
+    }
+    .formula-box .formula-text {
+      font-family:"EB Garamond",serif;
+      font-style:italic;
+      font-size:1.1rem;
+      color:var(--gold-lt);
+      letter-spacing:0.06em;
+    }
+    .formula-box .formula-note {
+      font-family:"Cinzel",serif;
+      font-size:0.65rem;
+      letter-spacing:0.2em;
+      text-transform:uppercase;
+      color:rgba(201,168,76,0.5);
+      margin-top:0.5rem;
+      display:block;
+    }
+
+    /* TABLES */
+    .table-wrap { overflow-x:auto; }
+    table {
+      width:100%; border-collapse:collapse;
+      font-size:0.95rem;
+    }
+    thead tr {
+      border-bottom:1px solid var(--gold-dk);
+    }
+    thead th {
+      font-family:"Cinzel",serif;
+      font-size:0.65rem; letter-spacing:0.22em;
+      text-transform:uppercase; color:var(--gold);
+      padding:0.9rem 1rem; text-align:left;
+      background:rgba(201,168,76,0.06);
+    }
+    tbody tr {
+      border-bottom:1px solid rgba(201,168,76,0.08);
+      transition:background 0.15s;
+    }
+    tbody tr:hover { background:rgba(201,168,76,0.04); }
+    tbody td {
+      padding:0.8rem 1rem;
+      color:var(--text); line-height:1.5;
+    }
+    tbody td:first-child { color:var(--text-lt); font-weight:500; }
+    .td-highlight {
+      color:var(--gold) !important;
+      font-family:"Cinzel",serif;
+      font-size:0.85rem;
+      font-weight:700;
+    }
+    .td-special {
+      background:rgba(201,168,76,0.07);
+    }
+
+    /* DESTINY POINTS - SPEND VS BURN */
+    .destiny-split {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1.5rem;
+    }
+    @media(max-width:640px){ .destiny-split { grid-template-columns:1fr; } }
+
+    .destiny-card {
+      border:1px solid;
+      padding:1.8rem 1.6rem;
+    }
+    .destiny-card.spend {
+      border-color:rgba(201,168,76,0.35);
+      background:rgba(201,168,76,0.04);
+    }
+    .destiny-card.burn {
+      border-color:rgba(139,0,0,0.5);
+      background:rgba(139,0,0,0.06);
+    }
+    .destiny-card h4 {
+      font-family:"Cinzel",serif; font-size:0.75rem;
+      letter-spacing:0.22em; text-transform:uppercase;
+      margin-bottom:1.2rem; padding-bottom:0.8rem;
+      border-bottom:1px solid;
+    }
+    .destiny-card.spend h4 { color:var(--gold); border-color:rgba(201,168,76,0.2); }
+    .destiny-card.burn  h4 { color:#c0504d;   border-color:rgba(139,0,0,0.3); }
+    .destiny-card ul { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+    .destiny-card li {
+      font-size:0.95rem; line-height:1.65;
+      color:var(--text); padding-left:1.2rem;
+      position:relative;
+    }
+    .destiny-card.spend li::before {
+      content:""; position:absolute; left:0; top:0.55rem;
+      width:5px; height:5px; border-radius:50%;
+      background:var(--gold);
+    }
+    .destiny-card.burn li::before {
+      content:""; position:absolute; left:0; top:0.55rem;
+      width:5px; height:5px; border-radius:50%;
+      background:#c0504d;
+    }
+
+    /* CHECKLIST */
+    .checklist {
+      display:flex; flex-direction:column; gap:0.9rem;
+    }
+    .check-item {
+      display:flex; align-items:flex-start; gap:1.2rem;
+      border:1px solid var(--border);
+      padding:1.1rem 1.4rem;
+      background:rgba(201,168,76,0.03);
+      transition:border-color 0.2s,background 0.2s;
+    }
+    .check-item:hover {
+      border-color:rgba(201,168,76,0.4);
+      background:rgba(201,168,76,0.06);
+    }
+    .check-icon {
+      flex-shrink:0;
+      width:28px; height:28px;
+      border:1px solid var(--gold-dk);
+      display:flex; align-items:center; justify-content:center;
+      font-family:"Cinzel",serif; font-size:0.72rem;
+      color:var(--gold); margin-top:0.05rem;
+    }
+    .check-body h4 {
+      font-family:"Cinzel",serif; font-size:0.78rem;
+      letter-spacing:0.12em; text-transform:uppercase;
+      color:var(--gold-lt); margin-bottom:0.3rem;
+    }
+    .check-body p { font-size:0.93rem; line-height:1.65; color:var(--text); }
+
+    /* DICE FORMULA */
+    .dice-display {
+      display:flex; align-items:center; gap:1rem;
+      padding:1.4rem 1.6rem;
+      border:1px solid rgba(201,168,76,0.3);
+      background:rgba(201,168,76,0.04);
+      flex-wrap:wrap;
+    }
+    .dice-num {
+      font-family:"Cinzel Decorative",serif;
+      font-size:2.2rem; color:var(--gold);
+      line-height:1;
+    }
+    .dice-label {
+      font-family:"Cinzel",serif; font-size:0.68rem;
+      letter-spacing:0.18em; text-transform:uppercase;
+      color:rgba(201,168,76,0.5);
+    }
+    .dice-sep {
+      font-size:1.4rem; color:rgba(201,168,76,0.3);
+    }
+    .dice-note {
+      font-size:0.93rem; color:var(--text);
+      font-style:italic;
+      flex:1; min-width:200px;
+    }
+    .code-tag {
+      font-family:"Courier New",monospace;
+      font-size:1rem; color:var(--gold-lt);
+      background:rgba(201,168,76,0.1);
+      padding:0.3rem 0.7rem;
+      border:1px solid rgba(201,168,76,0.2);
+    }
+
+    /* SECTION SEPARATOR */
+    .sep {
+      border:none;
+      border-top:1px solid rgba(201,168,76,0.1);
+      margin:1rem 0 0;
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity:0; transform:translateY(22px);
+      transition:opacity 0.65s ease,transform 0.65s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* STRIPE */
+    .stripe {
+      background:linear-gradient(90deg,transparent,rgba(201,168,76,0.07),transparent);
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      padding:0.55rem 0; overflow:hidden;
+    }
+    .stripe-inner {
+      font-family:"Cinzel",serif; font-size:0.6rem;
+      letter-spacing:0.35em; color:rgba(201,168,76,0.45);
+      text-transform:uppercase; white-space:nowrap;
+      animation:marquee 32s linear infinite;
+      display:inline-block;
+    }
+
+    /* FOOTER */
+    footer {
+      background:#050303;
+      border-top:1px solid var(--border);
+      padding:2.2rem 2rem;
+      text-align:center;
+      position:relative; z-index:1;
+    }
+    .footer-logo {
+      font-family:"Cinzel Decorative",serif;
+      font-size:0.9rem; color:var(--gold);
+      letter-spacing:0.12em; margin-bottom:0.6rem;
+    }
+    footer p {
+      font-size:0.76rem;
+      color:rgba(212,197,169,0.38);
+      line-height:1.7;
+    }
+    footer a { color:rgba(201,168,76,0.45); text-decoration:none; }
+    footer a:hover { color:var(--gold); }
+
+    /* SIDEBAR STICKY TOC (desktop) */
+    .layout {
+      display:grid;
+      grid-template-columns:1fr 220px;
+      gap:3rem;
+      max-width:1060px;
+      margin:0 auto;
+      padding:0 2rem 6rem;
+      position:relative; z-index:1;
+    }
+    @media(max-width:960px){
+      .layout { grid-template-columns:1fr; }
+      .toc-sidebar { display:none; }
+    }
+
+    .toc-sidebar {
+      position:relative;
+    }
+    .toc-inner {
+      position:sticky;
+      top:90px;
+      border:1px solid var(--border);
+      padding:1.5rem;
+      background:rgba(10,7,5,0.8);
+    }
+    .toc-title {
+      font-family:"Cinzel",serif; font-size:0.62rem;
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:1.2rem;
+      padding-bottom:0.8rem;
+      border-bottom:1px solid var(--border);
+    }
+    .toc-list { list-style:none; display:flex; flex-direction:column; gap:0.55rem; }
+    .toc-list a {
+      font-family:"Cinzel",serif; font-size:0.65rem;
+      letter-spacing:0.1em; color:rgba(212,197,169,0.6);
+      text-decoration:none; transition:color 0.2s;
+      display:flex; align-items:center; gap:0.5rem;
+      line-height:1.4;
+    }
+    .toc-list a:hover { color:var(--gold); }
+    .toc-list .toc-num {
+      flex-shrink:0;
+      font-size:0.58rem; color:var(--gold-dk);
+    }
+
+    /* KEYFRAMES */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(18px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes marquee {
+      from { transform:translateX(100vw); }
+      to   { transform:translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="ember-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Voltar ao Início
+  </a>
+  <a href="#hero" class="nav-logo">Guia de Ficha</a>
+  <ul class="nav-links">
+    <li><a href="#passo1">Básico</a></li>
+    <li><a href="#passo2">Status</a></li>
+    <li><a href="#passo3">Habilidades</a></li>
+    <li><a href="#passo4">Especialidades</a></li>
+    <li><a href="#passo5">Destino</a></li>
+    <li><a href="#passo6">Gastar x Queimar</a></li>
+    <li><a href="#passo7">Dados</a></li>
+    <li><a href="#resumo">Resumo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">A Queda de Valyria &nbsp;&#x2014;&nbsp; RPG</p>
+    <h1 class="hero-title">
+      Criação de<br>
+      <span>Personagem</span>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">
+      Um guia completo e passo a passo para construir sua ficha — do nome e status inicial
+      até os Pontos de Destino que um dia poderão salvar sua vida.
+    </p>
+  </div>
+</section>
+
+<!-- STRIPE -->
+<div class="stripe">
+  <span class="stripe-inner">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Passo 1: Informações Básicas &nbsp;&#x2014;&nbsp;
+    Passo 2: Status Inicial &nbsp;&#x2014;&nbsp;
+    Passo 3: Habilidades &nbsp;&#x2014;&nbsp;
+    Passo 4: Especialidades &nbsp;&#x2014;&nbsp;
+    Passo 5: Pontos de Destino &nbsp;&#x2014;&nbsp;
+    Passo 6: Gastar &amp; Queimar &nbsp;&#x2014;&nbsp;
+    Passo 7: Rolagem de Dados &nbsp;&#x2014;&nbsp;
+    Resumo Final &nbsp;&#x2014;&nbsp;
+  </span>
+</div>
+
+<!-- STEP NAV -->
+<div class="step-nav">
+  <div class="step-nav-inner">
+    <a href="#passo1" class="step-nav-item">01 · Básico</a>
+    <a href="#passo2" class="step-nav-item">02 · Status</a>
+    <a href="#passo3" class="step-nav-item">03 · Habilidades</a>
+    <a href="#passo4" class="step-nav-item">04 · Especialidades</a>
+    <a href="#passo5" class="step-nav-item">05 · Destino</a>
+    <a href="#passo6" class="step-nav-item">06 · Gastar x Queimar</a>
+    <a href="#passo7" class="step-nav-item">07 · Dados</a>
+    <a href="#resumo" class="step-nav-item">Resumo</a>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+  <!-- MAIN CONTENT -->
+  <main>
+
+    <!-- PASSO 1 -->
+    <div class="step-section reveal" id="passo1">
+      <div class="step-header">
+        <div class="step-badge">1</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Passo 1</p>
+          <h2 class="step-title">Informações Básicas</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+        <p class="prose">
+          Antes de qualquer número ou rolagem, você precisa estabelecer <strong>quem é seu personagem no mundo</strong>.
+          Essas informações contextualizam cada decisão mecânica posterior e são indispensáveis para que o Mestre
+          possa tecer os fios da narrativa ao redor da sua história.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Descrição</th>
+                <th>Importância</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Nome</strong></td>
+                <td>Como seu personagem é chamado no mundo — nome próprio, epíteto ou título</td>
+                <td>Identidade narrativa fundamental</td>
+              </tr>
+              <tr>
+                <td><strong>Sexo</strong></td>
+                <td>Relevante para interações sociais e dinâmicas políticas em Westeros</td>
+                <td>Contextualiza relações e reações do mundo</td>
+              </tr>
+              <tr class="td-special">
+                <td><strong>Idade</strong></td>
+                <td>Define XP inicial, limite máximo de atributos e Pontos de Destino</td>
+                <td class="td-highlight">Extremamente crítico</td>
+              </tr>
+              <tr>
+                <td><strong>Casa</strong></td>
+                <td>A família ou organização à qual pertence; jogadores da mesma campanha geralmente compartilham a mesma Casa</td>
+                <td>Define alianças, inimigos e contexto social</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <span class="callout-label">Atenção</span>
+          Essas informações <strong>não são opcionais</strong>. A ausência de qualquer uma delas pode travar sessões inteiras,
+          pois o Mestre necessita delas para contextualizar os eventos da história e construir os arcos em torno da sua família.
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- PASSO 2 -->
+    <div class="step-section reveal" id="passo2">
+      <div class="step-header">
+        <div class="step-badge">2</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Passo 2</p>
+          <h2 class="step-title">Definindo o Status Inicial</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+        <p class="prose">
+          Antes de distribuir qualquer ponto de atributo, você precisa definir seu <strong>Status</strong> —
+          que representa sua posição social dentro da Casa (servo, escudeiro, conselheiro, lorde...).
+          Role <strong>2d6</strong> e consulte a tabela abaixo:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Resultado (2d6)</th>
+                <th>Status Inicial</th>
+                <th>Posições Disponíveis</th>
+                <th>Exemplos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-highlight">2</td>
+                <td>2</td>
+                <td>Sem limite</td>
+                <td>Servo, cavaleiro errante, homem livre</td>
+              </tr>
+              <tr>
+                <td class="td-highlight">3 – 4</td>
+                <td>3</td>
+                <td>32</td>
+                <td>Espada jurada, guarda, escudeiro</td>
+              </tr>
+              <tr class="td-special">
+                <td class="td-highlight">5 – 9</td>
+                <td>4</td>
+                <td>16</td>
+                <td>Servo de alta posição, maestre, septon auxiliar, cavaleiro com terras</td>
+              </tr>
+              <tr>
+                <td class="td-highlight">10 – 11</td>
+                <td>5</td>
+                <td>8</td>
+                <td>Brasão vassalo, protegido, cortesão, septon, conselheiro</td>
+              </tr>
+              <tr>
+                <td class="td-highlight">12</td>
+                <td>6</td>
+                <td>4</td>
+                <td>Lorde da casa, herdeiro, lady, filhos</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout danger">
+          <span class="callout-label">Regra Crucial</span>
+          Seu Status <strong>jamais pode ser maior</strong> que o do líder da sua família ou Casa.
+          Se o lorde da Casa tiver Status 5, nenhum jogador pode ter Status 6.
+          O Status é tratado como uma habilidade normal e deve ser <strong>comprado com XP</strong> como qualquer outra.
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- PASSO 3 -->
+    <div class="step-section reveal" id="passo3">
+      <div class="step-header">
+        <div class="step-badge">3</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Passo 3</p>
+          <h2 class="step-title">Distribuindo Habilidades</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+        <p class="prose">
+          Toda ficha começa com <strong>graduação 2 em todas as habilidades</strong>. A partir daí,
+          você usa sua Experiência (XP) para aumentá-las. O total de XP disponível depende diretamente
+          da sua idade.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Faixa de Idade</th>
+                <th>XP para Habilidades</th>
+                <th>Graduação Máxima</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Criança</td><td class="td-highlight">120 XP</td><td>4</td></tr>
+              <tr><td>Adolescente</td><td class="td-highlight">150 XP</td><td>4</td></tr>
+              <tr><td>Jovem</td><td class="td-highlight">180 XP</td><td>5</td></tr>
+              <tr class="td-special"><td>Adulto</td><td class="td-highlight">210 XP</td><td>7</td></tr>
+              <tr><td>Meia Idade</td><td class="td-highlight">240 XP</td><td>6</td></tr>
+              <tr><td>Velho</td><td class="td-highlight">270 XP</td><td>5</td></tr>
+              <tr><td>Muito Velho</td><td class="td-highlight">330 XP</td><td>5</td></tr>
+              <tr><td>Venerável</td><td class="td-highlight">360 XP</td><td>5</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="prose" style="margin-top:0.5rem">
+          <strong>Custo para aumentar graduação</strong> — o custo é cumulativo por nível acima do 2 base:
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Aumento de Graduação</th>
+                <th>Custo em XP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>+1 &nbsp;(de 2 para 3)</td><td class="td-highlight">10 XP</td></tr>
+              <tr><td>+2 &nbsp;(de 2 para 4)</td><td class="td-highlight">40 XP</td></tr>
+              <tr><td>+3 &nbsp;(de 2 para 5)</td><td class="td-highlight">70 XP</td></tr>
+              <tr><td>+4 &nbsp;(de 2 para 6)</td><td class="td-highlight">100 XP</td></tr>
+              <tr class="td-special"><td>+5 &nbsp;(de 2 para 7)</td><td class="td-highlight">130 XP</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-box">
+          <p>
+            Você é um <strong>Adulto</strong> (210 XP). Quer levar Combate para 5 (+3 de custo) → <code>70 XP</code>.
+            E Persuasão para 4 (+2 de custo) → <code>40 XP</code>. Total gasto até agora: <code>110 XP</code>.
+            Restam <code>100 XP</code> para distribuir no restante da ficha.
+          </p>
+        </div>
+
+        <div class="callout tip">
+          <span class="callout-label">Negativando Atributos para Ganhar XP</span>
+          Com permissão do Mestre, você pode reduzir uma habilidade de 2 para 1, recebendo
+          <strong>+50 XP</strong> por isso. O mínimo absoluto é 1 — levar um atributo a 0 é inválido
+          e torna a ficha incorreta.
+        </div>
+
+        <div class="callout info">
+          <span class="callout-label">Onde Encontrar as Habilidades</span>
+          As habilidades disponíveis estão detalhadas nas páginas <strong>74 a 93</strong> do livro.
+          Leia-as antes de distribuir os pontos — a escolha de idade limita os tetos máximos, então pense estrategicamente.
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- PASSO 4 -->
+    <div class="step-section reveal" id="passo4">
+      <div class="step-header">
+        <div class="step-badge">4</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Passo 4</p>
+          <h2 class="step-title">Comprando Especialidades</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+        <p class="prose">
+          Especialidades são <strong>sub-habilidades</strong> dentro de cada atributo que definem no que seu personagem
+          é excepcionalmente bom. Por exemplo, dentro de <em>Percepção</em> existe a especialidade "Notar";
+          dentro de <em>Atletismo</em> existe "Arremessar".
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Faixa de Idade</th>
+                <th>XP para Especialidades</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Criança</td><td class="td-highlight">40 XP</td></tr>
+              <tr><td>Adolescente</td><td class="td-highlight">40 XP</td></tr>
+              <tr><td>Jovem</td><td class="td-highlight">60 XP</td></tr>
+              <tr class="td-special"><td>Adulto</td><td class="td-highlight">80 XP</td></tr>
+              <tr><td>Meia Idade</td><td class="td-highlight">100 XP</td></tr>
+              <tr><td>Velho</td><td class="td-highlight">160 XP</td></tr>
+              <tr><td>Muito Velho</td><td class="td-highlight">200 XP</td></tr>
+              <tr><td>Venerável</td><td class="td-highlight">240 XP</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="prose" style="margin-top:0.5rem">
+          <strong>Custo por nível de especialidade:</strong>
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nível do Dado de Bônus</th>
+                <th>Custo em XP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1º dado de bônus</td><td class="td-highlight">10 XP</td></tr>
+              <tr><td>2º dado de bônus</td><td class="td-highlight">20 XP</td></tr>
+              <tr><td>3º dado de bônus</td><td class="td-highlight">30 XP</td></tr>
+              <tr class="td-special"><td>Cada +1 adicional</td><td class="td-highlight">+10 XP</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout warning">
+          <span class="callout-label">Regra de Ouro</span>
+          A especialidade <strong>jamais pode ser igual ou maior que a graduação do atributo pai</strong>.
+          Se sua Percepção é 4, nenhuma especialidade de Percepção pode ter 4 ou mais níveis — o máximo seria 3.
+          As especialidades disponíveis estão nas páginas 74 a 93.
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- PASSO 5 -->
+    <div class="step-section reveal" id="passo5">
+      <div class="step-header">
+        <div class="step-badge">5</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Passo 5</p>
+          <h2 class="step-title">Pontos de Destino, Qualidades &amp; Desvantagens</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Faixa de Idade</th>
+                <th>Pontos de Destino</th>
+                <th>Máx. de Qualidades Ativas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Criança</td><td class="td-highlight">7</td><td>3</td></tr>
+              <tr><td>Adolescente</td><td class="td-highlight">6</td><td>3</td></tr>
+              <tr><td>Jovem</td><td class="td-highlight">5</td><td>3</td></tr>
+              <tr class="td-special"><td>Adulto</td><td class="td-highlight">4</td><td>3</td></tr>
+              <tr><td>Meia Idade</td><td class="td-highlight">3</td><td>3</td></tr>
+              <tr><td>Velho</td><td class="td-highlight">2</td><td>2</td></tr>
+              <tr><td>Muito Velho</td><td class="td-highlight">1</td><td>1</td></tr>
+              <tr><td>Venerável</td><td class="td-highlight">0</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="prose" style="margin-top:0.5rem">
+          <strong>Qualidades</strong> são as vantagens do seu personagem — algo que o destaca dos demais,
+          seja em combate, diplomacia ou aprendizado. Para adquirir uma qualidade, você "reserva" um Ponto de Destino nela.
+          Se quiser abandoná-la no futuro, o ponto é recuperado. Consulte as páginas <strong>97 a 117</strong> do livro.
+        </p>
+
+        <div class="callout tip">
+          <span class="callout-label">Limite de Qualidades</span>
+          Você tem um limite de qualidades <strong>ativas simultaneamente</strong> baseado na sua idade.
+          Um Adulto pode ter no máximo <strong>3 qualidades</strong> ao mesmo tempo.
+        </div>
+
+        <p class="prose">
+          <strong>Desvantagens</strong> são os aspectos negativos do personagem — uma fobia, a falta de um membro,
+          um segredo comprometedor. Em certas situações, um Ponto de Destino pode ser queimado para
+          <em>ignorar temporariamente</em> os efeitos de uma desvantagem.
+        </p>
+
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- PASSO 6 -->
+    <div class="step-section reveal" id="passo6">
+      <div class="step-header">
+        <div class="step-badge">6</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Passo 6</p>
+          <h2 class="step-title">Gastar vs. Queimar Pontos de Destino</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+        <p class="prose">
+          Essa é uma das mecânicas mais importantes do sistema. Há uma diferença <strong>crucial</strong>
+          entre gastar e queimar — uma é reversível, a outra é permanente.
+        </p>
+
+        <div class="destiny-split">
+          <div class="destiny-card spend">
+            <h4>Gastar um Ponto de Destino &nbsp;— Recuperável</h4>
+            <ul>
+              <li>Ganhar +1B (dado de bônus) em uma rolagem</li>
+              <li>Converter um dado de bônus em dado de teste</li>
+              <li>Remover –1D de uma penalidade própria</li>
+              <li>Impor –1D a um oponente</li>
+              <li>Realizar uma ação menor adicional</li>
+              <li>Ignorar penalidade de armadura por uma rodada</li>
+              <li>Negar os efeitos de um Ponto de Destino gasto por outro personagem</li>
+              <li>Adicionar um pequeno detalhe narrativo à cena</li>
+            </ul>
+          </div>
+          <div class="destiny-card burn">
+            <h4>Queimar um Ponto de Destino &nbsp;— Permanente</h4>
+            <ul>
+              <li>Converter todos os dados de bônus em dados de teste</li>
+              <li>Adicionar +5 ao resultado do teste</li>
+              <li>Conceder um sucesso automático</li>
+              <li>Remover todo dano e ferimentos (não lesões)</li>
+              <li>Decidir as consequências da própria derrota</li>
+              <li>Transformar um teste bem-sucedido inimigo em falha</li>
+              <li>Negar um Ponto de Destino queimado por outro personagem</li>
+              <li>Evitar a morte certa — retorna quando o narrador julgar adequado</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout danger">
+          <span class="callout-label">Aviso Crítico</span>
+          <strong>Não gaste todos os seus Pontos de Destino em qualidades logo de início.</strong>
+          Eles podem literalmente salvar a vida do seu personagem ou de aliados numa situação desesperadora.
+          Queimar um ponto é uma decisão irreversível — pondere com sabedoria.
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- PASSO 7 -->
+    <div class="step-section reveal" id="passo7">
+      <div class="step-header">
+        <div class="step-badge">7</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Passo 7</p>
+          <h2 class="step-title">Rolagem de Dados &amp; Especialidades na Prática</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+
+        <p class="prose">
+          O sistema usa exclusivamente <strong>dados de 6 faces (d6)</strong>. Quando o Mestre pede uma rolagem,
+          você rola uma quantidade de d6 igual à sua graduação naquele atributo.
+        </p>
+
+        <div class="example-box">
+          <p>O Mestre pede rolagem de <strong>Pontaria</strong>. Sua Pontaria é 4 → você rola <code>4d6</code>.</p>
+        </div>
+
+        <p class="prose" style="margin-top:1.4rem">
+          <strong>Usando especialidades na rolagem</strong> — quando você possui uma especialidade,
+          adiciona dados e descarta os de menor valor em quantidade igual ao nível da especialidade:
+        </p>
+
+        <div class="formula-box">
+          <div class="formula-text">
+            (Graduação do Atributo + Nível da Especialidade)d6 → descarta os (Nível da Especialidade) menores
+          </div>
+          <span class="formula-note">Soma apenas os dados restantes como resultado final</span>
+        </div>
+
+        <div class="example-box" style="margin-top:1.2rem">
+          <p>
+            <strong>Percepção 4</strong>, especialidade <em>"Notar"</em> nível 3
+            → rola <code>7d6</code>, descarta os 3 menores, soma os 4 maiores.
+            No Tabletop Simulator ou Discord: <code>7d6dl3</code>.
+          </p>
+        </div>
+
+        <div class="dice-display" style="margin-top:1.4rem">
+          <div>
+            <div class="dice-num">7</div>
+            <div class="dice-label">dados rolados</div>
+          </div>
+          <div class="dice-sep">&#x2212;</div>
+          <div>
+            <div class="dice-num">3</div>
+            <div class="dice-label">menores descartados</div>
+          </div>
+          <div class="dice-sep">=</div>
+          <div>
+            <div class="dice-num">4</div>
+            <div class="dice-label">dados contados</div>
+          </div>
+          <div class="dice-note">
+            Mais chances de obter resultados altos, sem aumentar o número de dados do resultado final.
+            Notação no Tabletop: <span class="code-tag">7d6dl3</span>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <span class="callout-label">Acréscimos e Penalidades Situacionais</span>
+          Bônus como +2 ou +4 em rolagens <strong>só existem</strong> através de qualidades específicas ou por
+          imposição do Mestre à cena. Da mesma forma, penalidades podem ser aplicadas de acordo com as
+          circunstâncias. Não há acréscimos genéricos fora dessas fontes.
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- RESUMO -->
+    <div class="step-section reveal" id="resumo">
+      <div class="step-header">
+        <div class="step-badge" style="font-size:1rem; font-family:'Cinzel',serif; letter-spacing:0.05em;">OK</div>
+        <div class="step-meta">
+          <p class="step-eyebrow">Checklist Final</p>
+          <h2 class="step-title">Ordem de Criação</h2>
+          <div class="step-divider"></div>
+        </div>
+      </div>
+      <div class="step-content">
+        <div class="checklist">
+          <div class="check-item">
+            <div class="check-icon">1</div>
+            <div class="check-body">
+              <h4>Informações Básicas</h4>
+              <p>Preencha nome, sexo, idade e casa antes de qualquer outro campo. A ausência compromete toda a criação.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-icon">2</div>
+            <div class="check-body">
+              <h4>Role 2d6 para o Status Inicial</h4>
+              <p>Consulte a tabela e registre sua posição social. Lembre que o Status nunca pode superar o do líder da Casa.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-icon">3</div>
+            <div class="check-body">
+              <h4>Leia as Habilidades Primeiro</h4>
+              <p>Consulte as páginas 74 a 93 antes de distribuir qualquer ponto. A escolha de idade limita os tetos — planeje com antecedência.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-icon">4</div>
+            <div class="check-body">
+              <h4>Distribua o XP de Habilidades</h4>
+              <p>Respeite o teto da sua faixa etária. Com permissão, você pode negativar atributos para +50 XP, mas nunca abaixo de 1.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-icon">5</div>
+            <div class="check-body">
+              <h4>Distribua o XP de Especialidades</h4>
+              <p>Sempre menor que o atributo pai. Uma especialidade de Percepção 4 pode ter no máximo 3 níveis.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-icon">6</div>
+            <div class="check-body">
+              <h4>Aloque Pontos de Destino em Qualidades</h4>
+              <p>Consulte as páginas 97 a 117. Guarde pelo menos alguns pontos livres — eles podem salvar sua vida.</p>
+            </div>
+          </div>
+          <div class="check-item">
+            <div class="check-icon">7</div>
+            <div class="check-body">
+              <h4>Anote Desvantagens</h4>
+              <p>Registre os aspectos negativos relevantes ao conceito do personagem. Eles enriquecem a narrativa e a interpretação.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning" style="margin-top:2rem">
+          <span class="callout-label">Antes de Enviar a Ficha</span>
+          Revise se o Status está correto em relação ao líder da Casa, se nenhuma especialidade iguala
+          ou supera seu atributo pai, e se você não zerou seus Pontos de Destino em qualidades.
+          Em caso de dúvidas, acesse o canal <strong>#suporte-de-fichas</strong> no Discord.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SIDEBAR TOC -->
+  <aside class="toc-sidebar">
+    <div class="toc-inner">
+      <p class="toc-title">Nesta Página</p>
+      <ul class="toc-list">
+        <li><a href="#passo1"><span class="toc-num">01</span> Informações Básicas</a></li>
+        <li><a href="#passo2"><span class="toc-num">02</span> Status Inicial</a></li>
+        <li><a href="#passo3"><span class="toc-num">03</span> Habilidades & XP</a></li>
+        <li><a href="#passo4"><span class="toc-num">04</span> Especialidades</a></li>
+        <li><a href="#passo5"><span class="toc-num">05</span> Pontos de Destino</a></li>
+        <li><a href="#passo6"><span class="toc-num">06</span> Gastar vs. Queimar</a></li>
+        <li><a href="#passo7"><span class="toc-num">07</span> Dados na Prática</a></li>
+        <li><a href="#resumo"><span class="toc-num">&#x2714;</span> Checklist Final</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">A Queda de Valyria</p>
+  <p>
+    Uma campanha de RPG não-oficial ambientada no universo de <em>As Crônicas de Gelo e Fogo</em>.<br>
+    Game of Thrones e todos os elementos relacionados são propriedade de George R. R. Martin, HBO e seus respectivos detentores de direitos.<br>
+    Este é um projeto de fãs sem fins lucrativos.<br><br>
+    <a href="index.html">Página Inicial</a> &nbsp;|&nbsp;
+    <a href="index.html#faq">FAQ</a> &nbsp;|&nbsp;
+    <a href="index.html#servidor">Regras</a> &nbsp;|&nbsp;
+    <a href="index.html#contato">Discord</a>
+  </p>
+</footer>
+
+<script>
+  // ── EMBER PARTICLES ──
+  const canvas = document.getElementById("ember-canvas");
+  const ctx = canvas.getContext("2d");
+  let W, H, embers = [];
+
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener("resize", resize);
+
+  function createEmber() {
+    return {
+      x: Math.random() * W, y: H + 10,
+      r: Math.random() * 2 + 0.4,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: -(Math.random() * 1.0 + 0.35),
+      alpha: Math.random() * 0.4 + 0.2,
+      life: 0, maxLife: Math.random() * 280 + 130
+    };
+  }
+  for (let i = 0; i < 40; i++) {
+    const e = createEmber(); e.y = Math.random() * H; e.life = Math.random() * e.maxLife; embers.push(e);
+  }
+
+  function animEmbers() {
+    ctx.clearRect(0, 0, W, H);
+    embers.forEach((e, i) => {
+      e.life++; e.x += e.vx + Math.sin(e.life * 0.025) * 0.35; e.y += e.vy;
+      const p = e.life / e.maxLife;
+      const a = e.alpha * (1 - Math.pow(p, 2));
+      ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,${55 + Math.floor(p * 70)},0,${a})`; ctx.fill();
+      if (e.life >= e.maxLife || e.y < -20) embers[i] = createEmber();
+    });
+    requestAnimationFrame(animEmbers);
+  }
+  animEmbers();
+
+  // ── NAVBAR ──
+  const navbar = document.getElementById("navbar");
+  window.addEventListener("scroll", () => navbar.classList.toggle("scrolled", window.scrollY > 40));
+
+  // ── REVEAL ──
+  const reveals = document.querySelectorAll(".reveal");
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add("visible"), idx * 60);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05 });
+  reveals.forEach(el => obs.observe(el));
+
+  // ── ACTIVE TOC ──
+  const sections = document.querySelectorAll("[id^=passo], #resumo");
+  const tocLinks = document.querySelectorAll(".toc-list a");
+  const onScroll = () => {
+    let current = "";
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    tocLinks.forEach(a => {
+      a.style.color = a.getAttribute("href") === "#" + current
+        ? "var(--gold)" : "";
+    });
+  };
+  window.addEventListener("scroll", onScroll);
+</script>
+</body>
+</html>
