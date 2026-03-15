@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia do Universo — A Queda de Valyria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --gold:#c9a84c;--gold-lt:#e8d5a3;--gold-dk:#8a6e2f;--crimson:#8b0000;--ember:#ff4500;
+      --bg:#080808;--bg2:#0e0a07;--bg3:#100808;--text:#d4c5a9;--text-lt:#f0e8d8;--border:rgba(201,168,76,.22)
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:"EB Garamond",serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0805}::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px}
+    #ember-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px;background:linear-gradient(to bottom,rgba(8,8,8,.98),rgba(8,8,8,0));backdrop-filter:blur(4px);border-bottom:1px solid var(--border);transition:background .3s}
+    nav.scrolled{background:rgba(8,5,3,.97)}
+    .nav-logo,.nav-back,.nav-links a,.toc a,.stripe-inner,.eyebrow,.section-eyebrow,.kpi-label,.card-tag,.mini-label,.timeline-date,.footer-link,.stat-name,.faq-q,.grid-head,.table-head,.table td strong{font-family:"Cinzel",serif}
+    .nav-logo{font-size:.82rem;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;text-decoration:none}
+    .nav-back{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.5rem;transition:color .2s}
+    .nav-back:hover,.nav-links a:hover,.toc a:hover,.footer-link:hover{color:var(--gold)}
+    .nav-back svg{width:14px;height:14px}
+    .nav-links{display:flex;gap:1.5rem;list-style:none}
+    .nav-links a{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;transition:color .2s}
+    @media(max-width:980px){.nav-links{display:none}}
+
+    #hero{position:relative;min-height:78vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 5rem;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 120% 60% at 50% 110%,rgba(139,0,0,.44) 0%,transparent 70%),radial-gradient(ellipse 85% 45% at 50% 100%,rgba(255,69,0,.16) 0%,transparent 65%),url("https://images2.alphacoders.com/132/1329016.jpg") center/cover no-repeat;filter:brightness(.3) saturate(1.1)}
+    .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,8,.28) 0%,rgba(8,8,8,0) 30%,rgba(8,8,8,.8) 80%,rgba(8,8,8,1) 100%)}
+    .hero-inner{position:relative;z-index:2;max-width:980px}
+    .eyebrow{font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;opacity:0;animation:fadeUp 1s .25s forwards}
+    .hero-title{font-family:"Cinzel Decorative",serif;font-size:clamp(2.2rem,6vw,4.9rem);line-height:1.07;color:#fff;text-shadow:0 0 70px rgba(201,168,76,.45),0 5px 20px rgba(0,0,0,.8);opacity:0;animation:fadeUp 1s .5s forwards}
+    .hero-title span{display:block;background:linear-gradient(135deg,var(--gold-lt) 0%,var(--gold) 52%,#a07a20 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-divider{width:180px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:1.8rem auto;opacity:0;animation:fadeUp 1s .8s forwards}
+    .hero-desc{font-size:clamp(1rem,2vw,1.18rem);line-height:1.9;color:var(--text-lt);max-width:760px;margin:0 auto;font-style:italic;opacity:0;animation:fadeUp 1s 1.05s forwards}
+    .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.3rem;opacity:0;animation:fadeUp 1s 1.25s forwards}
+    .btn-primary,.btn-secondary{font-family:"Cinzel",serif;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;padding:.9rem 2.2rem;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0 100%);transition:.2s;font-weight:700}
+    .btn-primary{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:#0a0805;border:none}
+    .btn-secondary{border:1px solid var(--gold-dk);color:var(--gold);background:transparent}
+    .btn-primary:hover,.btn-secondary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+
+    .stripe{background:linear-gradient(90deg,transparent,rgba(201,168,76,.08),transparent);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.6rem 0;overflow:hidden;position:relative;z-index:1}
+    .stripe-inner{font-size:.6rem;letter-spacing:.35em;color:rgba(201,168,76,.45);text-transform:uppercase;white-space:nowrap;display:inline-block;animation:marquee 34s linear infinite}
+
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:2.5rem;max-width:1300px;margin:0 auto;padding:0 2rem 6rem;position:relative;z-index:1}
+    @media(max-width:1060px){.layout{grid-template-columns:1fr}.toc-wrap{display:none}}
+    main{min-width:0}
+    .toc-wrap{position:relative}
+    .toc{position:sticky;top:86px;background:rgba(10,7,5,.82);border:1px solid var(--border);padding:1.5rem}
+    .toc-title{font-family:"Cinzel",serif;font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);padding-bottom:.8rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+    .toc ul{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+    .toc a{font-size:.65rem;letter-spacing:.1em;color:rgba(212,197,169,.65);text-decoration:none;line-height:1.45;display:flex;gap:.5rem}
+    .toc-num{color:var(--gold-dk);font-size:.58rem;flex-shrink:0;margin-top:.1rem}
+
+    section{padding-top:4.8rem}
+    .section-header{margin-bottom:2rem}
+    .section-eyebrow{font-size:.64rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+    .section-title{font-family:"Cinzel Decorative",serif;font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.15;color:var(--gold-lt)}
+    .section-line{width:100%;height:1px;margin-top:1rem;background:linear-gradient(to right,var(--gold-dk),transparent)}
+    .lead{font-size:1.08rem;line-height:1.92;color:var(--text);max-width:900px}
+    .lead strong,.card p strong,.prose strong,.table td strong,.timeline-body strong,.faq-a strong{color:var(--gold-lt);font-weight:600}
+
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}
+    @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.kpis{grid-template-columns:1fr}}
+    .kpi{border:1px solid var(--border);background:rgba(201,168,76,.04);padding:1.4rem 1.3rem;position:relative}
+    .kpi::before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--gold),transparent)}
+    .kpi-value{font-family:"Cinzel Decorative",serif;font-size:1.75rem;color:var(--gold);line-height:1;margin-bottom:.55rem}
+    .kpi-label{font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(201,168,76,.62);margin-bottom:.45rem}
+    .kpi-text{font-size:.94rem;line-height:1.65;color:var(--text)}
+
+    .cards-2,.cards-3{display:grid;gap:1.35rem;margin-top:1.8rem}
+    .cards-2{grid-template-columns:repeat(2,1fr)} .cards-3{grid-template-columns:repeat(3,1fr)}
+    @media(max-width:900px){.cards-3{grid-template-columns:1fr 1fr}.cards-2{grid-template-columns:1fr}}@media(max-width:620px){.cards-3{grid-template-columns:1fr}}
+    .card{border:1px solid var(--border);background:rgba(10,7,5,.76);padding:1.5rem;transition:transform .25s,border-color .25s,background .25s}
+    .card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.42);background:rgba(201,168,76,.06)}
+    .card-tag{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem}
+    .card h3{font-family:"Cinzel",serif;font-size:1.02rem;line-height:1.35;color:var(--gold-lt);margin-bottom:.8rem}
+    .card p{font-size:.98rem;line-height:1.78;color:var(--text)}
+
+    .callout{border-left:3px solid;padding:1.15rem 1.35rem;margin-top:1.4rem;font-size:1rem;line-height:1.75}
+    .callout.warning{border-color:var(--gold);background:rgba(201,168,76,.06)}
+    .callout.danger{border-color:#9d3935;background:rgba(139,0,0,.08)}
+    .callout.info{border-color:#6082b6;background:rgba(96,130,182,.06)}
+    .callout-label{display:block;font-family:"Cinzel",serif;font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;margin-bottom:.45rem}
+    .warning .callout-label{color:var(--gold)} .danger .callout-label{color:#cf6b61} .info .callout-label{color:#8ab0e0}
+
+    .timeline{position:relative;padding-left:2.4rem;margin-top:2rem}
+    .timeline::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent)}
+    .timeline-item{position:relative;margin-bottom:2rem}
+    .timeline-item::before{content:"";position:absolute;left:-2.4rem;top:.35rem;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px rgba(201,168,76,.65)}
+    .timeline-date{font-size:.66rem;letter-spacing:.23em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+    .timeline-title{font-family:"Cinzel",serif;font-size:1rem;color:var(--gold-lt);margin-bottom:.45rem}
+    .timeline-body{font-size:.98rem;line-height:1.78;color:var(--text)}
+
+    .houses-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:1.8rem}
+    @media(max-width:760px){.houses-grid{grid-template-columns:1fr}}
+    .house-card{border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1.45rem;position:relative}
+    .house-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:.8rem}
+    .house-name{font-family:"Cinzel",serif;font-size:1rem;line-height:1.3;color:var(--gold-lt)}
+    .house-region{font-family:"Cinzel",serif;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);flex-shrink:0;margin-top:.15rem}
+    .house-card p{font-size:.98rem;line-height:1.76;color:var(--text)}
+    .house-points{display:flex;flex-direction:column;gap:.5rem;margin-top:.9rem}
+    .house-points li{list-style:none;font-size:.93rem;line-height:1.6;color:var(--text);padding-left:1rem;position:relative}
+    .house-points li::before{content:"";position:absolute;left:0;top:.55rem;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+
+    .table{margin-top:1.5rem;border:1px solid var(--border);overflow:auto}
+    .table table{width:100%;border-collapse:collapse;min-width:760px}
+    .table th{font-family:"Cinzel",serif;font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,.06);padding:.95rem 1rem;text-align:left;border-bottom:1px solid var(--gold-dk)}
+    .table td{padding:.9rem 1rem;font-size:.95rem;line-height:1.6;color:var(--text);border-bottom:1px solid rgba(201,168,76,.08);vertical-align:top}
+    .table tr:hover td{background:rgba(201,168,76,.04)}
+
+    .faq-list{display:flex;flex-direction:column;gap:.7rem;margin-top:1.8rem}
+    .faq-item{border:1px solid var(--border);background:rgba(201,168,76,.03);overflow:hidden}
+    .faq-q{width:100%;background:none;border:none;text-align:left;padding:1.1rem 1.3rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;cursor:pointer;color:var(--gold-lt);font-size:.82rem;letter-spacing:.08em}
+    .faq-icon{width:18px;height:18px;border:1px solid var(--gold-dk);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.9rem;transition:.3s;flex-shrink:0}
+    .faq-item.open .faq-icon{transform:rotate(45deg);background:rgba(201,168,76,.15)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+    .faq-item.open .faq-a{max-height:300px}
+    .faq-a p{border-top:1px solid var(--border);padding:1rem 1.3rem 1.25rem;font-size:.98rem;line-height:1.78;color:var(--text)}
+
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.8rem}
+    @media(max-width:700px){.checklist{grid-template-columns:1fr}}
+    .check{display:flex;gap:1rem;border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1.15rem 1.25rem}
+    .check-icon{width:30px;height:30px;border:1px solid var(--gold-dk);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:"Cinzel",serif;font-size:.75rem;flex-shrink:0;margin-top:.05rem}
+    .check h4{font-family:"Cinzel",serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.28rem}
+    .check p{font-size:.94rem;line-height:1.65;color:var(--text)}
+
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+    footer{background:#050303;border-top:1px solid var(--border);padding:2.4rem 2rem;text-align:center;position:relative;z-index:1}
+    .footer-logo{font-family:"Cinzel Decorative",serif;font-size:.92rem;color:var(--gold);letter-spacing:.12em;margin-bottom:.65rem}
+    footer p{font-size:.77rem;line-height:1.72;color:rgba(212,197,169,.4)}
+    .footer-link{color:rgba(201,168,76,.48);text-decoration:none}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes marquee{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+  </style>
+</head>
+<body>
+<canvas id="ember-canvas"></canvas>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Voltar ao Início
+  </a>
+  <a href="#hero" class="nav-logo">Guia do Universo</a>
+  <ul class="nav-links">
+    <li><a href="#essos">Essos</a></li>
+    <li><a href="#westeros">Westeros</a></li>
+    <li><a href="#casas">Casas</a></li>
+    <li><a href="#eventos">Eventos</a></li>
+    <li><a href="#novatos">Novatos</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">A Queda de Valyria — Guia de Ambientação</p>
+    <h1 class="hero-title">Tudo o que um jogador precisa saber <span>antes do primeiro passo</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">Uma leitura completa sobre o mundo antes da Conquista: Valyria, o Doom, o Século de Sangue, as grandes casas de Westeros, a lógica feudal e os conflitos que moldam sua campanha.</p>
+    <div class="hero-actions">
+      <a href="#essos" class="btn-primary">Ler o Guia</a>
+      <a href="ficha.html" class="btn-secondary">Criar Personagem</a>
+    </div>
+  </div>
+</section>
+
+<div class="stripe"><span class="stripe-inner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Freehold Valyriano &nbsp;&#x2014;&nbsp; Doom de Valyria &nbsp;&#x2014;&nbsp; Século de Sangue &nbsp;&#x2014;&nbsp; Dragonlords &nbsp;&#x2014;&nbsp; Cidades Livres &nbsp;&#x2014;&nbsp; Norte, Vale, Rochedo, Campina, Tempestade, Dorne &nbsp;&#x2014;&nbsp; Juramentos, Vassalagem, Linhagem e Legado &nbsp;&#x2014;&nbsp; </span></div>
+
+<div class="layout">
+  <main>
+
+    <section id="intro" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Visão Geral</p>
+        <h2 class="section-title">O cenário da campanha</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="lead">Esta campanha acontece numa época em que <strong>Westeros ainda não foi unificado</strong> e em que Essos ainda está sentindo o abalo da destruição do maior império do mundo. O Freehold de Valyria dominou vastas regiões por milênios, sustentado por quarenta famílias de dragonlords e por um poder militar, mágico e econômico sem paralelo. Com o Doom, esse centro desaparece, e o mundo entra numa era de deslocamentos, guerras regionais, disputas por herança valyriana e oportunidades brutais para casas ambiciosas.</p>
+      <div class="kpis">
+        <div class="kpi"><div class="kpi-value">40</div><div class="kpi-label">Famílias de dragonlords</div><div class="kpi-text">A elite política do Freehold, senhores capazes de montar dragões e governar o império.</div></div>
+        <div class="kpi"><div class="kpi-value">5000</div><div class="kpi-label">Anos de supremacia</div><div class="kpi-text">A duração aproximada da ascensão e hegemonia valyriana no mundo conhecido.</div></div>
+        <div class="kpi"><div class="kpi-value">102</div><div class="kpi-label">Anos antes de Aegon</div><div class="kpi-text">A data tradicional do Doom de Valyria, marco absoluto da campanha.</div></div>
+        <div class="kpi"><div class="kpi-value">7+</div><div class="kpi-label">Reinos ativos em Westeros</div><div class="kpi-text">O continente continua fragmentado em poderes regionais independentes.</div></div>
+      </div>
+      <div class="callout warning">
+        <span class="callout-label">Leitura Essencial</span>
+        Se você conhece apenas a série principal, precisa ajustar sua referência mental: <strong>não existe Trono de Ferro</strong>, não existe um único rei sobre Westeros e várias casas famosas de eras posteriores ainda não ocupam a posição que você associa a elas.
+      </div>
+    </section>
+
+    <section id="essos" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Essos</p>
+        <h2 class="section-title">Valyria e o mundo a leste</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="lead">Para entender a campanha, primeiro é preciso entender <strong>o que Valyria era</strong>. O Freehold não era apenas uma cidade poderosa: era um império dracônico de alcance continental, organizado em torno de famílias nobres valyrianas, colônias, rotas comerciais, escravidão em grande escala e um domínio militar construído sobre dragões. Sua capital era o coração simbólico e político dessa ordem; sua queda não destruiu só uma cidade, mas toda a estrutura que mantinha o mundo sob seu peso.</p>
+
+      <div class="cards-3">
+        <div class="card">
+          <div class="card-tag">Poder Imperial</div>
+          <h3>Dragonlords e nobreza valyriana</h3>
+          <p>Os dragonlords eram a aristocracia máxima do Freehold. Seu poder vinha da posse de dragões, da posição política dentro do império e do controle de recursos, magia e exércitos. Em campanhas ambientadas no Doom, qualquer personagem de sangue valyriano carrega prestígio, medo e expectativas descomunais.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Economia</div>
+          <h3>Colônias, minas e estradas</h3>
+          <p>O império se projetava sobre Essos por meio de colônias e cidades associadas que depois dariam origem às Cidades Livres. Seu poder não era apenas militar: era também comercial, marítimo e administrativo. Isso explica por que a queda de Valyria provoca um efeito dominó sobre rotas, mercados e lealdades.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Legado</div>
+          <h3>A herança que não desaparece</h3>
+          <p>Mesmo destruída, Valyria continua definindo o imaginário político do mundo. Aço valyriano, língua valyriana, linhagem valyriana e memória valyriana seguem valendo como símbolos de poder, sofisticação e perigo muito tempo depois do cataclismo.</p>
+        </div>
+      </div>
+
+      <div class="cards-2">
+        <div class="card">
+          <div class="card-tag">Dragonstone</div>
+          <h3>O ponto de fuga dos Targaryen</h3>
+          <p>Doze anos antes do Doom, Daenys Targaryen teve uma visão profética da destruição de Valyria, e seu pai Aenar levou a família para Dragonstone. Esse detalhe é decisivo porque faz da Casa Targaryen a principal linhagem de dragonlords sobrevivente com base fora da península destruída.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Cidades Livres</div>
+          <h3>Ex-colônias que ganham autonomia</h3>
+          <p>Após o colapso do centro imperial, cidades como Volantis e outras herdeiras do mundo valyriano passam a disputar espaço, tradição e supremacia regional. Para a campanha, isso cria um cenário perfeito de alianças frágeis, mercadores poderosos, aventureiros, refugiados e nobres tentando reinventar seu lugar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="eventos" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Linha do Tempo</p>
+        <h2 class="section-title">Eventos que moldam a era</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">Milênios antes da Conquista</div>
+          <div class="timeline-title">Ascensão do Freehold</div>
+          <div class="timeline-body">Pastores valyrianos domesticam dragões nas Quatorze Chamas e constroem um estado que cresce até se tornar o maior império do mundo conhecido. Esse passado é importante porque ainda define o prestígio de quem descende de Valyria e o medo que esse nome provoca.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Era valyriana tardia</div>
+          <div class="timeline-title">Expansão sobre Essos</div>
+          <div class="timeline-body">O Freehold projeta poder por colônias, guerra, comércio e domínio dracônico. As Cidades Livres surgem em conexão com esse sistema, e várias regiões de Essos se organizam em relação direta ao peso valyriano.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">114 anos antes de Aegon</div>
+          <div class="timeline-title">A visão de Daenys</div>
+          <div class="timeline-body">Daenys Targaryen prevê a destruição de Valyria e sua família abandona o coração do império rumo a Dragonstone. Sem esse movimento, os Targaryen provavelmente desapareceriam junto com as demais grandes linhagens do Freehold.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">102 anos antes de Aegon</div>
+          <div class="timeline-title">O Doom de Valyria</div>
+          <div class="timeline-body">Valyria é destruída em um cataclismo súbito e colossal. O centro político, econômico e simbólico do mundo oriental deixa de existir, e a herança valyriana passa a ser fragmento, memória e ruína.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Após o Doom</div>
+          <div class="timeline-title">O Século de Sangue</div>
+          <div class="timeline-body">Sem o império para conter ambições rivais, Essos entra numa fase de guerras, reorganizações e violência generalizada. É nesse ambiente que famílias exiladas, casas menores, mercenários e nobres sobreviventes tentam encontrar um novo futuro.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Muito antes de Aegon</div>
+          <div class="timeline-title">Westeros continua dividido</div>
+          <div class="timeline-body">Enquanto Essos arde em instabilidade, Westeros ainda é um continente fragmentado entre reinos independentes como o Norte, o Vale, as Terras Ocidentais, a Campina, Dorne e outros. Esse quadro é fundamental porque seus personagens não chegam a um estado unificado, mas a um tabuleiro cheio de soberanos regionais.</div>
+        </div>
+      </div>
+      <div class="callout danger">
+        <span class="callout-label">O grande erro de novato</span>
+        O erro mais comum é tratar esta era como se fosse a mesma política de Game of Thrones. <strong>Não é</strong>. A Conquista ainda não aconteceu, então alianças, brasões e títulos precisam ser pensados segundo o mundo pré-Targaryen.
+      </div>
+    </section>
+
+    <section id="westeros" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Westeros</p>
+        <h2 class="section-title">O continente antes do Trono de Ferro</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="lead">Westeros nessa época não é um reino único, mas um mosaico de potências regionais. Cada área possui sua própria dinastia dominante, suas tradições religiosas, seus costumes e suas prioridades estratégicas. Para um personagem vindo de Essos ou de sangue valyriano, isso significa entrar num continente onde <strong>geografia é política</strong>, e onde cada senhor local julga estrangeiros com base em utilidade, risco, linhagem e capacidade militar.</p>
+      <div class="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Região</th>
+              <th>Casa dominante na era</th>
+              <th>O que um novato deve entender</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>O Norte</strong></td>
+              <td>Casa Stark</td>
+              <td>Região vasta, fria e menos populosa, marcada por forte identidade ancestral e pela permanência dos deuses antigos.</td>
+            </tr>
+            <tr>
+              <td><strong>Vale de Arryn</strong></td>
+              <td>Casa Arryn</td>
+              <td>Reino defensivo e aristocrático, protegido por montanhas e por uma posição geográfica naturalmente fortificada.</td>
+            </tr>
+            <tr>
+              <td><strong>Terras Ocidentais</strong></td>
+              <td>Casa Lannister</td>
+              <td>Centro de riqueza mineral e poder econômico, organizado em torno de Casterly Rock e da autoridade dos Lannister.</td>
+            </tr>
+            <tr>
+              <td><strong>Campina</strong></td>
+              <td>Casa Gardener</td>
+              <td>A dinastia real da região antes da Conquista; a Campina é uma das áreas mais ricas, populosas e politicamente cobiçadas de Westeros.</td>
+            </tr>
+            <tr>
+              <td><strong>Terras da Tempestade</strong></td>
+              <td>Casa Durrandon</td>
+              <td>Antes dos Baratheon, são os Durrandon que representam o poder tempestuoso do leste-sul do continente.</td>
+            </tr>
+            <tr>
+              <td><strong>Terras Fluviais + Ilhas</strong></td>
+              <td>Casa Hoare</td>
+              <td>Configuração politicamente instável; os rios costumam ser o prêmio disputado por forças externas e por senhores marítimos agressivos.</td>
+            </tr>
+            <tr>
+              <td><strong>Dorne</strong></td>
+              <td>Casa Nymeros Martell</td>
+              <td>Região com identidade própria e forte herança rhoynar, distinta do restante do continente em cultura, adaptação climática e política.</td>
+            </tr>
+            <tr>
+              <td><strong>Dragonstone</strong></td>
+              <td>Casa Targaryen</td>
+              <td>Pequena em escala continental, mas enorme em relevância simbólica por preservar uma linhagem valyriana de dragonlords fora de Valyria.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="casas" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Casas Principais</p>
+        <h2 class="section-title">Quem manda nesta era</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="lead">Abaixo está o núcleo das casas e linhagens que um jogador novato precisa conhecer. Elas não resumem todo o mundo, mas formam a espinha dorsal da política desta época. A maneira como sua família se aproxima, se submete, negocia ou desafia essas potências define grande parte do tom da campanha.</p>
+
+      <div class="houses-grid">
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Targaryen</h3><span class="house-region">Dragonstone</span></div>
+          <p>A mais importante das linhagens valyrianas sobreviventes para esta campanha. Ainda não é a dinastia real de Westeros, mas já carrega um peso extraordinário por ser descendente direta dos dragonlords que escaparam do Doom.</p>
+          <ul class="house-points">
+            <li>Representa continuidade com a velha Valyria.</li>
+            <li>Tem valor narrativo enorme para qualquer arco envolvendo sangue valyriano, dragões, profecia e legitimidade.</li>
+            <li>É pequena comparada aos grandes reinos de Westeros, mas simbolicamente imensa.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Velaryon</h3><span class="house-region">Driftmark</span></div>
+          <p>Casa de origem valyriana ligada ao mar, ao comércio e ao eixo marítimo de Dragonstone. Para campanhas de fuga, frota, abastecimento, travessia e influência naval, é uma referência essencial.</p>
+          <ul class="house-points">
+            <li>Mostra que nem toda casa valyriana relevante precisa ser dragonlord.</li>
+            <li>É ótima referência para famílias ligadas a navios, riqueza comercial e prestígio marítimo.</li>
+            <li>Conecta Essos e Westeros de forma muito mais prática do que muitas casas continentais.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Stark</h3><span class="house-region">O Norte</span></div>
+          <p>Os reis e senhores do Norte representam tradição, resistência e uma visão mais antiga de Westeros. Um personagem que negocie com o Norte lida com honra dura, distância geográfica e uma cultura menos cosmopolita.</p>
+          <ul class="house-points">
+            <li>O Norte é imenso; viajar ali é lento e politicamente significativo.</li>
+            <li>Os deuses antigos ainda estruturam parte da identidade regional.</li>
+            <li>Lealdade, ancestralidade e dever pesam muito.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Arryn</h3><span class="house-region">Vale</span></div>
+          <p>Os Arryn comandam um reino protegido por relevo difícil e por uma nobreza orgulhosa. O Vale é importante para campanhas políticas porque une isolamento geográfico, prestígio aristocrático e forte capacidade defensiva.</p>
+          <ul class="house-points">
+            <li>Entrar no Vale nem sempre é simples.</li>
+            <li>Casamentos e pactos ali podem render proteção de longo prazo.</li>
+            <li>É um reino que valoriza status e ordem.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Lannister</h3><span class="house-region">Terras Ocidentais</span></div>
+          <p>Riqueza, minas, ouro e poder econômico fazem dos Lannister uma casa central para qualquer família que queira patrocínio, empréstimos, armas, casamentos vantajosos ou prestígio material.</p>
+          <ul class="house-points">
+            <li>Ouro significa soldados, influência e dependência.</li>
+            <li>Um acordo financeiro com o Rochedo pode ser tão decisivo quanto uma aliança militar.</li>
+            <li>É um polo de ambição e pragmatismo.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Gardener</h3><span class="house-region">Campina</span></div>
+          <p>Antes da futura queda na Conquista, os Gardener são a grande dinastia da Campina. Para esta era, isso é essencial: eles representam uma potência agrícola, populosa, fértil e muito desejada por aliados e invasores.</p>
+          <ul class="house-points">
+            <li>A Campina é uma máquina de produção e prestígio.</li>
+            <li>Casas da região podem parecer refinadas, mas a competição ali é intensa.</li>
+            <li>Quem domina a Campina projeta poder por abundância.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Durrandon</h3><span class="house-region">Tempestade</span></div>
+          <p>Os reis da Tempestade ainda são os Durrandon, e não os Baratheon. Essa troca histórica é importante para evitar anacronismos e para ambientar corretamente a estrutura de poder do sul-leste de Westeros.</p>
+          <ul class="house-points">
+            <li>Território associado à guerra, fortaleza e resistência.</li>
+            <li>Boa referência para personagens marciais ou casas fronteiriças.</li>
+            <li>Seu peso histórico é pré-Conquista e precisa ser respeitado em ficha e lore.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Hoare</h3><span class="house-region">Rios e Ilhas</span></div>
+          <p>Na era pré-Conquista, os Hoare controlam o complexo e instável conjunto das Terras Fluviais e das Ilhas de Ferro. Isso torna a região uma zona de choque entre cultura marítima agressiva e territórios continentais cobiçados.</p>
+          <ul class="house-points">
+            <li>É uma configuração politicamente tensa por natureza.</li>
+            <li>As Terras Fluviais são vulneráveis a guerras e mudanças de domínio.</li>
+            <li>Boa região para conflitos de lealdade e ocupação.</li>
+          </ul>
+        </div>
+
+        <div class="house-card">
+          <div class="house-head"><h3 class="house-name">Casa Nymeros Martell</h3><span class="house-region">Dorne</span></div>
+          <p>Dorne é distinta do restante de Westeros em clima, mentalidade e herança cultural, muito marcada pela migração rhoynar. Para novatos, isso significa que nem toda regra social de Westeros vale da mesma forma em Dorne.</p>
+          <ul class="house-points">
+            <li>Identidade própria e orgulho regional fortíssimo.</li>
+            <li>Política mais adaptada ao deserto, à mobilidade e à autonomia.</li>
+            <li>Ideal para personagens outsiders, diplomatas ou sobreviventes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <span class="callout-label">Importante para ficha</span>
+        Quando você criar uma nova família para a campanha, pense nela em relação a estas potências. Sua casa precisa saber <strong>quem teme</strong>, <strong>quem corteja</strong>, <strong>de quem depende</strong> e <strong>o que oferece</strong> em troca de proteção ou reconhecimento.
+      </div>
+    </section>
+
+    <section id="cultura" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Leitura de Mundo</p>
+        <h2 class="section-title">Como esse universo funciona na prática</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="cards-3">
+        <div class="card">
+          <div class="card-tag">Feudalismo</div>
+          <h3>Juramentos valem mais que simpatia</h3>
+          <p>O mundo é estruturado por relações de vassalagem, dever, proteção e serviço. Você não é apenas uma pessoa: é membro de uma casa, de uma linhagem, de uma rede de obrigações e dívidas políticas.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Religião</div>
+          <h3>Fé molda comportamento</h3>
+          <p>O Norte conserva os deuses antigos, grande parte do sul é influenciada pela Fé dos Sete, Dorne carrega outra experiência histórica e as Ilhas de Ferro têm o Deus Afogado. Ignorar religião em ficha e interpretação empobrece o personagem.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Heráldica</div>
+          <h3>Brasão, nome e cor importam</h3>
+          <p>Em Westeros, símbolos são linguagem política. Seu estandarte, suas palavras e a reputação da sua casa dizem ao mundo quem você é antes mesmo de você falar.</p>
+        </div>
+      </div>
+      <div class="cards-3">
+        <div class="card">
+          <div class="card-tag">Geografia</div>
+          <h3>Distância é poder</h3>
+          <p>Portos, estreitos, castelos, montanhas e rios definem comércio, guerra e isolamento. Em campanha, viajar é caro, lento e perigoso; chegar a um lugar já é um acontecimento político.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Linhagem</div>
+          <h3>Sangue é capital político</h3>
+          <p>Ter ancestrais valyrianos, rhoynar, primeiros homens ou andalos muda como o mundo enxerga sua família. O sangue não determina destino, mas muda portas que se abrem e hostilidades que surgem.</p>
+        </div>
+        <div class="card">
+          <div class="card-tag">Consequência</div>
+          <h3>Escolhas deixam memória</h3>
+          <p>Roubar, casar, jurar, falhar, sobreviver e matar constroem reputação. Em ASOIAF, consequência não é detalhe mecânico: é a continuação natural da história.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="novatos" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Para Jogadores Novatos</p>
+        <h2 class="section-title">O que você precisa saber antes de começar</h2>
+        <div class="section-line"></div>
+      </div>
+      <p class="lead">Se esta é sua primeira experiência nesse universo, pense menos em “personagem herói” e mais em <strong>posição no mundo</strong>. Seu personagem funciona melhor quando nasce de uma casa, de um dever, de um trauma, de uma promessa ou de uma necessidade concreta. Em A Queda de Valyria, sobreviver já é dramático; fundar um legado é ainda mais.</p>
+      <div class="checklist">
+        <div class="check"><div class="check-icon">1</div><div><h4>Saiba de onde você vem</h4><p>Você é parte de uma casa valyriana em fuga, um vassalo westerosi, um mercador essosi, um conselheiro, um bastardo útil ou um guerreiro sem terras? Origem muda tudo.</p></div></div>
+        <div class="check"><div class="check-icon">2</div><div><h4>Defina o que você perdeu</h4><p>O Doom funciona melhor quando seu personagem carrega perdas reais: cidade, família, posição, fortuna, dragão, fé, segurança ou futuro.</p></div></div>
+        <div class="check"><div class="check-icon">3</div><div><h4>Entenda sua casa</h4><p>Uma boa ficha sabe o que sua família quer conquistar, quais recursos possui e quem pode destruí-la. Política começa em casa.</p></div></div>
+        <div class="check"><div class="check-icon">4</div><div><h4>Evite anacronismos</h4><p>Não use instituições, títulos ou arranjos políticos que pertencem ao período pós-Conquista. Pesquise a era correta da sua referência.</p></div></div>
+        <div class="check"><div class="check-icon">5</div><div><h4>Pense em alianças</h4><p>Nenhuma casa prospera sozinha. Casamentos, juramentos, patronos, credores, navios e reféns são formas concretas de sobrevivência.</p></div></div>
+        <div class="check"><div class="check-icon">6</div><div><h4>Leve cultura a sério</h4><p>Religião, sotaque, aparência, costumes funerários, visão sobre bastardia e honra social enriquecem muito mais do que números na ficha.</p></div></div>
+        <div class="check"><div class="check-icon">7</div><div><h4>Tenha medo do mundo</h4><p>O cenário não foi feito para ser confortável. Ambição é valiosa, mas prudência salva vidas, heranças e reputações.</p></div></div>
+        <div class="check"><div class="check-icon">8</div><div><h4>Jogue pelo legado</h4><p>Seu personagem pode morrer. Sua casa, não necessariamente. Em campanhas de linhagem, o verdadeiro protagonista muitas vezes é o nome da família.</p></div></div>
+      </div>
+    </section>
+
+    <section id="faq" class="reveal">
+      <div class="section-header">
+        <p class="section-eyebrow">Dúvidas Frequentes</p>
+        <h2 class="section-title">FAQ para entrar no cenário</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)"><span>Preciso conhecer toda a lore de ASOIAF para jogar?</span><div class="faq-icon">+</div></button>
+          <div class="faq-a"><p>Não. Você precisa entender o recorte da campanha: o que foi Valyria, o que o Doom destruiu, por que o Século de Sangue importa e como Westeros funciona antes da Conquista. Este guia cobre exatamente essa base.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)"><span>Posso criar uma casa totalmente nova?</span><div class="faq-icon">+</div></button>
+          <div class="faq-a"><p>Sim, desde que ela seja coerente com a política e a escala da era. Uma casa nova funciona melhor quando tem recursos plausíveis, inimigos claros e uma razão concreta para existir nesse momento histórico.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)"><span>Todo valyriano é dragonlord?</span><div class="faq-icon">+</div></button>
+          <div class="faq-a"><p>Não. Dragonlords eram a elite máxima do Freehold. Outras casas valyrianas podiam ter riqueza, navios, prestígio e ligações importantes sem necessariamente possuir dragões.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)"><span>Westeros já é governado pelos Targaryen?</span><div class="faq-icon">+</div></button>
+          <div class="faq-a"><p>Não. Esse é justamente um dos pilares da ambientação: a campanha se passa antes da Conquista, então Westeros continua dividido entre reinos e dinastias regionais independentes.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)"><span>O que torna uma ficha boa neste cenário?</span><div class="faq-icon">+</div></button>
+          <div class="faq-a"><p>Uma boa ficha sabe de onde veio, o que perdeu, qual casa representa, o que quer construir em Westeros e quem teria motivo para usá-la, protegê-la ou destruí-la.</p></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="toc-wrap">
+    <div class="toc">
+      <div class="toc-title">Nesta Página</div>
+      <ul>
+        <li><a href="#intro"><span class="toc-num">01</span> O cenário da campanha</a></li>
+        <li><a href="#essos"><span class="toc-num">02</span> Valyria e Essos</a></li>
+        <li><a href="#eventos"><span class="toc-num">03</span> Eventos da era</a></li>
+        <li><a href="#westeros"><span class="toc-num">04</span> Westeros pré-Conquista</a></li>
+        <li><a href="#casas"><span class="toc-num">05</span> Casas principais</a></li>
+        <li><a href="#cultura"><span class="toc-num">06</span> Como o mundo funciona</a></li>
+        <li><a href="#novatos"><span class="toc-num">07</span> Guia para novatos</a></li>
+        <li><a href="#faq"><span class="toc-num">08</span> FAQ</a></li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-logo">Guia do Universo</div>
+  <p>
+    Material de apoio para a campanha <em>A Queda de Valyria</em>.<br>
+    Projeto de fãs sem fins lucrativos ambientado no universo de <em>As Crônicas de Gelo e Fogo</em>.<br><br>
+    <a class="footer-link" href="index.html">Início</a> &nbsp;|&nbsp;
+    <a class="footer-link" href="ficha.html">Criação de Ficha</a> &nbsp;|&nbsp;
+    <a class="footer-link" href="#novatos">Guia para Novatos</a>
+  </p>
+</footer>
+
+<script>
+  const canvas=document.getElementById('ember-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,embers=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  function createEmber(){return{x:Math.random()*W,y:H+10,r:Math.random()*2.2+.5,vx:(Math.random()-.5)*.6,vy:-(Math.random()*1.1+.35),alpha:Math.random()*.45+.22,life:0,maxLife:Math.random()*320+150}}
+  for(let i=0;i<52;i++){const e=createEmber();e.y=Math.random()*H;e.life=Math.random()*e.maxLife;embers.push(e)}
+  function anim(){ctx.clearRect(0,0,W,H);embers.forEach((e,i)=>{e.life++;e.x+=e.vx+Math.sin(e.life*.03)*.35;e.y+=e.vy;const p=e.life/e.maxLife;const a=e.alpha*(1-Math.pow(p,2));ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,${55+Math.floor(p*75)},0,${a})`;ctx.fill();if(e.life>=e.maxLife||e.y<-20)embers[i]=createEmber()});requestAnimationFrame(anim)}anim();
+  const navbar=document.getElementById('navbar');window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>40));
+  const reveals=document.querySelectorAll('.reveal');const obs=new IntersectionObserver((entries)=>{entries.forEach((entry,idx)=>{if(entry.isIntersecting){setTimeout(()=>entry.target.classList.add('visible'),idx*55);obs.unobserve(entry.target)}})},{threshold:.06});reveals.forEach(el=>obs.observe(el));
+  function toggleFaq(btn){const item=btn.closest('.faq-item');const open=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));if(!open)item.classList.add('open')}
+  const sections=document.querySelectorAll('main section[id]');const tocLinks=document.querySelectorAll('.toc a');
+  function setActive(){let current='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-130)current=s.id});tocLinks.forEach(a=>a.style.color=a.getAttribute('href')==='#'+current?'var(--gold)':'')}
+  window.addEventListener('scroll',setActive);setActive();
+</script>
+</body>
+</html>
