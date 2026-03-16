@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bestiário e Catálogo — A Queda de Valyria</title>
+  <meta name="description" content="Bestiário e catálogo de criaturas, venenos, doenças e lendas da época da Queda de Valyria." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --gold:#c9a84c;--gold-lt:#ead8a7;--gold-dk:#876a2a;--bg:#070707;--panel:rgba(10,7,5,.88);
+      --panel2:rgba(16,12,9,.82);--text:#d9c9ac;--text-lt:#f4ebda;--muted:#bfa36f;--border:rgba(201,168,76,.22);
+      --red:#b45149;--green:#74a974;--blue:#7ea2d1;--purple:#9b7fd1;--orange:#bf7a39;
+    }
+    body{font-family:"EB Garamond",serif;background:radial-gradient(circle at 50% 120%,rgba(110,20,20,.16),transparent 30%),#070707;color:var(--text);min-height:100vh;overflow-x:hidden}
+    #embers{position:fixed;inset:0;pointer-events:none;z-index:0}
+    nav{position:sticky;top:0;z-index:50;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 1.4rem;background:linear-gradient(to bottom,rgba(8,6,5,.97),rgba(8,6,5,.86));border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+    .nav-link,.nav-logo,.eyebrow,.small-label,.btn,.chip,.tab-btn,.metric-label{font-family:"Cinzel",serif;text-transform:uppercase}
+    .nav-link,.nav-logo{text-decoration:none;letter-spacing:.16em;color:var(--gold-lt)} .nav-link{font-size:.62rem} .nav-logo{font-size:.82rem} .nav-link:hover{color:#fff}
+    .hero{position:relative;z-index:1;padding:5rem 1.5rem 2.2rem;text-align:center}
+    .eyebrow{font-size:.62rem;letter-spacing:.34em;color:var(--gold);margin-bottom:1rem}
+    .hero h1{font-family:"Cinzel Decorative",serif;font-size:clamp(2.2rem,5vw,4.1rem);line-height:1.04;color:#fff;text-shadow:0 0 70px rgba(201,168,76,.26)}
+    .hero h1 span{display:block;background:linear-gradient(135deg,var(--gold-lt),var(--gold),#a27b20);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .divider{width:210px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:1.45rem auto}
+    .hero p{max-width:1020px;margin:0 auto;font-size:1.07rem;line-height:1.88;color:var(--text-lt)}
+    .page{position:relative;z-index:1;max-width:1600px;margin:0 auto;padding:0 1.5rem 4rem}
+    .layout{display:grid;grid-template-columns:360px 1fr;gap:1.2rem;align-items:start} @media(max-width:1180px){.layout{grid-template-columns:1fr}}
+    .panel,.card{position:relative;border:1px solid var(--border);background:var(--panel);border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.32)}
+    .panel::before,.card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(to right,var(--gold),transparent)}
+    .panel{padding:1.2rem;position:sticky;top:84px} @media(max-width:1180px){.panel{position:relative;top:auto}}
+    .card{padding:1.2rem}
+    .panel-title,.card-title,.drawer-title{font-family:"Cinzel Decorative",serif;color:var(--gold-lt);line-height:1.1}
+    .panel-title{font-size:1.22rem;margin-bottom:1rem} .card-title{font-size:1.36rem}
+    .control{margin-bottom:1rem} .small-label{display:block;font-size:.56rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.42rem}
+    input,select{width:100%;background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.18);color:var(--text-lt);padding:.84rem .9rem;border-radius:12px;font-family:"EB Garamond",serif;font-size:1rem;outline:none;transition:.2s}
+    input:focus,select:focus{border-color:rgba(201,168,76,.48);background:rgba(201,168,76,.08)}
+    .btn{width:100%;padding:.96rem 1rem;border-radius:12px;border:1px solid var(--border);background:rgba(201,168,76,.05);color:var(--gold);font-size:.6rem;letter-spacing:.22em;cursor:pointer;transition:.2s}
+    .btn:hover{background:rgba(201,168,76,.12);transform:translateY(-1px)} .btn.primary{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:#090704;border-color:transparent;font-weight:700}
+    .chips{display:flex;flex-wrap:wrap;gap:.5rem} .chip{display:inline-flex;align-items:center;padding:.38rem .62rem;border-radius:999px;border:1px solid rgba(201,168,76,.2);background:rgba(201,168,76,.06);font-size:.5rem;letter-spacing:.16em;color:#ecd9af}
+    .chip.red{border-color:rgba(180,81,73,.35);background:rgba(180,81,73,.08);color:#efb3ac} .chip.green{border-color:rgba(116,169,116,.32);background:rgba(116,169,116,.08);color:#c7e8c7}
+    .chip.blue{border-color:rgba(126,162,209,.32);background:rgba(126,162,209,.08);color:#cbdcf2} .chip.purple{border-color:rgba(155,127,209,.34);background:rgba(155,127,209,.09);color:#decffc} .chip.orange{border-color:rgba(191,122,57,.34);background:rgba(191,122,57,.09);color:#f5d0a6}
+    .top-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem} @media(max-width:1040px){.top-grid{grid-template-columns:1fr}}
+    .headline{font-family:"Cinzel Decorative",serif;font-size:clamp(1.9rem,4vw,2.9rem);color:#fff1cb;line-height:1.05}
+    .subheadline{font-size:1rem;line-height:1.72;color:var(--text);font-style:italic;margin-top:.55rem}
+    .box,.metric,.legend-card{padding:1rem;border:1px solid rgba(201,168,76,.12);border-radius:16px;background:var(--panel2)}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem} @media(max-width:1040px){.metrics{grid-template-columns:1fr 1fr}} @media(max-width:640px){.metrics{grid-template-columns:1fr}}
+    .metric-label{font-size:.54rem;letter-spacing:.18em;color:var(--muted);margin-bottom:.3rem} .metric-value{font-family:"Cinzel Decorative",serif;font-size:1.7rem;color:var(--gold-lt)} .metric small{display:block;color:#cbb58d;line-height:1.42;margin-top:.24rem}
+    .tabs{display:flex;gap:.65rem;flex-wrap:wrap;margin:1rem 0} .tab-btn{padding:.72rem .9rem;border-radius:12px;border:1px solid rgba(201,168,76,.15);background:rgba(201,168,76,.04);color:var(--gold-lt);font-size:.58rem;letter-spacing:.18em;cursor:pointer;transition:.2s}
+    .tab-btn.active,.tab-btn:hover{background:linear-gradient(135deg,rgba(234,216,167,.12),rgba(201,168,76,.14));border-color:rgba(201,168,76,.35);color:#fff}
+    .section-head{margin-bottom:.9rem} .section-head p{margin-top:.5rem;line-height:1.72;color:var(--text)}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem} @media(max-width:1200px){.cards{grid-template-columns:repeat(2,1fr)}} @media(max-width:760px){.cards{grid-template-columns:1fr}}
+    .entry-card{position:relative;padding:1rem;border-radius:18px;border:1px solid rgba(201,168,76,.12);background:linear-gradient(180deg,rgba(201,168,76,.05),rgba(255,255,255,.01));cursor:pointer;transition:.22s;min-height:245px}
+    .entry-card:hover{transform:translateY(-3px);border-color:rgba(201,168,76,.3);box-shadow:0 18px 40px rgba(0,0,0,.22)}
+    .entry-title{font-family:"Cinzel Decorative",serif;font-size:1.16rem;color:#fff0ca;line-height:1.14;margin:.3rem 0 .45rem} .entry-summary{font-size:1rem;line-height:1.62;color:var(--text)}
+    .entry-meta{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.55rem}
+    .entry-foot{display:grid;grid-template-columns:repeat(2,1fr);gap:.45rem;margin-top:.85rem} .meta-box{padding:.55rem .65rem;border:1px solid rgba(201,168,76,.08);border-radius:12px;background:rgba(255,255,255,.02)} .meta-box strong{display:block;color:#f4e7c6;font-size:.95rem} .meta-box span{color:#c7b08a;font-size:.92rem}
+    .legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem} @media(max-width:920px){.legend-grid{grid-template-columns:1fr}}
+    .legend-card h3{font-family:"Cinzel Decorative",serif;color:var(--gold-lt);font-size:1.04rem;margin-bottom:.65rem} .legend-card p,.legend-card li{line-height:1.68;color:var(--text);font-size:1rem} .legend-card ul{padding-left:1.1rem;display:grid;gap:.25rem}
+    .empty{padding:1.2rem;border:1px dashed rgba(201,168,76,.22);border-radius:18px;color:#dbc8a5;line-height:1.7;background:rgba(201,168,76,.03)}
+    .drawer{position:fixed;top:0;right:-700px;width:min(700px,100vw);height:100vh;background:linear-gradient(180deg,rgba(10,7,5,.98),rgba(14,10,8,.98));border-left:1px solid var(--border);z-index:80;transition:right .28s ease;box-shadow:-24px 0 80px rgba(0,0,0,.45);display:flex;flex-direction:column}
+    .drawer.open{right:0} .drawer-head{padding:1.1rem 1.2rem;border-bottom:1px solid rgba(201,168,76,.12);display:flex;align-items:center;justify-content:space-between;gap:1rem} .drawer-title{font-size:1.34rem} .drawer-body{padding:1.2rem;overflow:auto;display:grid;gap:1rem}
+    .close-btn{background:none;border:1px solid rgba(201,168,76,.2);color:var(--gold-lt);border-radius:10px;padding:.55rem .8rem;cursor:pointer} .close-btn:hover{background:rgba(201,168,76,.08)}
+    .drawer-section{padding:1rem;border:1px solid rgba(201,168,76,.12);border-radius:16px;background:rgba(201,168,76,.03)} .drawer-section h4{font-family:"Cinzel Decorative",serif;color:var(--gold-lt);font-size:1.02rem;margin-bottom:.55rem} .drawer-section p{line-height:1.72;color:var(--text-lt)}
+    .drawer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem} @media(max-width:640px){.drawer-grid{grid-template-columns:1fr}}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:70;opacity:0;pointer-events:none;transition:.25s} .overlay.open{opacity:1;pointer-events:auto}
+    footer{margin-top:1rem;padding:1rem 1.2rem;border:1px solid rgba(201,168,76,.12);border-radius:18px;background:rgba(201,168,76,.03);line-height:1.7;color:#d8c7a7}
+  </style>
+</head>
+<body>
+<canvas id="embers"></canvas>
+<nav>
+  <a href="index.html" class="nav-link">← Início</a>
+  <a href="#top" class="nav-logo">Bestiário e Catálogo</a>
+  <a href="#catalogo" class="nav-link">Entradas</a>
+</nav>
+
+<section class="hero" id="top">
+  <div class="eyebrow">Arquivo de mesa para a campanha</div>
+  <h1>Bestiário e Catálogo <span>da Queda de Valyria</span></h1>
+  <div class="divider"></div>
+  <p>Um códice em HTML5 com 64 entradas organizadas entre criaturas, venenos, doenças e lendas. A página permite filtrar por categoria, região, raridade, ameaça, grau de verdade e palavras-chave, abrindo cada item em um dossiê detalhado para uso imediato em sessão.</p>
+</section>
+
+<main class="page" id="catalogo">
+  <div class="layout">
+    <aside class="panel">
+      <h2 class="panel-title">Filtros do códice</h2>
+      <div class="control"><label class="small-label">Buscar por nome ou tag</label><input id="searchInput" type="text" placeholder="Ex: dragão, greyscale, porto, veneno..." /></div>
+      <div class="control"><label class="small-label">Categoria</label>
+        <select id="categoryFilter">
+          <option value="Todas">Todas</option>
+          <option value="Criatura">Criaturas</option>
+          <option value="Veneno">Venenos</option>
+          <option value="Doença">Doenças</option>
+          <option value="Lenda">Lendas</option>
+        </select>
+      </div>
+      <div class="control"><label class="small-label">Região</label><select id="regionFilter"><option value="Todas">Todas</option></select></div>
+      <div class="control"><label class="small-label">Raridade</label><select id="rarityFilter"><option value="Todas">Todas</option></select></div>
+      <div class="control"><label class="small-label">Ameaça</label><select id="threatFilter"><option value="Todas">Todas</option></select></div>
+      <div class="control"><label class="small-label">Grau de verdade</label><select id="truthFilter"><option value="Todas">Todas</option></select></div>
+      <button class="btn primary" id="resetBtn">Limpar filtros</button>
+      <div class="chips" style="margin-top:1rem">
+        <span class="chip">64 entradas</span>
+        <span class="chip blue">Criaturas</span>
+        <span class="chip green">Venenos</span>
+        <span class="chip red">Doenças</span>
+        <span class="chip purple">Lendas</span>
+      </div>
+    </aside>
+
+    <section style="display:grid;gap:1rem">
+      <section class="card">
+        <div class="top-grid">
+          <div class="box">
+            <div class="headline">Códice para narrador e jogador</div>
+            <div class="subheadline">Cada entrada traz resumo, sinais de presença, detalhe de mundo e uso direto em campanha. O foco desta versão é a época da Ruína e dos anos turbulentos seguintes.</div>
+            <div class="tabs" id="tabs">
+              <button class="tab-btn active" data-tab="Todas">Tudo</button>
+              <button class="tab-btn" data-tab="Criatura">Criaturas</button>
+              <button class="tab-btn" data-tab="Veneno">Venenos</button>
+              <button class="tab-btn" data-tab="Doença">Doenças</button>
+              <button class="tab-btn" data-tab="Lenda">Lendas</button>
+            </div>
+          </div>
+          <div class="box">
+            <h3 style="font-family:'Cinzel Decorative',serif;color:var(--gold-lt);font-size:1.08rem;margin-bottom:.7rem">Leitura rápida</h3>
+            <p style="line-height:1.72;color:var(--text)">Use busca livre para encontrar temas como fogo, porto, linhagem, ruína, mar, culto ou herança. Clique em qualquer carta para abrir o dossiê completo com detalhe, sinais e gancho de sessão.</p>
+          </div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="metric-label">Entradas visíveis</div><div class="metric-value" id="visibleCount">64</div><small>Resultado atual após filtros.</small></div>
+          <div class="metric"><div class="metric-label">Criaturas</div><div class="metric-value" id="creatureCount">16</div><small>Fauna, monstros e predadores.</small></div>
+          <div class="metric"><div class="metric-label">Venenos</div><div class="metric-value" id="poisonCount">16</div><small>Botânicos, animais e alquímicos.</small></div>
+          <div class="metric"><div class="metric-label">Doenças e lendas</div><div class="metric-value" id="otherCount">32</div><small>Pragas, agouros e crônicas do período.</small></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div class="small-label">Entradas do catálogo</div>
+          <h2 class="card-title">Arquivo pesquisável</h2>
+          <p>Os cartões abaixo reagem aos filtros laterais e às abas superiores. O painel detalhado abre sem sair da página.</p>
+        </div>
+        <div class="cards" id="cards"></div>
+        <div class="empty" id="emptyState" style="display:none">Nenhuma entrada corresponde a esta combinação de filtros. Tente remover um critério, trocar a categoria ou buscar por uma tag mais ampla.</div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div class="small-label">Como usar</div>
+          <h2 class="card-title">Leituras de mesa</h2>
+        </div>
+        <div class="legend-grid">
+          <div class="legend-card">
+            <h3>Estrutura de cada ficha</h3>
+            <ul>
+              <li>Resumo curto para leitura rápida em sessão.</li>
+              <li>Detalhe de mundo para ambientação, tom e coerência histórica.</li>
+              <li>Sinais de presença para investigação, exploração e suspense.</li>
+              <li>Uso em campanha para transformar lore em cena prática.</li>
+            </ul>
+          </div>
+          <div class="legend-card">
+            <h3>Aplicações imediatas</h3>
+            <ul>
+              <li>Montar rumores, encontros, sintomas, pistas e relíquias.</li>
+              <li>Dar textura a portos, ruínas, campos de guerra e casas nobres.</li>
+              <li>Criar medo social com epidemias, pureza de sangue e lendas antigas.</li>
+              <li>Ligar viagens, intriga, exploração e magia perdida num mesmo arquivo.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Este códice foi pensado como uma biblioteca viva do cenário. Ele combina material de inspiração canônica com expansão original coerente com a Queda de Valyria, o mar estreito, as rotas de Essos e a atmosfera do início do Century of Blood.
+      </footer>
+    </section>
+  </div>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div>
+      <div class="small-label">Dossiê</div>
+      <div class="drawer-title" id="drawerTitle">Entrada</div>
+    </div>
+    <button class="close-btn" id="closeDrawer">Fechar</button>
+  </div>
+  <div class="drawer-body">
+    <div class="chips" id="drawerChips"></div>
+    <div class="drawer-grid">
+      <div class="drawer-section"><h4>Resumo</h4><p id="drawerSummary"></p></div>
+      <div class="drawer-section"><h4>Sinais de presença</h4><p id="drawerSigns"></p></div>
+    </div>
+    <div class="drawer-section"><h4>Detalhe</h4><p id="drawerDetail"></p></div>
+    <div class="drawer-section"><h4>Uso em campanha</h4><p id="drawerUsage"></p></div>
+    <div class="drawer-section"><h4>Etiquetas</h4><div class="chips" id="drawerTags"></div></div>
+  </div>
+</aside>
+
+<script>
+const ENTRIES = [{"category": "Criatura", "name": "Dragão Jovem", "region": "Dragonstone / Mar Estreito", "rarity": "Rara", "threat": "Extrema", "truth": "Confirmado", "summary": "Predador alado de sangue valiriano, menor que os grandes monstros de guerra, mas já capaz de reduzir torres leves, navios pequenos e formações de infantaria ao caos.", "detail": "Escamas duras, inteligência territorial e resposta agressiva a cheiro de fogo, sangue e metais brilhantes; costuma vincular-se a ninhos quentes, cavernas minerais e encostas vulcânicas.", "usage": "Encontro épico, disputa de linhagem, guarda de ruína, ovo desaparecido ou ameaça aérea sobre porto estratégico.", "signs": "Cinzas quentes, ossos carbonizados, garras em rocha negra, rebanhos sumidos.", "tags": ["fogo", "valiriano", "céu", "linhagem"]}, {"category": "Criatura", "name": "Dragão de Guerra Maduro", "region": "Valyria oriental e lendas do estreito", "rarity": "Muito rara", "threat": "Extrema", "truth": "Confirmado", "summary": "Monstro veterano de guerra, marcado por cicatrizes antigas e comportamento calculado diante de fortalezas, trombetas e cavalaria.", "detail": "Reconhece padrões de batalha, rotas de fuga e concentração de tropas; um exemplar desses muda equilíbrio político por si só.", "usage": "Campanha de alto nível, cerco, terror dinástico e corrida por armas ou montarias capazes de enfrentá-lo.", "signs": "Sombras largas ao entardecer, rebanhos queimados por completo, marcas de impacto em muralhas.", "tags": ["guerra", "fogo", "céu", "terror"]}, {"category": "Criatura", "name": "Basilisco das Ilhas", "region": "Basilisk Isles e portos de Essos", "rarity": "Rara", "threat": "Alta", "truth": "Confirmado", "summary": "Réptil brutal e pesado, vendido vivo em mercados cruéis e arenas clandestinas como espetáculo de sangue.", "detail": "Mandíbulas largas, agressividade constante e musculatura compacta fazem da criatura uma arma viva; sua carne é evitada e seu sangue pode ser aproveitado por envenenadores.", "usage": "Arena proibida, contrabando exótico, nobre decadente com coleção privada ou caça em ilhas tropicais.", "signs": "Ovos grossos, carcaças rasgadas, caixas reforçadas, cheiro acre e pegadas de barriga baixa.", "tags": ["réptil", "veneno", "essos", "contrabando"]}, {"category": "Criatura", "name": "Basilisco de Pântano Negro", "region": "Sothoryos e charcos quentes", "rarity": "Incomum", "threat": "Média", "truth": "Crônica plausível", "summary": "Variante menor e furtiva, mais próxima de um caçador de emboscada do que de uma fera de arena.", "detail": "Prefere água escura, troncos ocos e calor abafado; sua mordida raramente mata no ato, mas infecciona e aterroriza.", "usage": "Viagem de rio, ruína inundada, coleta de veneno e sobrevivência em terreno hostil.", "signs": "Réguas roídas em embarcações, rãs partidas, silêncio abrupto de aves de brejo.", "tags": ["pântano", "réptil", "emboscada", "veneno"]}, {"category": "Criatura", "name": "Serpente de Cinza", "region": "Ruínas vulcânicas e encostas quentes", "rarity": "Incomum", "threat": "Alta", "truth": "Boato de porto", "summary": "Ofídio escuro quase vítreo, capaz de permanecer imóvel entre fendas de cinza e pedra rachada.", "detail": "Seu corpo absorve calor com rapidez incomum; algumas versões falam de saliva irritante e olhos opacos como vidro queimado.", "usage": "Exploração de ruína, coleta alquímica, ameaça discreta em túneis e passagens antigas.", "signs": "Trilhas finas sobre pó cinza, muda de pele brilhante, ratos mortos perto de fumaça morna.", "tags": ["ruína", "vulcão", "ofídio", "calor"]}, {"category": "Criatura", "name": "Lagarto Vítreo de Valyria", "region": "Ruínas fumegantes do leste", "rarity": "Incomum", "threat": "Baixa", "truth": "Boato de erudito", "summary": "Pequeno réptil de couro brilhante e ossos frágeis, tratado por alguns como resto deformado de fauna exposta ao fogo profundo.", "detail": "Corre por placas quentes de pedra como se não sentisse dor; alquimistas o procuram por glândulas e pele translúcida.", "usage": "Caça de ingrediente, mercado de curiosidades, mascote exótico ou pista para laboratórios escondidos.", "signs": "Ovos translúcidos, riscos finos em rocha, brilho úmido em corredores sem sol.", "tags": ["alquimia", "ruína", "réptil", "mercado"]}, {"category": "Criatura", "name": "Morcego de Fenda Escarlate", "region": "Cavernas, minas e torres ocas", "rarity": "Comum", "threat": "Média", "truth": "Crônica plausível", "summary": "Morcego de colônia agressiva que se orienta por calor e movimento mais do que por luz.", "detail": "Isolado é frágil; em enxame, enlouquece montarias, cega arqueiros e espalha pânico em passagens estreitas.", "usage": "Emboscada em ruína, defesa natural de caverna, ingrediente de unguento ou presságio em minas.", "signs": "Guano ácido, guinchos curtos, poeira viva saindo de fendas e teto vibrando.", "tags": ["caverna", "enxame", "noite", "mina"]}, {"category": "Criatura", "name": "Enguia Vermelha do Estreito", "region": "Portos fundos e baías frias", "rarity": "Incomum", "threat": "Média", "truth": "Boato de marinheiro", "summary": "Predadora longa e avermelhada, ligada a docas onde cargas e corpos desaparecem sem testemunhas.", "detail": "Não ataca navios grandes diretamente, mas segue sangue, descarte de peixe e correntes de cadáveres; pescadores juram que aprende rotas de barcos.", "usage": "Mistério de porto, prova submersa, acidente encoberto e superstição marítima.", "signs": "Redes cortadas, mordidas em peixes grandes, água avermelhada em correntes estreitas.", "tags": ["mar", "porto", "predador", "mistério"]}, {"category": "Criatura", "name": "Cão de Escória", "region": "Portos degradados de Westeros e Essos", "rarity": "Comum", "threat": "Média", "truth": "Confirmado no tom", "summary": "Linhagem brutal de cães criados entre necrofagia, lixo e guarda de cais clandestinos.", "detail": "Magros, resistentes e pouco sensíveis a dor, servem bem a contrabandistas, cobradores e capangas de armazém.", "usage": "Guarda de covil, perseguição urbana, cão farejador de cadáver ou ameaça de beco.", "signs": "Latido rouco em matilhas, marcas de corrente pesada, ossos limpos perto de muros salgados.", "tags": ["porto", "guarda", "matilha", "submundo"]}, {"category": "Criatura", "name": "Rato de Brasido", "region": "Ruínas quentes e cozinhas abandonadas", "rarity": "Comum", "threat": "Baixa", "truth": "Crônica plausível", "summary": "Roedor de pelagem rala e focinho queimado, adaptado a calor constante e poeira vulcânica.", "detail": "Infesta armazéns, rói pergaminhos e denuncia presença humana antes de guardas ou sentinelas perceberem.", "usage": "Sinal ambiental, vetor de doença, obstáculo de exploração e incômodo persistente.", "signs": "Papel mastigado, fezes secas perto de brasas, ruído de unha sobre azulejo quente.", "tags": ["roedor", "ruína", "doença", "sinal"]}, {"category": "Criatura", "name": "Corvo de Cinza", "region": "Campos queimados e fortalezas vazias", "rarity": "Comum", "threat": "Baixa", "truth": "Crônica plausível", "summary": "Ave necrófaga associada a abandono, migração e carnificina recente.", "detail": "Bandos grandes cercam valas, execuções e vilas desertas; camponeses o tratam como mensageiro de desgraça.", "usage": "Agouro visual, guia de campo de batalha, marcador de cadáver ou prenúncio de peste.", "signs": "Bandos silenciosos, penas acinzentadas, olhos atentos em postes queimados.", "tags": ["ave", "agouro", "campo", "cadáver"]}, {"category": "Criatura", "name": "Aranha de Obsidiana", "region": "Frestas de vidro vulcânico", "rarity": "Incomum", "threat": "Média", "truth": "Boato de ruína", "summary": "Aracnídeo negro e brilhante, pequeno, mas valorizado por assassinos de dedo firme.", "detail": "Sua picada não costuma matar de imediato; ela endurece articulações e faz mãos tremerem, arruinando arqueiros, escribas e tocadores de alaúde.", "usage": "Coleta de veneno, sabotagem de duelo e encontro em salas de tesouro antigas.", "signs": "Teias baixas, cascas negras leves, pequenos insetos presos perto de rocha escura.", "tags": ["aranha", "veneno", "obsidiana", "sabotagem"]}, {"category": "Criatura", "name": "Lobo Salgado", "region": "Costas frias e ilhas rochosas", "rarity": "Incomum", "threat": "Alta", "truth": "Crônica plausível", "summary": "Canídeo costeiro, magro e resistente, que caça em pares ou pequenos bandos em praias de naufrágio.", "detail": "Aprendeu a seguir cheiro de peixe, cadáver e couro molhado; evita fogo aberto, mas não teme homens feridos.", "usage": "Sobrevivência costeira, perseguição noturna, proteção de cadáver ou complicação após naufrágio.", "signs": "Pegadas longas na maré baixa, restos de focas, uivos curtos batendo na falésia.", "tags": ["costa", "matilha", "sobrevivência", "ilha"]}, {"category": "Criatura", "name": "Cabra de Rocha Fumegante", "region": "Encostas vulcânicas e ilhas quentes", "rarity": "Comum", "threat": "Baixa", "truth": "Crônica plausível", "summary": "Animal de montanha adaptado a solo mineral quente e caminhos estreitos.", "detail": "Criadores a valorizam por leite forte, couro resistente e incrível sensibilidade a tremores, gases e fissuras.", "usage": "Indicador natural de perigo, recurso de viagem e economia local de ruína.", "signs": "Rebanho inquieto, mugido seco antes de tremores, cheiro forte de lã em pedra morna.", "tags": ["montanha", "rebanho", "sinal", "vulcão"]}, {"category": "Criatura", "name": "Verme de Fornalha", "region": "Túneis termais e passagens instáveis", "rarity": "Rara", "threat": "Média", "truth": "Lenda técnica", "summary": "Criatura pálida e longa, quase cega, encontrada em solo quente e macio demais para minas seguras.", "detail": "Não caça gente ativamente, mas seu movimento precede desabamentos, bolsas de gás e colapsos de chão.", "usage": "Exploração de ruína, tensão subterrânea e corrida para escapar de galeria condenada.", "signs": "Terra vibrando, lama morna, túneis ocos e silêncio de insetos comuns.", "tags": ["subsolo", "tremor", "calor", "mina"]}, {"category": "Criatura", "name": "Manticora Enjaulada", "region": "Mercados negros de Essos", "rarity": "Muito rara", "threat": "Alta", "truth": "Confirmado no cânone ampliado", "summary": "Fera exótica conhecida mais por tráfico, ostentação cruel e extração de veneno do que por presença natural em Westeros.", "detail": "Sua simples posse denuncia riqueza, depravação ou ligação com comerciantes do leste; mantê-la viva é caro e perigoso.", "usage": "Colecionador decadente, leilão oculto, fuga de jaula e tentativa de extrair veneno raro.", "signs": "Jaulas duplas, tratadores mutilados, correntes grossas e seda cara cobrindo gaiolas.", "tags": ["manticora", "mercado negro", "veneno", "luxo"]}, {"category": "Veneno", "name": "Nightshade", "region": "Westeros e Essos", "rarity": "Comum", "threat": "Alta", "truth": "Confirmado", "summary": "Planta venenosa usada em dose baixa como sedativo e em dose errada como sentença silenciosa.", "detail": "Misturada a vinho, leite ou infusão, pode produzir sonolência profunda, confusão e parada respiratória.", "usage": "Coleta botânica, boticário suspeito, homicídio doméstico e remédio perigoso.", "signs": "Lábios arroxeados, hálito doce, dedos frios, sono pesado.", "tags": ["planta", "sedativo", "assassinato", "botica"]}, {"category": "Veneno", "name": "Greycap em Pó", "region": "Bosques úmidos e cozinhas compradas", "rarity": "Comum", "threat": "Média", "truth": "Confirmado", "summary": "Cogumelo seco e moído, barato, fácil de esconder e preferido em envenenamentos de pouca sofisticação.", "detail": "Causa dor de ventre, suor frio e fraqueza gradual; mata menos por glória do que por oportunidade.", "usage": "Crime de estalagem, sabotagem de cozinha, suspeita de criada ou chantagem de taverna.", "signs": "Cheiro de terra no prato, vômito escuro, diarreia e palidez súbita.", "tags": ["fungo", "cozinha", "barato", "discreto"]}, {"category": "Veneno", "name": "Veneno de Basilisco", "region": "Basilisk Isles e coleções raras", "rarity": "Rara", "threat": "Alta", "truth": "Confirmado", "summary": "Substância extraída com extremo risco de glândulas ou sangue de basilisco.", "detail": "Pode agir por ingestão, ferida ou mistura alquímica; alguns lotes enlouquecem antes de matar.", "usage": "Mercado negro, caçador exótico, guilda de assassinos e arena clandestina.", "signs": "Queima local, pupilas agitadas, agitação violenta, febre breve.", "tags": ["animal", "exótico", "assassino", "mercado"]}, {"category": "Veneno", "name": "Sangue de Basilisco Temperado", "region": "Essos tropical", "rarity": "Rara", "threat": "Alta", "truth": "Confirmado em tradição", "summary": "Preparação espessa usada para transformar agressividade em fúria quase cega.", "detail": "Conhecido por fazer animais atacarem compulsivamente e homens perderem freio, discernimento e medo.", "usage": "Sabotagem de montaria, desordem em banquete e assassinato por fera.", "signs": "Espuma fina na boca, suor excessivo, olhos arregalados e violência sem cálculo.", "tags": ["basilisco", "fúria", "animal", "sabotagem"]}, {"category": "Veneno", "name": "Veneno de Manticora", "region": "Mercados de Essos", "rarity": "Muito rara", "threat": "Extrema", "truth": "Confirmado", "summary": "Toxina famosa por valor alto, obtenção cruel e morte lenta o bastante para ser memorável.", "detail": "É símbolo de luxo homicida; quem o compra quer não apenas matar, mas provar alcance e riqueza.", "usage": "Assassino nobre, cofre de venenos, chantagem de comerciante e morte exemplar.", "signs": "Dor crescente, colapso progressivo, dedos rígidos, terror consciente.", "tags": ["manticora", "luxo", "morte lenta", "nobre"]}, {"category": "Veneno", "name": "The Strangler", "region": "Círculos de elite", "rarity": "Muito rara", "threat": "Extrema", "truth": "Confirmado", "summary": "Veneno cristalino associado a taças, festas e assassinatos tão públicos quanto elegantes.", "detail": "Fecha a garganta em espasmos violentos e deixa a vítima lutando pelo ar diante de todos.", "usage": "Casamento arruinado, banquete fatal, prova de copeiro e disputa de herança.", "signs": "Engasgo súbito, face escurecendo, incapacidade de falar, olhos saltados.", "tags": ["taça", "corte", "banquete", "sufocação"]}, {"category": "Veneno", "name": "Tears of Lys", "region": "Lys e redes de veneno refinado", "rarity": "Rara", "threat": "Alta", "truth": "Confirmado", "summary": "Veneno fino e quase invisível, excelente para matar sem alterar cor, cheiro ou gosto com facilidade perceptível.", "detail": "Ataca entranhas e produz morte que pode parecer doença severa, sobretudo em ambientes onde poucos suspeitam de refinamento lyseno.", "usage": "Conspiração nobre, assassinato por mesa, prova médica e comércio secreto com Lys.", "signs": "Dor abdominal, suor frio, piora progressiva após refeição ou vinho.", "tags": ["lys", "elegante", "discreto", "nobre"]}, {"category": "Veneno", "name": "Sweetsleep", "region": "Boticas e meistrarias", "rarity": "Incomum", "threat": "Média", "truth": "Confirmado", "summary": "Preparação sedativa que em mãos responsáveis acalma dor e em mãos gananciosas encurta vidas discretamente.", "detail": "Perigosa em crianças, idosos e doentes, permite fronteira incômoda entre cuidado, comodidade e homicídio.", "usage": "Tutor cruel, herdeiro inconveniente, hospitalidade suspeita e silêncio comprado.", "signs": "Respiração rasa, pupilas lentas, dificuldade de acordar, confusão ao despertar.", "tags": ["sedativo", "meistre", "ambíguo", "cuidado"]}, {"category": "Veneno", "name": "Widow’s Blood", "region": "Círculos de assassínio refinado", "rarity": "Rara", "threat": "Alta", "truth": "Confirmado", "summary": "Tóxico usado para matar por dentro, com efeito menos teatral e mais calculado.", "detail": "Faz o corpo falhar lentamente, o que favorece mortes interpretadas como decadência natural ou crise de idade.", "usage": "Herança, casamento político, tutor incômodo e suspeita sem prova clara.", "signs": "Constipação grave, inchaço, rosto acinzentado, declínio vagaroso.", "tags": ["herança", "discreto", "nobre", "lento"]}, {"category": "Veneno", "name": "Wolfsbane", "region": "Bosques e hortas ocultas", "rarity": "Incomum", "threat": "Alta", "truth": "Confirmado", "summary": "Planta venenosa de reputação antiga, útil em infusão, pasta ou pó.", "detail": "Parteiras, curandeiras e caçadores a conhecem melhor do que admitem; o erro entre remédio e morte é estreito.", "usage": "Vingança rural, crime doméstico, botânica proibida e poção mal dosada.", "signs": "Dormência, náusea, suor gelado, marcha instável.", "tags": ["planta", "bosque", "parteira", "vingança"]}, {"category": "Veneno", "name": "Hemlock Real", "region": "Campos e boticas sérias", "rarity": "Incomum", "threat": "Alta", "truth": "Confirmado no tom", "summary": "Versão concentrada da cicuta conhecida, menos glamourosa que os venenos orientais, mas igualmente eficiente.", "detail": "Age bem em caldos e infusões; é o tipo de substância que parece simples demais até já ser tarde.", "usage": "Justiça privada, suicídio nobre, filosofia sombria e execução disfarçada.", "signs": "Fraqueza muscular, dificuldade para firmar pernas, fala pesada, colapso gradual.", "tags": ["cicuta", "simples", "execução", "caldo"]}, {"category": "Veneno", "name": "Blindeye", "region": "Mercados de espionagem", "rarity": "Rara", "threat": "Média", "truth": "Crônica plausível", "summary": "Mistura que não visa matar rápido, mas roubar visão, foco e firmeza manual por horas ou dias.", "detail": "Ideal para neutralizar escribas, arqueiros, navegadores e duelistas sem criar cadáver imediato.", "usage": "Sabotagem de torneio, roubo de mapa, fuga marítima e golpe político indireto.", "signs": "Olhos lacrimejando, visão turva, dor na testa, erro motor fino.", "tags": ["sabotagem", "visão", "espião", "duelo"]}, {"category": "Veneno", "name": "Demon’s Dance", "region": "Portos supersticiosos e templos obscuros", "rarity": "Rara", "threat": "Alta", "truth": "Confirmado como nome", "summary": "Toxina febril que faz o corpo parecer tomado por espasmos, suor e gestos de possessão.", "detail": "Excelente para pânico religioso e acusações de maldição, pois sua morte raramente parece limpa ou natural.", "usage": "Caça às bruxas, tumulto popular, execução conveniente e terror de culto.", "signs": "Febre alta, tremores violentos, olhos brilhantes, fala sem sentido.", "tags": ["febre", "possessão", "religião", "pânico"]}, {"category": "Veneno", "name": "Heart’s Bane", "region": "Cofres nobres e boticas fechadas", "rarity": "Rara", "threat": "Alta", "truth": "Confirmado como nome", "summary": "Veneno pensado para interromper vida com aparência de fraqueza interna inevitável.", "detail": "Tem reputação de “veneno digno”, preferido por conspiradores que querem luto rápido e investigação curta.", "usage": "Sucessão, morte de patriarca, golpe de salão e viúva paciente.", "signs": "Dor no peito, falta de ar, suor frio, queda sem ferida.", "tags": ["coração", "nobre", "sucessão", "discreto"]}, {"category": "Veneno", "name": "Cinza-Doce", "region": "Ruínas e laboratórios improvisados", "rarity": "Incomum", "threat": "Média", "truth": "Criação coerente", "summary": "Pó cinzento que se dissolve em bebida quente e produz febre, torpor e fala embaralhada.", "detail": "É popular entre falsos alquimistas que desejam vender a impressão de doença ou maldição em vez de assassinato direto.", "usage": "Impostor valiriano, golpe em hospedaria, falsa peste e interrogatório químico.", "signs": "Sabor levemente metálico, suor pegajoso, sonolência, calafrios.", "tags": ["pó", "falsa doença", "alquimia", "golpe"]}, {"category": "Veneno", "name": "Perfume de Mirra Rubra", "region": "Câmaras fechadas e alcovas", "rarity": "Rara", "threat": "Alta", "truth": "Criação coerente", "summary": "Toxina inalatória misturada a óleo perfumado, lenços, velas ou incenso.", "detail": "Age melhor em quarto fechado e contra alvos confiantes; combina luxo, intimidade e traição.", "usage": "Amante fatal, assassinato em cama, roubo sem luta e chantagem sensual.", "signs": "Cheiro adocicado persistente, tontura, fraqueza nos joelhos, tosse seca.", "tags": ["inalatório", "perfume", "alcova", "luxo"]}, {"category": "Doença", "name": "Greyscale Lenta", "region": "Rhoyne, Essos e margens malditas", "rarity": "Rara", "threat": "Extrema", "truth": "Confirmado", "summary": "Doença temida que endurece a pele, corrói a mente e empurra o doente rumo à condição monstruosa dos stone men.", "detail": "Começa com manchas ásperas e frias; com o tempo, espalha-se pelo corpo, rouba sensibilidade e humanidade.", "usage": "Horror médico, isolamento social, maldição de rio, cura impossível e tragédia de personagem.", "signs": "Pele cinza dura, dormência, fissuras, medo imediato de toque.", "tags": ["greyscale", "maldição", "contágio", "stone men"]}, {"category": "Doença", "name": "Greyscale Furiosa", "region": "Ruínas de contato recente", "rarity": "Muito rara", "threat": "Extrema", "truth": "Crônica plausível", "summary": "Forma agressiva e rápida da mesma doença, tratada por marinheiros como toque de lugar profano.", "detail": "Em vez de anos, o quadro avança em semanas ou dias, tornando o doente foco de pânico e abandono.", "usage": "Quarentena de navio, ruína proibida, surto em expedição e escolha moral impossível.", "signs": "Lesões aceleradas, febre, endurecimento veloz, delírio.", "tags": ["greyscale", "surto", "ruína", "quarentena"]}, {"category": "Doença", "name": "Fluxo Sangrento", "region": "Exércitos, cercos e campos quentes", "rarity": "Comum", "threat": "Alta", "truth": "Confirmado", "summary": "Enfermidade intestinal brutal, devastadora em acampamentos, fossas mal cuidadas e água ruim.", "detail": "Mata menos por mistério do que por sujeira, fome, calor e falta de disciplina sanitária.", "usage": "Cerco, marcha militar, colapso de vila e desespero de meistre.", "signs": "Diarreia com sangue, cólica, sede intensa, fraqueza extrema.", "tags": ["intestino", "cerco", "água", "exército"]}, {"category": "Doença", "name": "Febre do Remo", "region": "Navios superlotados", "rarity": "Incomum", "threat": "Alta", "truth": "Criação coerente", "summary": "Doença de tripulação espremida entre água ruim, sal, fezes, insolação e cansaço sem pausa.", "detail": "Seu avanço derruba remadores, marujos e guardas de bordo ao mesmo tempo, tornando qualquer travessia uma loteria cruel.", "usage": "Navio infectado, corrida contra porto, motim de doentes e quarentena.", "signs": "Suor excessivo, vômito, diarreia, olhos fundos, agressividade.", "tags": ["navio", "tripulação", "surto", "porto"]}, {"category": "Doença", "name": "Pulmão de Cinza", "region": "Minas, ruínas e túneis quentes", "rarity": "Incomum", "threat": "Alta", "truth": "Criação coerente", "summary": "Quadro respiratório ligado a poeira vulcânica, cinza fina e gases ruins presos em subterrâneos.", "detail": "Começa como tosse seca teimosa e evolui para sangue escuro, falta de ar e exaustão incapacitante.", "usage": "Ruína explorada demais, mina mal ventilada e disputa por local envenenado.", "signs": "Tosse persistente, catarro escuro, dor no peito, lábios secos.", "tags": ["pulmão", "cinza", "mina", "ruína"]}, {"category": "Doença", "name": "Mal da Névoa", "region": "Pântanos e rios velhos", "rarity": "Incomum", "threat": "Média", "truth": "Crônica plausível", "summary": "Febre de baixio e água parada, cercada por histórias de espíritos e vozes na bruma.", "detail": "Pode nascer de mosquitos, mofo, água ruim ou simples superstição amplificada pela paisagem.", "usage": "Travessia de pântano, aldeia isolada, confusão entre maldição e medicina.", "signs": "Vertigem, suor frio, desorientação, sonhos aquáticos.", "tags": ["pântano", "névoa", "delírio", "rio"]}, {"category": "Doença", "name": "Praga do Sal Negro", "region": "Cais podres e feridas marítimas", "rarity": "Incomum", "threat": "Alta", "truth": "Criação coerente", "summary": "Infecção agressiva de cortes expostos a corda, ferrugem, água suja e peixe podre.", "detail": "A carne escurece primeiro nas bordas, arde, cheira mal e pode exigir amputação rápida.", "usage": "Porto miserável, combate naval, castigo em mar aberto e cuidado cirúrgico urgente.", "signs": "Ferida negra, febre, odor pútrido, dor pulsante.", "tags": ["ferida", "mar", "infecção", "porto"]}, {"category": "Doença", "name": "Febre da Lâmina Suja", "region": "Campos de batalha", "rarity": "Comum", "threat": "Alta", "truth": "Crônica plausível", "summary": "Infecção pós-combate causada por metal sujo, pano ruim e fechamento apressado de feridas.", "detail": "Muitos homens sobrevivem à batalha apenas para morrer dias depois, delirando em leitos improvisados.", "usage": "Pós-batalha, escassez de meistre, cirurgia tensa e disputa por ervas.", "signs": "Pus, calor na ferida, febre, confusão e odor forte.", "tags": ["guerra", "ferida", "infecção", "meistre"]}, {"category": "Doença", "name": "Coceira do Mercado", "region": "Bairros densos e campos de refugiados", "rarity": "Comum", "threat": "Baixa", "truth": "Crônica plausível", "summary": "Sarna agressiva de vida apertada, roupa compartilhada e higiene ruim.", "detail": "Não derruba reinos sozinha, mas mina disciplina, moral e dignidade, sobretudo em tropas e deslocados.", "usage": "Campo de refugiados, vergonha social, curandeiro oportunista e motim por limpeza.", "signs": "Coceira intensa, pele vermelha, crostas, insônia.", "tags": ["pele", "mercado", "refugiados", "praga"]}, {"category": "Doença", "name": "Olho Branco de Poeira", "region": "Pedreiras, ruínas e estradas secas", "rarity": "Incomum", "threat": "Média", "truth": "Criação coerente", "summary": "Inflamação ocular causada por poeira fina, cal e vento carregado de cinza.", "detail": "Se espalha por mãos sujas e panos compartilhados, cegando temporária ou permanentemente.", "usage": "Pedreira, desabamento, guarda arqueiro inutilizado e crise de navegação.", "signs": "Olhos esbranquiçados, ardor, lágrimas, dor à luz.", "tags": ["olhos", "poeira", "cegueira", "estrada"]}, {"category": "Doença", "name": "Tremor de Mirra", "region": "Cidades ricas e alcovas decadentes", "rarity": "Rara", "threat": "Média", "truth": "Criação coerente", "summary": "Dano nervoso associado a abuso de sedativos, óleos aromáticos e compostos refinados.", "detail": "O doente mantém aparência social por algum tempo, mas perde firmeza, sono e confiança.", "usage": "Nobre decadente, vício secreto, chantagem de boticário e mascaramento de fraqueza.", "signs": "Mãos tremendo, fala irregular, sudorese leve, exaustão sem descanso.", "tags": ["vício", "nobre", "nervos", "sedativo"]}, {"category": "Doença", "name": "Febre das Lanternas", "region": "Cidades fechadas e hospedarias ruins", "rarity": "Incomum", "threat": "Média", "truth": "Criação coerente", "summary": "Surto urbano noturno que se espalha melhor em quartos sem ar, óleo ruim e calor preso.", "detail": "O nome vem das ruas cheias de luz quando os primeiros doentes começam a cair após o anoitecer.", "usage": "Quarteirão doente, investigação urbana e suspeita de maldição local.", "signs": "Febre à noite, tosse úmida, olhos fundos, suor em colchões.", "tags": ["cidade", "surto", "hospedaria", "noite"]}, {"category": "Doença", "name": "Mal do Poço Raso", "region": "Aldeias sitiadas ou pobres", "rarity": "Incomum", "threat": "Média", "truth": "Criação coerente", "summary": "Quadro de água contaminada que costuma ser confundido com castigo divino ou feitiço de rival.", "detail": "Afeta famílias inteiras de uma vez e pode esconder sabotagem deliberada em tempos de guerra.", "usage": "Aldeia sabotada, disputa de terras, poço envenenado e pânico religioso.", "signs": "Náusea, diarreia, febre baixa, todos adoecendo no mesmo dia.", "tags": ["água", "aldeia", "sabotagem", "poço"]}, {"category": "Doença", "name": "Sono Afogado", "region": "Pântanos, estuários e ruínas inundadas", "rarity": "Rara", "threat": "Alta", "truth": "Lenda médica", "summary": "Enfermidade rara em que o doente parece sempre lutar por ar, mesmo acordado.", "detail": "Alguns a ligam a fungos úmidos, outros a brumas antigas e águas velhas que carregam memória ruim.", "usage": "Ruína pantanosa, casa sobre estacas e cura x superstição.", "signs": "Respiração curta, desmaios, ronco úmido, sonhos de afogamento.", "tags": ["água", "sono", "pântano", "lenda"]}, {"category": "Doença", "name": "Carne de Pedra", "region": "Plebe e marinheiros", "rarity": "Rara", "threat": "Extrema", "truth": "Nome popular confirmado", "summary": "Nome vulgar dado aos estágios finais da greyscale quando o medo popular fala mais alto que o meistre.", "detail": "A expressão carrega horror social, pois transforma doença em sentença moral e visual.", "usage": "Pânico de porto, linchamento de suspeito e linguagem popular da peste.", "signs": "Membros duros, rachaduras na pele, rejeição imediata da comunidade.", "tags": ["greyscale", "nome popular", "pânico", "porto"]}, {"category": "Doença", "name": "Febre dos Refugiados", "region": "Rotas de fuga após guerras", "rarity": "Comum", "threat": "Média", "truth": "Crônica plausível", "summary": "Conjunto de fome, frio, sujeira e exaustão que derruba deslocados antes mesmo do aço alcançar seus corpos.", "detail": "É menos uma doença única do que a soma cruel de todas as condições que nascem quando um mundo desaba.", "usage": "Tragédia humana, estrada cheia, escolha moral e incapacidade de ajudar todos.", "signs": "Fraqueza geral, tosse, olhos vazios, desidratação e apatia.", "tags": ["fome", "migração", "guerra", "estrada"]}, {"category": "Lenda", "name": "A Ruína de Valyria", "region": "Valyria e mundo conhecido", "rarity": "Única", "threat": "Extrema", "truth": "Confirmado", "summary": "Cataclismo que destruiu o Freehold, apagou cidades, sangue, arquivos e grande parte da ordem política do leste.", "detail": "Toda lenda posterior bebe desse evento, seja para explicar monstros, metais, maldições ou ambição súbita de casas sobreviventes.", "usage": "Prólogo histórico, ruína central, trauma de época e justificativa para tesouros impossíveis.", "signs": "Cinza eterna em relatos, mar fervendo em memórias, casas antigas falando em perda irreparável.", "tags": ["doom", "valyria", "cataclismo", "história"]}, {"category": "Lenda", "name": "O Início do Century of Blood", "region": "Essos e mar estreito", "rarity": "Única", "threat": "Alta", "truth": "Confirmado", "summary": "Era de guerras, vácuo de poder e predadores políticos surgida após a queda do centro valiriano.", "detail": "Mais do que um nome, é uma atmosfera histórica: tudo ficou mais possível, mais cruel e menos estável.", "usage": "Contexto de campanha, alianças frágeis, mercenários e casas tentando subir rápido.", "signs": "Companhias armadas surgindo, rotas inseguras, juramentos quebrados e cidades armando-se.", "tags": ["história", "guerra", "vácuo", "essos"]}, {"category": "Lenda", "name": "Os Sinos Fundidos", "region": "Ruínas vulcânicas", "rarity": "Rara", "threat": "Média", "truth": "Boato de ruína", "summary": "Dizem que sinos antigos continuam tocando sob pedra líquida quando uma linhagem de sangue velho está prestes a cair.", "detail": "A maioria nunca ouviu nada; quem jura ter ouvido costuma relatar calor súbito, medo irracional e sonhos de cidade derretida.", "usage": "Presságio de casa nobre, jornada às ruínas e terror psicológico.", "signs": "Som metálico sem fonte, vibração em taças, animais inquietos.", "tags": ["presságio", "metal", "ruína", "linhagem"]}, {"category": "Lenda", "name": "A Noiva de Pedra", "region": "Rhoyne e margens malditas", "rarity": "Rara", "threat": "Alta", "truth": "Boato associado à greyscale", "summary": "Conta-se que uma nobre tocada pela doença espera eternamente por alguém que a reconheça sem fugir.", "detail": "Em algumas versões ela guia viajantes; em outras, toca o rosto de quem tem pena e deixa marca cinzenta para sempre.", "usage": "Horror gótico, encontro moral e ponte entre lenda e contágio.", "signs": "Pegadas junto à água, véu cinza em arbustos, canto distante em neblina.", "tags": ["greyscale", "fantasma", "rio", "tragédia"]}, {"category": "Lenda", "name": "O Arquivo Queimado", "region": "Valyria, Pentos e cofres privados", "rarity": "Rara", "threat": "Alta", "truth": "Boato de erudito", "summary": "Rumor sobre um cofre de mapas, nomes, dívidas e pactos que teria sobrevivido ao grande desastre.", "detail": "Quem o encontrar poderia chantagear descendentes, provar linhagem ou reabrir rotas enterradas pela cinza.", "usage": "Caça a documento, corrida de estudiosos, espias e casas nobres.", "signs": "Códices queimados pela metade, selos repetidos, anotações em alto valiriano.", "tags": ["arquivo", "linhagem", "mapa", "segredo"]}, {"category": "Lenda", "name": "O Último Ovo Negro", "region": "Mar estreito e colecionadores", "rarity": "Muito rara", "threat": "Alta", "truth": "Boato de porto", "summary": "Mito sobre um ovo de dragão escurecido pelo próprio fogo da Ruína e vendido muitas vezes como fraude.", "detail": "A graça da lenda está no risco: quase todos os ovos negros são falsos, mas basta um verdadeiro para incendiar reinos.", "usage": "Leilão oculto, golpe, expedição e guerra por relíquia viva.", "signs": "Pedra morna sem causa, casca pesada, ladrões surgindo do nada.", "tags": ["dragão", "ovo", "mercado", "fraude"]}, {"category": "Lenda", "name": "As Nove Chamas Quietas", "region": "Ilhas do leste", "rarity": "Rara", "threat": "Média", "truth": "Crônica mística", "summary": "Nove focos de fogo que não aquecem como deveriam e não se apagam por completo.", "detail": "São tratadas como marcos de caminho, altares perdidos ou rachaduras por onde o velho mundo ainda respira.", "usage": "Expedição ritual, mapa fragmentado e culto clandestino.", "signs": "Labareda baixa sem fumaça, fuligem fria, pedras enegrecidas em círculo.", "tags": ["fogo", "ilha", "culto", "mapa"]}, {"category": "Lenda", "name": "A Ponte que Canta", "region": "Rios antigos e ruínas inundadas", "rarity": "Rara", "threat": "Média", "truth": "Boato de viajante", "summary": "Ruína sobre água escura que responde com ecos estranhos quando passa alguém de sangue antigo.", "detail": "Alguns tratam como acústica; outros, como mecanismo valiriano ou memória da própria pedra.", "usage": "Teste de linhagem, passagem obrigatória e armadilha psicológica.", "signs": "Eco em nome próprio, água vibrando, pássaros calando de repente.", "tags": ["ponte", "rio", "sangue antigo", "eco"]}, {"category": "Lenda", "name": "As Filhas do Fogo Frio", "region": "Costas vulcânicas e neblina", "rarity": "Rara", "threat": "Alta", "truth": "Lenda marítima", "summary": "Mulheres de bruma e calor estranho que seduzem marinheiros e os atraem para costões ruins.", "detail": "Talvez sejam miragem, assassinas humanas ou simples explicação poética para naufrágios recorrentes.", "usage": "Naufrágio, tentação, visão coletiva e desaparecimento.", "signs": "Vozes femininas na névoa, brilho âmbar em pedra molhada, timão puxando sozinho.", "tags": ["mar", "sedução", "névoa", "naufrágio"]}, {"category": "Lenda", "name": "O Trono Partido de Vidro", "region": "Ruínas profundas", "rarity": "Muito rara", "threat": "Alta", "truth": "Boato de saqueador", "summary": "Assento de obsidiana rachada que enlouquece quem tenta reclamá-lo como símbolo de mando perdido.", "detail": "A lenda existe para castigar ambiciosos: o trono promete legitimidade, mas cobra mente, sono e sangue.", "usage": "Objeto maldito, dungeon central e tentação de poder absoluto.", "signs": "Fragmentos negros polidos, reflexos errados, sensação de estar sendo observado.", "tags": ["trono", "obsidiana", "maldição", "poder"]}, {"category": "Lenda", "name": "O Capitão sem Face", "region": "Mar estreito e rotas de Essos", "rarity": "Rara", "threat": "Média", "truth": "Lenda de marinheiro", "summary": "Navegador que teria visto o cataclismo de perto e voltado sem voz, sem rosto reconhecível e sem nome seguro.", "detail": "Em algumas versões ele conduz navios perdidos; em outras, leva curiosos demais para o mesmo fim que testemunhou.", "usage": "Encontro em porto, piloto impossível e viagem amaldiçoada.", "signs": "Capitão encapuzado, tripulação muda, bússola falhando, medo sem causa.", "tags": ["marinheiro", "ruína", "piloto", "maldição"]}, {"category": "Lenda", "name": "A Carta de Cinzas", "region": "Cofres familiares e espólios", "rarity": "Incomum", "threat": "Média", "truth": "Boato nobre", "summary": "Pergaminho que reaparece em heranças, sempre indicando a próxima pessoa que deve abrir certa rota, tumba ou cofre.", "detail": "Seu texto muda em algumas versões, como se cada leitor recebesse promessa diferente.", "usage": "Gancho de legado, corrida entre herdeiros e documento que escolhe portador.", "signs": "Selo antigo quebrando sozinho, letras surgindo ao calor, herdeiros disputando posse.", "tags": ["carta", "herança", "segredo", "mapa"]}, {"category": "Lenda", "name": "Os Três Poços de Fumaça", "region": "Minas e ilhas vulcânicas", "rarity": "Rara", "threat": "Alta", "truth": "Crônica de mineiro", "summary": "Três câmaras profundas onde o chão ainda respira e o calor sobe como se alguém soprasse de baixo.", "detail": "A lenda mistura geologia, sacrifício e tesouro; quem desce demais costuma não voltar inteiro.", "usage": "Exploração subterrânea, tesouro, gás venenoso e culto de escavadores.", "signs": "Fumaça ritmada, pedra úmida quente, eco oco e animais recusando a entrada.", "tags": ["subsolo", "fumaça", "tesouro", "vulcão"]}, {"category": "Lenda", "name": "A Coroa Submersa", "region": "Mar estreito", "rarity": "Rara", "threat": "Alta", "truth": "Boato de saque", "summary": "Símbolo régio perdido sob corrente traiçoeira e guardado por ferragem, cadáveres e criaturas de água funda.", "detail": "Promete legitimidade ou fortuna a quem a erguer, mas cada tentativa deixa mais ossos presos ao local.", "usage": "Mergulho, mapa incompleto, pirataria e corrida entre casas menores.", "signs": "Correntes puxando em sentido errado, brilho metálico no fundo, restos de mergulhadores.", "tags": ["coroa", "mar", "tesouro", "corrente"]}, {"category": "Lenda", "name": "A Maldição do Sangue Misturado", "region": "Casas paranoicas", "rarity": "Comum", "threat": "Média", "truth": "Superstição social", "summary": "Crença aristocrática de que linhagens misturadas perdem favor de deuses, dragões ou fortuna.", "detail": "É menos verdade histórica do que instrumento cruel de controle, exclusão e propaganda genealógica.", "usage": "Intriga de pureza, casamento, vergonha e perseguição interna.", "signs": "Genealogias ocultas, insultos sobre cabelo e olhos, rituais de prova de sangue.", "tags": ["pureza", "casa", "superstição", "linhagem"]}, {"category": "Lenda", "name": "O Nome que Não Deve Ser Lido", "region": "Círculos de eruditos e cultos", "rarity": "Muito rara", "threat": "Alta", "truth": "Lenda erudita", "summary": "Fala-se de um nome valiriano completo e primordial que não pode ser pronunciado impunemente.", "detail": "Quem o busca acredita ganhar domínio, memória ou acesso a porta esquecida; quem o teme diz que certos nomes acordam o que restou do fogo velho.", "usage": "Códice proibido, ritual, culto e quebra de sanidade.", "signs": "Texto raspado de pergaminhos, estudiosos evitando certas sílabas, velas apagando sem vento.", "tags": ["nome", "ritual", "valiriano", "culto"]}];
+const cardsEl = document.getElementById('cards');
+const emptyEl = document.getElementById('emptyState');
+const searchInput = document.getElementById('searchInput');
+const categoryFilter = document.getElementById('categoryFilter');
+const regionFilter = document.getElementById('regionFilter');
+const rarityFilter = document.getElementById('rarityFilter');
+const threatFilter = document.getElementById('threatFilter');
+const truthFilter = document.getElementById('truthFilter');
+const resetBtn = document.getElementById('resetBtn');
+const visibleCount = document.getElementById('visibleCount');
+const creatureCount = document.getElementById('creatureCount');
+const poisonCount = document.getElementById('poisonCount');
+const otherCount = document.getElementById('otherCount');
+const tabs = [...document.querySelectorAll('.tab-btn')];
+let activeTab = 'Todas';
+
+function uniq(values){ return [...new Set(values)].sort((a,b)=>a.localeCompare(b,'pt-BR')); }
+function populateFilter(select, values){ values.forEach(v=>{ const o=document.createElement('option'); o.value=v; o.textContent=v; select.appendChild(o); }); }
+populateFilter(regionFilter, uniq(ENTRIES.map(e=>e.region)));
+populateFilter(rarityFilter, uniq(ENTRIES.map(e=>e.rarity)));
+populateFilter(threatFilter, uniq(ENTRIES.map(e=>e.threat)));
+populateFilter(truthFilter, uniq(ENTRIES.map(e=>e.truth)));
+
+function chipClass(value){
+  const low = value.toLowerCase();
+  if(low.includes('alta') || low.includes('extrema') || low.includes('muito alto')) return 'red';
+  if(low.includes('confirmado')) return 'green';
+  if(low.includes('rara') || low.includes('muito rara')) return 'purple';
+  if(low.includes('boato') || low.includes('lenda') || low.includes('crônica')) return 'blue';
+  return 'orange';
+}
+
+function render(){
+  const q = searchInput.value.trim().toLowerCase();
+  const filtered = ENTRIES.filter(e=>{
+    const matchTab = activeTab === 'Todas' || e.category === activeTab;
+    const matchCategory = categoryFilter.value === 'Todas' || e.category === categoryFilter.value;
+    const matchRegion = regionFilter.value === 'Todas' || e.region === regionFilter.value;
+    const matchRarity = rarityFilter.value === 'Todas' || e.rarity === rarityFilter.value;
+    const matchThreat = threatFilter.value === 'Todas' || e.threat === threatFilter.value;
+    const matchTruth = truthFilter.value === 'Todas' || e.truth === truthFilter.value;
+    const blob = (e.name + ' ' + e.summary + ' ' + e.detail + ' ' + e.usage + ' ' + e.signs + ' ' + e.tags.join(' ')).toLowerCase();
+    const matchSearch = !q || blob.includes(q);
+    return matchTab && matchCategory && matchRegion && matchRarity && matchThreat && matchTruth && matchSearch;
+  });
+
+  cardsEl.innerHTML = '';
+  filtered.forEach((e, idx)=>{
+    const card = document.createElement('article');
+    card.className = 'entry-card';
+    card.innerHTML = `
+      <div class="entry-meta">
+        <span class="chip ${chipClass(e.category)}">${e.category}</span>
+        <span class="chip blue">${e.region}</span>
+        <span class="chip purple">${e.rarity}</span>
+      </div>
+      <h3 class="entry-title">${e.name}</h3>
+      <p class="entry-summary">${e.summary}</p>
+      <div class="entry-foot">
+        <div class="meta-box"><span>Ameaça</span><strong>${e.threat}</strong></div>
+        <div class="meta-box"><span>Verdade</span><strong>${e.truth}</strong></div>
+      </div>
+    `;
+    card.addEventListener('click', ()=>openDrawer(e));
+    cardsEl.appendChild(card);
+  });
+
+  emptyEl.style.display = filtered.length ? 'none' : 'block';
+  visibleCount.textContent = filtered.length;
+  creatureCount.textContent = ENTRIES.filter(e=>e.category==='Criatura').length;
+  poisonCount.textContent = ENTRIES.filter(e=>e.category==='Veneno').length;
+  otherCount.textContent = ENTRIES.filter(e=>e.category==='Doença' || e.category==='Lenda').length;
+}
+
+const drawer = document.getElementById('drawer');
+const overlay = document.getElementById('overlay');
+const drawerTitle = document.getElementById('drawerTitle');
+const drawerChips = document.getElementById('drawerChips');
+const drawerSummary = document.getElementById('drawerSummary');
+const drawerSigns = document.getElementById('drawerSigns');
+const drawerDetail = document.getElementById('drawerDetail');
+const drawerUsage = document.getElementById('drawerUsage');
+const drawerTags = document.getElementById('drawerTags');
+
+function openDrawer(entry){
+  drawerTitle.textContent = entry.name;
+  drawerSummary.textContent = entry.summary;
+  drawerSigns.textContent = entry.signs;
+  drawerDetail.textContent = entry.detail;
+  drawerUsage.textContent = entry.usage;
+  drawerChips.innerHTML = '';
+  [[entry.category,'orange'],[entry.region,'blue'],[entry.rarity,'purple'],[entry.threat,'red'],[entry.truth,'green']].forEach(([text,cls])=>{
+    const s = document.createElement('span'); s.className = 'chip ' + cls; s.textContent = text; drawerChips.appendChild(s);
+  });
+  drawerTags.innerHTML='';
+  entry.tags.forEach(tag=>{ const s=document.createElement('span'); s.className='chip'; s.textContent=tag; drawerTags.appendChild(s); });
+  drawer.classList.add('open'); overlay.classList.add('open'); drawer.setAttribute('aria-hidden','false');
+}
+function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); }
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer); overlay.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+[searchInput, categoryFilter, regionFilter, rarityFilter, threatFilter, truthFilter].forEach(el=> el.addEventListener('input', render));
+[categoryFilter, regionFilter, rarityFilter, threatFilter, truthFilter].forEach(el=> el.addEventListener('change', render));
+resetBtn.addEventListener('click', ()=>{
+  searchInput.value=''; categoryFilter.value='Todas'; regionFilter.value='Todas'; rarityFilter.value='Todas'; threatFilter.value='Todas'; truthFilter.value='Todas'; activeTab='Todas';
+  tabs.forEach(t=>t.classList.toggle('active', t.dataset.tab==='Todas')); render();
+});
+
+tabs.forEach(btn=>btn.addEventListener('click', ()=>{ activeTab = btn.dataset.tab; tabs.forEach(t=>t.classList.toggle('active', t===btn)); render(); }));
+render();
+
+const embers=document.getElementById('embers'); const ctx=embers.getContext('2d'); let W,H,parts=[];
+function resize(){W=embers.width=window.innerWidth;H=embers.height=window.innerHeight} resize(); window.addEventListener('resize',resize);
+function mkp(){return{x:Math.random()*W,y:H+Math.random()*70,r:Math.random()*2+.45,vx:(Math.random()-.5)*.45,vy:-(Math.random()*1+.3),a:Math.random()*.4+.16,life:0,max:Math.random()*320+140}}
+for(let i=0;i<52;i++){const p=mkp();p.y=Math.random()*H;p.life=Math.random()*p.max;parts.push(p)}
+function tick(){ctx.clearRect(0,0,W,H);parts.forEach((p,i)=>{p.life++;p.x+=p.vx+Math.sin(p.life*.03)*.22;p.y+=p.vy;const t=p.life/p.max;const a=p.a*(1-Math.pow(t,2));ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,${65+Math.floor(t*80)},0,${a})`;ctx.fill();if(p.life>=p.max||p.y<-18)parts[i]=mkp()});requestAnimationFrame(tick)} tick();
+</script>
+</body>
+</html>
