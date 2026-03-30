@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RELIQUIAE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Cinzel+Decorative:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #c8102e;
+      --red-2: #ff3159;
+      --gold: #ffd000;
+      --gold-2: #ffb800;
+      --black: #050505;
+      --black-2: #0c0c0e;
+      --black-3: #151519;
+      --white: #f7f3ec;
+      --soft: rgba(247,243,236,.72);
+      --line: rgba(255,255,255,.08);
+      --line-red: rgba(200,16,46,.24);
+      --glass: rgba(255,255,255,.03);
+      --title: 'Cinzel Decorative', serif;
+      --serif: 'Cinzel', serif;
+      --ui: 'Inter', sans-serif;
+      --shadow-red: 0 20px 60px rgba(200,16,46,.18);
+      --shadow-gold: 0 18px 50px rgba(255,208,0,.08);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(200,16,46,.12), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(255,208,0,.05), transparent 22%),
+        linear-gradient(180deg, #050505 0%, #09070b 42%, #050505 100%);
+      color: var(--white);
+      font-family: var(--ui);
+      overflow-x: hidden;
+    }
+    canvas#embers {
+      position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: .6;
+    }
+    .noise, .vignette {
+      position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    }
+    .noise {
+      opacity: .045;
+      background-image: radial-gradient(circle, rgba(255,255,255,.5) 1px, transparent 1px);
+      background-size: 5px 5px;
+      mix-blend-mode: soft-light;
+    }
+    .vignette { background: radial-gradient(circle, transparent 42%, rgba(0,0,0,.68) 100%); }
+    section, footer, nav { position: relative; z-index: 2; }
+    .wrap { width: min(1180px, calc(100% - 2rem)); margin: 0 auto; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.2rem;
+      background: linear-gradient(180deg, rgba(5,5,5,.88), rgba(5,5,5,.05));
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid transparent;
+      transition: .3s ease;
+    }
+    nav.scrolled { background: rgba(5,5,5,.92); border-bottom-color: var(--line-red); }
+    .logo {
+      text-decoration: none; color: var(--gold);
+      font-family: var(--title); font-size: .9rem; letter-spacing: .4em; text-transform: uppercase;
+    }
+    .nav-links { display: flex; list-style: none; gap: 1.7rem; }
+    .nav-links a {
+      text-decoration: none; color: rgba(247,243,236,.58);
+      font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; font-family: var(--ui);
+      position: relative; transition: color .25s ease;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; left: 0; bottom: -.45rem; width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--red), var(--gold)); transition: width .25s ease;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-flag {
+      border: 1px solid rgba(255,208,0,.26); color: var(--gold); background: rgba(255,208,0,.04);
+      padding: .45rem .8rem; font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; font-family: var(--ui);
+    }
+
+    #hero {
+      min-height: 100svh; display: flex; align-items: center; justify-content: center;
+      padding: 8rem 0 4rem; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,16,46,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,16,46,.035) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 92%);
+      animation: gridPulse 7s ease-in-out infinite;
+    }
+    @keyframes gridPulse { 0%,100% { opacity: .45; } 50% { opacity: .9; } }
+    .hero-aura {
+      position: absolute; width: 80vw; height: 80vw; max-width: 1000px; max-height: 1000px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(127,0,20,.28) 0%, rgba(127,0,20,.1) 32%, transparent 68%);
+      filter: blur(18px);
+      animation: aura 8s ease-in-out infinite;
+    }
+    @keyframes aura { 0%,100% { transform: scale(1); opacity: .7; } 50% { transform: scale(1.07); opacity: 1; } }
+    .hero-mark {
+      position: absolute; right: -2vw; top: 50%; transform: translateY(-50%);
+      font-family: var(--title); font-size: clamp(7rem, 22vw, 18rem); color: transparent;
+      -webkit-text-stroke: 1px rgba(200,16,46,.10); user-select: none;
+    }
+    .hero-content { text-align: center; max-width: 980px; padding: 0 1rem; }
+    .eyebrow {
+      display: inline-block; font-family: var(--ui); font-size: .7rem; letter-spacing: .5em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem; opacity: 0; transform: translateY(26px); animation: rise .9s .1s forwards;
+    }
+    .hero-title {
+      position: relative;
+      font-family: var(--title); font-size: clamp(3.4rem, 11vw, 8.2rem); line-height: .92; letter-spacing: .08em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 0%, #fff2c1 18%, var(--gold) 40%, var(--red-2) 78%, #7f0014 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      opacity: 0; transform: translateY(26px); animation: rise .95s .24s forwards;
+    }
+    .hero-title::before, .hero-title::after {
+      content: 'RELIQUIAE'; position: absolute; inset: 0; text-align: center; opacity: 0; pointer-events: none;
+    }
+    .hero-title::before {
+      color: rgba(255,49,89,.55); clip-path: polygon(0 14%, 100% 14%, 100% 35%, 0 35%); animation: glitchA 7s infinite;
+    }
+    .hero-title::after {
+      color: rgba(255,208,0,.42); clip-path: polygon(0 62%, 100% 62%, 100% 82%, 0 82%); animation: glitchB 7s infinite;
+    }
+    @keyframes glitchA {
+      0%,92%,100% { transform: translate(0); opacity: 0; }
+      93% { transform: translate(-4px,1px); opacity: 1; }
+      95% { transform: translate(3px,-1px); opacity: .75; }
+      97% { transform: translate(-2px,1px); opacity: .92; }
+    }
+    @keyframes glitchB {
+      0%,91%,100% { transform: translate(0); opacity: 0; }
+      92% { transform: translate(4px,-1px); opacity: 1; }
+      94% { transform: translate(-3px,1px); opacity: .75; }
+      96% { transform: translate(2px,-1px); opacity: .9; }
+    }
+    .hero-sub {
+      margin-top: 1rem; font-family: var(--serif); font-size: clamp(1rem, 2.4vw, 1.35rem); letter-spacing: .24em; text-transform: uppercase;
+      color: rgba(247,243,236,.44); opacity: 0; transform: translateY(26px); animation: rise .9s .45s forwards;
+    }
+    .divider {
+      width: 160px; height: 1px; margin: 1.8rem auto;
+      background: linear-gradient(90deg, transparent, var(--red), var(--gold), var(--red), transparent);
+      opacity: 0; transform: translateY(26px); animation: rise .9s .62s forwards;
+    }
+    .hero-text {
+      max-width: 830px; margin: 0 auto; color: rgba(247,243,236,.86); font-size: clamp(1.04rem, 2.2vw, 1.32rem); line-height: 1.9;
+      opacity: 0; transform: translateY(26px); animation: rise .95s .8s forwards;
+    }
+    .hero-text em { color: var(--red-2); font-style: normal; font-weight: 700; }
+    .hero-actions {
+      margin-top: 2rem; display: flex; justify-content: center; gap: .9rem; flex-wrap: wrap;
+      opacity: 0; transform: translateY(26px); animation: rise .95s 1s forwards;
+    }
+    .btn {
+      appearance: none; border: none; cursor: pointer; text-decoration: none;
+      padding: .95rem 1.25rem; text-transform: uppercase; letter-spacing: .18em; font-size: .74rem; font-family: var(--ui); font-weight: 700;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease, color .25s ease;
+    }
+    .btn-primary {
+      color: #110d08; background: linear-gradient(135deg, var(--gold), #fff0a5); box-shadow: var(--shadow-gold);
+    }
+    .btn-secondary {
+      color: var(--white); background: rgba(255,255,255,.03); border: 1px solid rgba(200,16,46,.28);
+    }
+    .btn:hover { transform: translateY(-3px); }
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .55rem; opacity: .8;
+    }
+    .hero-scroll span { color: rgba(247,243,236,.34); font-size: .6rem; letter-spacing: .35em; text-transform: uppercase; font-family: var(--ui); }
+    .hero-scroll i { width: 1px; height: 52px; background: linear-gradient(180deg, var(--red), transparent); animation: scroll 1.8s ease-in-out infinite; }
+    @keyframes scroll { from { transform: scaleY(0); transform-origin: top; opacity: 1; } to { transform: scaleY(1); transform-origin: top; opacity: 0; } }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+    .section { padding: 7rem 0; }
+    .section-head { text-align: center; margin-bottom: 3.5rem; }
+    .section-head h2 {
+      font-family: var(--serif); font-size: clamp(1.9rem, 4vw, 3.1rem); letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+    }
+    .section-head h2 span { color: var(--red-2); }
+    .section-copy {
+      max-width: 760px; margin: .9rem auto 0; color: rgba(247,243,236,.66); line-height: 1.8;
+    }
+
+    #countdown { padding-top: 0; }
+    .count-shell {
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
+      border: 1px solid var(--line-red); box-shadow: var(--shadow-red); padding: 2rem; overflow: hidden; position: relative;
+    }
+    .count-shell::before {
+      content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,208,0,.06), transparent); transform: translateX(-100%); animation: scan 7s linear infinite;
+    }
+    @keyframes scan { to { transform: translateX(100%); } }
+    .count-top {
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+    }
+    .count-title { font-family: var(--serif); font-size: clamp(1.2rem, 3vw, 1.9rem); text-transform: uppercase; letter-spacing: .14em; }
+    .count-title span { color: var(--red-2); }
+    .count-text { max-width: 580px; color: rgba(247,243,236,.64); line-height: 1.8; }
+    .count-grid { display: grid; grid-template-columns: repeat(5, minmax(110px, 1fr)); gap: 1rem; }
+    .time-card {
+      background: rgba(0,0,0,.28); border: 1px solid rgba(255,208,0,.14); text-align: center; padding: 1.2rem .8rem;
+    }
+    .time-num {
+      font-family: var(--title); font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1;
+      background: linear-gradient(180deg, #fff, var(--gold), var(--red-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .time-label { display: block; margin-top: .5rem; color: rgba(247,243,236,.42); font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; }
+    .count-note { margin-top: 1rem; color: rgba(247,243,236,.42); font-size: .72rem; text-transform: uppercase; letter-spacing: .18em; }
+
+    .cards-3 {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem;
+    }
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.018));
+      border: 1px solid var(--line); position: relative; overflow: hidden;
+    }
+    .glass::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, var(--red), var(--gold)); transform: scaleX(0); transform-origin: left; transition: transform .35s ease;
+    }
+    .glass:hover::before { transform: scaleX(1); }
+
+    #premise .intro-grid {
+      display: grid; grid-template-columns: 340px 1fr; gap: 1.4rem; align-items: start;
+    }
+    .dossier {
+      padding: 1.8rem; position: sticky; top: 6.2rem;
+    }
+    .dossier .label {
+      font-size: .62rem; letter-spacing: .32em; text-transform: uppercase; color: var(--red-2); margin-bottom: .45rem;
+    }
+    .dossier .value {
+      padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,.08);
+      font-family: var(--serif); text-transform: uppercase; letter-spacing: .08em;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .65rem; }
+    .chip {
+      padding: .35rem .7rem; border: 1px solid rgba(255,208,0,.2); background: rgba(255,208,0,.04); color: var(--gold);
+      font-size: .62rem; text-transform: uppercase; letter-spacing: .14em;
+    }
+    .narrative {
+      padding: 2rem;
+    }
+    .narrative p { color: rgba(247,243,236,.78); line-height: 1.95; margin-bottom: 1rem; }
+    .quote {
+      margin: 1.4rem 0; padding: 1.2rem 1.3rem; border-left: 2px solid var(--gold); background: rgba(255,208,0,.05);
+      color: var(--white); font-family: var(--serif); font-size: 1.08rem; line-height: 1.8;
+    }
+
+    .facts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(200,16,46,.14); border: 1px solid rgba(200,16,46,.16); }
+    .fact {
+      background: var(--black-2); padding: 2rem 1rem; text-align: center;
+    }
+    .fact strong {
+      display: block; font-family: var(--title); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1;
+      background: linear-gradient(180deg, var(--gold), var(--red-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .fact span { display: block; margin-top: .5rem; font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; color: rgba(247,243,236,.44); }
+    .fact small { display: block; margin-top: .45rem; color: rgba(247,243,236,.64); line-height: 1.6; }
+
+    #missions .mission-card {
+      padding: 1.6rem; min-height: 345px; display: flex; flex-direction: column; transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+    }
+    #missions .mission-card:hover {
+      transform: translateY(-6px); border-color: rgba(255,49,89,.3); box-shadow: var(--shadow-red);
+    }
+    .mission-index { color: var(--red-2); font-size: .62rem; letter-spacing: .3em; text-transform: uppercase; margin-bottom: .8rem; }
+    .mission-card h3 {
+      font-family: var(--serif); font-size: 1.34rem; text-transform: uppercase; letter-spacing: .08em; line-height: 1.35; margin-bottom: .9rem;
+    }
+    .mission-card p { color: rgba(247,243,236,.68); line-height: 1.82; margin-bottom: 1rem; }
+    .mission-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+    .mission-tags span {
+      border: 1px solid rgba(255,208,0,.18); padding: .35rem .6rem; font-size: .61rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(247,243,236,.82);
+    }
+    .mission-card .btn { margin-top: auto; width: 100%; }
+    .mission-card.selected {
+      border-color: rgba(255,208,0,.34); box-shadow: var(--shadow-red), var(--shadow-gold); background: linear-gradient(180deg, rgba(255,208,0,.045), rgba(255,255,255,.02));
+    }
+
+    .selection-panel {
+      margin-top: 1.4rem; padding: 1.7rem; border: 1px solid rgba(255,208,0,.16); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+    }
+    .selection-label { color: var(--gold); font-size: .66rem; letter-spacing: .3em; text-transform: uppercase; margin-bottom: .6rem; }
+    .selection-title { font-family: var(--serif); font-size: 1.5rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .8rem; }
+    .selection-copy { color: rgba(247,243,236,.74); line-height: 1.9; margin-bottom: 1rem; }
+    .selection-extra { display: flex; flex-wrap: wrap; gap: .55rem; }
+    .selection-extra span {
+      border: 1px solid rgba(200,16,46,.22); padding: .38rem .7rem; font-size: .62rem; text-transform: uppercase; letter-spacing: .14em; color: rgba(247,243,236,.84);
+    }
+
+    #team .team-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 1.2rem; align-items: stretch; }
+    .team-story, .team-side { padding: 1.8rem; }
+    .team-story p, .team-side p { color: rgba(247,243,236,.74); line-height: 1.9; margin-bottom: .95rem; }
+    .team-side ul { list-style: none; display: grid; gap: .8rem; }
+    .team-side li {
+      padding: .9rem 1rem; border: 1px solid rgba(255,255,255,.07); background: rgba(255,255,255,.02); color: rgba(247,243,236,.78);
+    }
+    .team-side li strong { display: block; color: var(--gold); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; margin-bottom: .35rem; }
+
+    #flow .flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+    .flow-card { padding: 1.6rem; }
+    .flow-num { color: var(--red-2); font-family: var(--title); font-size: 2.2rem; line-height: 1; margin-bottom: .85rem; }
+    .flow-card h3 { font-family: var(--serif); font-size: 1.1rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .8rem; }
+    .flow-card p { color: rgba(247,243,236,.7); line-height: 1.82; }
+
+    #cta { padding-top: 4rem; }
+    .cta-box {
+      text-align: center; padding: 3.2rem 1.6rem; border: 1px solid rgba(200,16,46,.2);
+      background:
+        radial-gradient(circle at center, rgba(127,0,20,.18), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.012));
+    }
+    .cta-box h2 {
+      font-family: var(--title); font-size: clamp(2.2rem, 7vw, 5.6rem); line-height: 1.08; letter-spacing: .09em; text-transform: uppercase;
+    }
+    .cta-box h2 .gold { color: var(--gold); }
+    .cta-box h2 .red { color: var(--red-2); }
+    .cta-box p { max-width: 760px; margin: 1rem auto 0; color: rgba(247,243,236,.72); line-height: 1.9; }
+
+    footer {
+      margin-top: 5rem; padding: 2rem 1.2rem 2.6rem; border-top: 1px solid rgba(200,16,46,.16);
+      display: flex; justify-content: space-between; gap: 1rem; align-items: center; flex-wrap: wrap;
+    }
+    .foot-left { font-family: var(--title); font-size: .76rem; letter-spacing: .34em; text-transform: uppercase; color: rgba(247,243,236,.28); }
+    .foot-right { color: rgba(247,243,236,.26); font-size: .65rem; letter-spacing: .16em; text-transform: uppercase; }
+    .foot-right span { color: var(--red-2); }
+
+    .reveal, .reveal-left, .reveal-right { opacity: 0; transition: opacity .85s ease, transform .85s ease; }
+    .reveal { transform: translateY(34px); }
+    .reveal-left { transform: translateX(-42px); }
+    .reveal-right { transform: translateX(42px); }
+    .show { opacity: 1 !important; transform: translate(0,0) !important; }
+
+    @media (max-width: 1080px) {
+      .cards-3, #flow .flow-grid { grid-template-columns: 1fr; }
+      #premise .intro-grid, #team .team-grid { grid-template-columns: 1fr; }
+      .dossier { position: relative; top: 0; }
+      .count-grid { grid-template-columns: repeat(3, minmax(110px,1fr)); }
+    }
+    @media (max-width: 860px) {
+      nav { padding: 1rem 1rem; }
+      .nav-links { display: none; }
+      .facts-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .count-grid { grid-template-columns: repeat(2, minmax(110px,1fr)); }
+      .facts-grid { grid-template-columns: 1fr; }
+      .hero-mark { display: none; }
+      .hero-actions { flex-direction: column; }
+      .btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="embers"></canvas>
+  <div class="noise"></div>
+  <div class="vignette"></div>
+
+  <nav id="nav">
+    <a class="logo" href="#hero">Reliquiae</a>
+    <ul class="nav-links">
+      <li><a href="#premise">Convocação</a></li>
+      <li><a href="#missions">Missões</a></li>
+      <li><a href="#team">Equipe</a></li>
+      <li><a href="#flow">Como Jogar</a></li>
+    </ul>
+    <div class="nav-flag">9 meses antes de tudo</div>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-aura"></div>
+    <div class="hero-mark">IX</div>
+    <div class="hero-content wrap">
+      <div class="eyebrow">Sanctum Veritatis · Convocação Paranormal</div>
+      <h1 class="hero-title">Reliquiae</h1>
+      <div class="hero-sub">Segunda Temporada</div>
+      <div class="divider"></div>
+      <p class="hero-text">Nove meses antes de tudo, antes dos grandes eventos, antes da Ordem ganhar o nome que o mundo um dia vai temer, você recebe uma convocação impossível: <em>entrar para uma operação que pode decidir o destino da realidade</em>.</p>
+      <div class="hero-actions">
+        <a href="#missions" class="btn btn-primary">Escolher missão</a>
+        <a href="#premise" class="btn btn-secondary">Ler convocação</a>
+      </div>
+    </div>
+    <div class="hero-scroll"><span>Descer</span><i></i></div>
+  </section>
+
+  <section id="countdown" class="section">
+    <div class="wrap">
+      <div class="count-shell reveal">
+        <div class="count-top">
+          <div>
+            <div class="eyebrow" style="opacity:1;transform:none;animation:none;margin-bottom:.55rem;">Prazo aberto</div>
+            <h2 class="count-title">Cronômetro dos <span>9 meses</span></h2>
+          </div>
+          <p class="count-text">A partir do momento em que você aceita a convocação, o tempo começa a correr. O site registra esse prazo no seu navegador e transforma cada visita em lembrete: o mundo está mais perto do colapso do que parece.</p>
+        </div>
+        <div class="count-grid">
+          <div class="time-card"><span class="time-num" id="months">09</span><span class="time-label">Meses</span></div>
+          <div class="time-card"><span class="time-num" id="days">00</span><span class="time-label">Dias</span></div>
+          <div class="time-card"><span class="time-num" id="hours">00</span><span class="time-label">Horas</span></div>
+          <div class="time-card"><span class="time-num" id="minutes">00</span><span class="time-label">Minutos</span></div>
+          <div class="time-card"><span class="time-num" id="seconds">00</span><span class="time-label">Segundos</span></div>
+        </div>
+        <div class="count-note" id="deadlineText">Prazo ancorado na sua primeira leitura do dossiê.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="premise" class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow" style="opacity:1;transform:none;animation:none;">Convocação</div>
+        <h2>O que você <span>sabe</span></h2>
+        <p class="section-copy">Você não precisa conhecer nada do passado para entrar. Este é o seu ponto de partida: uma chamada urgente, um líder que já viu demais, uma equipe de veteranos instável e três missões capazes de mudar o mundo.</p>
+      </div>
+      <div class="intro-grid">
+        <aside class="dossier glass reveal-left">
+          <div class="label">Status</div>
+          <div class="value">Operação iniciada<div class="chips"><span class="chip">Acesso liberado</span></div></div>
+          <div class="label">Momento</div>
+          <div class="value">9 meses antes de tudo<div class="chips"><span class="chip">Tempo crítico</span></div></div>
+          <div class="label">Convocante</div>
+          <div class="value">Sr. Verissimo<div class="chips"><span class="chip">Liderança</span><span class="chip">Segredos</span></div></div>
+          <div class="label">Seu papel</div>
+          <div class="value">Novo agente<div class="chips"><span class="chip">Escolha uma missão</span></div></div>
+          <div class="label">Seu destino</div>
+          <div class="value">Ainda indefinido<div class="chips"><span class="chip">Tudo pode mudar</span></div></div>
+        </aside>
+        <div class="narrative glass reveal-right">
+          <p>O telefone toca tarde demais para ser coincidência. Do outro lado da linha, uma voz precisa, cansada e absolutamente segura diz apenas o necessário: existe algo maior do que qualquer caso isolado se movendo nas sombras, e você foi escolhido para entrar antes que seja tarde.</p>
+          <p>Não há aula introdutória. Não há zona segura. Há um dossiê, um prazo e uma decisão. Um grupo de veteranos conturbados já está em movimento, carregando atritos, cicatrizes e convicções que podem salvar o mundo ou parti-lo ao meio. Entrar com eles significa aceitar que a verdade vem primeiro, mesmo quando ela corrói tudo ao redor.</p>
+          <div class="quote">Você não está sendo chamado para entender o paranormal. Está sendo chamado para sobreviver a ele tempo suficiente para fazer diferença.</div>
+          <p>Seu ponto de partida é simples: Sr. Verissimo convoca, a ameaça cresce e três frentes estão abertas. Uma envolve o desaparecimento da Equipe Kelvin. Outra aponta para relíquias em Nova York. A última exige impedir o próprio fim do mundo ao lado de pessoas que mal conseguem concordar entre si — mas que talvez sejam as únicas capazes de vencer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="facts-grid reveal">
+        <div class="fact"><strong>3</strong><span>Missões abertas</span><small>Você escolhe por onde entrar na história.</small></div>
+        <div class="fact"><strong>1</strong><span>Equipe veterana</span><small>Experiente, perigosa e emocionalmente instável.</small></div>
+        <div class="fact"><strong>9</strong><span>Meses</span><small>O prazo até a realidade cobrar a conta.</small></div>
+        <div class="fact"><strong>∞</strong><span>Consequências</span><small>Cada escolha muda o que vem depois.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="missions" class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow" style="opacity:1;transform:none;animation:none;">Entrada na campanha</div>
+        <h2>Escolha sua <span>missão</span></h2>
+        <p class="section-copy">Cada rota abre um tipo diferente de horror, investigação e conflito. Você pode começar pela verdade desaparecida, pela corrida atrás de poder ou pela guerra contra o fim de tudo.</p>
+      </div>
+
+      <div class="cards-3">
+        <article class="mission-card glass reveal selected" data-title="Missão 01 · O desaparecimento da Equipe Kelvin" data-copy="Sr. Verissimo apresenta o primeiro caso como um desaparecimento impossível. Uma equipe eficiente some, rastros param no lugar errado e o silêncio ao redor do nome Kelvin pesa mais do que qualquer relatório oficial. Essa missão é ideal para quem quer entrar pela investigação, descobrir o que estava escondido desde o começo e sentir o terror paranormal se revelando aos poucos." data-tags="Investigação|Mistério|Primeiro contato|Segredos antigos">
+          <div class="mission-index">Missão / 01</div>
+          <h3>Sr. Verissimo relata o desaparecimento da Equipe Kelvin</h3>
+          <div class="mission-tags">
+            <span>Investigação</span><span>Mistério</span><span>Arquivo perdido</span><span>Primeiro contato</span>
+          </div>
+          <p>Uma equipe veterana desapareceu sem deixar uma explicação confiável. Você entra na operação quando as pistas ainda são frágeis, as versões se contradizem e a sensação de que alguém chegou tarde demais começa a crescer.</p>
+          <button class="btn btn-secondary mission-btn">Selecionar missão</button>
+        </article>
+
+        <article class="mission-card glass reveal" data-title="Missão 02 · As relíquias de Nova York" data-copy="Sr. Verissimo anuncia a existência de relíquias em Nova York, e isso muda o peso da campanha imediatamente. Não se trata apenas de um caso estranho, mas de uma corrida por artefatos que podem alterar o equilíbrio entre realidade e horror. Essa entrada favorece jogadores que querem tensão global, descoberta de poder proibido e uma sensação de urgência crescente desde a primeira sessão." data-tags="Relíquias|Nova York|Corrida contra o tempo|Poder proibido">
+          <div class="mission-index">Missão / 02</div>
+          <h3>Sr. Verissimo anuncia a existência de relíquias em Nova York</h3>
+          <div class="mission-tags">
+            <span>Relíquias</span><span>Nova York</span><span>Caçada</span><span>Poder proibido</span>
+          </div>
+          <p>Há objetos em circulação que não deveriam existir, e alguém em Nova York já sabe mais do que devia. Entrar por aqui significa mergulhar cedo em uma disputa por poder, segredos internacionais e decisões que ninguém volta igual depois de tomar.</p>
+          <button class="btn btn-secondary mission-btn">Selecionar missão</button>
+        </article>
+
+        <article class="mission-card glass reveal" data-title="Missão 03 · Evitar o fim do mundo" data-copy="A terceira porta já começa aberta para o caos: impedir os eventos do fim do mundo ao lado de uma equipe conturbada. Aqui a campanha entra com tudo em tensão, conflito interno, decisões morais e sensação de catástrofe iminente. É a rota para quem quer começar com stakes máximas, alianças instáveis e a impressão de que cada sessão pode decidir o destino da história inteira." data-tags="Apocalipse|Equipe conturbada|Decisões morais|Alta tensão">
+          <div class="mission-index">Missão / 03</div>
+          <h3>Evitar os eventos do fim do mundo com uma equipe conturbada</h3>
+          <div class="mission-tags">
+            <span>Apocalipse</span><span>Alta tensão</span><span>Conflito interno</span><span>Escolhas pesadas</span>
+          </div>
+          <p>O relógio já está avançado demais para confortos. Você se junta a veteranos que sabem mais do que dizem e confiam menos do que deveriam, tentando impedir uma sequência de eventos que pode arrastar o mundo inteiro para o colapso.</p>
+          <button class="btn btn-secondary mission-btn">Selecionar missão</button>
+        </article>
+      </div>
+
+      <div class="selection-panel reveal" id="selectionPanel">
+        <div class="selection-label">Missão selecionada</div>
+        <div class="selection-title" id="selectionTitle">Missão 01 · O desaparecimento da Equipe Kelvin</div>
+        <div class="selection-copy" id="selectionCopy">Sr. Verissimo apresenta o primeiro caso como um desaparecimento impossível. Uma equipe eficiente some, rastros param no lugar errado e o silêncio ao redor do nome Kelvin pesa mais do que qualquer relatório oficial. Essa missão é ideal para quem quer entrar pela investigação, descobrir o que estava escondido desde o começo e sentir o terror paranormal se revelando aos poucos.</div>
+        <div class="selection-extra" id="selectionTags">
+          <span>Investigação</span><span>Mistério</span><span>Primeiro contato</span><span>Segredos antigos</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow" style="opacity:1;transform:none;animation:none;">Quem estará ao seu lado</div>
+        <h2>Uma equipe de veteranos <span>conturbados</span></h2>
+        <p class="section-copy">Você não entra em um grupo estável. Você entra em uma força de sobreviventes, especialistas e pessoas que já foram longe demais para continuar intactas.</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-story glass reveal-left">
+          <p>Eles não são lendas porque venceram sem perder nada. São lendas porque perderam muito e continuaram andando. A equipe que você encontra em Reliquiae é feita de veteranos que carregam certezas perigosas, métodos diferentes e uma visão dura sobre o que precisa ser feito para manter a realidade de pé.</p>
+          <p>Ao seu redor, cada discussão importa. Cada decisão de liderança pode abrir uma rota nova, destruir uma aliança ou revelar uma peça do quebra-cabeça antes da hora. Você não é um espectador; você é o elemento novo jogado no centro de uma máquina já sobrecarregada.</p>
+          <p>Isso torna a campanha especial para quem está chegando agora: você descobre o universo junto com seu personagem, mas entra imediatamente no meio de algo grande, vivo e carregado de consequências.</p>
+        </div>
+        <div class="team-side glass reveal-right">
+          <ul>
+            <li><strong>Clima</strong>Terror paranormal, investigação, ação tensa e decisões morais com peso real.</li>
+            <li><strong>Entrada perfeita</strong>Você começa sabendo apenas o necessário, e o resto é revelado na mesa.</li>
+            <li><strong>Grupo</strong>Veteranos experientes, emocionalmente instáveis e decisivos para o rumo da história.</li>
+            <li><strong>Sensação</strong>Você não está entrando atrasado em um mundo complexo. Você está entrando no momento em que tudo começa a importar.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="flow" class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow" style="opacity:1;transform:none;animation:none;">Como isso funciona</div>
+        <h2>Seu começo em <span>três passos</span></h2>
+        <p class="section-copy">A proposta do site é simples: te colocar no clima, te apresentar as portas de entrada e te fazer escolher a forma como sua história começa.</p>
+      </div>
+      <div class="flow-grid">
+        <div class="flow-card glass reveal">
+          <div class="flow-num">01</div>
+          <h3>Leia a convocação</h3>
+          <p>Entenda o cenário: o mundo ainda não sabe o que está prestes a acontecer, mas uma operação secreta já começou a agir. Você é chamado exatamente no ponto em que tudo pode mudar.</p>
+        </div>
+        <div class="flow-card glass reveal">
+          <div class="flow-num">02</div>
+          <h3>Escolha a primeira rota</h3>
+          <p>Desaparecimento, relíquias ou fim do mundo. Cada missão muda o tom da entrada e a maneira como você descobre o paranormal.</p>
+        </div>
+        <div class="flow-card glass reveal">
+          <div class="flow-num">03</div>
+          <h3>Entre na operação</h3>
+          <p>Depois disso, o resto pertence à mesa: alianças, tensão, revelações, medo e a sensação constante de que cada escolha puxa outra atrás.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cta" class="section">
+    <div class="wrap">
+      <div class="cta-box reveal">
+        <h2><span class="gold">O mundo</span><br>não sabe<br><span class="red">o que vem</span></h2>
+        <p>Mas você foi chamado antes de todo mundo. Escolha sua missão, entre para a operação e descubra por que Reliquiae começa no exato momento em que a realidade fica frágil o bastante para ser quebrada.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <div class="foot-left">Reliquiae</div>
+    <div class="foot-right">9 meses antes de tudo · <span>Sua escolha define a entrada</span></div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
+
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .14 });
+    revealEls.forEach(el => io.observe(el));
+
+    (function embers(){
+      const canvas = document.getElementById('embers');
+      const ctx = canvas.getContext('2d');
+      let w, h, parts = [];
+      const colors = ['#c8102e','#ff3159','#ffd000','#ffffff','#7f0014'];
+      function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+      addEventListener('resize', resize); resize();
+      function P(first){ this.reset(first); }
+      P.prototype.reset = function(first){
+        this.x = Math.random() * w;
+        this.y = first ? Math.random() * h : h + Math.random() * 120;
+        this.r = Math.random() * 1.8 + .35;
+        this.vx = (Math.random() - .5) * .28;
+        this.vy = -(Math.random() * .72 + .2);
+        this.life = 0;
+        this.max = 170 + Math.random() * 260;
+        this.alpha = Math.random() * .45 + .08;
+        this.color = colors[(Math.random() * colors.length) | 0];
+      };
+      P.prototype.update = function(){ this.x += this.vx; this.y += this.vy; this.life++; if (this.life > this.max || this.y < -20) this.reset(false); };
+      P.prototype.draw = function(){ const fade = Math.min(1, (this.max - this.life) / 60); ctx.globalAlpha = this.alpha * fade; ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fill(); };
+      for(let i=0;i<140;i++) parts.push(new P(true));
+      function loop(){ ctx.clearRect(0,0,w,h); for(const p of parts){ p.update(); p.draw(); } ctx.globalAlpha=1; requestAnimationFrame(loop); }
+      loop();
+    })();
+
+    (function countdown(){
+      const key = 'reliquiaePlayerCountdown';
+      let target = localStorage.getItem(key);
+      if (!target) {
+        const now = new Date();
+        const future = new Date(now);
+        future.setMonth(future.getMonth() + 9);
+        target = future.toISOString();
+        localStorage.setItem(key, target);
+      }
+      const targetDate = new Date(target);
+      const monthsEl = document.getElementById('months');
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+      const note = document.getElementById('deadlineText');
+      const formatter = new Intl.DateTimeFormat('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      note.textContent = 'Prazo registrado para ' + formatter.format(targetDate) + '.';
+      const pad = n => String(n).padStart(2, '0');
+      function diffCalendar(now, future){
+        if (now >= future) return { months:0, days:0, hours:0, minutes:0, seconds:0, done:true };
+        let cursor = new Date(now);
+        let months = 0;
+        while (true) {
+          const next = new Date(cursor);
+          next.setMonth(next.getMonth() + 1);
+          if (next <= future) { cursor = next; months++; }
+          else break;
+        }
+        let ms = future - cursor;
+        const days = Math.floor(ms / 86400000); ms -= days * 86400000;
+        const hours = Math.floor(ms / 3600000); ms -= hours * 3600000;
+        const minutes = Math.floor(ms / 60000); ms -= minutes * 60000;
+        const seconds = Math.floor(ms / 1000);
+        return { months, days, hours, minutes, seconds, done:false };
+      }
+      function tick(){
+        const d = diffCalendar(new Date(), targetDate);
+        monthsEl.textContent = pad(d.months);
+        daysEl.textContent = pad(d.days);
+        hoursEl.textContent = pad(d.hours);
+        minutesEl.textContent = pad(d.minutes);
+        secondsEl.textContent = pad(d.seconds);
+        if (d.done) note.textContent = 'O prazo terminou. A operação chegou ao ponto sem retorno.';
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+    (function missionSelector(){
+      const cards = [...document.querySelectorAll('.mission-card')];
+      const title = document.getElementById('selectionTitle');
+      const copy = document.getElementById('selectionCopy');
+      const tags = document.getElementById('selectionTags');
+      function select(card){
+        cards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        title.textContent = card.dataset.title;
+        copy.textContent = card.dataset.copy;
+        tags.innerHTML = '';
+        card.dataset.tags.split('|').forEach(tag => {
+          const span = document.createElement('span');
+          span.textContent = tag;
+          tags.appendChild(span);
+        });
+      }
+      cards.forEach(card => card.querySelector('.mission-btn').addEventListener('click', () => select(card)));
+    })();
+  </script>
+</body>
+</html>
