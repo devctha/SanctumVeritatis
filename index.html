@@ -1,1868 +1,1220 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>SANCTUM VERITATIS // NÓ VELUM-PRIMUS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- FONTES -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- ÁUDIO AMBIENTE -->
-    <audio id="bg-audio" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2021/09/01/audio_1f8b9b0488.mp3?filename=dark-ambient-background-9822.mp3" type="audio/mpeg">
-    </audio>
-
-    <style>
-        :root {
-            --bg-0: #020308;
-            --bg-1: #050712;
-            --bg-2: #0b0f1f;
-            --bg-glass: rgba(10, 15, 30, 0.86);
-            --bg-glass-soft: rgba(10, 15, 30, 0.72);
-
-            --accent: #00f5ff;
-            --accent-soft: rgba(0, 245, 255, 0.16);
-            --accent-secondary: #a855ff;
-            --accent-secondary-soft: rgba(168, 85, 255, 0.16);
-
-            --text-0: #ffffff;
-            --text-1: #c7d2ff;
-            --text-2: #8b90b2;
-            --text-muted: #616792;
-
-            --border-soft: rgba(255, 255, 255, 0.05);
-            --border-strong: rgba(255, 255, 255, 0.16);
-            --border-accent: rgba(0, 245, 255, 0.6);
-
-            --danger: #ff3366;
-            --warning: #ffb800;
-            --success: #00ff9d;
-
-            --radius-lg: 18px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-
-            --shadow-soft: 0 18px 55px rgba(0, 0, 0, 0.75);
-            --shadow-hard: 0 0 80px rgba(0, 0, 0, 1);
-
-            --transition-fast: 0.18s ease-out;
-            --transition-med: 0.28s ease-out;
-
-            --grid-size: 46px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: radial-gradient(circle at top, #121629 0, #050712 45%, #020308 100%);
-            color: var(--text-0);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            overflow-y: hidden; /* liberado após acesso */
-        }
-
-        /* CAMADAS DE FUNDO */
-
-        .grid-bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            background-image:
-                linear-gradient(var(--border-soft) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
-            background-size: var(--grid-size) var(--grid-size);
-            opacity: 0.25;
-            pointer-events: none;
-        }
-
-        .scanlines {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            background-image: linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0.06) 1px,
-                transparent 1px
-            );
-            background-size: 100% 3px;
-            mix-blend-mode: soft-light;
-            opacity: 0.15;
-            animation: scan 6s linear infinite;
-        }
-
-        .noise {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
-            opacity: 0.06;
-            mix-blend-mode: soft-light;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.8'/%3E%3C/svg%3E");
-        }
-
-        .vignette {
-            position: fixed;
-            inset: -60px;
-            z-index: 3;
-            pointer-events: none;
-            background:
-                radial-gradient(circle at top, transparent 0, transparent 35%, rgba(0, 0, 0, 0.65) 80%),
-                radial-gradient(circle at bottom, transparent 0, transparent 30%, rgba(0, 0, 0, 0.9) 90%);
-        }
-
-        .spotlight {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            background: radial-gradient(circle 480px at var(--x, 50%) var(--y, 30%), rgba(0, 245, 255, 0.16), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.25s ease-out;
-        }
-
-        @keyframes scan {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(3px); }
-        }
-
-        /* CAPA / NÓ DE ACESSO */
-
-        #cover {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            background:
-                radial-gradient(circle at top, #14182b 0, #020308 55%, #000000 100%);
-            transition: opacity 0.7s ease, visibility 0.7s ease;
-        }
-
-        #cover.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .cover-shell {
-            max-width: 880px;
-            width: 100%;
-            border-radius: 24px;
-            border: 1px solid var(--border-strong);
-            padding: 2px;
-            background:
-                linear-gradient(145deg,
-                    rgba(0, 245, 255, 0.35),
-                    rgba(168, 85, 255, 0.2),
-                    rgba(0, 0, 0, 0.5));
-            box-shadow: var(--shadow-hard);
-        }
-
-        .cover-inner {
-            border-radius: 22px;
-            background:
-                radial-gradient(circle at top left, rgba(0, 245, 255, 0.1), transparent 60%),
-                radial-gradient(circle at bottom right, rgba(168, 85, 255, 0.12), transparent 60%),
-                linear-gradient(145deg, rgba(3, 5, 14, 0.98), rgba(5, 9, 23, 0.98));
-            padding: 2.4rem 2.6rem 2.2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cover-inner::before {
-            content: "CONFIDENCIAL // NÍVEL VELUM";
-            position: absolute;
-            top: 18px;
-            right: 26px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.68rem;
-            letter-spacing: 0.16em;
-            color: rgba(199, 210, 254, 0.32);
-        }
-
-        .cover-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 2.4rem;
-            align-items: center;
-        }
-
-        .cover-brand {
-            position: relative;
-        }
-
-        .cover-logo {
-            width: 118px;
-            height: 118px;
-            border-radius: 18px;
-            border: 1px solid var(--border-strong);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.8rem;
-            background:
-                radial-gradient(circle at top, rgba(0, 245, 255, 0.18), transparent 70%),
-                radial-gradient(circle at bottom, rgba(168, 85, 255, 0.24), transparent 70%),
-                #050712;
-            position: relative;
-            box-shadow:
-                0 0 32px rgba(0, 245, 255, 0.4),
-                0 0 82px rgba(0, 0, 0, 0.95);
-        }
-
-        .cover-logo::before,
-        .cover-logo::after {
-            content: '';
-            position: absolute;
-            inset: -10px;
-            border-radius: 24px;
-            border: 1px solid rgba(0, 245, 255, 0.5);
-            opacity: 0.7;
-            animation: rotateOutline 12s linear infinite;
-        }
-
-        .cover-logo::after {
-            inset: -20px;
-            border-color: rgba(168, 85, 255, 0.45);
-            animation-duration: 18s;
-            animation-direction: reverse;
-        }
-
-        .cover-logo span {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.7rem;
-            font-weight: 900;
-            letter-spacing: 0.18em;
-            color: var(--accent);
-            text-shadow:
-                0 0 12px rgba(0, 245, 255, 0.85),
-                0 0 36px rgba(0, 245, 255, 0.65);
-        }
-
-        @keyframes rotateOutline {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .cover-kicker {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 0.9rem;
-        }
-
-        .cover-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.35rem;
-            text-transform: uppercase;
-            letter-spacing: 0.24em;
-            margin-bottom: 0.4rem;
-            background: linear-gradient(120deg, var(--accent), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .cover-sub {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--text-2);
-            margin-bottom: 1.5rem;
-        }
-
-        .cover-description {
-            font-size: 0.92rem;
-            color: var(--text-1);
-            max-width: 420px;
-        }
-
-        .cover-description span {
-            color: var(--accent-secondary);
-        }
-
-        .cover-terminal {
-            margin-top: 1.7rem;
-            padding: 0.85rem 1rem;
-            border-radius: 12px;
-            background: radial-gradient(circle at left, rgba(0, 245, 255, 0.16), transparent 70%);
-            border: 1px solid rgba(148, 163, 253, 0.35);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cover-terminal-line {
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 2px solid rgba(0, 245, 255, 0.7);
-            animation: typing 4s steps(36, end) 0.4s 1 normal both, cursorBlink 0.9s step-end infinite alternate;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes cursorBlink {
-            0% { border-color: rgba(0, 245, 255, 0.7); }
-            50% { border-color: transparent; }
-            100% { border-color: rgba(0, 245, 255, 0.7); }
-        }
-
-        .cover-access {
-            border-radius: 18px;
-            background:
-                linear-gradient(135deg, rgba(0, 245, 255, 0.2), transparent 55%),
-                linear-gradient(225deg, rgba(168, 85, 255, 0.25), transparent 60%),
-                var(--bg-glass);
-            border: 1px solid var(--border-strong);
-            box-shadow: var(--shadow-soft);
-            padding: 1.6rem 1.7rem 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cover-access::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 40%, transparent 60%, rgba(255, 255, 255, 0.04) 100%);
-            mix-blend-mode: soft-light;
-            opacity: 0;
-            transform: translateX(-40%);
-            transition: opacity 0.4s ease, transform 0.6s ease;
-        }
-
-        .cover-access:hover::before {
-            opacity: 1;
-            transform: translateX(20%);
-        }
-
-        .access-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.4rem;
-        }
-
-        .access-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--text-1);
-        }
-
-        .access-badge {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            padding: 0.25rem 0.7rem;
-            border-radius: 999px;
-            border: 1px solid rgba(0, 245, 255, 0.6);
-            color: var(--accent);
-            background: rgba(0, 245, 255, 0.08);
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-        }
-
-        .access-meta {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-
-        .access-form {
-            display: grid;
-            gap: 0.75rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .field-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            color: var(--text-2);
-            margin-bottom: 0.25rem;
-        }
-
-        .field-wrapper {
-            position: relative;
-        }
-
-        .field-input {
-            width: 100%;
-            padding: 0.72rem 2.5rem 0.72rem 0.8rem;
-            border-radius: 10px;
-            border: 1px solid var(--border-soft);
-            background: rgba(2, 6, 23, 0.86);
-            color: var(--text-0);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            outline: none;
-            transition: border-color var(--transition-med), box-shadow var(--transition-med), background var(--transition-med), transform var(--transition-fast);
-        }
-
-        .field-input:focus {
-            border-color: var(--border-accent);
-            background: rgba(2, 6, 23, 0.98);
-            box-shadow: 0 0 0 1px rgba(0, 245, 255, 0.4), 0 0 40px rgba(0, 245, 255, 0.25);
-            transform: translateY(-1px);
-        }
-
-        .field-icon {
-            position: absolute;
-            right: 0.7rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .access-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.45rem;
-            padding: 0.9rem 1.6rem;
-            border-radius: 999px;
-            border: 0;
-            cursor: pointer;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: linear-gradient(120deg, var(--accent), #42f5ff);
-            color: #020617;
-            font-weight: 500;
-            box-shadow: 0 12px 32px rgba(0, 245, 255, 0.35);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 18px 48px rgba(0, 245, 255, 0.55);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-1);
-            border: 1px solid var(--border-soft);
-            padding-inline: 1.3rem;
-        }
-
-        .btn-ghost:hover {
-            border-color: var(--border-accent);
-            color: var(--accent);
-            background: rgba(0, 245, 255, 0.06);
-        }
-
-        .access-note {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            max-width: 260px;
-        }
-
-        /* HEADER */
-
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            padding: 0.9rem 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem;
-            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.96));
-            backdrop-filter: blur(22px);
-            border-bottom: 1px solid rgba(148, 163, 253, 0.22);
-            transition: padding 0.2s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-        }
-
-        header.scrolled {
-            padding: 0.55rem 2.4rem;
-            background: rgba(2, 6, 23, 0.97);
-            border-color: rgba(148, 163, 253, 0.32);
-            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.85);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-            cursor: pointer;
-        }
-
-        .brand-mark {
-            width: 38px;
-            height: 38px;
-            border-radius: 14px;
-            border: 1px solid rgba(0, 245, 255, 0.7);
-            background:
-                radial-gradient(circle at top, rgba(0, 245, 255, 0.24), transparent 70%),
-                #020617;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .brand-mark::before {
-            content: '';
-            position: absolute;
-            inset: -40%;
-            background: conic-gradient(from 180deg, transparent, rgba(0, 245, 255, 0.35), transparent 40%, rgba(168, 85, 255, 0.35), transparent);
-            opacity: 0;
-            transform: rotate(0deg);
-            transition: opacity 0.25s ease-out;
-        }
-
-        .brand:hover .brand-mark::before {
-            opacity: 1;
-            animation: spinMark 6s linear infinite;
-        }
-
-        @keyframes spinMark {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .brand-mark span {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 900;
-            letter-spacing: 0.16em;
-            color: var(--accent);
-            text-shadow: 0 0 14px rgba(0, 245, 255, 0.8);
-        }
-
-        .brand-text h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.22em;
-        }
-
-        .brand-text p {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 1.8rem;
-        }
-
-        nav a {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-2);
-            text-decoration: none;
-            position: relative;
-            padding-bottom: 0.2rem;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -4px;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(120deg, var(--accent), var(--accent-secondary));
-            transition: width 0.22s ease-out;
-        }
-
-        nav a:hover {
-            color: var(--accent);
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .nav-cta {
-            border-radius: 999px;
-            border: 1px solid var(--border-accent);
-            padding: 0.55rem 1.3rem;
-            background: radial-gradient(circle at top, rgba(0, 245, 255, 0.24), transparent 70%);
-            color: var(--accent);
-        }
-
-        .nav-cta::after {
-            display: none;
-        }
-
-        .nav-cta:hover {
-            background: linear-gradient(120deg, var(--accent), #42f5ff);
-            color: #020617 !important;
-            box-shadow: 0 14px 38px rgba(0, 245, 255, 0.55);
-        }
-
-        .header-status {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 999px;
-            background: var(--success);
-            box-shadow: 0 0 12px rgba(0, 255, 157, 0.9);
-            animation: pulseStatus 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseStatus {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(0, 255, 157, 0.9); }
-            50% { transform: scale(1.16); box-shadow: 0 0 20px rgba(0, 255, 157, 1); }
-        }
-
-        /* HERO */
-
-        main {
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero {
-            min-height: 100vh;
-            padding: 7.4rem 3rem 4rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-inner {
-            max-width: 1320px;
-            margin: 0 auto;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1.35fr 1fr;
-            gap: 3rem;
-            align-items: stretch;
-        }
-
-        .hero-left {
-            position: relative;
-        }
-
-        .hero-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.32rem 0.9rem;
-            border-radius: 999px;
-            border: 1px solid rgba(0, 245, 255, 0.4);
-            background: rgba(15, 23, 42, 0.9);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 1.6rem;
-        }
-
-        .hero-tag span.dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 999px;
-            background: var(--accent);
-            box-shadow: 0 0 16px rgba(0, 245, 255, 0.9);
-        }
-
-        .hero-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2.3rem, 3.8vw, 3.3rem);
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            line-height: 1.25;
-            margin-bottom: 1.2rem;
-        }
-
-        .hero-title span {
-            background: linear-gradient(120deg, var(--accent), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-subtitle {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 1.6rem;
-        }
-
-        .hero-description {
-            font-size: 0.98rem;
-            color: var(--text-1);
-            max-width: 620px;
-            margin-bottom: 2.1rem;
-        }
-
-        .hero-description strong {
-            color: var(--accent-secondary);
-            font-weight: 500;
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.9rem;
-            margin-bottom: 1.8rem;
-        }
-
-        .hero-meta-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-        }
-
-        .hero-meta-item span {
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-        }
-
-        .hero-meta-item strong {
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .audio-control {
-            margin-top: 1.8rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--text-muted);
-        }
-
-        .audio-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 999px;
-            border: 1px solid var(--border-soft);
-            background: rgba(15, 23, 42, 0.92);
-            color: var(--text-2);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .audio-btn.active {
-            border-color: var(--border-accent);
-            color: var(--accent);
-            background: rgba(0, 245, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
-        }
-
-        .hero-right {
-            position: relative;
-        }
-
-        .hero-panel {
-            height: 100%;
-            border-radius: var(--radius-lg);
-            background:
-                linear-gradient(160deg, rgba(0, 245, 255, 0.16), transparent 55%),
-                linear-gradient(220deg, rgba(168, 85, 255, 0.18), transparent 60%),
-                var(--bg-glass-soft);
-            border: 1px solid rgba(148, 163, 253, 0.26);
-            box-shadow: var(--shadow-soft);
-            padding: 1.6rem 1.6rem 1.4rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1.1rem;
-        }
-
-        .hero-panel-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .hero-panel-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-1);
-        }
-
-        .hero-panel-chip {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            padding: 0.2rem 0.65rem;
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 253, 0.5);
-            color: var(--text-2);
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-        }
-
-        .hero-panel-body {
-            border-radius: var(--radius-md);
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(31, 41, 80, 0.8);
-            padding: 1rem 1.1rem;
-            display: grid;
-            gap: 0.8rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--text-1);
-        }
-
-        .hero-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 0.9rem;
-        }
-
-        .hero-row span.label {
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            color: var(--text-muted);
-        }
-
-        .hero-row span.value {
-            color: var(--accent);
-        }
-
-        .hero-divider {
-            height: 1px;
-            width: 100%;
-            background: linear-gradient(90deg, transparent, rgba(148, 163, 253, 0.7), transparent);
-            opacity: 0.7;
-        }
-
-        .hero-ops-list {
-            display: grid;
-            gap: 0.7rem;
-        }
-
-        .hero-op-item {
-            display: flex;
-            justify-content: space-between;
-            gap: 0.8rem;
-        }
-
-        .hero-op-name {
-            color: var(--text-1);
-        }
-
-        .hero-op-meta {
-            display: inline-flex;
-            gap: 0.5rem;
-            color: var(--text-muted);
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.12rem 0.6rem;
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 253, 0.6);
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-        }
-
-        .badge-danger {
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        .badge-warn {
-            border-color: var(--warning);
-            color: var(--warning);
-        }
-
-        .badge-ok {
-            border-color: var(--success);
-            color: var(--success);
-        }
-
-        .hero-panel-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.7rem;
-            margin-top: 0.7rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-        <div class="hero-op-item">
-    <div class="hero-op-name">Operação Veracruz</div>
-    <div class="hero-op-meta">
-        <span class="badge"><i class="fas fa-skull"></i> Oneshot</span>
-        <span class="badge"><i class="fas fa-map-marker-alt"></i> Veracruz</span>
-    </div>
-</div>
-
-
-        /* OPERAÇÕES */
-
-        .operations {
-            padding: 3.4rem 3rem 4rem;
-        }
-
-        .section-frame {
-            max-width: 1320px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 1.6rem;
-            align-items: flex-end;
-            margin-bottom: 2.4rem;
-            padding-bottom: 1.1rem;
-            border-bottom: 1px solid rgba(30, 58, 138, 0.8);
-        }
-
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.22em;
-        }
-
-        .section-sub {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            color: var(--text-muted);
-        }
-
-        .section-meta {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--text-2);
-            text-align: right;
-            line-height: 1.5;
-        }
-
-        .ops-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 1.9rem;
-            margin-bottom: 2.6rem;
-        }
-
-        .op-card {
-            border-radius: var(--radius-lg);
-            background: linear-gradient(155deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
-            border: 1px solid rgba(30, 64, 175, 0.9);
-            overflow: hidden;
-            box-shadow: 0 10px 34px rgba(0, 0, 0, 0.9);
-            transform: translateY(0);
-            transition: transform 0.26s ease-out, box-shadow 0.26s ease-out, border-color 0.26s ease-out;
-            position: relative;
-        }
-
-        .op-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 20%;
-            right: 20%;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(0, 245, 255, 0.05), rgba(0, 245, 255, 1), rgba(0, 245, 255, 0.05));
-            opacity: 0;
-            transform: scaleX(0.4);
-            transition: opacity 0.25s ease-out, transform 0.25s ease-out;
-        }
-
-        .op-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 60px rgba(0, 0, 0, 1);
-            border-color: rgba(0, 245, 255, 0.8);
-        }
-
-        .op-card:hover::before {
-            opacity: 1;
-            transform: scaleX(1);
-        }
-
-        .op-image {
-            height: 220px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .op-image::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.0), rgba(15, 23, 42, 0.95));
-        }
-
-        .op-tag {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            padding: 0.3rem 0.7rem;
-            border-radius: 999px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid var(--border-accent);
-            color: var(--accent);
-        }
-
-        .op-tag.classified {
-            border-color: var(--accent-secondary);
-            color: var(--accent-secondary);
-        }
-
-        .op-tag.urgent {
-            border-color: var(--danger);
-            color: var(--danger);
-            animation: urgentPulse 1.8s infinite;
-        }
-
-        @keyframes urgentPulse {
-            0%, 100% { box-shadow: 0 0 12px rgba(255, 51, 102, 0.9); }
-            50% { box-shadow: 0 0 24px rgba(255, 51, 102, 1); }
-        }
-
-        .op-content {
-            padding: 1.6rem 1.6rem 1.5rem;
-            position: relative;
-        }
-
-        .op-meta-top {
-            display: flex;
-            justify-content: space-between;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            margin-bottom: 0.4rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-        }
-
-        .op-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            margin-bottom: 0.7rem;
-        }
-
-        .op-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--text-2);
-            margin-bottom: 1rem;
-        }
-
-        .op-meta span i {
-            margin-right: 0.3rem;
-        }
-
-        .op-description {
-            font-size: 0.86rem;
-            color: var(--text-1);
-            margin-bottom: 1rem;
-        }
-
-        .op-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.8rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-
-        .op-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .op-link i {
-            transition: transform 0.2s ease-out;
-        }
-
-        .op-link:hover i {
-            transform: translateX(3px);
-        }
-
-        /* ALTO CONSELHO */
-
-        .info-panel {
-            border-radius: var(--radius-lg);
-            background:
-                linear-gradient(130deg, rgba(0, 245, 255, 0.16), transparent 55%),
-                linear-gradient(225deg, rgba(168, 85, 255, 0.22), transparent 60%),
-                rgba(15, 23, 42, 0.96);
-            border: 1px solid rgba(30, 64, 175, 0.9);
-            padding: 1.7rem 1.9rem 1.5rem;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .info-panel::before {
-            content: "ALTO CONSELHO // SV-4";
-            position: absolute;
-            right: 1.8rem;
-            top: 1.4rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: rgba(199, 210, 254, 0.4);
-        }
-
-        .info-panel h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 0.9rem;
-            color: var(--accent);
-        }
-
-        .info-panel p {
-            font-size: 0.88rem;
-            color: var(--text-1);
-            max-width: 780px;
-            margin-bottom: 0.6rem;
-        }
-
-        .info-panel a {
-            margin-top: 0.6rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .info-panel a:hover i {
-            transform: translateX(3px);
-        }
-
-        /* STATS */
-
-        .stats {
-            padding: 3.4rem 3rem 3.6rem;
-            border-top: 1px solid rgba(30, 64, 175, 0.9);
-            border-bottom: 1px solid rgba(30, 64, 175, 0.9);
-            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(3, 7, 18, 1));
-        }
-
-        .stats-grid {
-            max-width: 960px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 2.6rem;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            letter-spacing: 0.24em;
-            background: linear-gradient(110deg, var(--accent), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.2rem;
-        }
-
-        .stat-item p {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-2);
-        }
-
-        /* FOOTER */
-
-        footer {
-            padding: 2.6rem 3rem 2.4rem;
-            text-align: center;
-            background: #020617;
-        }
-
-        .footer-content {
-            max-width: 780px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            margin-bottom: 0.9rem;
-            color: var(--accent);
-        }
-
-        footer p {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        /* SCROLL ANIMAÇÕES */
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(24px);
-        }
-
-        .fade-in.visible {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        /* RESPONSIVO */
-
-        @media (max-width: 1120px) {
-            .hero-inner {
-                grid-template-columns: 1.1fr 1fr;
-                gap: 2.2rem;
-            }
-
-            header {
-                padding-inline: 2rem;
-            }
-        }
-
-        @media (max-width: 960px) {
-            .cover-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero {
-                padding: 7rem 1.7rem 3.4rem;
-            }
-
-            .hero-inner {
-                grid-template-columns: 1fr;
-            }
-
-            header {
-                padding-inline: 1.6rem;
-            }
-
-            nav {
-                display: none;
-            }
-
-            .operations,
-            .stats,
-            footer {
-                padding-inline: 1.7rem;
-            }
-
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                text-align: left;
-            }
-
-            .section-meta {
-                text-align: left;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .cover-inner {
-                padding: 2rem 1.6rem 1.7rem;
-            }
-
-            .hero-title {
-                letter-spacing: 0.16em;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-panel {
-                padding-inline: 1.3rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SANCTUM VERITATIS | Organização Paranormal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blood: #8b0000;
+      --crimson: #c0392b;
+      --gold: #c9a84c;
+      --pale-gold: #e8d5a3;
+      --dark: #060608;
+      --dark2: #0d0d12;
+      --dark3: #141420;
+      --light: #d4cfc7;
+      --muted: #7a7570;
+      --accent: #4a1942;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--dark);
+      color: var(--light);
+      font-family: 'Crimson Text', serif;
+      font-size: 18px;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCANLINES OVERLAY ─── */
+    body::before {
+      content: '';
+      pointer-events: none;
+      position: fixed; inset: 0; z-index: 9999;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+    }
+
+    /* ─── CANVAS PARTICLES ─── */
+    #particles-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      background: linear-gradient(to bottom, rgba(6,6,8,0.98), rgba(6,6,8,0));
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--crimson); }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-status {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--crimson);
+      letter-spacing: 0.15em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-status::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--crimson);
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(139,0,0,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 80%, rgba(74,25,66,0.08) 0%, transparent 70%);
+    }
+
+    /* Seal */
+    .seal-wrap {
+      position: relative;
+      width: 180px; height: 180px;
+      margin-bottom: 3rem;
+    }
+
+    .seal-ring {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      opacity: 0.5;
+      animation: spin-slow 30s linear infinite;
+    }
+    .seal-ring-2 {
+      inset: 10px;
+      border: 1px solid rgba(201,168,76,0.3);
+      animation: spin-slow 20s linear infinite reverse;
+    }
+    .seal-ring-3 {
+      inset: 20px;
+      border: 1px dashed rgba(201,168,76,0.2);
+      animation: spin-slow 40s linear infinite;
+    }
+
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+
+    .seal-inner {
+      position: absolute;
+      inset: 30px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,0,0,0.25), var(--dark));
+      border: 1.5px solid rgba(201,168,76,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      filter: drop-shadow(0 0 20px rgba(139,0,0,0.8));
+    }
+
+    .seal-text {
+      position: absolute; inset: 0;
+      animation: spin-slow 60s linear infinite;
+    }
+    .seal-text svg { width: 100%; height: 100%; }
+    .seal-text textPath {
+      fill: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      opacity: 0.7;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      line-height: 0.95;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--pale-gold);
+      text-shadow:
+        0 0 40px rgba(201,168,76,0.3),
+        0 0 80px rgba(139,0,0,0.2);
+      margin-bottom: 0.3em;
+    }
+
+    .hero-title .line2 {
+      display: block;
+      font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+      color: var(--gold);
+      letter-spacing: 0.25em;
+      opacity: 0.8;
+    }
+
+    .hero-divider {
+      width: 200px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 2rem auto;
+    }
+
+    .hero-sub {
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      max-width: 500px;
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      margin-top: 3rem;
+      padding: 0.9rem 2.5rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.4);
+      text-decoration: none;
+      position: relative;
+      transition: all 0.3s;
+      background: rgba(201,168,76,0.04);
+    }
+    .hero-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(201,168,76,0.08);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .hero-cta:hover::before { transform: scaleX(1); }
+    .hero-cta:hover { border-color: var(--gold); color: var(--pale-gold); }
+
+    .scroll-hint {
+      margin-top: 4rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: rgba(201,168,76,0.3);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, rgba(201,168,76,0.3), transparent);
+      animation: scroll-line 2s infinite;
+    }
+    @keyframes scroll-line {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      50.01% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ─── ALERT BANNER ─── */
+    .alert-banner {
+      position: relative; z-index: 1;
+      background: rgba(139,0,0,0.15);
+      border-top: 1px solid rgba(139,0,0,0.4);
+      border-bottom: 1px solid rgba(139,0,0,0.4);
+      padding: 0.8rem 0;
+      overflow: hidden;
+    }
+    .alert-ticker {
+      display: flex; gap: 4rem;
+      animation: ticker 30s linear infinite;
+      white-space: nowrap;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--crimson);
+    }
+    .alert-ticker span::before { content: '▸  '; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ─── SECTIONS ─── */
+    section {
+      position: relative; z-index: 1;
+      padding: 7rem 2rem;
+    }
+
+    .section-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.5em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px; height: 1px;
+      background: var(--crimson);
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--pale-gold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      line-height: 1.2;
+    }
+
+    .section-title em {
+      font-style: normal;
+      color: var(--crimson);
+    }
+
+    /* ─── SOBRE / ABOUT ─── */
+    #sobre {
+      background: linear-gradient(to bottom, var(--dark), var(--dark2));
+    }
+
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .sobre-text p {
+      color: var(--light);
+      line-height: 1.9;
+      margin-bottom: 1.4rem;
+      opacity: 0.85;
+    }
+
+    .sobre-text p strong {
+      color: var(--pale-gold);
+      font-weight: 600;
+    }
+
+    .sobre-text .redacted {
+      background: var(--muted);
+      color: transparent;
+      user-select: none;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+      padding: 0 0.2em;
+      cursor: not-allowed;
+    }
+
+    .sobre-aside {
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+
+    .dossier-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-left: 3px solid var(--blood);
+      padding: 1.5rem;
+      position: relative;
+    }
+    .dossier-card::before {
+      content: attr(data-label);
+      position: absolute; top: -0.6rem; left: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      background: var(--dark2);
+      padding: 0 0.5rem;
+    }
+
+    .dossier-card p {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .dossier-card p strong { color: var(--light); }
+
+    /* ─── MEMBRANA ─── */
+    #membrana {
+      background:
+        linear-gradient(to bottom, var(--dark2), var(--dark)),
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(74,25,66,0.08) 0%, transparent 70%);
+    }
+
+    .membrana-visual {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      margin: 3rem auto;
+      width: 100%; max-width: 600px;
+      height: 300px;
+    }
+
+    .membrane-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+    }
+    .mr1 { width: 280px; height: 280px; border-color: rgba(201,168,76,0.15); animation: pulse-ring 4s ease-in-out infinite; }
+    .mr2 { width: 210px; height: 210px; border-color: rgba(139,0,0,0.3); animation: pulse-ring 4s ease-in-out 0.5s infinite; }
+    .mr3 { width: 140px; height: 140px; border-color: rgba(74,25,66,0.5); animation: pulse-ring 4s ease-in-out 1s infinite; }
+    .mr4 { width: 70px; height: 70px; background: radial-gradient(circle, rgba(139,0,0,0.5), transparent); border-color: var(--blood); animation: pulse-ring 4s ease-in-out 1.5s infinite; }
+
+    @keyframes pulse-ring {
+      0%,100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .membrane-label {
+      position: absolute;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+    .ml-top { top: 0; }
+    .ml-right { right: 0; transform: rotate(90deg); transform-origin: right center; }
+    .ml-left { left: 0; transform: rotate(-90deg); transform-origin: left center; }
+
+    .membrana-desc {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .mem-item {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(201,168,76,0.08);
+      background: rgba(255,255,255,0.01);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .mem-item:hover {
+      border-color: rgba(201,168,76,0.25);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .mem-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+    .mem-item h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .mem-item p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ─── PROTOCOLOS ─── */
+    #protocolos {
+      background: var(--dark2);
+    }
+
+    .proto-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .proto-card {
+      position: relative;
+      padding: 2rem;
+      background: rgba(255,255,255,0.015);
+      border: 1px solid rgba(201,168,76,0.1);
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+      cursor: default;
+    }
+    .proto-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(201,168,76,0.3);
+    }
+
+    .proto-card::after {
+      content: attr(data-num);
+      position: absolute; right: -0.5rem; bottom: -1.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(201,168,76,0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .proto-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--crimson);
+      margin-bottom: 0.8rem;
+    }
+
+    .proto-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      color: var(--pale-gold);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .proto-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .proto-card.highlight {
+      grid-column: span 2;
+      border-color: rgba(139,0,0,0.35);
+      background: rgba(139,0,0,0.05);
+    }
+    .proto-card.highlight:hover { border-color: var(--blood); }
+
+    /* ─── PATENTES ─── */
+    #patentes {
+      background: linear-gradient(to bottom, var(--dark2), var(--dark));
+    }
+
+    .patentes-list {
+      display: flex; flex-direction: column; gap: 0;
+      margin-top: 1.5rem;
+      border: 1px solid rgba(201,168,76,0.1);
+    }
+
+    .patente-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 3fr auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(201,168,76,0.06);
+      transition: background 0.3s;
+    }
+    .patente-row:last-child { border-bottom: none; }
+    .patente-row:hover { background: rgba(201,168,76,0.03); }
+
+    .patente-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--blood);
+      letter-spacing: 0.15em;
+      text-align: center;
+    }
+
+    .patente-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      color: var(--pale-gold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .patente-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .patente-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .badge-classified { color: var(--crimson); border-color: var(--blood); background: rgba(139,0,0,0.08); }
+    .badge-restricted { color: var(--gold); border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.05); }
+    .badge-open { color: var(--muted); border-color: rgba(122,117,112,0.3); }
+
+    /* ─── ALERTA PARANORMAL ─── */
+    #alerta {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139,0,0,0.1) 0%, transparent 70%),
+        var(--dark);
+    }
+
+    .alerta-inner {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .alerta-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 0 20px rgba(139,0,0,0.8));
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
+    @keyframes pulse-icon { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+
+    .alerta-inner .section-title { text-align: center; }
+    .alerta-inner p {
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .terminal-block {
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(139,0,0,0.3);
+      padding: 1.5rem 2rem;
+      text-align: left;
+      margin: 2rem 0;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 2;
+      color: var(--crimson);
+      position: relative;
+    }
+    .terminal-block::before {
+      content: 'TERMINAL // SANCTUM_SYS v2.3';
+      position: absolute; top: -0.6rem; left: 1rem;
+      background: var(--dark);
+      padding: 0 0.5rem;
+      font-size: 0.6rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+    }
+
+    .terminal-line { display: flex; gap: 1rem; }
+    .t-prompt { color: rgba(201,168,76,0.5); }
+    .t-cmd { color: var(--light); }
+    .t-output { color: var(--crimson); padding-left: 2rem; }
+    .t-ok { color: #4caf50; }
+    .t-cursor {
+      display: inline-block;
+      width: 8px; height: 1em;
+      background: var(--crimson);
+      animation: blink 1s infinite;
+      vertical-align: text-bottom;
+    }
+
+    /* ─── RECRUTAMENTO ─── */
+    #recrutamento {
+      background: var(--dark2);
+      border-top: 1px solid rgba(201,168,76,0.08);
+    }
+
+    .recruit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .recruit-form-wrap h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--pale-gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label {
+      display: block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,168,76,0.15);
+      color: var(--light);
+      padding: 0.8rem 1rem;
+      font-family: 'Crimson Text', serif;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: rgba(201,168,76,0.5);
+      background: rgba(201,168,76,0.03);
+    }
+    .form-group select option { background: var(--dark2); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(139,0,0,0.2);
+      border: 1px solid var(--blood);
+      color: var(--pale-gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 0.5rem;
+    }
+    .btn-submit:hover {
+      background: rgba(139,0,0,0.4);
+      border-color: var(--crimson);
+    }
+
+    .recruit-info { display: flex; flex-direction: column; gap: 2rem; }
+    .recruit-info-card {
+      padding: 2rem;
+      border: 1px solid rgba(201,168,76,0.08);
+      background: rgba(255,255,255,0.01);
+      border-top: 2px solid var(--blood);
+    }
+    .recruit-info-card h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .recruit-info-card ul {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .recruit-info-card ul li {
+      font-size: 0.9rem;
+      color: var(--muted);
+      display: flex; align-items: baseline; gap: 0.7rem;
+    }
+    .recruit-info-card ul li::before {
+      content: '—';
+      color: var(--blood);
+      flex-shrink: 0;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative; z-index: 1;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(201,168,76,0.1);
+      background: var(--dark);
+      text-align: center;
+    }
+
+    .footer-seal {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    .footer-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.5em;
+      color: var(--gold);
+      opacity: 0.5;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-copy {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      opacity: 0.4;
+      line-height: 2;
+    }
+
+    .footer-divider {
+      width: 100px; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
+      margin: 1.5rem auto;
+    }
+
+    /* ─── SCROLL FADE IN ─── */
+    .fade-in {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .sobre-grid, .recruit-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .membrana-desc { grid-template-columns: 1fr; }
+      .proto-grid { grid-template-columns: 1fr; }
+      .proto-card.highlight { grid-column: span 1; }
+      .patente-row { grid-template-columns: 40px 1fr; gap: 1rem; }
+      .patente-desc, .patente-badge { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="grid-bg"></div>
-<div class="scanlines"></div>
-<div class="noise"></div>
-<div class="vignette"></div>
-<div class="spotlight" id="spotlight"></div>
+<canvas id="particles-canvas"></canvas>
 
-<!-- CAPA / NÓ DE ACESSO -->
-<div id="cover">
-    <div class="cover-shell">
-        <div class="cover-inner">
-            <div class="cover-grid">
-                <div class="cover-brand">
-                    <div class="cover-logo">
-                        <span>SV</span>
-                    </div>
-                    <div class="cover-kicker">// NÓ SEGURO: VELUM-PRIMUS</div>
-                    <h1 class="cover-title">Sanctum Veritatis</h1>
-                    <p class="cover-sub">Ordo da Verdade Velada</p>
-                    <p class="cover-description">
-                        Você está acessando um enclave de operação fechada. Toda narrativa é tratada como protocolo, 
-                        toda mesa como experimento controlado. <span>A curiosidade sozinha não é credencial.</span>
-                    </p>
-                    <div class="cover-terminal" aria-hidden="true">
-                        <div class="cover-terminal-line">
-                            &gt; Inicializando canal criptografado… protocolo VELUM/OMEGA online.
-                        </div>
-                    </div>
-                </div>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Sanctum <span>Veritatis</span></div>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#membrana">A Membrana</a></li>
+    <li><a href="#protocolos">Protocolos</a></li>
+    <li><a href="#patentes">Patentes</a></li>
+    <li><a href="#recrutamento">Recrutamento</a></li>
+  </ul>
+  <div class="nav-status">MEMBRANA ESTÁVEL</div>
+</nav>
 
-                <form class="cover-access" id="accessForm">
-                    <div class="access-header">
-                        <div>
-                            <div class="access-title">Console de Autenticação</div>
-                            <div class="access-meta">Nível de leitura mínimo: VELUM-BETA</div>
-                        </div>
-                        <div class="access-badge">SV // INTERNO</div>
-                    </div>
-
-                    <div class="access-form">
-                        <div>
-                            <div class="field-label">Token de Acesso</div>
-                            <div class="field-wrapper">
-                                <input type="password" id="accessToken" class="field-input" placeholder="••••••••••" autocomplete="off">
-                                <span class="field-icon"><i class="fas fa-key"></i></span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="field-label">Nível de Sigilo</div>
-                            <div class="field-wrapper">
-                                <input type="text" id="accessLevel" class="field-input" placeholder="VELUM" value="VELUM" autocomplete="off">
-                                <span class="field-icon"><i class="fas fa-shield-alt"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="access-footer">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-terminal"></i> Acessar Protocolo
-                        </button>
-                        <button type="button" class="btn btn-ghost" id="guestBtn">
-                            Acesso Convidado
-                        </button>
-                        <p class="access-note">
-                            Tentativas de autenticação são registradas. Acesso convidado exibe apenas camadas superficiais do Sanctum.
-                        </p>
-                    </div>
-                </form>
-            </div>
-        </div>
+<!-- HERO -->
+<section id="hero">
+  <div class="seal-wrap">
+    <div class="seal-ring"></div>
+    <div class="seal-ring seal-ring-2"></div>
+    <div class="seal-ring seal-ring-3"></div>
+    <div class="seal-inner">☽</div>
+    <div class="seal-text">
+      <svg viewBox="0 0 180 180">
+        <defs>
+          <path id="circle" d="M 90,90 m -75,0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"/>
+        </defs>
+        <text>
+          <textPath href="#circle">SANCTUM VERITATIS ✦ ORDEM PARANORMAL ✦ SUB SIGILO OPERANDUM ✦</textPath>
+        </text>
+      </svg>
     </div>
+  </div>
+
+  <div class="hero-eyebrow">Classificado — Nível Ômega</div>
+  <h1 class="hero-title">
+    Sanctum<br>
+    <span class="line2">Veritatis</span>
+  </h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">
+    <em>"A verdade não precisa de luz para existir.<br>Ela aguarda, nas sombras, que os corajosos a encontrem."</em>
+  </p>
+  <a href="#sobre" class="hero-cta">↓ Acessar Arquivos</a>
+  <div class="scroll-hint">ROLE PARA BAIXO</div>
+</section>
+
+<!-- TICKER -->
+<div class="alert-banner">
+  <div class="alert-ticker">
+    <span>ALERTA: RUPTURA DETECTADA — SETOR 7-GAMMA</span>
+    <span>STATUS DA MEMBRANA: ESTÁVEL — 94.7%</span>
+    <span>MISSÃO ATIVA: CODENAME VETOR NEGRO</span>
+    <span>AGENTES EM CAMPO: 12 CONFIRMADOS</span>
+    <span>ENTIDADE CLASSIFICADA: NÍVEL IV — CONTIDA</span>
+    <span>OPERAÇÃO SILÊNCIO ETERNO — EM ANDAMENTO</span>
+    <span>ALERTA: RUPTURA DETECTADA — SETOR 7-GAMMA</span>
+    <span>STATUS DA MEMBRANA: ESTÁVEL — 94.7%</span>
+    <span>MISSÃO ATIVA: CODENAME VETOR NEGRO</span>
+    <span>AGENTES EM CAMPO: 12 CONFIRMADOS</span>
+    <span>ENTIDADE CLASSIFICADA: NÍVEL IV — CONTIDA</span>
+    <span>OPERAÇÃO SILÊNCIO ETERNO — EM ANDAMENTO</span>
+  </div>
 </div>
 
-<!-- HEADER -->
-<header id="header">
-    <div class="brand" id="brandClick">
-        <div class="brand-mark">
-            <span>SV</span>
-        </div>
-        <div class="brand-text">
-            <h1>Sanctum Veritatis</h1>
-            <p>Ordo da Verdade Velada</p>
-        </div>
-    </div>
-
-    <nav>
-        <a href="fundadores.html">Conselho</a>
-        <a href="sobre.html">Sobre</a>
-        <a href="regras.html">Regras</a>
-        <a href="faq.html">FAQ</a>
-        <a href="https://discord.gg/u3GmJt6Ts6" target="_blank" class="nav-cta">Ingressar</a>
-    </nav>
-
-    <div class="header-status">
-        <span class="status-dot"></span>
-        <span>Canal Seguro Ativo</span>
-    </div>
-</header>
-
-<main>
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="hero-left fade-in">
-                <div class="hero-tag">
-                    <span class="dot"></span>
-                    <span>// ACESSO AUTORIZADO: NÍVEL VELUM</span>
-                </div>
-                <h2 class="hero-title">
-                    NEM TODA <span>VERDADE</span> FOI FEITA PARA SAIR DO ABISMO
-                </h2>
-                <p class="hero-subtitle">
-                    CÉLULA NARRATIVA DE HORROR CONTROLADO // OPERADORES ESPECIALIZADOS
-                </p>
-                <p class="hero-description">
-                    O Sanctum Veritatis é uma ordem silenciosa de mestres e agentes que tratam o horror como matéria-prima 
-                    para histórias profundas e pessoais. Não é um lobby barulhento de curiosos; é um enclave para quem chega 
-                    com <strong>cicatrizes narrativas</strong> e disposição para sustentá-las até o fim.
-                </p>
-
-                <div class="hero-actions">
-                    <a href="OPAtivas.html" class="btn btn-primary">
-                        <i class="fas fa-folder-open"></i> Operações Ativas
-                    </a>
-                    <a href="fundadores.html" class="btn btn-ghost">
-                        Alto Conselho
-                    </a>
-                </div>
-
-                <div class="hero-meta-row">
-                    <div class="hero-meta-item">
-                        <span>Protocolo de Entrada</span>
-                        <strong>Mesa Longa, Compromisso Integral</strong>
-                    </div>
-                    <div class="hero-meta-item">
-                        <span>Risco Narrativo</span>
-                        <strong>Irreversível</strong>
-                    </div>
-                </div>
-
-                <div class="audio-control">
-                    <button id="audioToggle" class="audio-btn" type="button">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <span>Ativar ruído de fundo do Sanctum</span>
-                </div>
-            </div>
-
-            <aside class="hero-right fade-in">
-                <div class="hero-panel">
-                    <div class="hero-panel-header">
-                        <div>
-                            <div class="hero-panel-title">Painel de Situação</div>
-                            <div class="section-sub">Nó de Monitoramento // SV-PRIME</div>
-                        </div>
-                        <div class="hero-panel-chip">RELATÓRIO 00-Σ</div>
-                    </div>
-
-                    <div class="hero-panel-body">
-                        <div class="hero-row">
-                            <span class="label">Operações Ativas</span>
-                            <span class="value">04</span>
-                        </div>
-                        <div class="hero-row">
-                            <span class="label">Fundadores em Campo</span>
-                            <span class="value">04</span>
-                        </div>
-                        <div class="hero-divider"></div>
-
-                        <div class="hero-ops-list">
-                            <div class="hero-op-item">
-                                <div class="hero-op-name">SETENTRIONAL // Ilha de São Firmo</div>
-                                <div class="hero-op-meta">
-                                    <span class="badge badge-ok"><i class="fas fa-user-secret"></i> Corvo</span>
-                                    <span class="badge"><i class="fas fa-clock"></i> Campanha Longa</span>
-                                </div>
-                            </div>
-                            <div class="hero-op-item">
-                                <div class="hero-op-name">Operação Reivindicação</div>
-                                <div class="hero-op-meta">
-                                    <span class="badge badge-warn"><i class="fas fa-flask"></i> Bio Genesis</span>
-                                    <span class="badge"><i class="fas fa-shield-alt"></i> NEX 5+</span>
-                                </div>
-                            </div>
-                            <div class="hero-op-item">
-                                <div class="hero-op-name">Aurora de Vidro</div>
-                                <div class="hero-op-meta">
-                                    <span class="badge badge-danger"><i class="fas fa-snowflake"></i> Círculo Polar</span>
-                                    <span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Alta Prioridade</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="hero-panel-footer">
-                        <span>Use os arquivos abaixo para aprofundar o nível de sigilo.</span>
-                        <a href="setor973.html" class="op-link">
-                            Setor 973<i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </aside>
-        </div>
-    </section>
-
-    <!-- OPERAÇÕES -->
-    <section class="operations">
-        <div class="section-frame">
-            <div class="section-header fade-in">
-                <div>
-                    <h2 class="section-title">Operações em Andamento</h2>
-                    <div class="section-sub">// Dossiês liberados para Nível VELUM</div>
-                </div>
-                <div class="section-meta">
-                    OPERAÇÕES: 04<br>
-                    MATRIZ DE URGÊNCIA: VARIÁVEL<br>
-                    ÚLTIMA ATUALIZAÇÃO: &lt;72 HORAS
-                </div>
-            </div>
-
-            <div class="ops-grid">
-                <article class="op-card fade-in">
-                    <div class="op-image" style="background-image:url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1400&auto=format&fit=crop');">
-                        <div class="op-tag">SETENTRIONAL</div>
-                    </div>
-                    <div class="op-content">
-                        <div class="op-meta-top">
-                            <span>SV-001 // Camada 1</span>
-                            <span>Classificação: VELUM</span>
-                        </div>
-                        <h3 class="op-title">Ilha de São Firmo</h3>
-                        <div class="op-meta">
-                            <span><i class="fas fa-user-secret"></i> Mestre: Corvo</span>
-                            <span><i class="fas fa-clock"></i> Campanha Longa</span>
-                        </div>
-                        <p class="op-description">
-                            Um farol esquecido. Uma ilha que aparece em mapas diferentes com datas que não batem. 
-                            SETENTRIONAL é prova de fogo para investigação lenta, terror de sobrevivência e decisões permanentes 
-                            que não admitem “reset”.
-                        </p>
-                        <div class="op-footer">
-                            <span>// Indicada para agentes que aceitam cicatrizes persistentes na ficha.</span>
-                            <a href="setentrional2.html" class="op-link">
-                                Acessar Dossiê <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="op-card fade-in">
-                    <div class="op-image" style="background-image:url('https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1400&auto=format&fit=crop');">
-                        <div class="op-tag classified">CLASSIFICADO</div>
-                    </div>
-                    <div class="op-content">
-                        <div class="op-meta-top">
-                            <span>SV-014 // Camada 2</span>
-                            <span>Classificação: SIGMA-RESTRITA</span>
-                        </div>
-                        <h3 class="op-title">Operação Reivindicação</h3>
-                        <div class="op-meta">
-                            <span><i class="fas fa-flask"></i> Bio Genesis Corp</span>
-                            <span><i class="fas fa-shield-alt"></i> NEX 5+</span>
-                        </div>
-                        <p class="op-description">
-                            Infiltração em instalação corporativa para recuperação da substância “LM”. Experiência controlada do Outro Lado, 
-                            com prioridade absoluta para amostras e documentação técnica antes da sobrevivência dos ativos.
-                        </p>
-                        <div class="op-footer">
-                            <span>// Operação focada em horror científico e ética descartável.</span>
-                            <a href="reivindicacao.html" class="op-link">
-                                Briefing Operacional <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="op-card fade-in">
-                    <div class="op-image" style="background-image:url('https://images.unsplash.com/photo-1483347756197-71ef80e95f73?q=80&w=1400&auto=format&fit=crop');">
-                        <div class="op-tag urgent">URGENTE</div>
-                    </div>
-                    <div class="op-content">
-                        <div class="op-meta-top">
-                            <span>SV-023 // Camada 3</span>
-                            <span>Classificação: OMEGA-ALERTA</span>
-                        </div>
-                        <h3 class="op-title">Aurora de Vidro</h3>
-                        <div class="op-meta">
-                            <span><i class="fas fa-snowflake"></i> Círculo Polar</span>
-                            <span><i class="fas fa-exclamation-triangle"></i> Alta Prioridade</span>
-                        </div>
-                        <p class="op-description">
-                            Base de pesquisa no Ártico. Dezessete pesquisadores. Última transmissão há 72 horas. O silêncio agora 
-                            é total — inclusive nos canais de contingência. O Sanctum precisa de agentes experientes imediatamente.
-                        </p>
-                        <div class="op-footer">
-                            <span>// Perfeita para quem quer sentir o frio de morrer longe de casa.</span>
-                            <a href="auroradevidro.html" class="op-link">
-                                Responder Chamado <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <article class="op-card fade-in">
-    <div class="op-image" style="background-image:url('https://cdn.discordapp.com/attachments/1457479980673011855/1471590498832613650/trilha-praias-mansa-e-vermelha-ilhabela-e1601069989943.png?ex=698f7cf3&is=698e2b73&hm=44e7958b4ec1205f4132dbcf3b6635c660c64bd684c1b3e6c7e41320aaefa56e');">
-        <div class="op-tag">ONESHOT</div>
-    </div>
-    <div class="op-content">
-        <div class="op-meta-top">
-            <span>SV-031 // Camada 1</span>
-            <span>Classificação: VELUM</span>
-        </div>
-        <h3 class="op-title">Operação Veracruz</h3>
-        <div class="op-meta">
-            <span><i class="fas fa-skull"></i> Oneshot</span>
-            <span><i class="fas fa-map-marker-alt"></i> Veracruz</span>
-        </div>
-        <p class="op-description">
-            Um porto marcado por promessas quebradas, cargas que nunca constam nos manifestos oficiais
-            e uma noite em que o nevoeiro não recuou com o nascer do sol. Veracruz é um recorte fechado:
-            entrar, sobreviver a uma única madrugada e sair aceitando que algumas respostas vão embora com a maré.
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-container">
+    <div class="sobre-grid">
+      <div class="sobre-text fade-in">
+        <div class="section-label">Arquivo 001 — Classificado</div>
+        <h2 class="section-title">Quem Somos <em>Nós</em></h2>
+        <p>
+          O <strong>Sanctum Veritatis</strong> é uma organização paranormal de operações encobertas, fundada nos hiatos da história onde a <strong>Ordo Realitas</strong> não pode — ou não quer — olhar. Enquanto a Ordem preserva a Membrana sob os holofotes, nós operamos nas fissuras do impossível.
         </p>
-        <div class="op-footer">
-            <span>// Oneshot para agentes que querem um mergulho intenso sem compromisso de campanha longa.</span>
-            <a href="OPVeracruz.html" class="op-link">
-                Acessar Dossiê <i class="fas fa-arrow-right"></i>
-            </a>
+        <p>
+          Nossos agentes são recrutados entre aqueles que já <strong>enxergaram o Outro Lado</strong> e sobreviveram para contar. Não somos heróis. Somos a resposta necessária a perguntas que o mundo não deveria fazer.
+        </p>
+        <p>
+          O Sanctum não existe em nenhum registro oficial. Nenhum orçamento governamental. Nenhuma sede nos mapas. Apenas resultados, e os <span class="redacted">████████████████ que testificam nossa eficácia</span>.
+        </p>
+        <p>
+          <em>Sub sigilo operandum. Sob o silêncio, operamos.</em>
+        </p>
+      </div>
+      <div class="sobre-aside fade-in">
+        <div class="dossier-card" data-label="DOSSIER // FUNDAÇÃO">
+          <p><strong>Data de fundação:</strong> [REDIGIDO]<br>
+          <strong>Sede operacional:</strong> Localização classificada<br>
+          <strong>Status atual:</strong> Ativo — Operações em andamento<br>
+          <strong>Afiliações externas:</strong> Nenhuma reconhecida</p>
         </div>
+        <div class="dossier-card" data-label="DOSSIER // MISSÃO">
+          <p><strong>Prioridade I:</strong> Conter entidades de Nível III ou superior<br>
+          <strong>Prioridade II:</strong> Proteger a integridade da Membrana<br>
+          <strong>Prioridade III:</strong> Recrutar e treinar Ocultistas leais<br>
+          <strong>Prioridade IV:</strong> Manter o segredo absoluto</p>
+        </div>
+        <div class="dossier-card" data-label="DOSSIER // SÍMBOLO">
+          <p>O símbolo do Sanctum é uma <strong>lua crescente sobre um olho aberto</strong>. A lua representa os ciclos do paranormal. O olho, a vigília eterna contra aquilo que não dorme. Juntos: <em>ver sem ser visto</em>.</p>
+        </div>
+      </div>
     </div>
-</article>
+  </div>
+</section>
 
+<!-- MEMBRANA -->
+<section id="membrana">
+  <div class="section-container">
+    <div class="section-label fade-in">Arquivo 002 — Cosmologia Operacional</div>
+    <h2 class="section-title fade-in">A <em>Membrana</em> e o Outro Lado</h2>
 
+    <div class="membrana-visual fade-in">
+      <div class="membrane-ring mr1"></div>
+      <div class="membrane-ring mr2"></div>
+      <div class="membrane-ring mr3"></div>
+      <div class="membrane-ring mr4"></div>
+      <span class="membrane-label ml-top">REALIDADE</span>
+    </div>
 
-            <div class="info-panel fade-in">
-                <h3>Alto Conselho</h3>
-                <p>
-                    Quatro fundadores administram o Sanctum Veritatis: Corvo, Mariposa, Noir e EpicGrail. 
-                    Cada um traz uma especialidade distinta — de política sombria a terror cósmico — garantindo 
-                    que nenhuma mesa seja raso entretenimento descartável.
-                </p>
-                <p>
-                    O Conselho supervisiona o início, o meio e o fim de cada operação, para que nenhum agente 
-                    seja abandonado no abismo narrativo sem encerramento digno.
-                </p>
-                <a href="fundadores.html">
-                    Ver Arquivo Completo <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
+    <div class="membrana-desc">
+      <div class="mem-item fade-in">
+        <span class="mem-icon">🌑</span>
+        <h3>A Membrana</h3>
+        <p>O véu invisível que separa a realidade humana do Outro Lado. Frágil por natureza, ela se rompe onde o medo, a morte e o conhecimento proibido se concentram. O Sanctum monitora suas fissuras.</p>
+      </div>
+      <div class="mem-item fade-in">
+        <span class="mem-icon">🩸</span>
+        <h3>O Outro Lado</h3>
+        <p>Um plano de existência paralelo, lar de entidades que desafiam a lógica humana. Não é o inferno. Não é o paraíso. É algo muito mais antigo e indiferente à sobrevivência da humanidade.</p>
+      </div>
+      <div class="mem-item fade-in">
+        <span class="mem-icon">👁</span>
+        <h3>Ocultismo</h3>
+        <p>Agentes com exposição suficiente ao paranormal desenvolvem capacidades que dobram a realidade. O Sanctum treina e arma esses Ocultistas — porque combater o Outro Lado com suas próprias armas é o único caminho.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOCOLOS -->
+<section id="protocolos">
+  <div class="section-container">
+    <div class="section-label fade-in">Arquivo 003 — Diretrizes Internas</div>
+    <h2 class="section-title fade-in"><em>Protocolos</em> Operacionais</h2>
+    <div class="proto-grid">
+      <div class="proto-card fade-in" data-num="I">
+        <div class="proto-num">PROTOCOLO I</div>
+        <h3>Silêncio Absoluto</h3>
+        <p>Nenhuma informação sobre o Sanctum pode ser revelada a civis, autoridades ou membros de outras organizações. A exposição involuntária exige aplicação imediata do Protocolo de Obliteração de Rastro.</p>
+      </div>
+      <div class="proto-card fade-in" data-num="II">
+        <div class="proto-num">PROTOCOLO II</div>
+        <h3>Contenção Primeiro</h3>
+        <p>Antes de eliminar, contenha. Entidades paranormais possuem valor estratégico. O conhecimento extraído de uma criatura viva supera em mil vezes o obtido de sua carcaça.</p>
+      </div>
+      <div class="proto-card fade-in" data-num="III">
+        <div class="proto-num">PROTOCOLO III</div>
+        <h3>Preservação da Membrana</h3>
+        <p>A integridade da Membrana é prioritária sobre qualquer missão individual. Se uma operação ameaça acelerar uma ruptura, ela deve ser abortada imediatamente — independentemente do custo humano.</p>
+      </div>
+      <div class="proto-card fade-in" data-num="IV">
+        <div class="proto-num">PROTOCOLO IV</div>
+        <h3>Autonomia de Campo</h3>
+        <p>Agentes em missão possuem autoridade máxima sobre decisões táticas. Comunicação com a sede nem sempre é possível — e o Sanctum confia no julgamento daqueles que ele mesmo treinou.</p>
+      </div>
+      <div class="proto-card highlight fade-in" data-num="Ω">
+        <div class="proto-num">PROTOCOLO ÔMEGA — MÁXIMA PRIORIDADE</div>
+        <h3>O Preço do Conhecimento</h3>
+        <p>Todo agente assina o Pacto do Véu no momento do recrutamento: <em>o conhecimento que você carrega é uma arma. Se ela cair em mãos erradas, o Sanctum tomará as medidas necessárias.</em> Não há exceções. Não há misericórdia. Há apenas a continuidade da missão.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PATENTES -->
+<section id="patentes">
+  <div class="section-container">
+    <div class="section-label fade-in">Arquivo 004 — Hierarquia Interna</div>
+    <h2 class="section-title fade-in">Estrutura de <em>Patentes</em></h2>
+    <div class="patentes-list fade-in">
+      <div class="patente-row">
+        <div class="patente-num">VI</div>
+        <div class="patente-name">Iniciado</div>
+        <div class="patente-desc">Recém-recrutado. Passa por triagem paranormal e condicionamento psicológico. Acesso mínimo a informações operacionais.</div>
+        <div class="patente-badge badge-open">ABERTO</div>
+      </div>
+      <div class="patente-row">
+        <div class="patente-num">V</div>
+        <div class="patente-name">Agente de Campo</div>
+        <div class="patente-desc">Completa o primeiro ciclo de missões. Autorizado a operar sem supervisão direta em incidentes de Nível I e II.</div>
+        <div class="patente-badge badge-open">PADRÃO</div>
+      </div>
+      <div class="patente-row">
+        <div class="patente-num">IV</div>
+        <div class="patente-name">Especialista</div>
+        <div class="patente-desc">Desenvolveu aptidões únicas — seja no combate, ocultismo ou análise. Lidera esquadrões menores em campo.</div>
+        <div class="patente-badge badge-restricted">RESTRITO</div>
+      </div>
+      <div class="patente-row">
+        <div class="patente-num">III</div>
+        <div class="patente-name">Operativo Sênior</div>
+        <div class="patente-desc">Veterano de múltiplas rupturas. Acesso parcial aos Arquivos Negros. Conduz treinamento de Iniciados.</div>
+        <div class="patente-badge badge-restricted">RESTRITO</div>
+      </div>
+      <div class="patente-row">
+        <div class="patente-num">II</div>
+        <div class="patente-name">Guardião do Véu</div>
+        <div class="patente-desc">Membros do conselho interno. Tomam decisões estratégicas. Conhecem a localização da sede e a origem real do Sanctum.</div>
+        <div class="patente-badge badge-classified">CLASSIFICADO</div>
+      </div>
+      <div class="patente-row">
+        <div class="patente-num">I</div>
+        <div class="patente-name">A Voz do Sanctum</div>
+        <div class="patente-desc">O líder. Identidade nunca revelada sequer aos Guardiões. Comunica-se apenas por mensagens cifradas e intermediários de confiança.</div>
+        <div class="patente-badge badge-classified">ULTRA SECRETO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERTA PARANORMAL -->
+<section id="alerta">
+  <div class="section-container">
+    <div class="alerta-inner fade-in">
+      <span class="alerta-icon">⚠</span>
+      <div class="section-label" style="justify-content:center">Sistema de Vigilância Ativo</div>
+      <h2 class="section-title">Status <em>Operacional</em></h2>
+      <p>
+        O Sanctum mantém uma rede de monitoramento contínuo da Membrana em todos os fusos horários. Quando uma anomalia é detectada, a resposta é imediata.
+      </p>
+      <div class="terminal-block">
+        <div class="terminal-line"><span class="t-prompt">></span><span class="t-cmd">STATUS --all --verbose</span></div>
+        <div class="terminal-line"><span class="t-output">[ OK ] Membrana — Integridade: 94.7%</span></div>
+        <div class="terminal-line"><span class="t-output">[ OK ] Rede de Agentes — 12 ativos / 3 em trânsito</span></div>
+        <div class="terminal-line"><span class="t-output">[WARN] Setor 7-GAMMA — Anomalia térmica detectada</span></div>
+        <div class="terminal-line"><span class="t-output">[ OK ] Arquivo Negro — Acesso: bloqueado</span></div>
+        <div class="terminal-line"><span class="t-prompt">></span><span class="t-cmd">DEPLOY --squad FERRO-3 --sector 7G</span></div>
+        <div class="terminal-line"><span class="t-output t-ok">[ OK ] Esquadrão FERRO-3 em rota. ETA: 47min</span></div>
+        <div class="terminal-line"><span class="t-prompt">></span><span class="t-cmd t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECRUTAMENTO -->
+<section id="recrutamento">
+  <div class="section-container">
+    <div class="section-label fade-in">Arquivo 005 — Acesso Controlado</div>
+    <h2 class="section-title fade-in">Solicitar <em>Recrutamento</em></h2>
+    <div class="recruit-grid">
+      <div class="recruit-form-wrap fade-in">
+        <h3>Formulário de Triagem Inicial</h3>
+        <div class="form-group">
+          <label>Nome de Codinome</label>
+          <input type="text" placeholder="Ex: FALCÃO-7, SOMBRA, CINZAS..."/>
         </div>
-    </section>
-
-    <!-- STATS -->
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item fade-in">
-                <h3>04</h3>
-                <p>Fundadores em Vigília</p>
-            </div>
-            <div class="stat-item fade-in">
-                <h3>04</h3>
-                <p>Operações Em Curso</p>
-            </div>
-            <div class="stat-item fade-in">
-                <h3>∞</h3>
-                <p>Verdades Não Registradas</p>
-            </div>
+        <div class="form-group">
+          <label>Origem / Especialidade</label>
+          <select>
+            <option value="">— Selecione —</option>
+            <option>Militar</option>
+            <option>Investigador</option>
+            <option>Acadêmico</option>
+            <option>Ocultista</option>
+            <option>Médico / Legista</option>
+            <option>Tecnologia</option>
+            <option>Desconhecida</option>
+          </select>
         </div>
-    </section>
-</main>
+        <div class="form-group">
+          <label>Relato de Primeiro Contato Paranormal</label>
+          <textarea rows="5" placeholder="Descreva, com o máximo de detalhes possível, seu primeiro contato com o Outro Lado..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Código de Indicação (se houver)</label>
+          <input type="text" placeholder="[AGENTE QUE INDICOU]"/>
+        </div>
+        <button class="btn-submit">Enviar para Análise ›</button>
+      </div>
+
+      <div class="recruit-info fade-in">
+        <div class="recruit-info-card">
+          <h4>O que esperamos de você</h4>
+          <ul>
+            <li>Resistência psicológica comprovada</li>
+            <li>Capacidade de agir sob pressão extrema</li>
+            <li>Discrição absoluta — em vida e em morte</li>
+            <li>Abertura para treinamento em ocultismo básico</li>
+            <li>Ausência de vínculos familiares próximos (recomendado)</li>
+          </ul>
+        </div>
+        <div class="recruit-info-card">
+          <h4>O que oferecemos</h4>
+          <ul>
+            <li>Treinamento nos três ramos operacionais</li>
+            <li>Acesso a equipamentos de origem paranormal</li>
+            <li>Proteção e identidade operacional garantidas</li>
+            <li>Acesso progressivo aos Arquivos Negros</li>
+            <li>A verdade. Toda ela.</li>
+          </ul>
+        </div>
+        <div class="recruit-info-card">
+          <h4>Aviso Obrigatório</h4>
+          <ul>
+            <li>O Sanctum Veritatis não reconhece a existência deste formulário</li>
+            <li>A submissão implica aceitação do Pacto do Véu</li>
+            <li>Candidatos reprovados são submetidos ao Protocolo de Obliteração de Rastro</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
-    <div class="footer-content">
-        <div class="footer-logo">SANCTUM VERITATIS</div>
-        <p>
-            Este projeto é feito por fãs, sem qualquer vínculo oficial com Ordem Paranormal, Rafael “Cellbit” Lange 
-            ou qualquer outra entidade. Todo o conteúdo aqui é fictício e existe apenas para o entretenimento dos participantes.
-        </p>
-        <p style="margin-top: 1rem; font-size: 0.8rem;">
-            © 2025 Ordo da Verdade Velada. Todos os protocolos reservados.
-        </p>
-    </div>
+  <span class="footer-seal">☽</span>
+  <div class="footer-title">Sanctum Veritatis</div>
+  <div class="footer-divider"></div>
+  <div class="footer-copy">
+    SUB SIGILO OPERANDUM · ESTE SITE É UM PROJETO DE FÃ SEM FINS LUCRATIVOS<br>
+    ORDEM PARANORMAL © CELLBIT / RAFAEL LANGE · TODOS OS DIREITOS RESERVADOS
+  </div>
 </footer>
 
 <script>
-    // LIBERA SCROLL APÓS ACESSO
-    function liberarAcesso() {
-        const cover = document.getElementById('cover');
-        cover.classList.add('hidden');
-        document.body.style.overflowY = 'auto';
+  // ─── PARTICLES ───
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 1.5 + 0.3;
+      this.alpha = Math.random() * 0.4 + 0.05;
+      this.vx = (Math.random() - 0.5) * 0.15;
+      this.vy = -Math.random() * 0.3 - 0.05;
+      this.life = 1;
+      this.decay = Math.random() * 0.002 + 0.0005;
+      const roll = Math.random();
+      if (roll < 0.6) this.color = `rgba(201,168,76,`;
+      else if (roll < 0.85) this.color = `rgba(139,0,0,`;
+      else this.color = `rgba(212,207,199,`;
     }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.life -= this.decay;
+      if (this.life <= 0 || this.y < -10) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color + (this.alpha * this.life) + ')';
+      ctx.fill();
+    }
+  }
 
-    const accessForm = document.getElementById('accessForm');
-    const guestBtn = document.getElementById('guestBtn');
+  for (let i = 0; i < 120; i++) particles.push(new Particle());
 
-    accessForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        liberarAcesso();
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  // ─── SCROLL FADE IN ───
+  const faders = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
     });
+  }, { threshold: 0.12 });
+  faders.forEach(f => observer.observe(f));
 
-    guestBtn.addEventListener('click', function () {
-        liberarAcesso();
+  // ─── SMOOTH SCROLL ───
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))
+        ?.scrollIntoView({ behavior: 'smooth' });
     });
-
-    // HEADER SCROLL
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 40) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-
-    // SPOTLIGHT
-    const spotlight = document.getElementById('spotlight');
-    document.addEventListener('mousemove', (e) => {
-        spotlight.style.setProperty('--x', e.clientX + 'px');
-        spotlight.style.setProperty('--y', e.clientY + 'px');
-        spotlight.style.opacity = '1';
-    });
-
-    // ÁUDIO
-    const audioEl = document.getElementById('bg-audio');
-    const audioToggle = document.getElementById('audioToggle');
-    let audioPlaying = false;
-
-    audioToggle.addEventListener('click', () => {
-        if (!audioPlaying) {
-            audioEl.volume = 0.3;
-            audioEl.play();
-            audioPlaying = true;
-            audioToggle.classList.add('active');
-            audioToggle.querySelector('i').classList.replace('fa-play', 'fa-pause');
-        } else {
-            audioEl.pause();
-            audioPlaying = false;
-            audioToggle.classList.remove('active');
-            audioToggle.querySelector('i').classList.replace('fa-pause', 'fa-play');
-        }
-    });
-
-    // EASTER EGG - SETOR 973 (clique rápido no logotipo)
-    const brand = document.getElementById('brandClick');
-    let clickCount = 0;
-    let clickTimer;
-
-    brand.addEventListener('click', () => {
-        clickCount++;
-        clearTimeout(clickTimer);
-
-        if (clickCount === 3) {
-            window.location.href = 'setor973.html';
-        }
-
-        clickTimer = setTimeout(() => {
-            clickCount = 0;
-        }, 500);
-    });
-
-    // ANIMAÇÃO AO SCROLL
-    const observerOptions = {
-        threshold: 0.2,
-        rootMargin: '0px 0px -60px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  });
 </script>
-
 </body>
 </html>
