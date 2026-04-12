@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROJETO REVIVE — Sistema de Arquivos Internos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg:            #040402;
+      --surface:       #080806;
+      --surface-2:     #0d0d0a;
+      --surface-3:     #111110;
+      --border:        #1c1c16;
+      --border-hi:     #2e2e24;
+      --text:          #c4c4a0;
+      --text-muted:    #787860;
+      --text-faint:    #3e3e30;
+      --accent:        #88bb52;
+      --accent-dim:    #3d6020;
+      --accent-glow:   rgba(136,187,82,0.18);
+      --amber:         #c8a040;
+      --red:           #c85050;
+      --red-dim:       #602020;
+      --font-mono:     'Share Tech Mono', 'Courier New', monospace;
+      --font-vt:       'VT323', 'Courier New', monospace;
+      --radius:        2px;
+      --transition:    150ms ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; background: var(--bg); }
+
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* CRT scanlines */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* CRT vignette */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%);
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* ── LAYOUT ── */
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ── BOOT SCREEN ── */
+    #boot-screen {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      z-index: 9997;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      gap: 8px;
+    }
+
+    #boot-screen.hidden { display: none; }
+
+    .boot-line {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.2s;
+      width: 100%;
+      max-width: 500px;
+    }
+    .boot-line.visible { opacity: 1; }
+    .boot-line.accent  { color: var(--accent); }
+    .boot-line.warn    { color: var(--amber); }
+    .boot-line.error   { color: var(--red); }
+
+    #boot-enter {
+      margin-top: 32px;
+      font-family: var(--font-vt);
+      font-size: 1.6rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      border: 1px solid var(--accent-dim);
+      padding: 10px 32px;
+      background: transparent;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+      display: none;
+    }
+    #boot-enter.visible {
+      display: block;
+      opacity: 1;
+    }
+    #boot-enter:hover {
+      background: var(--accent-dim);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      padding: 22px 0 0;
+      margin-bottom: 0;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding-bottom: 16px;
+    }
+
+    .site-title {
+      font-family: var(--font-vt);
+      font-size: 2.4rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 28px rgba(136,187,82,0.35);
+      line-height: 1;
+    }
+
+    .header-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 1.8;
+    }
+
+    /* Status dot */
+    .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      animation: pulse 2.2s ease infinite;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    nav button {
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 9px 18px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    nav button:hover  { background: var(--surface-2); color: var(--text); }
+    nav button.active { background: var(--surface-2); color: var(--accent); text-shadow: 0 0 10px rgba(136,187,82,0.5); }
+
+    /* ── PAGES ── */
+    main { padding: 30px 0 40px; }
+
+    .page { display: none; }
+    .page.active {
+      display: block;
+      animation: fadeUp 0.3s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── REPORT CARD ── */
+    .report-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px 30px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .report-card + .report-card { margin-top: -1px; }
+
+    .report-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      width: 2px; height: 100%;
+      background: var(--accent-dim);
+    }
+
+    /* Report header lines */
+    .rh-bar {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0;
+    }
+
+    .rh-title {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      padding: 3px 0;
+    }
+
+    .section-label {
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin: 20px 0 8px;
+    }
+
+    .section-label:first-child { margin-top: 0; }
+
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+
+    /* ── DATA ROW ── */
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.025);
+      font-size: 12px;
+    }
+
+    .row-label { color: var(--text-muted); flex: 1; }
+    .row-val   { color: var(--text); text-align: right; min-width: fit-content; }
+
+    .row-val.pass   { color: var(--accent); }
+    .row-val.fail   { color: var(--red); }
+    .row-val.warn   { color: var(--amber); }
+    .row-val.na     { color: var(--text-faint); }
+    .row-val.hi     {
+      color: var(--red);
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(200,80,80,0.4);
+    }
+
+    .row-hi { background: rgba(136,187,82,0.04); margin: 0 -6px; padding: 4px 6px; }
+
+    .test-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.025);
+      font-size: 12px;
+    }
+    .test-label { color: var(--text-muted); flex: 1; }
+    .test-score { color: var(--text-faint); min-width: 40px; text-align: right; }
+    .test-result { min-width: 70px; text-align: right; }
+
+    /* ── NOTES BOX ── */
+    .notes {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      margin: 8px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    .notes .date  { color: var(--text-muted); }
+    .notes .warn  { color: var(--amber); }
+    .notes .crit  { color: var(--red); }
+    .notes .dim   { color: var(--text-faint); }
+
+    .redact {
+      background: var(--text-muted);
+      color: transparent;
+      user-select: none;
+      border-radius: 1px;
+      letter-spacing: 0;
+      font-size: 11px;
+      padding: 0 2px;
+    }
+
+    /* ── STAMP ── */
+    .stamp {
+      display: inline-block;
+      font-family: var(--font-vt);
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      border: 2px solid;
+      padding: 3px 12px;
+      transform: rotate(-2deg);
+    }
+    .stamp-class { border-color: var(--red); color: var(--red); }
+    .stamp-active { border-color: var(--accent); color: var(--accent); }
+    .stamp-enc { border-color: var(--text-faint); color: var(--text-faint); }
+
+    /* ── CURSOR ── */
+    .cursor {
+      display: inline-block;
+      width: 7px; height: 13px;
+      background: var(--accent);
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── SUBJECT GRID ── */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .subj-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+
+    .subj-card:hover { border-color: var(--accent-dim); }
+
+    .subj-card.enc { opacity: 0.48; }
+    .subj-card.enc::after {
+      content: 'ENCERRADO';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(-12deg);
+      font-family: var(--font-vt);
+      font-size: 1.8rem;
+      color: var(--red);
+      opacity: 0.35;
+      pointer-events: none;
+      letter-spacing: 0.1em;
+    }
+
+    .subj-id   { font-size: 10px; color: var(--text-faint); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+    .subj-name { font-family: var(--font-vt); font-size: 1.6rem; color: var(--accent); line-height: 1.1; margin-bottom: 6px; }
+    .subj-meta { font-size: 11px; color: var(--text-muted); line-height: 1.9; }
+
+    .sig-track {
+      height: 2px; background: var(--border); margin: 10px 0 4px; position: relative;
+    }
+    .sig-fill {
+      height: 100%;
+      position: absolute; top: 0; left: 0;
+      background: var(--accent);
+      transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .sig-fill.max { background: var(--red); box-shadow: 0 0 8px rgba(200,80,80,0.6); }
+    .sig-fill.high { background: var(--amber); }
+    .sig-val { font-size: 10px; }
+
+    /* ── EXPERIMENT LOG ── */
+    .exp-entry {
+      border-left: 2px solid var(--border);
+      padding-left: 20px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .exp-entry::before {
+      content: '';
+      position: absolute;
+      left: -5px; top: 6px;
+      width: 8px; height: 8px;
+      border: 1px solid var(--accent-dim);
+      background: var(--bg);
+    }
+
+    .exp-date  { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 3px; }
+    .exp-title { color: var(--accent); font-size: 12px; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .exp-body  { font-size: 12px; color: var(--text-muted); line-height: 1.75; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 18px 0;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-hi); }
+
+    /* ── UTILS ── */
+    .c-acc  { color: var(--accent); }
+    .c-amb  { color: var(--amber); }
+    .c-red  { color: var(--red); }
+    .c-mut  { color: var(--text-muted); }
+    .c-fnt  { color: var(--text-faint); }
+    .mb8  { margin-bottom: 8px; }
+    .mb16 { margin-bottom: 16px; }
+    .center { text-align: center; }
+
+    pre { font-family: var(--font-mono); white-space: pre-wrap; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .report-card { padding: 16px; }
+      .rh-title, .row, .test-row { flex-direction: column; }
+      .row-val, .test-score, .test-result { text-align: left; }
+      nav button { padding: 9px 12px; font-size: 10px; }
+      .site-title { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     BOOT SCREEN
+══════════════════════════════════════════ -->
+<div id="boot-screen">
+  <div class="boot-line" id="b0">REVIVE OS v2.4.1 — INICIALIZANDO…</div>
+  <div class="boot-line" id="b1">VERIFICANDO INTEGRIDADE DO ARQUIVO………… OK</div>
+  <div class="boot-line" id="b2">CARREGANDO BANCO DE DADOS DE SUJEITOS……… OK</div>
+  <div class="boot-line warn" id="b3">AVISO: 2 SUJEITOS EM QUARENTENA</div>
+  <div class="boot-line accent" id="b4">NÍVEL DE DISTORÇÃO LOCAL: 0 — ESTÁVEL</div>
+  <div class="boot-line" id="b5">AUTENTICANDO SESSÃO……………………………………… OK</div>
+  <div class="boot-line error" id="b6">ACESSO AUTORIZADO — TODOS OS ACESSOS SÃO REGISTRADOS</div>
+  <button id="boot-enter" onclick="enterSite()">[ ENTRAR NO SISTEMA ]</button>
+</div>
+
+
+<div id="main-site" style="display:none">
+<div class="wrap">
+
+  <!-- ══ HEADER ══ -->
+  <header class="site-header">
+    <div class="header-top">
+      <!-- SVG Logo -->
+      <svg width="46" height="46" viewBox="0 0 46 46" fill="none" aria-label="Logo do Projeto REVIVE" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="23" cy="23" r="21" stroke="#3d6020" stroke-width="1"/>
+        <circle cx="23" cy="23" r="13" stroke="#88bb52" stroke-width="0.8"/>
+        <circle cx="23" cy="23" r="5" stroke="#88bb52" stroke-width="1.2"/>
+        <circle cx="23" cy="23" r="2" fill="#88bb52"/>
+        <line x1="23" y1="2" x2="23" y2="9"  stroke="#3d6020" stroke-width="1"/>
+        <line x1="23" y1="37" x2="23" y2="44" stroke="#3d6020" stroke-width="1"/>
+        <line x1="2"  y1="23" x2="9"  y2="23" stroke="#3d6020" stroke-width="1"/>
+        <line x1="37" y1="23" x2="44" y2="23" stroke="#3d6020" stroke-width="1"/>
+        <line x1="7.5"  y1="7.5"  x2="12" y2="12" stroke="#3d6020" stroke-width="0.8"/>
+        <line x1="34"   y1="34"   x2="38.5" y2="38.5" stroke="#3d6020" stroke-width="0.8"/>
+        <line x1="38.5" y1="7.5"  x2="34" y2="12" stroke="#3d6020" stroke-width="0.8"/>
+        <line x1="7.5"  y1="38.5" x2="12" y2="34" stroke="#3d6020" stroke-width="0.8"/>
+      </svg>
+
+      <div>
+        <div class="site-title">PROJETO REVIVE</div>
+        <div class="header-meta">
+          <span class="dot"></span>Sistema de Arquivo Interno &nbsp;·&nbsp; Nível de Acesso: RESTRITO
+          <br><span class="c-fnt">Instalação [CLASSIFICADA] &nbsp;·&nbsp; Atualizado: 05 JAN 2004</span>
+        </div>
+      </div>
+    </div>
+
+    <nav role="navigation" aria-label="Navegação principal">
+      <button class="active" id="btn-visao"        onclick="show('visao')">VISÃO GERAL</button>
+      <button               id="btn-rui"          onclick="show('rui')">SUJEITO: RUI</button>
+      <button               id="btn-sujeitos"     onclick="show('sujeitos')">SUJEITOS</button>
+      <button               id="btn-experimentos" onclick="show('experimentos')">EXPERIMENTOS</button>
+      <button               id="btn-notas"        onclick="show('notas')">NOTAS DE CAMPO</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ════════════════════════════════
+         PAGE: VISÃO GERAL
+    ════════════════════════════════ -->
+    <div class="page active" id="page-visao">
+      <div class="report-card">
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title">
+          <span>PROJETO REVIVE — DOSSIÊ INTERNO</span>
+          <span class="c-mut">v.04.01 — ACESSO AUTORIZADO</span>
+        </div>
+        <div class="rh-bar">================================================================================</div>
+
+        <div class="section-label">====DESCRIÇÃO DO PROJETO</div>
+        <hr class="divider">
+        <div class="notes">
+          O Projeto REVIVE é um programa de pesquisa de longo prazo conduzido sob supervisão institucional de nível máximo. Seu objetivo primário é o mapeamento, a ativação e o controle de capacidades neurológicas atípicas em indivíduos jovens — informalmente designadas como <span class="c-acc">"Terceiro Olho"</span>.
+          <br><br>
+          Iniciado em <span class="c-acc">17 de março de 1998</span>, o projeto opera em instalações subterrâneas isoladas de qualquer jurisdição pública conhecida. Todos os sujeitos são admitidos entre as idades de <span class="warn">2 e 9 anos</span>, período em que a neuroplasticidade torna a indução de capacidades mais eficaz e previsível.
+          <br><br>
+          <span class="crit">AVISO: Qualquer tentativa de contato com autoridades externas ou de extração não autorizada de sujeitos constitui violação do Protocolo Sigma-7 e será tratada conforme o Artigo 14.</span>
+        </div>
+
+        <div class="section-label">====STATUS DO PROGRAMA</div>
+        <hr class="divider">
+        <div class="row"><span class="row-label">Sujeitos Ativos</span><span class="row-val pass">07</span></div>
+        <div class="row"><span class="row-label">Sujeitos Encerrados</span><span class="row-val c-mut">12</span></div>
+        <div class="row"><span class="row-label">Sujeitos em Quarentena</span><span class="row-val warn">02</span></div>
+        <div class="row"><span class="row-label">Fase Atual do Protocolo</span><span class="row-val">FASE IV — CONTROLE AVANÇADO</span></div>
+        <div class="row"><span class="row-label">Próxima Revisão Geral</span><span class="row-val">15/02/2004</span></div>
+        <div class="row"><span class="row-label">Diretora do Projeto</span><span class="row-val c-fnt">[CLASSIFICADO]</span></div>
+        <div class="row"><span class="row-label">Nível de Contenção</span><span class="row-val fail">MÁXIMO</span></div>
+
+        <div class="section-label">====NOTAS RECENTES DO DIRETOR</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="date">Última atualização: 03/01/2004</span>
+          <hr class="divider">
+          O incidente de dezembro de 2003 foi contido com perdas mínimas de pessoal. Os três sujeitos envolvidos foram encaminhados para avaliação de danos neurológicos.
+          <br><br>
+          Reitero que os protocolos de supressão devem ser aplicados <span class="warn">antes</span> de qualquer sessão de ativação acima do limiar 6. A sequência inversa demonstrou ser <span class="crit">catastrófica</span> no Experimento 31.
+          <br><br>
+          Quanto à solicitação da Dra. <span class="redact">██████████</span> de suspender os testes com o Sujeito RUI — o pedido foi negado pela terceira vez. Um nível de significância 100 não pode ser desperdiçado por considerações sentimentais.
+        </div>
+
+        <div class="section-label">====PROTOCOLOS EM VIGOR</div>
+        <hr class="divider">
+        <div class="row"><span class="row-label">Protocolo Alpha-1</span><span class="row-val c-mut">Isolamento de sujeitos entre sessões</span></div>
+        <div class="row"><span class="row-label">Protocolo Beta-3</span><span class="row-val c-mut">Restrição de contato interpessoal entre sujeitos</span></div>
+        <div class="row"><span class="row-label">Protocolo Gamma-9</span><span class="row-val warn">Monitoramento de distorção local 24h</span></div>
+        <div class="row"><span class="row-label">Protocolo Delta-2</span><span class="row-val c-mut">Supressão farmacológica entre sessões</span></div>
+        <div class="row"><span class="row-label">Protocolo Sigma-7</span><span class="row-val fail">Contenção de emergência — ATIVO</span></div>
+
+        <br>
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title"><span class="c-fnt">FIM DO DOSSIÊ</span></div>
+        <div class="rh-bar">================================================================================</div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════
+         PAGE: SUJEITO RUI
+    ════════════════════════════════ -->
+    <div class="page" id="page-rui">
+      <div class="report-card">
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title">
+          <span>RELATÓRIO DE EXAMINAÇÃO MENSAL</span>
+          <span class="c-mut">5 de Janeiro de 2004</span>
+        </div>
+        <div class="rh-bar">================================================================================</div>
+
+        <div class="section-label">====INFORMAÇÕES DO SUJEITO</div>
+        <hr class="divider">
+        <div class="row"><span class="row-label">Nome</span><span class="row-val">RUI, <span class="c-fnt">[SOBRENOME CLASSIFICADO]</span></span></div>
+        <div class="row"><span class="row-label">Data de Nascimento</span><span class="row-val">01/05/2001</span></div>
+        <div class="row"><span class="row-label">Sexo</span><span class="row-val">M</span></div>
+        <div class="row"><span class="row-label">Idade</span><span class="row-val">3</span></div>
+        <div class="row"><span class="row-label">Altura (cm)</span><span class="row-val">95</span></div>
+        <div class="row"><span class="row-label">Peso (kg)</span><span class="row-val">14</span></div>
+        <div class="row"><span class="row-label">Ala</span><span class="row-val">A</span></div>
+        <div class="row"><span class="row-label">Sala</span><span class="row-val">114</span></div>
+        <hr class="divider">
+        <div class="row row-hi"><span class="row-label">Nível de Significância (001–100)</span><span class="row-val hi">100</span></div>
+        <hr class="divider">
+
+        <div class="section-label">====NOTAS DO SUJEITO</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="date">Última atualização: 05/12/2003</span>
+          <hr class="divider">
+          <span class="warn">A partir de 5 de dezembro de 2003, todo o pessoal está proibido de editar este campo.</span> Todas as notas anteriores sobre o sujeito foram apagadas permanentemente.
+          <br><br>
+          <span class="crit">Adendo: A introdução de viés durante os testes como resultado de apego pessoal ao sujeito será daqui em diante punida com morte.</span>
+        </div>
+
+        <div class="section-label">====RESULTADOS FÍSICOS</div>
+        <hr class="divider">
+        <div class="row"><span class="row-label">IMC</span><span class="row-val">15.5</span></div>
+        <div class="row"><span class="row-label">FC (bpm)</span><span class="row-val">96</span></div>
+        <div class="row"><span class="row-label">PS (mmHg)</span><span class="row-val">98</span></div>
+        <div class="row"><span class="row-label">PD (mmHg)</span><span class="row-val">61</span></div>
+        <div class="row"><span class="row-label">TEMP (°C)</span><span class="row-val">36.9</span></div>
+        <div class="row"><span class="row-label">Olhos</span><span class="row-val pass">Normal</span></div>
+        <div class="row"><span class="row-label">Ouvidos</span><span class="row-val pass">Normal</span></div>
+        <div class="row"><span class="row-label">Dentes</span><span class="row-val pass">Normal</span></div>
+        <div class="row"><span class="row-label">Genitais</span><span class="row-val pass">Normal</span></div>
+        <div class="row"><span class="row-label">Tolerância à Dor (01–10)</span><span class="row-val warn">03</span></div>
+
+        <div class="section-label">====RESULTADOS FÍSICOS (TERCEIRO OLHO)</div>
+        <hr class="divider">
+        <div class="row"><span class="row-label">FC Alterada (bpm)</span><span class="row-val fail">160</span></div>
+        <div class="row"><span class="row-label">Tempo de Reação (ms)</span><span class="row-val fail">1</span></div>
+        <div class="row"><span class="row-label">Força</span><span class="row-val na">N/D</span></div>
+        <div class="row"><span class="row-label">Distorção Local</span><span class="row-val fail">434</span></div>
+        <div class="row"><span class="row-label">Decaimento de Distorção</span><span class="row-val warn">29</span></div>
+        <div class="row"><span class="row-label">Positividade (01–10)</span><span class="row-val fail">01</span></div>
+        <div class="row"><span class="row-label">Sensibilidade (01–10)</span><span class="row-val fail">09</span></div>
+        <div class="row"><span class="row-label">Controle (01–10)</span><span class="row-val fail">01</span></div>
+
+        <div class="section-label">====NOTAS FÍSICAS</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="date">Última atualização: 05/01/2004</span>
+          <hr class="divider">
+          Os seguintes comportamentos ocasionais foram registrados e devem ser <strong>ignorados</strong> em examinações futuras:
+          <br><br>
+          <span class="warn">Espasmos; tiques vocais; mordidas; epífora; vômitos; gritos; agressão ao examinador; autoagressão; riso fora de contexto.</span>
+          <br><br>
+          <span class="crit">Qualquer tentativa de autoagressão deve ser interrompida imediatamente.</span>
+        </div>
+
+        <div class="section-label">====RESULTADOS DOS TESTES</div>
+        <hr class="divider">
+
+        <div class="test-row row-hi"><span class="test-label">Teste de Resposta Física</span><span class="test-score c-fnt">100</span><span class="test-result pass">APROVADO</span></div>
+        <div class="test-row row-hi"><span class="test-label">Teste de Resposta Emocional</span><span class="test-score c-fnt">100</span><span class="test-result pass">APROVADO</span></div>
+        <div class="test-row"><span class="test-label">Teste de Controle Físico</span><span class="test-score c-fnt">32</span><span class="test-result fail">REPROVADO</span></div>
+        <div class="test-row"><span class="test-label">Teste de Controle Emocional</span><span class="test-score c-fnt">22</span><span class="test-result fail">REPROVADO</span></div>
+        <div class="test-row row-hi"><span class="test-label">Teste de Ativação do Terceiro Olho</span><span class="test-score c-fnt">100</span><span class="test-result pass">APROVADO</span></div>
+        <div class="test-row"><span class="test-label">Teste de Supressão do Terceiro Olho</span><span class="test-score c-fnt">08</span><span class="test-result fail">REPROVADO</span></div>
+        <hr class="divider">
+        <div class="test-row"><span class="test-label">Teste de Resposta Sexual</span><span class="test-score na">N/D</span><span class="test-result na">N/D</span></div>
+        <hr class="divider">
+        <div class="test-row row-hi"><span class="test-label">Teste de Resposta a Ameaça Menor</span><span class="test-score c-fnt">100</span><span class="test-result pass">APROVADO</span></div>
+        <div class="test-row row-hi"><span class="test-label">Teste de Eliminação de Ameaça Menor</span><span class="test-score c-fnt">100</span><span class="test-result pass">APROVADO</span></div>
+        <div class="test-row row-hi"><span class="test-label">Teste de Resposta a Ameaça Letal</span><span class="test-score c-fnt">100</span><span class="test-result pass">APROVADO</span></div>
+        <div class="test-row row-hi"><span class="test-label">Teste de Eliminação de Ameaça Letal</span><span class="test-score c-fnt">100</span><span class="test-result pass">APROVADO</span></div>
+
+        <div class="section-label">====NOTAS DOS TESTES</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="date">Última atualização: 05/01/2004</span>
+          <hr class="divider">
+          O Teste de Resposta Sexual é ignorado durante a pré-pubescência.
+          <br><br>
+          Solicitada a suspensão dos seguintes testes: Teste de Ativação do Terceiro Olho; Teste de Supressão do Terceiro Olho; Teste de Resposta a Ameaça Letal; Teste de Eliminação de Ameaça Letal.
+          <br><br>
+          <span class="warn">Todas as solicitações foram negadas.</span>
+          <br><br>
+          Rui ainda não se recuperou do encerramento do Sujeito <span class="redact">██████</span> e não há expectativa de recuperação no futuro próximo. Continuar a administrar estes testes somente acelerará a deterioração da saúde de Rui.
+          <br><br>
+          <span class="crit">O senhor está escolhendo evitar as medidas necessárias para prevenir um cenário repetido, Doutor. O senhor não terá tanta fé em seu pessoal quanto tem em seu Deus?</span>
+        </div>
+
+        <br>
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title"><span class="c-fnt">FIM DO RELATÓRIO</span></div>
+        <div class="rh-bar">================================================================================</div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════
+         PAGE: SUJEITOS
+    ════════════════════════════════ -->
+    <div class="page" id="page-sujeitos">
+      <div class="report-card">
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title">
+          <span>REGISTRO DE SUJEITOS — PROJETO REVIVE</span>
+          <span class="c-mut">Atualizado: 05/01/2004</span>
+        </div>
+        <div class="rh-bar">================================================================================</div>
+        <br>
+
+        <div class="subjects-grid" id="subjects-grid">
+
+          <!-- RUI -->
+          <div class="subj-card">
+            <div class="subj-id">SUJEITO-009 · ALA A · SALA 114</div>
+            <div class="subj-name">RUI</div>
+            <div class="subj-meta">
+              Idade: 3 anos &nbsp;·&nbsp; Sexo: M<br>
+              Ingresso: 15/09/2001<br>
+              Status: <span class="c-acc">ATIVO</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill max" data-w="100"></div></div>
+            <div class="sig-val fail">Significância: 100/100</div>
+          </div>
+
+          <!-- MARA -->
+          <div class="subj-card">
+            <div class="subj-id">SUJEITO-003 · ALA B · SALA 201</div>
+            <div class="subj-name">MARA</div>
+            <div class="subj-meta">
+              Idade: 7 anos &nbsp;·&nbsp; Sexo: F<br>
+              Ingresso: 03/06/1997<br>
+              Status: <span class="c-acc">ATIVA</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill" data-w="72"></div></div>
+            <div class="sig-val c-acc">Significância: 72/100</div>
+          </div>
+
+          <!-- DAVI — encerrado -->
+          <div class="subj-card enc">
+            <div class="subj-id">SUJEITO-005 · ALA A · SALA 108</div>
+            <div class="subj-name">DAVI</div>
+            <div class="subj-meta">
+              Idade: 5 anos &nbsp;·&nbsp; Sexo: M<br>
+              Ingresso: 22/11/1998<br>
+              Status: <span class="c-fnt">ENCERRADO</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill" data-w="0"></div></div>
+            <div class="sig-val c-fnt">Data de enc.: 28/11/2003</div>
+          </div>
+
+          <!-- LUNA — quarentena -->
+          <div class="subj-card">
+            <div class="subj-id">SUJEITO-011 · ALA C · SALA 317</div>
+            <div class="subj-name">LUNA</div>
+            <div class="subj-meta">
+              Idade: 6 anos &nbsp;·&nbsp; Sexo: F<br>
+              Ingresso: 07/03/2002<br>
+              Status: <span class="c-amb">QUARENTENA</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill high" data-w="88"></div></div>
+            <div class="sig-val c-amb">Significância: 88/100</div>
+          </div>
+
+          <!-- CAIO — encerrado -->
+          <div class="subj-card enc">
+            <div class="subj-id">SUJEITO-002 · ALA A · SALA 102</div>
+            <div class="subj-name">CAIO</div>
+            <div class="subj-meta">
+              Idade: 4 anos &nbsp;·&nbsp; Sexo: M<br>
+              Ingresso: 14/01/1997<br>
+              Status: <span class="c-fnt">ENCERRADO</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill" data-w="0"></div></div>
+            <div class="sig-val c-fnt">Data de enc.: 03/07/2001</div>
+          </div>
+
+          <!-- NINA -->
+          <div class="subj-card">
+            <div class="subj-id">SUJEITO-014 · ALA B · SALA 209</div>
+            <div class="subj-name">NINA</div>
+            <div class="subj-meta">
+              Idade: 4 anos &nbsp;·&nbsp; Sexo: F<br>
+              Ingresso: 20/08/2003<br>
+              Status: <span class="c-acc">ATIVA</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill" data-w="45"></div></div>
+            <div class="sig-val c-acc">Significância: 45/100</div>
+          </div>
+
+          <!-- THEO — quarentena -->
+          <div class="subj-card">
+            <div class="subj-id">SUJEITO-016 · ALA C · SALA 320</div>
+            <div class="subj-name">THEO</div>
+            <div class="subj-meta">
+              Idade: 5 anos &nbsp;·&nbsp; Sexo: M<br>
+              Ingresso: 11/02/2003<br>
+              Status: <span class="c-amb">QUARENTENA</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill high" data-w="61"></div></div>
+            <div class="sig-val c-amb">Significância: 61/100</div>
+          </div>
+
+          <!-- ISA — encerrado -->
+          <div class="subj-card enc">
+            <div class="subj-id">SUJEITO-007 · ALA A · SALA 111</div>
+            <div class="subj-name">ISA</div>
+            <div class="subj-meta">
+              Idade: 8 anos &nbsp;·&nbsp; Sexo: F<br>
+              Ingresso: 30/04/1999<br>
+              Status: <span class="c-fnt">ENCERRADO</span>
+            </div>
+            <div class="sig-track"><div class="sig-fill" data-w="0"></div></div>
+            <div class="sig-val c-fnt">Data de enc.: 12/09/2002</div>
+          </div>
+
+        </div>
+
+        <div class="notes">
+          <span class="warn">NOTA:</span> Perfis detalhados de todos os sujeitos estão disponíveis mediante solicitação formal ao departamento de pesquisa. O acesso a sujeitos de nível A exige autorização nível 4 ou superior. Sujeitos de significância acima de 80 estão sob restrições adicionais conforme o Protocolo Gamma-9.
+        </div>
+
+        <br>
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title"><span class="c-fnt">FIM DO REGISTRO</span></div>
+        <div class="rh-bar">================================================================================</div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════
+         PAGE: EXPERIMENTOS
+    ════════════════════════════════ -->
+    <div class="page" id="page-experimentos">
+      <div class="report-card">
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title">
+          <span>LOG DE EXPERIMENTOS — SUJEITO RUI</span>
+          <span class="c-mut">Acesso Nível 4 Requerido</span>
+        </div>
+        <div class="rh-bar">================================================================================</div>
+
+        <div class="section-label">====EXPERIMENTO 31 — ATIVAÇÃO DE LIMIAR MÁXIMO</div>
+        <hr class="divider">
+        <div class="exp-entry">
+          <div class="exp-date">DATA: 12/12/2003 &nbsp;·&nbsp; DURAÇÃO: 00:47:22 &nbsp;·&nbsp; EXAMINADOR: Dr. <span class="c-fnt">███████</span></div>
+          <div class="exp-title">Ativação Forçada — Terceiro Olho — Limiar 9</div>
+          <div class="exp-body">
+            O sujeito foi preparado às 03h14 com supressão farmacológica padrão (Beta-3, dose adaptada para 14 kg). A ativação foi iniciada usando estímulo audiovisual de Classe IV combinado com privação de sono de 72 horas.
+            <br><br>
+            Às 03h31, o sujeito atingiu estado de ativação plena. Distorção local registrada em <span class="c-red">512</span> — valor mais alto já registrado nesta instalação. Três membros da equipe de contenção relataram hemorragia nasal. As câmeras do corredor sul falharam simultaneamente.
+            <br><br>
+            <span class="c-amb">O sujeito permaneceu em estado de ativação por 19 minutos além do esperado. A supressão farmacológica não produziu efeito.</span> O experimento foi encerrado via Protocolo Sigma-7. O sujeito perdeu a consciência às 04h01.
+            <br><br>
+            <span class="c-red">Baixas: 1 pesquisador (Dr. Eletskaya — danos neurológicos irreversíveis). 2 agentes de contenção (internados — prognóstico reservado).</span>
+          </div>
+        </div>
+
+        <div class="section-label">====EXPERIMENTO 28 — RECONHECIMENTO DE AMEAÇAS</div>
+        <hr class="divider">
+        <div class="exp-entry">
+          <div class="exp-date">DATA: 03/11/2003 &nbsp;·&nbsp; DURAÇÃO: 02:15:00 &nbsp;·&nbsp; EXAMINADOR: Dra. <span class="c-fnt">███████</span></div>
+          <div class="exp-title">Identificação e Resposta — Ameaça Letal Simulada</div>
+          <div class="exp-body">
+            O sujeito foi exposto a atores treinados simulando comportamento ameaçador em nível crescente (protocolos 1 a 7). O objetivo era medir o tempo de reação e a natureza da resposta do Terceiro Olho sem ativação forçada prévia.
+            <br><br>
+            No nível 4, antes da introdução do ator na sala, o sujeito virou-se para a câmera de monitoramento e ficou em silêncio por 4 minutos. Ao ser questionado, disse apenas: <span class="c-amb">"Eu sei que você está assistindo."</span>
+            <br><br>
+            O experimento continuou. No nível 6, o ator foi lançado contra a parede oposta antes mesmo de entrar na sala. Nenhum contato físico com o sujeito. Tempo de reação: <span class="c-red">1 ms</span>. Distorção local: 287.
+            <br><br>
+            <span class="c-mut">Observação pessoal (Dra. <span class="c-fnt">███████</span>): Esta criança tem três anos. Por favor.</span>
+          </div>
+        </div>
+
+        <div class="section-label">====EXPERIMENTO 25 — INTERAÇÃO COM SUJEITO <span class="redact">██████</span></div>
+        <hr class="divider">
+        <div class="exp-entry">
+          <div class="exp-date">DATA: 04/10/2003 &nbsp;·&nbsp; DURAÇÃO: 00:30:00 &nbsp;·&nbsp; EXAMINADOR: Dr. <span class="c-fnt">███████</span></div>
+          <div class="exp-title">Estímulo de Vínculo — Impacto na Distorção Local [CONFIDENCIAL]</div>
+          <div class="exp-body">
+            <span class="c-red">[ACESSO A ESTE REGISTRO RESTRITO AO DIRETOR E AO NÍVEL 5+. CONTEÚDO REDIGIDO POR ORDEM INTERNA DE 01/12/2003.]</span>
+            <br><br>
+            <span class="redact">███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████</span>
+            <br><br>
+            Distorção local durante a sessão: <span class="c-acc">0</span>. Primeira leitura de zero em todos os registros do sujeito RUI.
+            <br><br>
+            <span class="c-red">O Diretor determinou que este resultado é irrelevante para os objetivos do projeto e ordenou o encerramento do Sujeito <span class="redact">██████</span> em 28/11/2003.</span>
+          </div>
+        </div>
+
+        <div class="section-label">====EXPERIMENTO 22 — SUPRESSÃO VOLUNTÁRIA</div>
+        <hr class="divider">
+        <div class="exp-entry">
+          <div class="exp-date">DATA: 07/08/2003 &nbsp;·&nbsp; DURAÇÃO: 03:40:00 &nbsp;·&nbsp; EXAMINADOR: Dr. <span class="c-fnt">███████</span></div>
+          <div class="exp-title">Tentativa de Supressão Autônoma — Terceiro Olho</div>
+          <div class="exp-body">
+            Primeira tentativa de ensinar o sujeito a suprimir voluntariamente as manifestações do Terceiro Olho. Técnica utilizada: condicionamento positivo-negativo com feedback visual em tempo real.
+            <br><br>
+            O sujeito não demonstrou capacidade de supressão voluntária, obtendo pontuação de <span class="c-red">08/100</span> — compatível com relatórios anteriores. Permaneceu em silêncio durante a maior parte da sessão.
+            <br><br>
+            Às 11h47, durante uma pausa, o sujeito perguntou: <span class="c-amb">"Quando posso ir para casa?"</span> A pergunta foi registrada e ignorada conforme o protocolo.
+            <br><br>
+            <span class="c-red">Nota do Diretor: O sujeito não tem "casa" para a qual retornar. Qualquer membro do pessoal que responda a perguntas deste tipo incorrerá em sanção disciplinar.</span>
+          </div>
+        </div>
+
+        <div class="section-label">====EXPERIMENTO 17 — LINHA DE BASE EMOCIONAL</div>
+        <hr class="divider">
+        <div class="exp-entry">
+          <div class="exp-date">DATA: 15/04/2003 &nbsp;·&nbsp; DURAÇÃO: 01:00:00 &nbsp;·&nbsp; EXAMINADOR: Dr. <span class="c-fnt">███████</span></div>
+          <div class="exp-title">Avaliação de Resposta Emocional — Estímulos Controlados</div>
+          <div class="exp-body">
+            Avaliação padrão de resposta emocional. O sujeito foi exposto a materiais audiovisuais de valência positiva, negativa e neutra, com monitoramento biométrico contínuo.
+            <br><br>
+            O sujeito demonstrou respostas emocionais intensas a todos os estímulos positivos — pontuação <span class="c-acc">100/100</span>. A correlação entre resposta emocional e ativação do Terceiro Olho continua sendo o principal vetor de estudo do Projeto REVIVE.
+            <br><br>
+            <span class="c-mut">Durante o estímulo de valência positiva (imagens de crianças brincando ao ar livre), o sujeito sorriu pela primeira vez em 34 dias de registro. Distorção local durante o sorriso: <span class="c-acc">0</span>.</span>
+          </div>
+        </div>
+
+        <br>
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title"><span class="c-fnt">FIM DO LOG</span></div>
+        <div class="rh-bar">================================================================================</div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════
+         PAGE: NOTAS DE CAMPO
+    ════════════════════════════════ -->
+    <div class="page" id="page-notas">
+      <div class="report-card">
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title">
+          <span>NOTAS DE CAMPO — COMUNICAÇÕES INTERNAS</span>
+          <span class="c-mut">Nível de Acesso: 3+</span>
+        </div>
+        <div class="rh-bar">================================================================================</div>
+
+        <div class="section-label">====MEMORANDO — 04/01/2004</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="c-mut">DE: Dra. <span class="redact">████████</span> &nbsp;|&nbsp; PARA: Diretor <span class="redact">████████</span></span>
+          <hr class="divider">
+          Solicito formalmente, pela quarta vez, a suspensão dos testes de ameaça letal com o Sujeito RUI.
+          <br><br>
+          O sujeito tem três anos. As métricas que o senhor considera "promissoras" — tempo de reação de 1ms, distorção acima de 400, resposta de eliminação em 100% — são sintomas de trauma severo, não indicadores de progresso controlado.
+          <br><br>
+          Sua exposição ao encerramento do Sujeito <span class="redact">██████</span> foi calculada pelo senhor como um "estímulo de controle". As consequências observadas contradizem qualquer hipótese de controle. A distorção de 512 no Experimento 31 poderia ter destruído a Ala A inteira.
+          <br><br>
+          <span class="warn">Se o senhor continuar nesta direção, o que quer que reste de Rui não será utilizável. E nem deveria ser.</span>
+        </div>
+
+        <div class="section-label">====RESPOSTA DO DIRETOR — 04/01/2004</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="c-mut">DE: Diretor <span class="redact">████████</span> &nbsp;|&nbsp; PARA: Dra. <span class="redact">████████</span></span>
+          <hr class="divider">
+          Pedido negado.
+          <br><br>
+          <span class="crit">A senhora está sendo transferida para a Ala C a partir de amanhã. Não terá mais acesso ao Sujeito RUI.</span>
+          <br><br>
+          Recomendo que a senhora releia o Artigo 14 do Protocolo Sigma-7 antes de enviar mais correspondências deste tipo.
+        </div>
+
+        <div class="section-label">====REGISTRO INFORMAL — 28/12/2003 — Dr. <span class="redact">████████</span> (Examinador)</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="c-amb">NOTA: Este registro foi recuperado do lixo. Seu arquivamento foi ordenado pelo Diretor.</span>
+          <hr class="divider">
+          Hoje Rui perguntou meu nome. Eu não deveria ter respondido. Eu sei que não deveria ter respondido.
+          <br><br>
+          Ele disse: <span class="warn">"Você parece com meu pai."</span>
+          <br><br>
+          Precisei sair da sala por dez minutos. Registrei como verificação de equipamento.
+          <br><br>
+          Não vou pedir transferência. Isso não vai mudar nada para ele. Mas estou registrando aqui porque alguém precisa saber que quando ele olha para você — quando ele realmente olha — não há distorção. Não há ativação. Não há nada nos números que explique o que acontece.
+          <br><br>
+          Ele é apenas um menino de três anos.
+          <br><br>
+          <span class="crit">E nós estamos fazendo isso de qualquer forma.</span>
+        </div>
+
+        <div class="section-label">====ALERTA DO SISTEMA — 01/01/2004 — 03h47</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="crit">DISTORÇÃO LOCAL DETECTADA: ALA A — SALA 114 — NÍVEL 6</span>
+          <br>
+          Duração: 00:00:03<br>
+          Causa: Desconhecida — sujeito não estava em sessão ativa<br>
+          Danos: Sensor de temperatura do corredor 1-A fundido. Espelho da sala destruído.<br>
+          Feridos: Nenhum.
+          <br><br>
+          <span class="warn">Nota do agente de plantão (Agente <span class="redact">███</span>):</span> Quando abri a porta para verificar, Rui estava sentado no chão com os joelhos no peito. Estava cantando baixinho. Não entrei na sala.
+        </div>
+
+        <div class="section-label">====REGISTRO ANÔNIMO — DATA DESCONHECIDA</div>
+        <hr class="divider">
+        <div class="notes">
+          <span class="c-fnt">[Fonte não identificada. Encontrado impresso e deslizado por baixo da porta do arquivo em 03/01/2004.]</span>
+          <hr class="divider">
+          Se alguém ler isso depois que tudo acabar:
+          <br><br>
+          O Rui tem um dente de leite amolecendo. Ele fica mexendo com a língua nele. Às vezes, no meio de um teste, ele para tudo e fica mexendo no dente, com aquela cara de criança que tá tentando não pensar no dente, mas pensa.
+          <br><br>
+          O Diretor não colocou isso em nenhum relatório.
+          <br><br>
+          <span class="warn">Nós somos os monstros aqui. E eu vou fazer o que puder.</span>
+        </div>
+
+        <br>
+        <div class="center mb16">
+          <span class="stamp stamp-class">CLASSIFICADO</span>
+        </div>
+
+        <div class="rh-bar">================================================================================</div>
+        <div class="rh-title"><span class="c-fnt">FIM DAS NOTAS</span></div>
+        <div class="rh-bar">================================================================================</div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span>PROJETO REVIVE © 2004 — USO INTERNO EXCLUSIVO</span>
+    <span>SISTEMA v2.4.1 &nbsp;·&nbsp; TODOS OS ACESSOS SÃO REGISTRADOS<span class="cursor"></span></span>
+  </footer>
+
+</div><!-- .wrap -->
+</div><!-- #main-site -->
+
+
+<script>
+  /* ── BOOT SEQUENCE ── */
+  const lines = ['b0','b1','b2','b3','b4','b5','b6'];
+  let i = 0;
+
+  function bootNext() {
+    if (i < lines.length) {
+      document.getElementById(lines[i]).classList.add('visible');
+      i++;
+      setTimeout(bootNext, i < 4 ? 350 : 480);
+    } else {
+      setTimeout(() => {
+        document.getElementById('boot-enter').classList.add('visible');
+      }, 400);
+    }
+  }
+
+  setTimeout(bootNext, 600);
+
+  function enterSite() {
+    document.getElementById('boot-screen').classList.add('hidden');
+    document.getElementById('main-site').style.display = 'block';
+    animateSigBars();
+  }
+
+  /* ── NAVIGATION ── */
+  function show(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.getElementById('btn-' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (id === 'sujeitos') setTimeout(animateSigBars, 80);
+  }
+
+  /* ── SIGNIFICANCE BARS ANIMATION ── */
+  function animateSigBars() {
+    document.querySelectorAll('.sig-fill').forEach(el => {
+      el.style.width = '0%';
+      const target = el.dataset.w + '%';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { el.style.width = target; });
+      });
+    });
+  }
+
+  /* Wait until sujeitos page might be viewed */
+  document.getElementById('btn-sujeitos').addEventListener('click', () => {
+    setTimeout(animateSigBars, 100);
+  });
+</script>
+
+</body>
+</html>
