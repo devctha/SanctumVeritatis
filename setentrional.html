@@ -1,596 +1,2320 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SETENTRIONAL | Ordem Paranormal RPG</title>
-    
-    <!-- FONTES E ÍCONES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* --- CONFIGURAÇÕES GERAIS (CORES E RESET) --- */
-        :root {
-            --bg-dark: #050505;
-            --bg-abyss: #0a0000;
-            --bg-panel: #111111;
-            
-            /* Nova Paleta */
-            --text-primary: #f0f0f0;
-            --text-muted: #8c8c8c;
-            --accent-red: #ff1a1a;       /* Vermelho Neon Principal */
-            --accent-dark-red: #8a0000;  /* Vermelho Sangue Escuro */
-            --accent-silver: #b0b0b0;    /* Cinza Metálico */
-            
-            --glass: rgba(10, 0, 0, 0.85);
-            --border: rgba(255, 255, 255, 0.08);
-            --glow: 0 0 15px rgba(255, 26, 26, 0.4);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+  <title>Setentrional | Sanctum Veritatis</title>
 
-        body {
-            background: radial-gradient(circle at center, #1a0505 0%, #000000 100%);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+  <style>
+    :root {
+      --bg: #040506;
+      --bg2: #090b0d;
+      --black: #020203;
+      --paper: #e8e1cd;
+      --paper2: #bcb29a;
+      --muted: #898174;
+      --gold: #b79b5b;
+      --gold2: #e2c978;
+      --blood: #8b1010;
+      --blood2: #c82020;
+      --green: #6affbc;
+      --blue: #87b7ff;
+      --line: rgba(232, 225, 205, 0.14);
+      --goldLine: rgba(183, 155, 91, 0.28);
+      --dangerLine: rgba(255, 55, 55, 0.32);
+      --glass: rgba(7, 8, 9, 0.78);
+      --fontTitle: Georgia, "Times New Roman", serif;
+      --fontUi: Inter, Arial, Helvetica, sans-serif;
+      --fontMono: "Courier New", Courier, monospace;
+    }
 
-        /* --- TIPOGRAFIA --- */
-        h1, h2, h3 { 
-            font-family: 'Cinzel', serif; 
-            text-transform: uppercase; 
-            letter-spacing: 3px; 
-            color: #fff;
-        }
-        .mono { font-family: 'Share Tech Mono', monospace; }
-        .text-highlight { color: var(--accent-red); text-shadow: var(--glow); }
-        .text-silver { color: var(--accent-silver); }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        /* --- EFEITOS VISUAIS (FUNDO & AMBIENTE) --- */
-        .overlay-noise {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
-            pointer-events: none; z-index: 90; opacity: 0.5; mix-blend-mode: overlay;
-        }
-        
-        .overlay-scanline {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none; z-index: 91;
-        }
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
 
-        /* Partículas Vermelhas (Embers) */
-        .embers-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; pointer-events: none;
-        }
-        .ember {
-            position: absolute; width: 2px; height: 2px;
-            background: var(--accent-red);
-            bottom: -10px;
-            border-radius: 50%;
-            box-shadow: 0 0 4px var(--accent-red);
-            animation: rise 10s infinite ease-in;
-            opacity: 0;
-        }
-        @keyframes rise {
-            0% { bottom: -10px; transform: translateX(0); opacity: 0; }
-            20% { opacity: 1; }
-            100% { bottom: 100vh; transform: translateX(-50px); opacity: 0; }
-        }
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--paper);
+      font-family: var(--fontUi);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(183, 155, 91, 0.16), transparent 35%),
+        radial-gradient(circle at 18% 30%, rgba(139, 16, 16, 0.23), transparent 28%),
+        radial-gradient(circle at 82% 60%, rgba(20, 45, 55, 0.15), transparent 32%),
+        linear-gradient(180deg, #050607 0%, #080607 50%, #020203 100%);
+      letter-spacing: 0.02em;
+    }
 
-        /* --- NAVEGAÇÃO --- */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 1.2rem 3rem;
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--glass); 
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 26, 26, 0.2); 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            z-index: 100;
-        }
-        .nav-logo { 
-            font-weight: 800; font-size: 1.2rem; letter-spacing: 4px; 
-            color: #fff; cursor: pointer; text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            transition: 0.3s;
-        }
-        .nav-logo:hover { color: var(--accent-red); text-shadow: var(--glow); }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.025) 50%, rgba(0, 0, 0, 0.055) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.018), rgba(0, 255, 255, 0.014));
+      background-size: 100% 4px, 7px 100%;
+      mix-blend-mode: screen;
+      opacity: 0.42;
+    }
 
-        .nav-links a {
-            color: var(--text-muted); text-decoration: none; margin-left: 2rem;
-            font-size: 0.8rem; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;
-            position: relative;
-        }
-        .nav-links a::after {
-            content: ''; position: absolute; width: 0; height: 1px; bottom: -5px; left: 0;
-            background-color: var(--accent-red); transition: width 0.3s;
-        }
-        .nav-links a:hover { color: #fff; text-shadow: 0 0 8px var(--accent-red); }
-        .nav-links a:hover::after { width: 100%; }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 51;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.78) 100%);
+    }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 2rem;
-            position: relative;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg-dark)), url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            filter: saturate(0) contrast(1.2);
-            transition: filter 3s ease;
-        }
-        .hero:hover { filter: saturate(0.2) contrast(1.2); }
+    ::selection {
+      background: var(--blood);
+      color: white;
+    }
 
-        .ordem-logo {
-            width: 180px; margin-bottom: 2rem;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.3));
-            animation: float 6s ease-in-out infinite;
-            cursor: pointer;
-            transition: 0.5s;
-        }
-        .ordem-logo:hover { filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8)); transform: scale(1.05); }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-        .hero h1 {
-            font-size: 5rem; font-weight: 800; color: #fff;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); 
-            margin-bottom: 1rem;
-            letter-spacing: 10px;
-        }
-        
-        /* Glitch Vermelho */
-        .glitch { position: relative; }
-        .glitch::before, .glitch::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        }
-        .glitch::before { 
-            left: 2px; text-shadow: -2px 0 #ff0000; 
-            clip: rect(44px, 450px, 56px, 0); 
-            animation: glitch-anim 4s infinite linear alternate-reverse; 
-        }
-        .glitch::after { 
-            left: -2px; text-shadow: -2px 0 #808080; 
-            clip: rect(44px, 450px, 56px, 0); 
-            animation: glitch-anim2 4s infinite linear alternate-reverse; 
-        }
-        @keyframes glitch-anim { 0% { clip: rect(2px, 9999px, 15px, 0); } 100% { clip: rect(88px, 9999px, 100px, 0); } }
-        @keyframes glitch-anim2 { 0% { clip: rect(50px, 9999px, 70px, 0); } 100% { clip: rect(10px, 9999px, 40px, 0); } }
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 260 260' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.75'/%3E%3C/svg%3E");
+      animation: noiseMove 1.2s steps(2) infinite;
+    }
 
-        /* BOTÃO CTA - CORRIGIDO */
-        .btn-cta {
-            display: inline-block;
-            padding: 1rem 3.5rem; 
-            background: rgba(20,0,0,0.8); 
-            border: 1px solid var(--accent-red);
-            color: var(--accent-red); 
-            text-transform: uppercase; 
-            font-weight: bold; 
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            text-decoration: none; 
-            font-size: 1rem; 
-            margin-top: 2rem;
-            position: relative; 
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(255,0,0,0.1);
-            z-index: 1;
-        }
-        .btn-cta::before {
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: -100%; 
-            width: 100%; 
-            height: 100%;
-            background: var(--accent-red); 
-            transition: left 0.4s ease; 
-            z-index: -1;
-        }
-        .btn-cta:hover { 
-            color: #000; 
-            box-shadow: 0 0 40px rgba(255, 26, 26, 0.6); 
-        }
-        .btn-cta:hover::before { 
-            left: 0; 
-        }
+    @keyframes noiseMove {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-1%, 1%); }
+      50% { transform: translate(1%, -1%); }
+      75% { transform: translate(-1%, -1%); }
+      100% { transform: translate(0, 0); }
+    }
 
-        /* LOGIN MODAL */
-        .login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px);
-            z-index: 2000; display: none; opacity: 0; transition: opacity 0.4s ease;
-            justify-content: center; align-items: center;
-        }
-        .login-overlay.active { display: flex; opacity: 1; }
-        
-        .login-box {
-            background: #0a0a0a; border: 1px solid var(--accent-red);
-            width: 100%; max-width: 420px; padding: 0;
-            box-shadow: 0 0 60px rgba(255, 0, 0, 0.15);
-            transform: scale(0.95); transition: transform 0.3s;
-            position: relative;
-        }
-        .login-box::before {
-            content: ''; position: absolute; top: -1px; left: -1px; width: 20px; height: 20px;
-            border-top: 2px solid var(--accent-red); border-left: 2px solid var(--accent-red);
-        }
-        .login-box::after {
-            content: ''; position: absolute; bottom: -1px; right: -1px; width: 20px; height: 20px;
-            border-bottom: 2px solid var(--accent-red); border-right: 2px solid var(--accent-red);
-        }
-        .login-overlay.active .login-box { transform: scale(1); }
-        
-        .login-header {
-            background: rgba(255, 0, 0, 0.05); padding: 1.2rem 2rem;
-            border-bottom: 1px solid #222; display: flex; justify-content: space-between;
-            color: var(--accent-red); font-size: 0.8rem; letter-spacing: 2px;
-        }
-        .close-btn { background: none; border: none; color: #666; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
-        .close-btn:hover { color: #fff; transform: rotate(90deg); }
-        
-        .login-content { padding: 3.5rem 2.5rem; text-align: center; }
-        .input-group { margin-bottom: 2rem; text-align: left; }
-        .input-group label { display: block; font-size: 0.7rem; color: var(--accent-silver); margin-bottom: 0.8rem; letter-spacing: 1px; }
-        .input-group input {
-            width: 100%; background: #050505; border: 1px solid #333; color: #fff;
-            padding: 1.2rem; font-family: 'Share Tech Mono', monospace; outline: none;
-            transition: 0.3s;
-        }
-        .input-group input:focus { border-color: var(--accent-red); box-shadow: 0 0 15px rgba(255,0,0,0.1); }
-        .error-msg { color: var(--accent-red); height: 20px; margin-bottom: 1rem; font-size: 0.8rem; font-weight: bold; text-shadow: 0 0 5px rgba(255,0,0,0.5); }
+    .fog {
+      position: fixed;
+      inset: -25%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.24;
+      filter: blur(24px);
+      background:
+        radial-gradient(circle at 20% 40%, rgba(220, 220, 220, 0.12), transparent 24%),
+        radial-gradient(circle at 65% 55%, rgba(220, 220, 220, 0.09), transparent 26%),
+        radial-gradient(circle at 42% 75%, rgba(220, 220, 220, 0.08), transparent 32%);
+      animation: fogDrift 25s ease-in-out infinite alternate;
+    }
 
-        /* SEÇÕES */
-        .section { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; }
-        .section-title {
-            font-size: 2.8rem; margin-bottom: 5rem; text-align: center;
-            border-bottom: 1px solid #333; padding-bottom: 1.5rem; 
-            width: 100%;
-            color: #fff;
-        }
-        .section-title::after {
-            content: ''; 
-            position: absolute; 
-            bottom: -2px; 
-            left: 50%; 
-            transform: translateX(-50%);
-            width: 30%; 
-            height: 3px;
-            background: var(--accent-red); 
-            box-shadow: var(--glow);
-        }
+    @keyframes fogDrift {
+      from { transform: translate3d(-2%, -1%, 0) scale(1); }
+      to { transform: translate3d(3%, 2%, 0) scale(1.08); }
+    }
 
-        .lore-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-        
-        .lore-card {
-            background: linear-gradient(135deg, #0d0d0d, #050505);
-            border: 1px solid #222; padding: 2.5rem; position: relative;
-            transition: 0.4s;
-        }
-        .lore-card:hover { transform: translateY(-5px); border-color: var(--accent-red); box-shadow: var(--glow); }
-        .lore-card::before {
-            content: ''; position: absolute; top: -5px; right: -5px; width: 20px; height: 20px;
-            border-top: 2px solid var(--accent-red); border-right: 2px solid var(--accent-red);
-        }
+    #sigilCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.34;
+    }
 
-        .classes-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; }
-        .class-card {
-            background: linear-gradient(160deg, #111, #080808);
-            border: 1px solid #222; padding: 3rem 2rem; text-align: center; transition: 0.4s;
-            position: relative; overflow: hidden;
-        }
-        .class-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: var(--accent-red); transform: scaleX(0); transition: 0.4s; transform-origin: left;
-        }
-        .class-card:hover { transform: translateY(-10px); background: #141414; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        .class-card:hover::before { transform: scaleX(1); }
-        
-        .class-icon { font-size: 3.5rem; color: #333; margin-bottom: 1.5rem; transition: 0.4s; }
-        .class-card:hover .class-icon { color: var(--accent-red); text-shadow: 0 0 20px var(--accent-red); transform: scale(1.1); }
+    .cursor-light {
+      position: fixed;
+      width: 430px;
+      height: 430px;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(183, 155, 91, 0.11), transparent 64%);
+      mix-blend-mode: screen;
+      opacity: 0.7;
+    }
 
-        /* PROTOCOLOS - CORRIGIDO O ALINHAMENTO */
-        .protocol-cards {
-            display: flex; 
-            justify-content: center; 
-            align-items: stretch;
-            gap: 3rem; 
-            flex-wrap: wrap; 
-            margin-bottom: 4rem;
-            width: 100%;
-        }
-        .protocol-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent); 
-            padding: 2.5rem; 
-            border: 1px solid #222; 
-            min-width: 220px;
-            flex: 0 1 auto;
-            transition: 0.3s; 
-            cursor: default;
-            text-align: center;
-        }
-        .protocol-card:hover {
-            border-color: var(--accent-red);
-            transform: translateY(-5px);
-        }
+    .shell {
+      position: relative;
+      z-index: 5;
+      width: min(1460px, calc(100% - 34px));
+      margin: 0 auto;
+    }
 
-        footer { text-align: center; padding: 4rem 0 6rem 0; font-size: 0.75rem; color: #555; border-top: 1px solid #111; margin-top: 4rem; }
-        
-        .status-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(5, 5, 5, 0.95); border-top: 1px solid #333;
-            padding: 0.6rem 2rem; display: flex; justify-content: space-between;
-            font-size: 0.75rem; color: var(--text-muted); z-index: 100; cursor: help;
-            backdrop-filter: blur(5px);
-        }
-        .status-bar div { display: flex; align-items: center; gap: 8px; }
-        .blinking { animation: blink 1.5s infinite; color: var(--accent-red); text-shadow: 0 0 5px red; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } 100% { transform: translateX(0); } }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(4, 5, 6, 0.92), rgba(4, 5, 6, 0.54));
+      backdrop-filter: blur(18px);
+    }
 
-        /* Animações de Entrada */
-        .hidden { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .show { opacity: 1; transform: translateY(0); }
+    .nav {
+      width: min(1460px, calc(100% - 34px));
+      min-height: 82px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3.5rem; letter-spacing: 5px; }
-            .lore-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .status-bar { flex-direction: column; gap: 5px; text-align: center; }
-            .status-bar div { justify-content: center; }
-            .protocol-cards { gap: 2rem; }
-        }
-    </style>
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-width: 270px;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--goldLine);
+      transform: rotate(45deg);
+      background: rgba(183, 155, 91, 0.035);
+      box-shadow: 0 0 34px rgba(183, 155, 91, 0.08);
+      position: relative;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border: 1px solid rgba(183, 155, 91, 0.17);
+    }
+
+    .brand-mark span {
+      transform: rotate(-45deg);
+      font-family: var(--fontTitle);
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    .brand-text small {
+      display: block;
+      font-family: var(--fontMono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .brand-text strong {
+      display: block;
+      margin-top: 3px;
+      font-family: var(--fontTitle);
+      font-size: 18px;
+      color: var(--paper);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      font-size: 11px;
+      color: rgba(232, 225, 205, 0.72);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      transition: 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--paper);
+      border-color: rgba(183, 155, 91, 0.25);
+      background: rgba(183, 155, 91, 0.055);
+    }
+
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--fontMono);
+      font-size: 11px;
+      color: var(--blood2);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+    }
+
+    .pulse-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--blood2);
+      box-shadow: 0 0 16px var(--blood2);
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.7); opacity: 0.35; }
+    }
+
+    .hero {
+      min-height: calc(100vh - 82px);
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 54px;
+      align-items: center;
+      padding: 76px 0 90px;
+      position: relative;
+    }
+
+    .classification {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 27px;
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 55, 55, 0.25);
+      background: rgba(139, 16, 16, 0.11);
+      color: rgba(255, 225, 225, 0.9);
+      font-family: var(--fontMono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      box-shadow: 0 0 30px rgba(139, 16, 16, 0.13);
+    }
+
+    .classification b {
+      color: white;
+    }
+
+    h1 {
+      font-family: var(--fontTitle);
+      font-size: clamp(4.6rem, 11vw, 12.4rem);
+      line-height: 0.82;
+      letter-spacing: -0.058em;
+      color: var(--paper);
+      text-transform: uppercase;
+      text-shadow:
+        0 0 26px rgba(183, 155, 91, 0.17),
+        2px 0 rgba(255, 0, 0, 0.22),
+        -2px 0 rgba(0, 255, 255, 0.13);
+    }
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0.72;
+    }
+
+    .glitch::before {
+      color: rgba(255, 40, 40, 0.65);
+      clip-path: inset(8% 0 65% 0);
+      transform: translate(-3px, -2px);
+      animation: glitchTop 3s infinite linear alternate-reverse;
+    }
+
+    .glitch::after {
+      color: rgba(80, 200, 255, 0.45);
+      clip-path: inset(62% 0 8% 0);
+      transform: translate(3px, 2px);
+      animation: glitchBottom 2.3s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitchTop {
+      0%, 88%, 100% { clip-path: inset(8% 0 65% 0); transform: translate(-3px, -2px); }
+      90% { clip-path: inset(20% 0 48% 0); transform: translate(4px, 0); }
+      92% { clip-path: inset(2% 0 72% 0); transform: translate(-6px, 1px); }
+      94% { clip-path: inset(34% 0 40% 0); transform: translate(3px, -3px); }
+    }
+
+    @keyframes glitchBottom {
+      0%, 84%, 100% { clip-path: inset(62% 0 8% 0); transform: translate(3px, 2px); }
+      86% { clip-path: inset(54% 0 22% 0); transform: translate(-5px, 0); }
+      88% { clip-path: inset(70% 0 4% 0); transform: translate(7px, 3px); }
+      90% { clip-path: inset(45% 0 35% 0); transform: translate(-2px, -2px); }
+    }
+
+    .motto {
+      margin-top: 28px;
+      max-width: 750px;
+      font-family: var(--fontTitle);
+      font-size: clamp(1.35rem, 2vw, 2.2rem);
+      line-height: 1.25;
+      color: rgba(232, 225, 205, 0.94);
+    }
+
+    .motto span {
+      color: var(--gold2);
+      text-shadow: 0 0 22px rgba(183, 155, 91, 0.18);
+    }
+
+    .hero-description {
+      max-width: 760px;
+      margin-top: 25px;
+      color: rgba(232, 225, 205, 0.69);
+      font-size: 1.02rem;
+      line-height: 1.86;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 49px;
+      gap: 10px;
+      padding: 0 19px;
+      border: 1px solid rgba(183, 155, 91, 0.32);
+      background: rgba(183, 155, 91, 0.065);
+      color: var(--paper);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.17em;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-115%);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+      transition: transform 0.65s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(183, 155, 91, 0.72);
+      background: rgba(183, 155, 91, 0.12);
+    }
+
+    .btn:hover::before {
+      transform: translateX(115%);
+    }
+
+    .btn-danger {
+      border-color: rgba(255, 55, 55, 0.38);
+      background: rgba(139, 16, 16, 0.18);
+    }
+
+    .btn-danger:hover {
+      border-color: rgba(255, 55, 55, 0.76);
+      background: rgba(139, 16, 16, 0.28);
+    }
+
+    .hero-side {
+      min-height: 710px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .op-card {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      width: min(360px, 92vw);
+      padding: 18px;
+      border: 1px solid rgba(183, 155, 91, 0.2);
+      background: rgba(4, 4, 4, 0.58);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 0 42px rgba(139, 16, 16, 0.13);
+      z-index: 2;
+    }
+
+    .op-card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .op-card img {
+      max-width: 82px;
+      max-height: 82px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 14px rgba(183, 155, 91, 0.16));
+    }
+
+    .op-fallback {
+      display: none;
+      width: 82px;
+      height: 82px;
+      border: 1px solid rgba(183, 155, 91, 0.25);
+      place-items: center;
+      font-family: var(--fontTitle);
+      color: var(--gold);
+      font-size: 28px;
+      background: rgba(183, 155, 91, 0.04);
+    }
+
+    .op-card small {
+      display: block;
+      font-family: var(--fontMono);
+      color: var(--gold);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 5px;
+    }
+
+    .op-card strong {
+      display: block;
+      font-family: var(--fontTitle);
+      font-size: 1.45rem;
+      color: var(--paper);
+      line-height: 1.1;
+    }
+
+    .op-card p {
+      margin-top: 13px;
+      color: rgba(232, 225, 205, 0.62);
+      font-size: 0.87rem;
+      line-height: 1.65;
+    }
+
+    .compass {
+      width: min(94vw, 610px);
+      aspect-ratio: 1;
+      position: relative;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 0 50px rgba(183, 155, 91, 0.12));
+    }
+
+    .compass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(183, 155, 91, 0.18);
+      border-radius: 50%;
+      animation: rotateSlow 42s linear infinite;
+    }
+
+    .compass::after {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border: 1px dashed rgba(183, 155, 91, 0.24);
+      border-radius: 50%;
+      animation: rotateReverse 62s linear infinite;
+    }
+
+    @keyframes rotateSlow {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes rotateReverse {
+      to { transform: rotate(-360deg); }
+    }
+
+    .compass-ring {
+      position: absolute;
+      inset: 18%;
+      border: 1px solid rgba(183, 155, 91, 0.2);
+      border-radius: 50%;
+    }
+
+    .compass-ring::before,
+    .compass-ring::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -22%;
+      width: 1px;
+      height: 144%;
+      background: linear-gradient(transparent, rgba(183, 155, 91, 0.38), transparent);
+      transform-origin: center;
+    }
+
+    .compass-ring::after {
+      transform: rotate(90deg);
+    }
+
+    .needle {
+      position: absolute;
+      width: 35%;
+      height: 35%;
+      clip-path: polygon(50% 0, 61% 48%, 50% 100%, 39% 48%);
+      background: linear-gradient(180deg, rgba(200, 32, 32, 0.96) 0 48%, rgba(183, 155, 91, 0.72) 48% 100%);
+      filter: drop-shadow(0 0 24px rgba(200, 32, 32, 0.35));
+      animation: needle 7s ease-in-out infinite;
+    }
+
+    @keyframes needle {
+      0%, 100% { transform: rotate(-3deg); }
+      40% { transform: rotate(13deg); }
+      70% { transform: rotate(-18deg); }
+    }
+
+    .compass-center {
+      position: relative;
+      width: 164px;
+      height: 164px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(183, 155, 91, 0.34);
+      background:
+        radial-gradient(circle, rgba(183, 155, 91, 0.1), rgba(0, 0, 0, 0.48) 60%),
+        rgba(0, 0, 0, 0.4);
+      box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.5), 0 0 50px rgba(139, 16, 16, 0.2);
+      text-align: center;
+      padding: 16px;
+    }
+
+    .compass-center strong {
+      display: block;
+      font-family: var(--fontTitle);
+      font-size: 44px;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .compass-center small {
+      display: block;
+      margin-top: 7px;
+      font-family: var(--fontMono);
+      font-size: 10px;
+      color: rgba(232, 225, 205, 0.66);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .coord {
+      position: absolute;
+      font-family: var(--fontMono);
+      font-size: 11px;
+      color: rgba(232, 225, 205, 0.52);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .coord.n { top: 2%; left: 50%; transform: translateX(-50%); color: var(--blood2); }
+    .coord.s { bottom: 2%; left: 50%; transform: translateX(-50%); }
+    .coord.e { right: 0; top: 50%; transform: translateY(-50%); }
+    .coord.w { left: 0; top: 50%; transform: translateY(-50%); }
+
+    .floating-file {
+      position: absolute;
+      right: 2%;
+      bottom: 7%;
+      width: min(370px, 86vw);
+      padding: 18px;
+      border: 1px solid rgba(183, 155, 91, 0.16);
+      background: rgba(5, 5, 5, 0.66);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 45px rgba(139, 16, 16, 0.18);
+      transform: rotate(-2deg);
+      z-index: 2;
+    }
+
+    .floating-file::before {
+      content: "SANCTUM VERITATIS";
+      position: absolute;
+      top: -11px;
+      left: 18px;
+      padding: 4px 8px;
+      border: 1px solid rgba(183, 155, 91, 0.18);
+      background: #0b0908;
+      color: var(--gold);
+      font-family: var(--fontMono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+    }
+
+    .floating-file p {
+      color: rgba(232, 225, 205, 0.72);
+      font-family: var(--fontMono);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .redacted {
+      display: inline-block;
+      min-width: 72px;
+      height: 0.9em;
+      background: rgba(232, 225, 205, 0.78);
+      vertical-align: -0.08em;
+      box-shadow: 0 0 10px rgba(232, 225, 205, 0.12);
+    }
+
+    section {
+      position: relative;
+      padding: 96px 0;
+    }
+
+    .section-kicker {
+      margin-bottom: 14px;
+      font-family: var(--fontMono);
+      color: var(--gold);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+    }
+
+    .section-title {
+      max-width: 1020px;
+      font-family: var(--fontTitle);
+      font-size: clamp(2.4rem, 5vw, 5.7rem);
+      line-height: 0.96;
+      color: var(--paper);
+      text-transform: uppercase;
+      letter-spacing: -0.035em;
+    }
+
+    .section-text {
+      max-width: 880px;
+      margin-top: 22px;
+      color: rgba(232, 225, 205, 0.66);
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+
+    .incident-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.82fr;
+      gap: 28px;
+      margin-top: 40px;
+      align-items: stretch;
+    }
+
+    .dossier {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(22px, 4vw, 44px);
+      border: 1px solid rgba(183, 155, 91, 0.18);
+      background:
+        linear-gradient(135deg, rgba(183, 155, 91, 0.06), transparent 38%),
+        rgba(5, 6, 7, 0.74);
+      box-shadow: 0 0 45px rgba(139, 16, 16, 0.18);
+    }
+
+    .dossier::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(183, 155, 91, 0.07);
+      pointer-events: none;
+    }
+
+    .dossier-stamp {
+      position: absolute;
+      right: 26px;
+      top: 25px;
+      padding: 8px 12px;
+      border: 2px solid rgba(255, 55, 55, 0.35);
+      color: rgba(255, 55, 55, 0.58);
+      font-family: var(--fontMono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      transform: rotate(8deg);
+    }
+
+    .dossier h3 {
+      max-width: 760px;
+      margin-bottom: 20px;
+      font-family: var(--fontTitle);
+      font-size: clamp(2rem, 3.4vw, 4.2rem);
+      color: var(--paper);
+    }
+
+    .dossier p {
+      max-width: 920px;
+      margin-bottom: 18px;
+      color: rgba(232, 225, 205, 0.72);
+      line-height: 1.95;
+    }
+
+    .dossier strong {
+      color: var(--paper);
+    }
+
+    .threat-box {
+      display: grid;
+      gap: 12px;
+      margin-top: 28px;
+      padding: 20px;
+      border: 1px solid var(--dangerLine);
+      background: rgba(139, 16, 16, 0.12);
+      font-family: var(--fontMono);
+      box-shadow: inset 0 0 28px rgba(139, 16, 16, 0.12);
+    }
+
+    .threat-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(232, 225, 205, 0.74);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .threat-line:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .threat-line b {
+      color: var(--blood2);
+      text-align: right;
+    }
+
+    .membrane {
+      position: relative;
+      min-height: 100%;
+      overflow: hidden;
+      padding: 28px;
+      border: 1px solid rgba(183, 155, 91, 0.16);
+      background: rgba(5, 6, 7, 0.72);
+    }
+
+    .membrane::after {
+      content: "";
+      position: absolute;
+      inset: -70px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 55, 55, 0.13), transparent 31%),
+        conic-gradient(from 20deg, transparent, rgba(183, 155, 91, 0.08), transparent, rgba(139, 16, 16, 0.12), transparent);
+      opacity: 0.6;
+      animation: rotateSlow 22s linear infinite;
+    }
+
+    .membrane-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .membrane h3 {
+      margin-bottom: 14px;
+      font-family: var(--fontTitle);
+      font-size: 2rem;
+      color: var(--paper);
+    }
+
+    .meter {
+      height: 16px;
+      margin-top: 22px;
+      padding: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 55, 55, 0.3);
+      background: rgba(0, 0, 0, 0.44);
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 82%;
+      background: linear-gradient(90deg, rgba(183, 155, 91, 0.72), rgba(200, 32, 32, 0.95));
+      box-shadow: 0 0 18px rgba(200, 32, 32, 0.35);
+      animation: meterPulse 2.6s ease-in-out infinite;
+    }
+
+    @keyframes meterPulse {
+      0%, 100% { width: 78%; filter: brightness(0.85); }
+      50% { width: 88%; filter: brightness(1.2); }
+    }
+
+    .readout {
+      margin-top: 16px;
+      font-family: var(--fontMono);
+      color: rgba(232, 225, 205, 0.66);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .readout b {
+      color: var(--blood2);
+    }
+
+    .scanner-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .mini-btn {
+      padding: 10px 12px;
+      border: 1px solid rgba(183, 155, 91, 0.22);
+      background: rgba(0, 0, 0, 0.3);
+      color: rgba(232, 225, 205, 0.78);
+      font-family: var(--fontMono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .mini-btn:hover {
+      border-color: rgba(183, 155, 91, 0.55);
+      color: var(--paper);
+      background: rgba(183, 155, 91, 0.07);
+    }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 28px;
+      margin-top: 40px;
+    }
+
+    .island-map,
+    .intel-tabs {
+      border: 1px solid rgba(183, 155, 91, 0.17);
+      background: rgba(5, 6, 7, 0.72);
+      padding: 26px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .island-map h3,
+    .intel-tabs h3 {
+      font-family: var(--fontTitle);
+      font-size: 2rem;
+      color: var(--paper);
+      margin-bottom: 16px;
+    }
+
+    .map-svg {
+      width: 100%;
+      min-height: 340px;
+      border: 1px solid rgba(232, 225, 205, 0.08);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(183, 155, 91, 0.07), transparent 35%),
+        rgba(0, 0, 0, 0.28);
+    }
+
+    .map-pulse {
+      animation: mapPulse 1.8s infinite;
+    }
+
+    @keyframes mapPulse {
+      0%, 100% { opacity: 0.25; r: 6; }
+      50% { opacity: 0.85; r: 13; }
+    }
+
+    .tab-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      padding: 11px 12px;
+      border: 1px solid rgba(183, 155, 91, 0.2);
+      background: rgba(0, 0, 0, 0.26);
+      color: rgba(232, 225, 205, 0.62);
+      font-family: var(--fontMono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      color: var(--paper);
+      border-color: rgba(255, 55, 55, 0.4);
+      background: rgba(139, 16, 16, 0.16);
+    }
+
+    .tab-content {
+      min-height: 260px;
+      padding: 24px;
+      border: 1px solid rgba(232, 225, 205, 0.08);
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .tab-content h4 {
+      margin-bottom: 12px;
+      font-family: var(--fontTitle);
+      font-size: 2rem;
+      color: var(--gold2);
+    }
+
+    .tab-content p {
+      color: rgba(232, 225, 205, 0.68);
+      line-height: 1.85;
+      margin-bottom: 14px;
+    }
+
+    .tab-content ul {
+      display: grid;
+      gap: 10px;
+      margin-top: 15px;
+      padding-left: 20px;
+      color: rgba(232, 225, 205, 0.66);
+      line-height: 1.65;
+    }
+
+    .radio {
+      position: relative;
+      overflow: hidden;
+      margin-top: 40px;
+      padding: clamp(20px, 4vw, 34px);
+      border: 1px solid rgba(106, 255, 188, 0.18);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
+        rgba(4, 4, 4, 0.82);
+      box-shadow: 0 0 40px rgba(106, 255, 188, 0.06);
+    }
+
+    .radio::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(106, 255, 188, 0.04), transparent);
+      transform: translateX(-100%);
+      animation: signalSweep 5s infinite;
+    }
+
+    @keyframes signalSweep {
+      0% { transform: translateX(-120%); }
+      45%, 100% { transform: translateX(120%); }
+    }
+
+    .radio-label {
+      margin-bottom: 18px;
+      color: var(--green);
+      font-family: var(--fontMono);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+    }
+
+    .radio-text {
+      min-height: 150px;
+      color: rgba(225, 255, 239, 0.88);
+      font-family: var(--fontMono);
+      font-size: clamp(1rem, 1.7vw, 1.45rem);
+      line-height: 1.72;
+      text-shadow: 0 0 10px rgba(106, 255, 188, 0.12);
+    }
+
+    .radio-source {
+      margin-top: 20px;
+      color: rgba(232, 225, 205, 0.54);
+      font-family: var(--fontMono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 42px;
+    }
+
+    .role-card {
+      position: relative;
+      min-height: 430px;
+      overflow: hidden;
+      padding: 30px;
+      border: 1px solid rgba(183, 155, 91, 0.16);
+      background:
+        linear-gradient(160deg, rgba(183, 155, 91, 0.09), transparent 42%),
+        rgba(7, 8, 9, 0.76);
+      transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+    }
+
+    .role-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(183, 155, 91, 0.42);
+      background:
+        linear-gradient(160deg, rgba(183, 155, 91, 0.13), transparent 42%),
+        rgba(9, 10, 11, 0.82);
+    }
+
+    .role-card::before {
+      content: attr(data-index);
+      position: absolute;
+      right: 22px;
+      top: 18px;
+      font-family: var(--fontTitle);
+      font-size: 7rem;
+      color: rgba(232, 225, 205, 0.035);
+      line-height: 1;
+    }
+
+    .role-icon {
+      width: 82px;
+      height: 82px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 26px;
+      border: 1px solid rgba(183, 155, 91, 0.24);
+      background: rgba(183, 155, 91, 0.035);
+    }
+
+    .role-icon svg {
+      width: 44px;
+      height: 44px;
+      stroke: var(--gold);
+      opacity: 0.9;
+    }
+
+    .role-type {
+      margin-bottom: 12px;
+      font-family: var(--fontMono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--blood2);
+    }
+
+    .role-card h3 {
+      margin-bottom: 16px;
+      font-family: var(--fontTitle);
+      font-size: 2.4rem;
+      color: var(--paper);
+    }
+
+    .role-card p {
+      margin-bottom: 24px;
+      color: rgba(232, 225, 205, 0.66);
+      line-height: 1.8;
+    }
+
+    .role-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .role-tags span {
+      padding: 8px 9px;
+      border: 1px solid rgba(183, 155, 91, 0.18);
+      background: rgba(0, 0, 0, 0.2);
+      color: rgba(232, 225, 205, 0.65);
+      font-family: var(--fontMono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .protocols {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 28px;
+      margin-top: 42px;
+    }
+
+    .protocol-panel {
+      min-height: 370px;
+      padding: 28px;
+      border: 1px solid rgba(183, 155, 91, 0.16);
+      background: rgba(5, 6, 7, 0.78);
+    }
+
+    .protocol-panel h3 {
+      margin-bottom: 18px;
+      font-family: var(--fontTitle);
+      font-size: 2rem;
+      color: var(--paper);
+    }
+
+    .protocol-list {
+      display: grid;
+      gap: 14px;
+      list-style: none;
+    }
+
+    .protocol-list li {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+      color: rgba(232, 225, 205, 0.68);
+      line-height: 1.6;
+    }
+
+    .protocol-list li span {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(183, 155, 91, 0.22);
+      color: var(--gold);
+      font-family: var(--fontMono);
+      font-size: 11px;
+    }
+
+    .terminal {
+      position: relative;
+      min-height: 370px;
+      overflow: hidden;
+      padding: 24px;
+      border: 1px solid rgba(106, 255, 188, 0.18);
+      background: #030504;
+      color: rgba(183, 255, 218, 0.78);
+      font-family: var(--fontMono);
+    }
+
+    .terminal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(106, 255, 188, 0.035) 50%, rgba(0, 0, 0, 0.03) 50%);
+      background-size: 100% 5px;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .terminal-line {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 12px;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .terminal-line b {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .terminal-line.danger {
+      color: rgba(255, 112, 112, 0.88);
+    }
+
+    .access-panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: center;
+      overflow: hidden;
+      margin-top: 44px;
+      padding: clamp(26px, 5vw, 52px);
+      border: 1px solid rgba(183, 155, 91, 0.18);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(183, 155, 91, 0.08), transparent 30%),
+        linear-gradient(135deg, rgba(139, 16, 16, 0.12), transparent 55%),
+        rgba(5, 6, 7, 0.8);
+    }
+
+    .access-panel::after {
+      content: "NORTE NORTE NORTE NORTE NORTE";
+      position: absolute;
+      right: -40px;
+      bottom: -8px;
+      font-family: var(--fontTitle);
+      font-size: 6rem;
+      color: rgba(232, 225, 205, 0.028);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .access-panel h3 {
+      margin-bottom: 12px;
+      font-family: var(--fontTitle);
+      font-size: clamp(2.1rem, 4vw, 4.6rem);
+      color: var(--paper);
+      line-height: 1;
+    }
+
+    .access-panel p {
+      max-width: 780px;
+      color: rgba(232, 225, 205, 0.66);
+      line-height: 1.8;
+    }
+
+    .discord-card {
+      width: min(100%, 390px);
+      padding: 18px;
+      border: 1px solid rgba(183, 155, 91, 0.18);
+      background: rgba(0, 0, 0, 0.32);
+      font-family: var(--fontMono);
+    }
+
+    .discord-card div {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: rgba(232, 225, 205, 0.62);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .discord-card div:last-child {
+      border-bottom: 0;
+    }
+
+    .discord-card b {
+      color: var(--paper);
+      text-align: right;
+    }
+
+    footer {
+      position: relative;
+      z-index: 5;
+      padding: 34px 0;
+      border-top: 1px solid var(--line);
+      color: rgba(232, 225, 205, 0.44);
+      font-family: var(--fontMono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .footer-inner {
+      width: min(1460px, calc(100% - 34px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(12px);
+    }
+
+    .modal.open {
+      display: grid;
+    }
+
+    .modal-box {
+      position: relative;
+      width: min(780px, 100%);
+      padding: clamp(24px, 5vw, 46px);
+      border: 1px solid rgba(183, 155, 91, 0.22);
+      background:
+        linear-gradient(135deg, rgba(183, 155, 91, 0.07), transparent 40%),
+        #070707;
+      box-shadow: 0 0 80px rgba(139, 16, 16, 0.18);
+    }
+
+    .modal-box h3 {
+      margin-bottom: 18px;
+      font-family: var(--fontTitle);
+      font-size: clamp(2rem, 4vw, 4rem);
+      color: var(--paper);
+    }
+
+    .modal-box p {
+      margin-bottom: 18px;
+      color: rgba(232, 225, 205, 0.68);
+      line-height: 1.85;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(183, 155, 91, 0.22);
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--paper);
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero,
+      .incident-grid,
+      .map-grid,
+      .protocols,
+      .access-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        min-height: 600px;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role-card {
+        min-height: auto;
+      }
+
+      .nav-status {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        height: auto;
+        padding: 16px 0;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .nav-links a {
+        padding-left: 0;
+        padding-right: 10px;
+      }
+
+      .hero {
+        padding-top: 46px;
+      }
+
+      .classification {
+        font-size: 10px;
+        letter-spacing: 0.1em;
+      }
+
+      h1 {
+        font-size: clamp(4rem, 18vw, 6rem);
+      }
+
+      .op-card {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 24px;
+      }
+
+      .floating-file {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        margin-top: 24px;
+        transform: rotate(0);
+      }
+
+      .compass {
+        width: min(100%, 440px);
+      }
+
+      .coord {
+        font-size: 9px;
+      }
+
+      .dossier-stamp {
+        position: static;
+        display: inline-block;
+        margin-bottom: 20px;
+        transform: rotate(0);
+      }
+
+      section {
+        padding: 72px 0;
+      }
+
+      .access-panel::after {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <canvas id="sigilCanvas"></canvas>
+  <div class="noise"></div>
+  <div class="fog"></div>
+  <div class="cursor-light" id="cursorLight"></div>
 
-    <div class="overlay-noise"></div>
-    <div class="overlay-scanline"></div>
-    
-    <!-- PARTICULAS VERMELHAS FLUTUANTES (EMBERS) -->
-    <div class="embers-container" id="embers"></div>
-
-    <!-- NAV -->
-    <nav>
-        <div class="nav-logo mono" id="nav-logo">ORDO REALITAS <span class="text-highlight">//</span> SETENTRIONAL</div>
-        <div class="nav-links mono">
-            <a href="#dossie">Dossiê</a>
-            <a href="#agentes">Equipe</a>
-            <a href="#protocolos">Protocolos</a>
-            <a href="sobre.html">Sobre o Mestre</a>
-            <a href="faq.html">FAQ</a>
-            <a href="quiz.html">Teste de Classe</a>
-            <a href="lore.html">Lore da Ilha</a>
-            <a href="#" onclick="toggleLogin()" style="border: 1px solid var(--accent-red); padding: 5px 15px; color: var(--accent-red);">LOGIN</a>
+  <header>
+    <nav class="nav">
+      <a href="#inicio" class="brand" aria-label="Sanctum Veritatis">
+        <div class="brand-mark">
+          <span>SV</span>
         </div>
+
+        <div class="brand-text">
+          <small>Arquivo Restrito</small>
+          <strong>Sanctum Veritatis</strong>
+        </div>
+      </a>
+
+      <div class="nav-links" aria-label="Navegação principal">
+        <a href="#incidente">Incidente</a>
+        <a href="#ilha">São Firmo</a>
+        <a href="#transmissao">Transmissão</a>
+        <a href="#equipe">Equipe</a>
+        <a href="#protocolos">Protocolos</a>
+        <a href="faq.html">FAQ</a>
+        <a href="https://discord.gg/ZQqTjkUfv9" target="_blank" rel="noopener noreferrer">Discord</a>
+      </div>
+
+      <div class="nav-status">
+        <span class="pulse-dot"></span>
+        Membrana instável
+      </div>
     </nav>
+  </header>
 
-    <!-- LOGIN -->
-    <div id="login-overlay" class="login-overlay">
-        <div class="login-box">
-            <div class="login-header mono">
-                <span><i class="fas fa-shield-alt"></i> ACESSO NIVEL 4 REQUERIDO</span>
-                <button onclick="toggleLogin()" class="close-btn"><i class="fas fa-times"></i></button>
-            </div>
-            
-            <div class="login-content">
-                <div style="font-size: 3.5rem; color: #1a1a1a; margin-bottom: 1.5rem; text-shadow: 0 0 2px var(--accent-red);">
-                    <i class="fas fa-fingerprint" style="color: var(--accent-dark-red);"></i>
-                </div>
-                <p class="mono text-highlight" style="font-size: 0.8rem; margin-bottom: 2.5rem; letter-spacing: 1px;">INSIRA CREDENCIAIS DE AGENTE</p>
-                
-                <form id="loginForm" onsubmit="realizarLogin(event)">
-                    <div class="input-group">
-                        <label class="mono">IDENTIFICAÇÃO:</label>
-                        <input type="text" id="username" autocomplete="off" placeholder="ID..." required>
-                    </div>
-                    <div class="input-group">
-                        <label class="mono">CHAVE DE ACESSO:</label>
-                        <input type="password" id="password" placeholder="SENHA..." required>
-                    </div>
-                    
-                    <div id="error-msg" class="mono error-msg"></div>
-                    
-                    <button type="submit" class="btn-cta mono" style="width: 100%; margin-top: 1rem;">AUTENTICAR</button>
-                </form>
-            </div>
-            <div class="mono" style="padding: 0.8rem; background: #050505; border-top: 1px solid #222; text-align: center; font-size: 0.65rem; color: #444;">
-                CONEXÃO SEGURA ORDO VERITAS v.9.0
-            </div>
+  <main class="shell">
+    <section class="hero" id="inicio">
+      <div class="hero-copy reveal">
+        <div class="classification">
+          <span>Operação</span>
+          <b>Setentrional</b>
+          <span>// Sigilo Grau V</span>
         </div>
+
+        <h1 class="glitch" data-text="Setentrional">Setentrional</h1>
+
+        <p class="motto">
+          “O <span>Norte Verdadeiro</span> aponta para o abismo.”
+        </p>
+
+        <p class="hero-description">
+          Este dossiê foi aberto após o retorno de um sinal costeiro impossível vindo de São Firmo.
+          A ilha não consta em mapas oficiais, registros náuticos ou relatórios civis recentes.
+          O farol, desativado desde 1995, voltou a emitir luz, mas a luz não atravessa a neblina.
+          Ela parece atravessar quem olha.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-danger" href="#incidente">Abrir dossiê</a>
+          <a class="btn" href="#equipe">Selecionar função</a>
+          <a class="btn" href="faq.html">Ler FAQ</a>
+          <a class="btn" href="https://discord.gg/ZQqTjkUfv9" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
+          <button class="btn" id="secretButton" type="button">Desbloquear fragmento</button>
+        </div>
+      </div>
+
+      <aside class="hero-side reveal" aria-label="Selo operacional">
+        <article class="op-card">
+          <div class="op-card-top">
+            <img
+              src="ordem-paranormal-logo.png"
+              alt="Logo de Ordem Paranormal"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+            />
+            <div class="op-fallback">OP</div>
+
+            <div>
+              <small>Inspirado em</small>
+              <strong>Ordem Paranormal</strong>
+            </div>
+          </div>
+
+          <p>
+            Campanha original de RPG baseada na atmosfera de investigação, ocultismo,
+            contenção e ruptura da realidade.
+          </p>
+        </article>
+
+        <div class="compass">
+          <span class="coord n">Norte Verdadeiro</span>
+          <span class="coord s">Sul Morto</span>
+          <span class="coord e">Limiar</span>
+          <span class="coord w">Retorno</span>
+
+          <div class="compass-ring"></div>
+          <div class="needle"></div>
+
+          <div class="compass-center">
+            <div>
+              <strong>☉</strong>
+              <small>Não siga a luz</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="floating-file">
+          <p>
+            Referência: <span class="redacted"></span><br />
+            Origem: Farol de São Firmo<br />
+            Status: sinal ativo<br />
+            Observação: o rádio repete nomes de pessoas que ainda não chegaram à ilha.
+          </p>
+        </div>
+      </aside>
+    </section>
+
+    <section id="incidente">
+      <div class="reveal">
+        <div class="section-kicker">Relatório Inicial</div>
+        <h2 class="section-title">O Incidente em São Firmo</h2>
+        <p class="section-text">
+          A primeira regra de São Firmo é simples: nenhum mapa admite sua existência.
+          A segunda regra foi escrita depois do desaparecimento da Guarda Costeira:
+          se o farol acender, não responda ao sinal.
+        </p>
+      </div>
+
+      <div class="incident-grid">
+        <article class="dossier reveal">
+          <div class="dossier-stamp">Ameaça Alta</div>
+
+          <h3>Dossiê de Contenção // Ilha de São Firmo</h3>
+
+          <p>
+            Uma ilha que não consta nos mapas oficiais. Um farol desativado em <strong>1995</strong>
+            voltou a emitir um sinal impossível. O vilarejo de pescadores local silenciou completamente.
+          </p>
+
+          <p>
+            A Membrana está em processo de <strong>Ruptura</strong>. Elementos de
+            <strong>Sangue</strong> e <strong>Conhecimento</strong> foram detectados em alta concentração.
+            O padrão de emissão luminosa do farol não corresponde a nenhum código marítimo conhecido.
+          </p>
+
+          <p>
+            Os registros apontam para deslocamento de memória coletiva, alteração de bússolas,
+            ecos de rádio sem fonte física, rituais submersos e atividade anômala concentrada no rochedo norte.
+          </p>
+
+          <div class="threat-box">
+            <div class="threat-line">
+              <span>&gt; AMEAÇA</span>
+              <b>ALTA</b>
+            </div>
+            <div class="threat-line">
+              <span>&gt; POPULAÇÃO</span>
+              <b>DESCONHECIDA</b>
+            </div>
+            <div class="threat-line">
+              <span>&gt; OBJETIVO</span>
+              <b>CONTENÇÃO IMEDIATA</b>
+            </div>
+            <div class="threat-line">
+              <span>&gt; CONTATO CIVIL</span>
+              <b>INTERROMPIDO</b>
+            </div>
+          </div>
+        </article>
+
+        <aside class="membrane reveal">
+          <div class="membrane-content">
+            <h3>Leitura da Membrana</h3>
+
+            <p class="section-text">
+              O campo paranormal ao redor da ilha está oscilando acima do limite aceitável.
+              A região norte apresenta deformação cognitiva progressiva.
+            </p>
+
+            <div class="meter" aria-label="Nível de ruptura da membrana">
+              <div class="meter-fill"></div>
+            </div>
+
+            <div class="readout">
+              RUPTURA ESTIMADA: <b id="ruptureValue">82%</b><br />
+              ELEMENTO PRIMÁRIO: <b id="primaryElement">SANGUE</b><br />
+              ELEMENTO SECUNDÁRIO: <b id="secondaryElement">CONHECIMENTO</b><br />
+              ANOMALIA: <b id="anomalyName">FAROL INTERIOR</b><br />
+              RECOMENDAÇÃO: <b id="recommendation">NÃO OBSERVAR POR MAIS DE 13 SEGUNDOS</b>
+            </div>
+
+            <div class="scanner-controls">
+              <button class="mini-btn" type="button" data-scan="coast">Scan Costa</button>
+              <button class="mini-btn" type="button" data-scan="village">Scan Vilarejo</button>
+              <button class="mini-btn" type="button" data-scan="lighthouse">Scan Farol</button>
+              <button class="mini-btn" type="button" data-scan="deep">Scan Profundo</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="ilha">
+      <div class="reveal">
+        <div class="section-kicker">Cartografia Incompleta</div>
+        <h2 class="section-title">São Firmo não deveria existir</h2>
+        <p class="section-text">
+          O território reage à observação. Fotografias mudam de posição.
+          Rotas marítimas se reorganizam sozinhas. O farol sempre aparece ao norte,
+          mesmo quando o norte muda de lugar.
+        </p>
+      </div>
+
+      <div class="map-grid">
+        <article class="island-map reveal">
+          <h3>Mapa operacional</h3>
+
+          <svg class="map-svg" viewBox="0 0 520 360" role="img" aria-label="Mapa estilizado da ilha de São Firmo">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <path
+              d="M248 34 C334 39 407 92 430 166 C459 260 381 321 282 327 C190 332 102 282 89 204 C78 138 144 43 248 34Z"
+              fill="rgba(183,155,91,0.08)"
+              stroke="rgba(183,155,91,0.42)"
+              stroke-width="2"
+            />
+
+            <path
+              d="M222 84 C250 98 261 126 251 153 C242 179 206 186 184 166 C159 143 167 102 192 88 C201 83 211 81 222 84Z"
+              fill="rgba(139,16,16,0.16)"
+              stroke="rgba(255,55,55,0.28)"
+            />
+
+            <path
+              d="M307 196 C341 206 365 231 361 258 C356 291 310 302 281 282 C250 261 257 216 287 200 C293 197 300 195 307 196Z"
+              fill="rgba(106,255,188,0.05)"
+              stroke="rgba(106,255,188,0.2)"
+            />
+
+            <line x1="260" y1="28" x2="260" y2="333" stroke="rgba(232,225,205,0.11)" stroke-dasharray="8 8"/>
+            <line x1="88" y1="185" x2="432" y2="185" stroke="rgba(232,225,205,0.11)" stroke-dasharray="8 8"/>
+
+            <circle cx="260" cy="62" r="6" fill="#c82020" filter="url(#glow)"/>
+            <circle class="map-pulse" cx="260" cy="62" r="8" fill="none" stroke="#c82020" stroke-width="2"/>
+
+            <circle cx="179" cy="171" r="5" fill="#b79b5b" filter="url(#glow)"/>
+            <circle class="map-pulse" cx="179" cy="171" r="8" fill="none" stroke="#b79b5b" stroke-width="2"/>
+
+            <circle cx="330" cy="249" r="5" fill="#6affbc" filter="url(#glow)"/>
+            <circle class="map-pulse" cx="330" cy="249" r="8" fill="none" stroke="#6affbc" stroke-width="2"/>
+
+            <text x="274" y="66" fill="rgba(232,225,205,0.7)" font-size="12" font-family="Courier New">FAROL</text>
+            <text x="193" y="176" fill="rgba(232,225,205,0.7)" font-size="12" font-family="Courier New">VILAREJO</text>
+            <text x="344" y="254" fill="rgba(232,225,205,0.7)" font-size="12" font-family="Courier New">DOCA</text>
+            <text x="22" y="335" fill="rgba(232,225,205,0.35)" font-size="11" font-family="Courier New">coordenadas inconsistentes</text>
+          </svg>
+        </article>
+
+        <article class="intel-tabs reveal">
+          <h3>Fragmentos de Inteligência</h3>
+
+          <div class="tab-buttons">
+            <button class="tab-btn active" type="button" data-tab="farol">Farol</button>
+            <button class="tab-btn" type="button" data-tab="vilarejo">Vilarejo</button>
+            <button class="tab-btn" type="button" data-tab="neblina">Neblina</button>
+            <button class="tab-btn" type="button" data-tab="culto">Símbolos</button>
+          </div>
+
+          <div class="tab-content" id="tabContent"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="transmissao">
+      <div class="reveal">
+        <div class="section-kicker">Arquivo Sonoro</div>
+        <h2 class="section-title">Transcrição de Rádio</h2>
+        <p class="section-text">
+          O áudio abaixo foi captado no último contato confirmado da Guarda Costeira.
+          O ruído de fundo contém três camadas de voz, mas apenas uma delas estava viva no momento da transmissão.
+        </p>
+      </div>
+
+      <article class="radio reveal">
+        <div class="radio-label">[TRANSCRIÇÃO DE RÁDIO // ÚLTIMO CONTATO]</div>
+        <p class="radio-text" id="radioText"></p>
+        <div class="radio-source">
+          Último contato da Guarda Costeira. Canal 09. Origem aproximada: costa noroeste de São Firmo.
+        </div>
+      </article>
+    </section>
+
+    <section id="equipe">
+      <div class="reveal">
+        <div class="section-kicker">Equipe de Contenção</div>
+        <h2 class="section-title">Escolha sua posição antes que a ilha escolha por você</h2>
+        <p class="section-text">
+          Cada agente enviado a São Firmo precisa cumprir uma função clara.
+          Lá dentro, improviso é só outro nome para funeral.
+        </p>
+      </div>
+
+      <div class="team-grid">
+        <article class="role-card reveal" data-index="01">
+          <div class="role-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M12 52L52 12" stroke-width="2"/>
+              <path d="M45 9L55 19" stroke-width="2"/>
+              <path d="M9 45L19 55" stroke-width="2"/>
+              <path d="M22 42L42 22" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <div class="role-type">Combatente // Ofensiva</div>
+          <h3>Combatente</h3>
+          <p>
+            A linha de frente contra o impossível. Força bruta para quebrar a realidade
+            quando a realidade decide morder primeiro.
+          </p>
+
+          <div class="role-tags">
+            <span>Pressão</span>
+            <span>Proteção</span>
+            <span>Confronto</span>
+            <span>Sobrevivência</span>
+          </div>
+        </article>
+
+        <article class="role-card reveal" data-index="02">
+          <div class="role-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M14 18H50" stroke-width="2"/>
+              <path d="M18 18V52H46V18" stroke-width="2"/>
+              <path d="M22 12H42V18H22V12Z" stroke-width="2"/>
+              <path d="M24 29H40" stroke-width="2"/>
+              <path d="M24 38H36" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <div class="role-type">Especialista // Técnico</div>
+          <h3>Especialista</h3>
+          <p>
+            O conhecimento é a única arma que não falha. Versatilidade, perícia e frieza
+            para transformar pistas em rotas de fuga.
+          </p>
+
+          <div class="role-tags">
+            <span>Investigação</span>
+            <span>Estratégia</span>
+            <span>Ferramentas</span>
+            <span>Precisão</span>
+          </div>
+        </article>
+
+        <article class="role-card reveal" data-index="03">
+          <div class="role-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M32 8L40 25L58 28L45 41L48 59L32 50L16 59L19 41L6 28L24 25L32 8Z" stroke-width="2"/>
+              <path d="M32 23V41" stroke-width="2"/>
+              <path d="M23 32H41" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <div class="role-type">Ocultista // Paranormal</div>
+          <h3>Ocultista</h3>
+          <p>
+            Combata o Outro Lado com o próprio Outro Lado. Poder suficiente para abrir portas
+            e risco suficiente para não saber o que volta junto.
+          </p>
+
+          <div class="role-tags">
+            <span>Rituais</span>
+            <span>Risco</span>
+            <span>Controle</span>
+            <span>Abismo</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="protocolos">
+      <div class="reveal">
+        <div class="section-kicker">Ordem Interna</div>
+        <h2 class="section-title">Protocolos de entrada em zona de ruptura</h2>
+        <p class="section-text">
+          O Sanctum Veritatis não promete retorno. Promete propósito.
+          Antes do desembarque, memorize os protocolos. Depois do desembarque, eles talvez memorizem você.
+        </p>
+      </div>
+
+      <div class="protocols">
+        <article class="protocol-panel reveal">
+          <h3>Diretrizes de Campo</h3>
+
+          <ul class="protocol-list">
+            <li>
+              <span>01</span>
+              <p>Não siga luzes isoladas dentro da neblina. Nenhuma fonte luminosa em São Firmo é considerada confiável.</p>
+            </li>
+            <li>
+              <span>02</span>
+              <p>Não responda vozes familiares pelo rádio. A anomalia replica intimidade antes de replicar som.</p>
+            </li>
+            <li>
+              <span>03</span>
+              <p>Qualquer agente que afirmar conhecer o caminho até o farol deve ser observado por outro membro da equipe.</p>
+            </li>
+            <li>
+              <span>04</span>
+              <p>Em caso de sangramento nasal, perda de memória ou compulsão por símbolos náuticos, interrompa a missão secundária.</p>
+            </li>
+          </ul>
+        </article>
+
+        <article class="terminal reveal" aria-label="Terminal interno">
+          <div id="terminalFeed"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="acesso">
+      <div class="access-panel reveal">
+        <div>
+          <div class="section-kicker">Servidor Discord</div>
+          <h3>Entrada autorizada apenas para agentes convocados</h3>
+          <p>
+            Use esta página como porta de entrada da campanha, hub de informações e vitrine do clima de Setentrional.
+            O restante do dossiê deve permanecer compartimentado por cargos, canais e permissões.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-danger" href="https://discord.gg/ZQqTjkUfv9" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
+            <a class="btn" href="faq.html">Consultar FAQ</a>
+          </div>
+        </div>
+
+        <div class="discord-card">
+          <div>
+            <span>Campanha</span>
+            <b>Setentrional</b>
+          </div>
+          <div>
+            <span>Sociedade</span>
+            <b>Sanctum Veritatis</b>
+          </div>
+          <div>
+            <span>Local</span>
+            <b>São Firmo</b>
+          </div>
+          <div>
+            <span>Estado</span>
+            <b>Ruptura</b>
+          </div>
+          <div>
+            <span>Prioridade</span>
+            <b>Contenção</b>
+          </div>
+          <div>
+            <span>Acesso</span>
+            <b>Discord</b>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Sanctum Veritatis // Setentrional</span>
+      <span>“O Norte Verdadeiro aponta para o abismo.”</span>
     </div>
+  </footer>
 
-    <!-- HERO -->
-    <header class="hero">
-        <img src="images/op-logo.png" alt="Logo Ordem" class="ordem-logo" id="hero-logo">
-        <h1 class="glitch" data-text="SETENTRIONAL">SETENTRIONAL</h1>
-        <p class="mono text-silver">"O Norte Verdadeiro aponta para o abismo."</p>
-        <button onclick="toggleLogin()" class="btn-cta mono">
-            <i class="fas fa-terminal"></i> Iniciar Sistema
-        </button>
-    </header>
+  <div class="modal" id="secretModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close-modal" id="closeModal" type="button" aria-label="Fechar">×</button>
 
-    <!-- DOSSIÊ -->
-    <section id="dossie" class="section hidden">
-        <h2 class="section-title">Dossiê 004-N</h2>
-        <div class="lore-grid">
-            <div class="lore-text">
-                <h3 style="margin-bottom: 1rem; color: var(--accent-silver);">O Incidente em São Firmo</h3>
-                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
-                    Uma ilha que não consta nos mapas oficiais. Um farol desativado em 1995 que voltou a emitir um sinal impossível. O vilarejo de pescadores local silenciou completamente.
-                </p>
-                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
-                    A Membrana está em processo de <strong class="text-highlight" id="ruptura-link" style="cursor: pointer;">Ruptura</strong>. Elementos de Sangue e Conhecimento foram detectados em alta concentração.
-                </p>
-                <div class="mono" style="border-left: 3px solid var(--accent-red); padding-left: 1.5rem; color: var(--accent-red); font-size: 0.85rem; background: linear-gradient(90deg, rgba(138,0,0,0.1), transparent);">
-                    > AMEAÇA: ALTA<br>
-                    > POPULAÇÃO: DESCONHECIDA<br>
-                    > OBJETIVO: CONTENÇÃO IMEDIATA
-                </div>
-            </div>
-            <div class="lore-card">
-                <h4 class="mono text-highlight" style="margin-bottom: 1rem;">[TRANSCRIÇÃO DE RÁDIO]</h4>
-                <p style="font-family: 'Courier New', monospace; font-size: 0.95rem; color: #ccc;">
-                    "...a neblina tem cheiro de ferro. Eles não estão mortos, eles estão... esperando. O farol não ilumina pra fora, ele ilumina pra dentro. Câmbio? Tem alguém aí?"
-                </p>
-                <br>
-                <p class="mono" style="font-size: 0.75rem; text-align: right; color: var(--accent-red);">- Último contato da Guarda Costeira</p>
-            </div>
-        </div>
-    </section>
+      <div class="section-kicker">Fragmento Recuperado</div>
 
-    <!-- CLASSES -->
-    <section id="agentes" class="section hidden">
-        <h2 class="section-title">Equipe de Contenção</h2>
-        <div class="classes-container">
-            <div class="class-card">
-                <i class="fas fa-crosshairs class-icon"></i>
-                <h3>Combatente</h3>
-                <p class="mono" style="font-size: 0.8rem; margin-top: 1rem; color: var(--accent-silver);">OFENSIVA</p>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: #777;">A linha de frente contra o impossível. Força bruta para quebrar a realidade.</p>
-            </div>
-            <div class="class-card">
-                <i class="fas fa-laptop-code class-icon"></i>
-                <h3>Especialista</h3>
-                <p class="mono" style="font-size: 0.8rem; margin-top: 1rem; color: var(--accent-silver);">TÉCNICO</p>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: #777;">O conhecimento é a única arma que não falha. Versatilidade e perícia.</p>
-            </div>
-            <div class="class-card">
-                <i class="fas fa-book-dead class-icon"></i>
-                <h3>Ocultista</h3>
-                <p class="mono" style="font-size: 0.8rem; margin-top: 1rem; color: var(--accent-silver);">PARANORMAL</p>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: #777;">Combata o Outro Lado com o próprio Outro Lado. Risco e poder.</p>
-            </div>
-        </div>
-    </section>
+      <h3 id="modalTitle">O farol não está chamando barcos.</h3>
 
-    <!-- PROTOCOLOS -->
-    <section id="protocolos" class="section hidden" style="text-align: center;">
-        <h2 class="section-title">Protocolos da Missão</h2>
-        <div class="protocol-cards">
-            <div class="protocol-card">
-                <i class="fab fa-steam" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
-                <h4 class="mono text-silver">TABLETOP SIMULATOR</h4>
-            </div>
-            <div class="protocol-card">
-                <i class="fab fa-discord" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
-                <h4 class="mono text-silver">DISCORD (VOZ)</h4>
-            </div>
-            <div class="protocol-card">
-                <i class="fas fa-calendar-alt" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
-                <h4 class="mono text-silver">DOMINGOS - 18H</h4>
-            </div>
-        </div>
+      <p>
+        Ele está chamando lembranças. Cada pulso luminoso corresponde a uma memória removida dos habitantes de São Firmo.
+        Quando a luz gira, alguém na ilha esquece o próprio nome.
+      </p>
 
-        <a href="https://discord.gg/u3GmJt6Ts6" target="_blank" class="btn-cta mono" style="border-color: #5865F2; color: #5865F2;">
-            <i class="fab fa-discord"></i> Entrar no Servidor
-        </a>
-    </section>
+      <p>
+        O último operador da Guarda Costeira repetiu a mesma frase dezessete vezes antes do silêncio:
+        “Tem alguém dentro da lâmpada.”
+      </p>
 
-    <footer>
-        <p class="mono">ESTE SITE É UM PROJETO DE FÃ SEM FINS LUCRATIVOS.</p>
-        <p class="mono" style="margin-top: 5px;">ORDEM PARANORMAL © CELLBIT.</p>
-    </footer>
-
-    <!-- STATUS BAR (SEGREDO: DUO-CLICK) -->
-    <div class="status-bar mono" id="status-bar">
-        <div><i class="fas fa-satellite-dish blinking"></i> CONEXÃO CRIPTOGRAFADA</div>
-        <div style="color: var(--accent-silver);">LOCAL: ILHA DE SÃO FIRMO</div>
-        <div>AGENTE: <span class="text-highlight">NÃO IDENTIFICADO</span></div>
+      <button class="btn btn-danger" id="closeModalAlt" type="button">Arquivar fragmento</button>
     </div>
+  </div>
 
-    <script>
-        // JS para gerar particulas (Embers)
-        const embersContainer = document.getElementById('embers');
-        for (let i = 0; i < 40; i++) {
-            let ember = document.createElement('div');
-            ember.classList.add('ember');
-            ember.style.left = Math.random() * 100 + 'vw';
-            ember.style.animationDuration = (Math.random() * 5 + 5) + 's';
-            ember.style.animationDelay = (Math.random() * 5) + 's';
-            embersContainer.appendChild(ember);
+  <script>
+    const canvas = document.getElementById("sigilCanvas");
+    const ctx = canvas.getContext("2d");
+    const cursorLight = document.getElementById("cursorLight");
+    const radioText = document.getElementById("radioText");
+    const ruptureValue = document.getElementById("ruptureValue");
+    const primaryElement = document.getElementById("primaryElement");
+    const secondaryElement = document.getElementById("secondaryElement");
+    const anomalyName = document.getElementById("anomalyName");
+    const recommendation = document.getElementById("recommendation");
+    const secretButton = document.getElementById("secretButton");
+    const secretModal = document.getElementById("secretModal");
+    const closeModal = document.getElementById("closeModal");
+    const closeModalAlt = document.getElementById("closeModalAlt");
+    const tabContent = document.getElementById("tabContent");
+    const terminalFeed = document.getElementById("terminalFeed");
+
+    let width;
+    let height;
+    let particles = [];
+    let radioStarted = false;
+    let terminalIndex = 0;
+
+    const radioMessage =
+      '"...a neblina tem cheiro de ferro. Eles não estão mortos, eles estão... esperando. O farol não ilumina pra fora, ele ilumina pra dentro. Câmbio? Tem alguém aí?"';
+
+    const tabData = {
+      farol: {
+        title: "Farol de São Firmo",
+        text: [
+          "Desativado em 1995 após uma falha elétrica oficialmente registrada como acidente estrutural.",
+          "O feixe luminoso não se projeta para o mar. A luz curva para dentro da torre, como se o próprio farol fosse uma garganta."
+        ],
+        list: [
+          "Sinal ativo entre 02:13 e 03:07.",
+          "Som de sino sem fonte física.",
+          "Escadas internas registram mais degraus na subida do que na descida."
+        ]
+      },
+      vilarejo: {
+        title: "Vilarejo Silenciado",
+        text: [
+          "O assentamento pesqueiro não respondeu aos últimos chamados de rádio.",
+          "Nas fotografias aéreas, as casas aparecem com portas abertas, redes estendidas e mesas postas."
+        ],
+        list: [
+          "Nenhum corpo confirmado.",
+          "Nenhum animal visível.",
+          "Todas as janelas parecem voltadas para o farol."
+        ]
+      },
+      neblina: {
+        title: "Neblina Ferruginosa",
+        text: [
+          "A névoa tem cheiro metálico e interfere com bússolas, câmeras, microfones e memória recente.",
+          "Agentes relatam a sensação de serem observados por alguém que está lembrando deles errado."
+        ],
+        list: [
+          "Visibilidade reduzida para 4 metros.",
+          "Eco de vozes familiares.",
+          "Amostras condensam em líquido avermelhado após 13 minutos."
+        ]
+      },
+      culto: {
+        title: "Símbolos Náuticos",
+        text: [
+          "Marcas foram encontradas em pedras, portas e ossadas de peixes na região norte.",
+          "Os símbolos não parecem invocar algo. Parecem indicar direção."
+        ],
+        list: [
+          "Espirais cortadas por linhas verticais.",
+          "Desenhos de olhos dentro de lâmpadas.",
+          "Frase recorrente: o norte está faminto."
+        ]
+      }
+    };
+
+    const scanData = {
+      coast: {
+        rupture: "79%",
+        primary: "SANGUE",
+        secondary: "MEDO",
+        anomaly: "MARÉ REVERSA",
+        rec: "EVITAR CONTATO COM ÁGUA ESTAGNADA"
+      },
+      village: {
+        rupture: "84%",
+        primary: "CONHECIMENTO",
+        secondary: "SANGUE",
+        anomaly: "MEMÓRIA COLETIVA REMOVIDA",
+        rec: "NÃO ENTRAR EM CASAS COM LUZ ACESA"
+      },
+      lighthouse: {
+        rupture: "91%",
+        primary: "CONHECIMENTO",
+        secondary: "SANGUE",
+        anomaly: "FAROL INTERIOR",
+        rec: "NÃO OBSERVAR POR MAIS DE 13 SEGUNDOS"
+      },
+      deep: {
+        rupture: "??%",
+        primary: "INCONCLUSIVO",
+        secondary: "INCONCLUSIVO",
+        anomaly: "RESPOSTA VIVA",
+        rec: "ENCERRAR LEITURA IMEDIATAMENTE"
+      }
+    };
+
+    const terminalLines = [
+      '<div class="terminal-line"><b>SYSTEM:</b> conexão criptografada estabelecida.</div>',
+      '<div class="terminal-line"><b>ARQUIVO:</b> SETENTRIONAL_SF-1995 aberto.</div>',
+      '<div class="terminal-line"><b>LEITURA:</b> farol ativo, fonte luminosa incompatível.</div>',
+      '<div class="terminal-line danger"><b>ALERTA:</b> registros civis removidos de bases públicas.</div>',
+      '<div class="terminal-line"><b>SCAN:</b> concentração elevada de Sangue no perímetro costeiro.</div>',
+      '<div class="terminal-line"><b>SCAN:</b> concentração elevada de Conhecimento na torre do farol.</div>',
+      '<div class="terminal-line danger"><b>ERRO:</b> coordenadas retornam para o mesmo ponto.</div>',
+      '<div class="terminal-line"><b>NOTA:</b> o norte da bússola não aponta para cima.</div>',
+      '<div class="terminal-line"><b>NOTA:</b> o norte aponta para dentro.</div>',
+      '<div class="terminal-line danger"><b>STATUS:</b> contenção imediata autorizada.</div>'
+    ];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+
+      const amount = Math.min(130, Math.floor((width * height) / 14000));
+
+      particles = Array.from({ length: amount }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 1.7 + 0.25,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        a: Math.random() * 0.45 + 0.08
+      }));
+    }
+
+    function drawSigils() {
+      ctx.clearRect(0, 0, width, height);
+
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(183, 155, 91, ${p.a})`;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dx = p.x - q.x;
+          const dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 115) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = `rgba(183, 155, 91, ${0.055 * (1 - dist / 115)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
         }
+      });
 
-        // Reveal on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) entry.target.classList.add('show');
-            });
-        });
-        document.querySelectorAll('.hidden').forEach(el => observer.observe(el));
+      requestAnimationFrame(drawSigils);
+    }
 
-        // Login System
-        const AGENTES = {
-            "Dante": "H1J0",
-            "Mestre": "admin",
-            "Kian": "segredo"
-        };
-        const loginOverlay = document.getElementById('login-overlay');
-        const errorMsg = document.getElementById('error-msg');
-        const loginBox = document.querySelector('.login-box');
+    function typeRadio() {
+      if (radioStarted) return;
 
-        function toggleLogin() {
-            if (getComputedStyle(loginOverlay).display === 'flex') {
-                loginOverlay.style.opacity = '0';
-                setTimeout(() => { loginOverlay.style.display = 'none'; loginOverlay.classList.remove('active'); }, 300);
-            } else {
-                loginOverlay.style.display = 'flex';
-                setTimeout(() => { loginOverlay.style.opacity = '1'; loginOverlay.classList.add('active'); }, 10);
-                document.getElementById('username').focus();
+      radioStarted = true;
+      let index = 0;
+      radioText.textContent = "";
+
+      function tick() {
+        if (index <= radioMessage.length) {
+          radioText.textContent = radioMessage.slice(0, index) + (index % 2 === 0 ? "▌" : "");
+          index++;
+
+          const current = radioMessage[index - 1];
+          const delay = current === "." || current === "?" ? 150 : Math.random() * 34 + 24;
+
+          setTimeout(tick, delay);
+        } else {
+          radioText.textContent = radioMessage;
+        }
+      }
+
+      tick();
+    }
+
+    function setupReveals() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+
+            if (entry.target.classList.contains("radio")) {
+              typeRadio();
             }
-            errorMsg.textContent = '';
-            document.getElementById('loginForm').reset();
-        }
 
-        function realizarLogin(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-
-            if (AGENTES[user] && AGENTES[user] === pass) {
-                errorMsg.style.color = 'var(--accent-red)';
-                errorMsg.style.textShadow = '0 0 10px red';
-                errorMsg.innerHTML = '<i class="fas fa-check"></i> ACESSO AUTORIZADO. CARREGANDO...';
-                setTimeout(() => {
-                    window.location.href = 'arquivos.html';
-                }, 1500);
-            } else {
-                errorMsg.style.color = 'var(--accent-silver)';
-                errorMsg.style.textShadow = 'none';
-                errorMsg.innerHTML = '<i class="fas fa-times"></i> ERRO: DADOS INCORRETOS';
-                loginBox.style.animation = 'shake 0.4s ease-in-out';
-                setTimeout(() => { loginBox.style.animation = ''; }, 400);
+            if (entry.target.classList.contains("terminal")) {
+              startTerminal();
             }
+          }
+        });
+      }, { threshold: 0.14 });
+
+      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    }
+
+    function randomRupture() {
+      const base = 82;
+      const variance = Math.floor(Math.random() * 7) - 3;
+      ruptureValue.textContent = `${base + variance}%`;
+    }
+
+    function setScan(type) {
+      const data = scanData[type];
+
+      if (!data) return;
+
+      ruptureValue.textContent = data.rupture;
+      primaryElement.textContent = data.primary;
+      secondaryElement.textContent = data.secondary;
+      anomalyName.textContent = data.anomaly;
+      recommendation.textContent = data.rec;
+    }
+
+    function renderTab(type) {
+      const data = tabData[type];
+
+      if (!data) return;
+
+      tabContent.innerHTML = `
+        <h4>${data.title}</h4>
+        ${data.text.map((item) => `<p>${item}</p>`).join("")}
+        <ul>
+          ${data.list.map((item) => `<li>${item}</li>`).join("")}
+        </ul>
+      `;
+    }
+
+    function setupTabs() {
+      document.querySelectorAll(".tab-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".tab-btn").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          renderTab(button.dataset.tab);
+        });
+      });
+
+      renderTab("farol");
+    }
+
+    function setupScanner() {
+      document.querySelectorAll("[data-scan]").forEach((button) => {
+        button.addEventListener("click", () => {
+          setScan(button.dataset.scan);
+        });
+      });
+    }
+
+    function startTerminal() {
+      if (terminalIndex > 0) return;
+
+      function pushLine() {
+        if (terminalIndex < terminalLines.length) {
+          terminalFeed.innerHTML += terminalLines[terminalIndex];
+          terminalIndex++;
+          setTimeout(pushLine, 420);
         }
+      }
 
-        // SEGREDOS / ENIGMAS
-        document.getElementById('hero-logo').addEventListener('dblclick', () => {
-            window.location.href = 'corvo_comando.html';
-        });
-        document.getElementById('nav-logo').addEventListener('dblclick', () => {
-            window.location.href = 'log.html';
-        });
-        document.getElementById('ruptura-link').addEventListener('click', () => {
-            window.location.href = 'equipe_alpha.html';
-        });
-        document.getElementById('status-bar').addEventListener('dblclick', () => {
-            window.location.href = 'calibracao.html';
-        });
+      pushLine();
+    }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'l' || e.key === 'L') window.location.href = 'log.html';
-            if (e.key === 'q' || e.key === 'Q') window.location.href = 'quiz.html';
-            if (e.key === 'o' || e.key === 'O') window.location.href = 'ordo_log.html';
-            if (e.key === 'c' || e.key === 'C') window.location.href = 'alicia.html';
-            if (e.key === 'v' || e.key === 'V') window.location.href = 'Vidraceiros.html';
-            if (e.key === 'b' || e.key === 'B') window.location.href = 'belladonna.html'; 
-            if (e.key === 's' || e.key === 'S') window.location.href = 'ShadowCompany.html'
-        });
-    </script>
+    function openSecret() {
+      secretModal.classList.add("open");
+      secretModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeSecret() {
+      secretModal.classList.remove("open");
+      secretModal.setAttribute("aria-hidden", "true");
+    }
+
+    window.addEventListener("mousemove", (event) => {
+      cursorLight.style.left = `${event.clientX}px`;
+      cursorLight.style.top = `${event.clientY}px`;
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+
+    secretButton.addEventListener("click", openSecret);
+    closeModal.addEventListener("click", closeSecret);
+    closeModalAlt.addEventListener("click", closeSecret);
+
+    secretModal.addEventListener("click", (event) => {
+      if (event.target === secretModal) closeSecret();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+
+      if (activeTag === "input" || activeTag === "textarea" || activeTag === "select") return;
+
+      if (e.key === "Escape") closeSecret();
+
+      if (e.key === "l" || e.key === "L") window.location.href = "log.html";
+      if (e.key === "q" || e.key === "Q") window.location.href = "quiz.html";
+      if (e.key === "o" || e.key === "O") window.location.href = "ordo_log.html";
+      if (e.key === "c" || e.key === "C") window.location.href = "alicia.html";
+      if (e.key === "v" || e.key === "V") window.location.href = "Vidraceiros.html";
+      if (e.key === "b" || e.key === "B") window.location.href = "belladonna.html";
+      if (e.key === "s" || e.key === "S") window.location.href = "ShadowCompany.html";
+    });
+
+    setInterval(randomRupture, 2200);
+
+    resizeCanvas();
+    drawSigils();
+    setupReveals();
+    setupTabs();
+    setupScanner();
+  </script>
 </body>
 </html>
