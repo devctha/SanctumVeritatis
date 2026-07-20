@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/setentrional/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • PROJETO SETENTRIONAL • INCIDENTE-ORIGEM (SANCTUM VERITATIS)</title>
+  <style>
+    :root{
+      --bg0:#04030a;
+      --bg1:#07081b;
+      --glass: rgba(10, 12, 22, .70);
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted: rgba(219,234,254,.65);
+
+      --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.20);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .12;
+      --noise-opacity: .08;
+      --flicker: .055;
+      --shake: 0px;
+
+      --blood: rgba(239, 68, 68, .12);
+      --mold: rgba(34, 197, 94, .10);
+      --neon: rgba(56, 189, 248, .10);
+      --ink: rgba(168, 85, 247, .12);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(900px 600px at 12% 10%, var(--ink), transparent 60%),
+        radial-gradient(900px 650px at 88% 22%, var(--neon), transparent 58%),
+        radial-gradient(900px 650px at 50% 92%, var(--mold), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, var(--blood), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(14px, 2vw, 22px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(12px, 1.6vw, 18px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+
+    /* CRT + interferência */
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.03), transparent 22%, rgba(0,255,255,.02) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.55;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.60) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-7px,5px,0); }
+      50%{ transform: translate3d(6px,-5px,0); }
+      75%{ transform: translate3d(-4px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 4.4s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      33%{ opacity: calc(var(--flicker) * 1.2); }
+      34%{ opacity: 0; }
+      58%{ opacity: calc(var(--flicker) * .8); }
+      59%{ opacity: 0; }
+      88%{ opacity: calc(var(--flicker) * 1.45); }
+      89%{ opacity: 0; }
+    }
+
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,24,.70), rgba(5,6,10,.44));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: clamp(14px, 1.7vw, 16px);
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.72);
+      line-height:1.35;
+      max-width: 80ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.24);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowB);
+      font-size: 12px;
+      color: rgba(219,234,254,.82);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--orange);
+      box-shadow: 0 0 14px rgba(251,146,60,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(168,85,247,.16);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(251,146,60,.22);
+      background: linear-gradient(180deg, rgba(251,146,60,.18), rgba(239,68,68,.10));
+      color: #ffe4c7;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowO), var(--shadowR);
+      user-select:none;
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .ghost{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowB);
+      user-select:none;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      padding: 16px;
+      min-height:0;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.25);
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.06);
+      overflow:hidden;
+    }
+
+    .cardHead{
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .cardHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.80);
+    }
+
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.28);
+      font-size: 12px;
+      color: rgba(219,234,254,.60);
+    }
+    .chip b{ color: rgba(219,234,254,.88); }
+
+    .cardBody{ padding: 12px; }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      padding: 10px 10px;
+      box-shadow: var(--shadowV);
+    }
+    .kv .k{ font-size: 11px; letter-spacing:.12em; text-transform:uppercase; color: rgba(219,234,254,.55); }
+    .kv .v{ margin-top:6px; font-size: 13px; line-height:1.5; color: rgba(219,234,254,.82); }
+
+    .log{
+      height: clamp(360px, 56vh, 740px);
+      overflow:auto;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.38);
+      border: 1px solid rgba(239,68,68,.16);
+      box-shadow: var(--shadowR), inset 0 0 0 1px rgba(56,189,248,.06);
+      white-space: pre-wrap;
+      line-height: 1.52;
+      color: rgba(219,234,254,.82);
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+    }
+
+    .warn{ color: rgba(251,146,60,.88); text-shadow: var(--shadowO); }
+    .danger{ color: rgba(239,68,68,.88); text-shadow: var(--shadowR); }
+    .ok{ color: rgba(34,197,94,.88); text-shadow: var(--shadowG); }
+    .link{
+      color: rgba(56,189,248,.88);
+      text-shadow: var(--shadowB);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(56,189,248,.35);
+    }
+
+    /* BLOCO “CENSURADO” */
+    .redact{
+      background: linear-gradient(90deg, rgba(239,68,68,.16), rgba(0,0,0,.0));
+      border-left: 3px solid rgba(239,68,68,.55);
+      padding: 10px 10px;
+      border-radius: 12px;
+      margin: 10px 0;
+    }
+    .redact .k{ font-size: 11px; letter-spacing:.12em; text-transform:uppercase; color: rgba(239,68,68,.78); }
+    .redact .v{ margin-top:6px; font-size: 13px; line-height:1.5; color: rgba(219,234,254,.76); }
+
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+    }
+    .introCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.90), rgba(3,6,18,.64));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 48px rgba(168,85,247,.18),
+        0 0 56px rgba(56,189,248,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .introTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      font-size: 13px;
+    }
+    .introTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+      max-width: 80ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      font-size: 12px;
+      min-height: 220px;
+      max-height: min(58vh, 600px);
+      overflow:auto;
+    }
+    .introActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.62);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,.25);
+      background: rgba(251,146,60,.08);
+      color: #ffe4c7;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .crt::after, .noise, .flicker{ animation:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="title">S.A.S / OPERAÇÃO • PROJETO SETENTRIONAL</div>
+          <div class="sub">
+            Documento de incidente-origem: <span class="ok">Fundação da Sanctum Veritatis</span>.<br/>
+            Pós-evento: <span class="danger">Deserção em massa</span> (20 agentes / 30 funcionários / 45 operadores).
+            Motivo declarado: “verdades por trás da Ordo” (menção mantida apenas como <span class="warn">marcador histórico</span>).
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>FILE: SETENTRIONAL_BLACK.log • STATUS: UNCLEAN</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <div class="k">ARCHIVE VIEW • “DO NOT QUOTE”</div>
+        <div class="actions">
+          <button class="ghost" id="btnNoise" type="button">Ruído</button>
+          <button class="btn" id="btnAutoscroll" type="button">Auto-scroll: ON</button>
+          <button class="ghost" id="btnTop" type="button">Topo</button>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Sumário do projeto</div>
+            <div class="chips">
+              <span class="chip"><b>Tipo</b> Pesquisa/Contenção</span>
+              <span class="chip"><b>Falha</b> Sistêmica</span>
+              <span class="chip"><b>Consequência</b> Cisma organizacional</span>
+            </div>
+          </div>
+
+          <div class="cardBody">
+            <div class="grid2">
+              <div class="kv">
+                <div class="k">Hipótese oficial (antes)</div>
+                <div class="v">
+                  “Projeto Setentrional” visava mapear um corredor anômalo subterrâneo que surgia apenas em latitudes específicas,
+                  como se o planeta tivesse uma “costura” escondida.
+                </div>
+              </div>
+
+              <div class="kv">
+                <div class="k">Resultado real (depois)</div>
+                <div class="v">
+                  O corredor não era passagem: era <span class="danger">filtro</span>.<br/>
+                  Quem atravessava não encontrava um lugar — encontrava a parte do próprio mundo que foi apagada para manter “a ordem”.
+                </div>
+              </div>
+
+              <div class="kv">
+                <div class="k">Evento de deserção</div>
+                <div class="v">
+                  95 indivíduos abandonaram funções e nomes. Levaram arquivos, selos, chaves e juramentos rasgados.<br/>
+                  Surgiu então a <span class="ok">Sanctum Veritatis</span>: “não como grupo, mas como recusa”.
+                </div>
+              </div>
+
+              <div class="kv">
+                <div class="k">Termo recorrente (pós)</div>
+                <div class="v">
+                  “Se você disser a verdade inteira, o mundo tenta te desmentir.”<br/>
+                  “Se você escrever a verdade inteira, a tinta aprende a mentir sozinha.”
+                </div>
+              </div>
+            </div>
+
+            <div class="redact">
+              <div class="k">Nota interna (censurada)</div>
+              <div class="v">
+                A organização-mãe mantém a narrativa de “ruptura ideológica”.<br/>
+                Os desertores descrevem “descoberta de origem” e “culpa herdada”.<br/>
+                Trechos abaixo foram preservados por duplicação fora de cadeia.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Lista parcial de desertores</div>
+            <div class="chips">
+              <span class="chip"><b>Agentes</b> 20</span>
+              <span class="chip"><b>Funcionários</b> 30</span>
+              <span class="chip"><b>Operadores</b> 45</span>
+            </div>
+          </div>
+
+          <div class="cardBody">
+            <div class="kv">
+              <div class="k">Seis nomes (amostra recuperada)</div>
+              <div class="v">
+                - Ag. Helena “CORAL” Siqueira — “o norte não aponta, ele escolhe”.<br/>
+                - Ag. Rubens “CHALK” Meireles — último a desligar as câmeras por dentro.<br/>
+                - Func. Maira Inoue — apagou o próprio registro e deixou o crachá pendurado num prego enferrujado.<br/>
+                - Func. Paulo Kadar — “não é religião, é contabilidade de almas”.<br/>
+                - Op. Sérgio “HOLLOW” Viana — entregou armas e levou apenas papel.<br/>
+                - Op. Yara “MERCY” Dantas — recusou ordem final e sobreviveu ao “desmentido”.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Log • Setentrional Black</div>
+            <div class="chips">
+              <span class="chip"><b>Formato</b> Canal/Relato</span>
+              <span class="chip"><b>Integridade</b> 63%</span>
+              <span class="chip"><b>Nota</b> brutalidade psicológica</span>
+            </div>
+          </div>
+
+          <div class="cardBody">
+            <div class="log" id="log">
+[INÍCIO DO REGISTRO • PROJETO SETENTRIONAL • “SETENTRIONAL_BLACK” • HASH: S-Ø-13]
+classificação: sigilo extremo • cópia: não autorizada • origem: canal interno, depois “fora de cadeia”
+----------------------------------------------------------------------------------------------------
+
+D0 06:11:03  COORD: Equipe em deslocamento. Contagem: 20 agentes / 30 staff / 45 operadores. Sem divulgação.
+D0 06:11:12  COORD: Objetivo primário: mapear corredor. Objetivo secundário: recuperar “peça” (termo não explicado).
+D0 06:11:19  COORD: Ordem: não nomear o que for visto. Nome cria hábito. Hábito vira portal.
+
+D0 09:52:40  [AMBIENTE] Entrada de túnel — concreto antigo e novo no mesmo lugar, como se alguém reconstruísse o passado.
+D0 09:53:08  AG.CORAL: Bússola girando sem pressa. Como se procurasse desculpa.
+D0 09:53:21  OP.HOLLOW: Eu ouvi alguém contando números dentro da parede. Não é eco. É contagem.
+D0 09:53:35  STAFF.KADAR: Se é contagem, é dívida.
+
+D0 10:04:11  [SINAL] Comunicação externa: “OK”. Interna: “OK”. Mas o “OK” volta com atraso e voz diferente.
+D0 10:04:18  AG.CHALK: Atraso não é técnico. É moral.
+D0 10:04:23  COORD: Sem filosofia. Avancem.
+
+----------------------------------------------------------------------------------------------------
+D1 01:19:02  [DESCIDA] O corredor muda com o grupo. Quanto mais gente, mais estreito.
+D1 01:19:10  AG.CORAL: O lugar tá escolhendo quem passa. Não é geologia, é triagem.
+D1 01:19:15  COORD: Mantenham o ritmo.
+D1 01:19:20  OP.MERCY: Eu não consigo engolir. Não é medo. É como se o ar tivesse mãos.
+
+D1 01:22:47  [EVENTO] Primeira “negação”: uma porta marcada aparece na frente; ao tocar, a marca some da memória.
+D1 01:23:05  AG.CHALK: Eu tô olhando pro símbolo e minha cabeça insiste que nunca existiu.
+D1 01:23:12  STAFF.INOUE: Anotei num papel. Quando olho de novo, o papel tá em branco.
+D1 01:23:20  OP.HOLLOW: O lugar desmente o que a gente registra.
+
+----------------------------------------------------------------------------------------------------
+D6 18:40:33  [SETOR] Câmara de arquivos (não catalogada).
+D6 18:40:38  AG.CORAL: Tem prateleiras. Tem fichas. Tem... nossos nomes.
+D6 18:40:44  COORD: Isso é impossível.
+D6 18:40:47  AG.CORAL: Não. É inevitável.
+
+D6 18:41:10  [VISUAL] Fichas com datas de nascimento, histórico e... “data de uso”.
+D6 18:41:22  STAFF.KADAR: (sussurrando) Contabilidade.
+D6 18:41:26  OP.HOLLOW: Eu achei a minha. Diz: “descartável por saturação”.
+D6 18:41:31  AG.CHALK: Isso não é arquivo de missão. É estoque.
+
+D6 18:42:08  COORD: Recolham provas. Não fotografem.
+D6 18:42:11  AG.CORAL: Por quê?
+D6 18:42:13  COORD: Porque a prova olha de volta.
+
+----------------------------------------------------------------------------------------------------
+D14 03:09:55  [ENCONTRO] “Peça” localizada: objeto embrulhado em pano negro, pulsando sem som.
+D14 03:10:02  COORD: Não abram. Transportem.
+D14 03:10:08  OP.MERCY: Tem palavra no pano.
+D14 03:10:12  AG.CHALK: Eu não consigo ler. Meu cérebro escorrega.
+D14 03:10:16  OP.MERCY: Eu li. Tá escrito: “DEVOLVAM”.
+
+D14 03:10:30  [ECO] Voz coletiva, seca: “de-vol-vam”.
+D14 03:10:36  AG.CORAL: Isso não é ordem. É reparo.
+
+----------------------------------------------------------------------------------------------------
+D19 22:18:07  [FALHA] Primeira deserção (não oficial): três operadores largam armas e caminham para o escuro sem correr.
+D19 22:18:14  COORD: Parem!
+D19 22:18:17  OP (não identificado): “Se eu ficar, eu viro número. Se eu for, eu viro pessoa.”
+D19 22:18:25  [REGISTRO] Eles somem sem som. Sem grito. Como se o lugar tivesse aceitado.
+
+----------------------------------------------------------------------------------------------------
+M1 12:02:02  [INSIGHT] Descoberta: o corredor é um mecanismo de “triagem de fé”.
+M1 12:02:08  STAFF.KADAR: Quem acredita na ordem, atravessa e vira ferramenta.
+M1 12:02:12  STAFF.INOUE: Quem duvida, sangra por dentro até aprender a obedecer.
+M1 12:02:16  AG.CORAL: Quem entende, deserta.
+
+M1 12:03:01  COORD: Não existe deserção. Existe falha de caráter.
+M1 12:03:05  AG.CHALK: Então chama de falha. Mas não chama de mentira.
+
+----------------------------------------------------------------------------------------------------
+M2 07:51:44  [SALA BRANCA] Um “arquivo vivo” fala sem boca. Diz datas e nomes que ainda não nasceram.
+M2 07:51:50  ARQ-VIVO: “Vocês foram criados para tapar o buraco da verdade.”
+M2 07:51:55  ARQ-VIVO: “O norte aponta para onde vocês enterram os erros.”
+M2 07:52:01  ARQ-VIVO: “A organização-mãe não contém. Ela administra o medo.”
+M2 07:52:07  [CORTE] 12 segundos sumidos.
+
+M2 07:53:18  OP.MERCY: Isso é o que eles escondem… o motivo pelo qual tudo existe.
+M2 07:53:22  AG.CORAL: A “verdade por trás” não é uma teoria. É uma estrutura.
+
+----------------------------------------------------------------------------------------------------
+M3 19:12:09  [QUEBRA] 20 agentes se recusam a executar “ordem final”.
+M3 19:12:15  AG.CORAL: A missão não é mapear. É silenciar.
+M3 19:12:19  AG.CHALK: E a peça não é peça. É tampa. É culpa embrulhada.
+
+M3 19:12:41  COORD: Vocês estão violando juramento.
+M3 19:12:45  AG.CORAL: Juramento firmado em mentira não é juramento. É prisão.
+M3 19:12:50  OP.HOLLOW: (quase sem voz) Eu não quero mais ser ferramenta.
+M3 19:12:56  COORD: Vocês serão caçados.
+M3 19:13:00  OP.MERCY: Então caçem. Mas não chamem isso de “ordem”.
+
+----------------------------------------------------------------------------------------------------
+M4 04:30:22  [DESERÇÃO EM MASSA] 20 agentes / 30 funcionários / 45 operadores abandonam a cadeia de comando.
+M4 04:30:29  [AÇÃO] arquivos copiadas por método analógico (papel), distribuídos entre bolsas e corpos.
+M4 04:30:35  STAFF.INOUE: Se a tinta tentar mentir, a gente escreve por cima.
+M4 04:30:39  STAFF.KADAR: Se o mundo desmentir, a gente vira o erro que não dá pra apagar.
+
+M4 04:31:10  [NASCIMENTO] Nome escolhido no escuro: SANCTUM VERITATIS.
+M4 04:31:16  AG.CORAL: Não é organização. É abrigo.
+M4 04:31:20  AG.CHALK: Não é abrigo. É acusação.
+
+----------------------------------------------------------------------------------------------------
+M5 11:58:44  [RETALIAÇÃO] O corredor “responde”: algumas pessoas esquecem o próprio rosto. Outras lembram de coisas que nunca viveram.
+M5 11:58:52  OP.HOLLOW: O lugar tá punindo a gente?
+M5 11:58:55  OP.MERCY: Não. Ele tá cobrando recibo.
+
+M5 11:59:10  ARQ-VIVO (distante): “Devolvam.”
+M5 11:59:14  [SOM] algo batendo no pano negro por dentro.
+
+----------------------------------------------------------------------------------------------------
+[NOTA FINAL • fora de cadeia]
+Se você leu até aqui, você já foi contado.
+Não conte de volta.
+Não use nomes.
+Não confie em quem chama mentira de “procedimento”.
+
+[FIM DO REGISTRO • SETENTRIONAL_BLACK • HASH: S-Ø-13]
+            </div>
+
+            <div class="redact">
+              <div class="k">Apêndice: motivo da ruptura (resumo)</div>
+              <div class="v">
+                Os desertores não abandonaram por medo do “corredor”. Abandonaram por reconhecer o padrão:
+                a estrutura maior precisava que pessoas virassem números para sustentar uma ideia de ordem.
+                A Sanctum Veritatis nasce como contramedida: não conter o fenômeno — conter a mentira.
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução do dossiê Setentrional">
+    <div class="introCard">
+      <div class="introTop">
+        <div>
+          <div class="h">SARCOPHAGUS / OPEN FILE</div>
+          <div class="s">
+            AVISO: este arquivo inclui relato de deserção em massa e violação institucional.<br/>
+            O conteúdo foi preservado por “cópia analógica” e pode conter contradições intencionais.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>READ MODE: BLACK</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="introActions">
+        <button class="btn" id="btnEnter" type="button">Entrar</button>
+        <div class="kbd">Atalhos: <code>Enter</code> entrar • <code>/</code> ruído • <code>T</code> topo • <code>B</code> fundo</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const typebox = document.getElementById("typebox");
+    const log = document.getElementById("log");
+
+    const btnNoise = document.getElementById("btnNoise");
+    const btnAutoscroll = document.getElementById("btnAutoscroll");
+    const btnTop = document.getElementById("btnTop");
+    const btnEnter = document.getElementById("btnEnter");
+
+    let autoscroll = true;
+
+    function setVars(scan, noise, flick, shake){
+      document.documentElement.style.setProperty("--scan-opacity", scan);
+      document.documentElement.style.setProperty("--noise-opacity", noise);
+      document.documentElement.style.setProperty("--flicker", flick);
+      document.documentElement.style.setProperty("--shake", shake);
+    }
+
+    function dopaminePulse(){
+      const scan = (0.08 + Math.random()*0.12).toFixed(2);
+      const noise = (0.06 + Math.random()*0.10).toFixed(2);
+      const flick = (0.04 + Math.random()*0.08).toFixed(3);
+      const shake = (Math.random() < 0.35) ? ((Math.random() * 2 - 1).toFixed(1) + "px") : "0px";
+      setVars(scan, noise, flick, shake);
+      setTimeout(() => setVars(".12",".08",".055","0px"), 1100);
+    }
+
+    function closeIntro(){
+      intro.style.display = "none";
+      dopaminePulse();
+      if (autoscroll) log.scrollTop = log.scrollHeight;
+    }
+
+    const boot = [
+      "[S.A.S] mount: SAS Results/",
+      "[S.A.S] file: projeto-setentrional.html",
+      "[S.A.S] integrity: 63% (fragmentado)",
+      "[S.A.S] note: arquivo “fora de cadeia”",
+      "",
+      "PROJETO SETENTRIONAL",
+      "INCIDENTE-ORIGEM: SANCTUM VERITATIS",
+      "DESERÇÃO: 20 / 30 / 45",
+      "",
+      "Se o texto parecer mentir: é parte do mecanismo.",
+      "Pressione ENTER para abrir."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        const base = 30;
+        const jitter = Math.random()*90;
+        setTimeout(tick, base + jitter);
+      };
+      tick();
+    }
+
+    function updateAutoscrollLabel(){
+      btnAutoscroll.textContent = "Auto-scroll: " + (autoscroll ? "ON" : "OFF");
+    }
+
+    btnNoise.addEventListener("click", dopaminePulse);
+    btnTop.addEventListener("click", () => log.scrollTop = 0);
+    btnAutoscroll.addEventListener("click", () => {
+      autoscroll = !autoscroll;
+      updateAutoscrollLabel();
+      dopaminePulse();
+      if (autoscroll) log.scrollTop = log.scrollHeight;
+    });
+
+    btnEnter.addEventListener("click", closeIntro);
+
+    window.addEventListener("keydown", (e) => {
+      if (intro.style.display !== "none") {
+        if (e.key === "Enter") closeIntro();
+        return;
+      }
+      if (e.key === "/" ) { e.preventDefault(); dopaminePulse(); }
+      if (e.key.toLowerCase() === "t") log.scrollTop = 0;
+      if (e.key.toLowerCase() === "b") log.scrollTop = log.scrollHeight;
+    });
+
+    typeBoot();
+    updateAutoscrollLabel();
+  </script>
+</body>
+</html>

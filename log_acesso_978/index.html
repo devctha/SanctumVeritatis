@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/log_acesso_978/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PROJETO 978 // LOG DE ACESSO (INTERDITADO)</title>
+  <style>
+    :root{
+      --bg:#020002;
+      --panel:#07000a;
+      --panel2:#0b0010;
+      --mag:#ff00ff;
+      --mag2:#b400ff;
+      --ink:#ffe9ff;
+      --muted:#b98bb9;
+      --line: rgba(255,0,255,.22);
+      --ok:#6bffb0;
+      --warn:#ffd96b;
+      --bad:#ff4a72;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 20% 20%, rgba(255,0,255,.12), transparent 55%),
+        radial-gradient(900px 600px at 80% 40%, rgba(180,0,255,.09), transparent 60%),
+        linear-gradient(180deg, #010001, var(--bg));
+      color:var(--ink);
+      font-family:var(--mono);
+      overflow:hidden;
+    }
+
+    /* scanlines + noise */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(to bottom,
+          rgba(255,255,255,.05) 0px,
+          rgba(255,255,255,.05) 1px,
+          rgba(0,0,0,0) 3px,
+          rgba(0,0,0,0) 6px
+        );
+      mix-blend-mode: overlay;
+      opacity:.10;
+    }
+    body::after{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      opacity:.035;
+      mix-blend-mode: soft-light;
+    }
+
+    .wrap{
+      height:100%;
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      gap:14px;
+    }
+
+    header{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11,0,16,.92), rgba(7,0,10,.70));
+      box-shadow: 0 18px 60px rgba(0,0,0,.75);
+      padding:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    header::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(90deg, transparent, rgba(255,0,255,.18), transparent);
+      transform: translateX(-80%);
+      animation: sweep 7s linear infinite;
+      opacity:.55;
+      pointer-events:none;
+    }
+    @keyframes sweep{ 0%{transform:translateX(-80%);} 100%{transform:translateX(80%);} }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:260px;
+    }
+    .title h1{
+      margin:0;
+      color:var(--mag);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:14px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 14px;
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.04em;
+    }
+    .pill{
+      border:1px solid rgba(255,0,255,.22);
+      background: rgba(255,0,255,.06);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .pill b{ color:var(--ink); font-weight:600; }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    button{
+      appearance:none;
+      border:1px solid rgba(255,0,255,.26);
+      background: rgba(255,0,255,.08);
+      color:var(--ink);
+      font-family:var(--mono);
+      font-size:12px;
+      padding:9px 11px;
+      border-radius:10px;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    button:hover{ background: rgba(255,0,255,.12); border-color: rgba(255,0,255,.38); }
+    button:active{ transform: translateY(1px); }
+    button.danger{ border-color: rgba(255,74,114,.35); background: rgba(255,74,114,.10); }
+    button.danger:hover{ background: rgba(255,74,114,.14); }
+
+    main{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11,0,16,.82), rgba(7,0,10,.55));
+      box-shadow: 0 18px 60px rgba(0,0,0,.75);
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:auto 1fr;
+      min-height:0;
+    }
+    .banner{
+      padding:10px 14px;
+      border-bottom:1px solid rgba(255,0,255,.16);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      font-size:12px;
+      color:var(--muted);
+      flex-wrap:wrap;
+    }
+    .statusline{ display:flex; align-items:center; gap:10px; }
+    .dot{
+      width:9px; height:9px; border-radius:99px;
+      background: var(--warn);
+      box-shadow: 0 0 14px rgba(255,217,107,.30);
+    }
+    .dot.ok{ background: var(--ok); box-shadow: 0 0 14px rgba(107,255,176,.26); }
+    .dot.bad{ background: var(--bad); box-shadow: 0 0 14px rgba(255,74,114,.26); }
+
+    .screen{
+      padding:14px;
+      overflow:auto;
+      min-height:0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,0,255,.22) transparent;
+    }
+    .screen::-webkit-scrollbar{ width:10px; }
+    .screen::-webkit-scrollbar-thumb{
+      background: rgba(255,0,255,.18);
+      border-radius: 999px;
+      border:2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .panel{
+      border:1px solid rgba(255,0,255,.18);
+      background: rgba(255,0,255,.04);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:12px;
+    }
+    @media (max-width: 820px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .h{
+      margin:0 0 10px 0;
+      color: rgba(255,233,255,.92);
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+
+    .kbd{
+      border:1px solid rgba(255,0,255,.22);
+      background: rgba(255,0,255,.06);
+      padding:2px 7px;
+      border-radius:7px;
+      color: rgba(255,233,255,.88);
+      white-space:nowrap;
+    }
+
+    /* minigame */
+    .miniRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .meter{
+      position:relative;
+      height:14px;
+      border-radius:999px;
+      border:1px solid rgba(255,0,255,.22);
+      background: rgba(255,0,255,.06);
+      overflow:hidden;
+      flex:1;
+      min-width:220px;
+    }
+    .bar{
+      position:absolute; top:0; left:0; bottom:0;
+      width:0%;
+      background: linear-gradient(90deg, rgba(255,0,255,.25), rgba(255,0,255,.75));
+      filter: saturate(1.1);
+    }
+    .zone{
+      position:absolute; top:-1px; bottom:-1px;
+      width:18%;
+      left: 62%;
+      border:1px dashed rgba(255,233,255,.55);
+      background: rgba(107,255,176,.10);
+    }
+
+    .seq{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .keyChip{
+      border:1px solid rgba(255,0,255,.22);
+      background: rgba(255,0,255,.06);
+      border-radius:12px;
+      padding:8px 10px;
+      font-size:12px;
+      color: rgba(255,233,255,.90);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .keyChip.done{
+      border-color: rgba(107,255,176,.30);
+      background: rgba(107,255,176,.10);
+      color: rgba(230,255,244,.92);
+    }
+    .keyChip.bad{
+      border-color: rgba(255,74,114,.35);
+      background: rgba(255,74,114,.10);
+      color: rgba(255,233,235,.92);
+    }
+
+    /* log */
+    .entry{
+      display:grid;
+      grid-template-columns: 118px 1fr;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,0,255,.0);
+      background: rgba(255,0,255,.03);
+      margin-bottom:10px;
+    }
+    .entry:hover{
+      border-color: rgba(255,0,255,.10);
+      background: rgba(255,0,255,.04);
+    }
+    .stamp{ color: rgba(185,139,185,.95); font-size:12px; white-space:nowrap; }
+    .msg{ color: rgba(255,233,255,.92); font-size:13px; line-height:1.35; white-space:pre-wrap; word-break:break-word; }
+    .tag{
+      display:inline-block;
+      margin-right:8px;
+      padding:2px 7px;
+      border-radius:999px;
+      border:1px solid rgba(255,0,255,.18);
+      background: rgba(255,0,255,.06);
+      font-size:11px;
+      color: rgba(255,233,255,.88);
+    }
+    .tag.bad{
+      border-color: rgba(255,74,114,.35);
+      background: rgba(255,74,114,.10);
+      color: rgba(255,230,235,.92);
+    }
+    .tag.sys{
+      border-color: rgba(255,0,255,.14);
+      background: rgba(255,0,255,.04);
+      color: rgba(255,233,255,.82);
+    }
+    .who{ color: var(--mag); }
+
+    .cursor{
+      display:inline-block;
+      width:9px;
+      margin-left:2px;
+      border-bottom:2px solid rgba(255,0,255,.95);
+      transform: translateY(-1px);
+      animation: blink .9s steps(2,end) infinite;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    .shake{
+      animation: shake .25s linear 1;
+    }
+    @keyframes shake{
+      0%{ transform:translate(0,0); }
+      20%{ transform:translate(-2px, 1px); }
+      40%{ transform:translate(3px, -1px); }
+      60%{ transform:translate(-3px, 2px); }
+      80%{ transform:translate(2px, -2px); }
+      100%{ transform:translate(0,0); }
+    }
+
+    footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:0 4px;
+      color: rgba(185,139,185,.92);
+      font-size:11px;
+      letter-spacing:.04em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="top">
+        <div class="title">
+          <h1>Projeto 978 // Terminal de Acesso (Purgado)</h1>
+          <div class="meta">
+            <span class="pill">Classificação: <b>NÍVEL MAGENTA</b></span>
+            <span class="pill">Módulo: <b>LOG_DE_ACESSO</b></span>
+            <span class="pill">Sessão: <b id="sess">—</b></span>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="btnHack">Iniciar intrusão</button>
+          <button id="btnReset" class="danger">Resetar</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="banner">
+        <div class="statusline">
+          <span class="dot" id="dot"></span>
+          <span id="status">Acesso interditado. Interação será registrada.</span>
+        </div>
+        <div>
+          Controles: <span class="kbd">ESPAÇO</span> travar pulso • <span class="kbd">↑ ↓ ← →</span> sequência
+        </div>
+      </div>
+
+      <div class="screen" id="screen">
+        <div class="grid">
+          <section class="panel">
+            <h2 class="h">Minigame // “Hack”</h2>
+            <p style="margin:0 0 10px 0; color:rgba(255,233,255,.86); font-size:13px; line-height:1.45">
+              Para liberar o log, execute dois passos: (1) trave o pulso dentro da zona segura; (2) digite a sequência.
+              Falha aciona purga e encerra tentativa.
+            </p>
+
+            <div class="miniRow">
+              <div class="meter" aria-label="Pulso de intrusão">
+                <div class="zone" title="Zona segura"></div>
+                <div class="bar" id="bar"></div>
+              </div>
+              <div class="pill">Travas: <b id="locks">0</b>/1</div>
+              <div class="pill">Falhas: <b id="fails">0</b>/3</div>
+            </div>
+
+            <div class="seq" id="seq"></div>
+
+            <div style="margin-top:10px; color:rgba(185,139,185,.95); font-size:12px; line-height:1.5">
+              Dica: o sistema “bipa” e tenta te expulsar. Continue tentando. Olhe para cima.
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2 class="h">Trava do sistema</h2>
+            <div style="color:rgba(255,233,255,.86); font-size:13px; line-height:1.45">
+              <div style="margin-bottom:10px">
+                <span class="tag sys">POLÍTICA</span>
+                Operações associadas ao operador <span class="who">CORVO</span> serão negadas após o desfecho do evento “Setentrional”.
+              </div>
+              <div style="margin-bottom:10px">
+                <span class="tag sys">NOTA</span>
+                Este terminal registra tentativas, mesmo quando falham.
+              </div>
+              <div>
+                <span class="tag bad">AVISO</span>
+                Conteúdo memético sob censura ativa.
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel" id="logPanel" style="display:none">
+          <h2 class="h">Log de acesso // Hartmann</h2>
+          <div id="log"></div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div>Integridade: parcial • Purga: ativa • Observação: constante</div>
+      <div id="progress">—</div>
+    </footer>
+  </div>
+
+<script>
+(() => {
+  const $ = (q) => document.querySelector(q);
+
+  // UI
+  const sessEl = $("#sess");
+  const statusEl = $("#status");
+  const dot = $("#dot");
+  const btnHack = $("#btnHack");
+  const btnReset = $("#btnReset");
+  const bar = $("#bar");
+  const locksEl = $("#locks");
+  const failsEl = $("#fails");
+  const seqEl = $("#seq");
+  const logPanel = $("#logPanel");
+  const logEl = $("#log");
+  const progressEl = $("#progress");
+  const screen = $("#screen");
+
+  // Session id
+  const sid = crypto.getRandomValues(new Uint32Array(2));
+  sessEl.textContent = (sid[0].toString(16) + "-" + sid[1].toString(16)).toUpperCase();
+
+  // Audio (beep)
+  let audioCtx = null;
+  function initAudio(){
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  function beep(type="deny"){
+    initAudio();
+    if(audioCtx.state === "suspended") audioCtx.resume();
+    const t0 = audioCtx.currentTime;
+
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+
+    o.type = (type==="ok") ? "sine" : "sawtooth";
+    const f1 = (type==="ok") ? 880 : 740;
+    const f2 = (type==="ok") ? 660 : 120;
+
+    o.frequency.setValueAtTime(f1, t0);
+    o.frequency.exponentialRampToValueAtTime(f2, t0 + (type==="ok" ? 0.12 : 0.10));
+
+    g.gain.setValueAtTime(type==="ok" ? 0.22 : 0.45, t0);
+    g.gain.exponentialRampToValueAtTime(0.01, t0 + 0.12);
+
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t0);
+    o.stop(t0 + 0.14);
+
+    // tiny static burst
+    const nlen = Math.floor(audioCtx.sampleRate * 0.06);
+    const buf = audioCtx.createBuffer(1, nlen, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<nlen;i++) data[i] = (Math.random()*2-1) * (type==="ok" ? 0.25 : 0.55);
+    const src = audioCtx.createBufferSource();
+    const ng = audioCtx.createGain();
+    ng.gain.value = type==="ok" ? 0.05 : 0.14;
+    src.buffer = buf;
+    src.connect(ng); ng.connect(audioCtx.destination);
+    src.start(t0);
+  }
+
+  // State
+  let running = false;
+  let locked = false;
+  let locks = 0;
+  let fails = 0;
+  let pulse = 0;        // 0..1
+  let vel = 0.008;      // pulse speed
+  let raf = null;
+
+  // Sequence step
+  const SEQ = ["↑","↓","←","→","↑","→","↓","←"]; // “padrão” simples e repetível
+  let seqIndex = 0;
+
+  function setStatus(kind, text){
+    statusEl.textContent = text;
+    dot.className = "dot" + (kind ? " " + kind : "");
+  }
+
+  function resetAll(){
+    running = false;
+    locked = false;
+    locks = 0;
+    fails = 0;
+    pulse = 0;
+    vel = 0.008;
+    seqIndex = 0;
+    locksEl.textContent = "0";
+    failsEl.textContent = "0";
+    progressEl.textContent = "—";
+    bar.style.width = "0%";
+    logPanel.style.display = "none";
+    logEl.innerHTML = "";
+    renderSeq();
+    setStatus("", "Acesso interditado. Interação será registrada.");
+    cancelAnimationFrame(raf);
+  }
+
+  function renderSeq(badFlash=false){
+    seqEl.innerHTML = "";
+    for(let i=0;i<SEQ.length;i++){
+      const chip = document.createElement("div");
+      chip.className = "keyChip";
+      if(i < seqIndex) chip.classList.add("done");
+      if(badFlash && i === seqIndex) chip.classList.add("bad");
+      chip.innerHTML = `<span class="kbd">${SEQ[i]}</span><span>${i+1}/${SEQ.length}</span>`;
+      seqEl.appendChild(chip);
+    }
+  }
+
+  function loop(){
+    if(!running) return;
+    pulse += vel;
+    if(pulse >= 1){ pulse = 1; vel *= -1; }
+    if(pulse <= 0){ pulse = 0; vel *= -1; }
+    bar.style.width = (pulse * 100).toFixed(1) + "%";
+    raf = requestAnimationFrame(loop);
+  }
+
+  function inSafeZone(){
+    // zone: 62% .. 80% (width 18%)
+    const p = pulse * 100;
+    return (p >= 62 && p <= 80);
+  }
+
+  function punish(reason){
+    fails++;
+    failsEl.textContent = String(fails);
+    screen.classList.remove("shake"); void screen.offsetWidth; screen.classList.add("shake");
+    beep("deny");
+
+    const lines = [
+      "PURGA ACIONADA",
+      "ACESSO NEGADO",
+      "TENTATIVA REGISTRADA",
+      "NÍVEL MAGENTA: CONTENÇÃO",
+      "VOCÊ NÃO TEM AUTORIZAÇÃO"
+    ];
+    setStatus("bad", `${lines[Math.floor(Math.random()*lines.length)]} // ${reason}`);
+
+    renderSeq(true);
+
+    if(fails >= 3){
+      running = false;
+      cancelAnimationFrame(raf);
+      setStatus("bad", "ERRO 978 // LIMITE DE FALHAS // SESSÃO INTERDITADA");
+      progressEl.textContent = "BLOQUEADO";
+      // soft lock: require manual reset
+    }
+  }
+
+  function grant(){
+    running = false;
+    cancelAnimationFrame(raf);
+    beep("ok");
+    setStatus("ok", "Intrusão aceita. Descriptografando log…");
+    progressEl.textContent = "LIBERADO";
+    logPanel.style.display = "block";
+    playLog();
+  }
+
+  // Typewriter log
+  const ACCESS_LOG = [
+    { t:"00:04:11", tag:"SIS", who:"GATEWAY", text:"Solicitação de leitura: ARQUIVO/HARTMANN // permissão: NEGADA (padrão)." },
+    { t:"00:04:12", tag:"SIS", who:"GATEWAY", text:"Exceção aplicada: INTRUSÃO DETECTADA // janela de leitura: 42s." },
+
+    { t:"00:04:15", tag:"ACESSO", who:"HARTMANN", text:"Abrindo pacote: OPERACAO_AURORA_DE_VIDRO // origem: campo // operador: CORVO." },
+    { t:"00:04:19", tag:"ACESSO", who:"HARTMANN", text:"Resumo recebido: equipe em Vík; material particulado com brilho; suspeita de contaminação por fragmentos vítreos." },
+    { t:"00:04:26", tag:"ACESSO", who:"HARTMANN", text:"Nota interna: ‘vidro moído’ não é resíduo. É meio. É memória." },
+    { t:"00:04:31", tag:"ACESSO", who:"HARTMANN", text:"Registro crítico: um agente apresenta óbito clínico e retorno anômalo. Linguagem alterada. Ausência de sinais vitais." },
+    { t:"00:04:39", tag:"ACESSO", who:"HARTMANN", text:"Diretriz provisória: evitar reflexos (água, vitrines, metal polido). Evitar observação prolongada de fenômenos luminosos." },
+
+    { t:"00:05:02", tag:"SIS", who:"AUDITORIA", text:"Evento correlato: ‘SETENTRIONAL’ // status: DESFECHO CONFIRMADO // impacto: reclassificação de risco." },
+    { t:"00:05:06", tag:"SIS", who:"AUDITORIA", text:"Regra aplicada: OPERAÇÕES NOVAS ASSOCIADAS AO OPERADOR ‘CORVO’ = NEGADAS AUTOMATICAMENTE." },
+
+    { t:"00:05:11", tag:"BLOQ", who:"GATEWAY", text:"Pedido subsequente detectado: OP/01-CORVO // ABERTURA DE NOVA OPERAÇÃO." },
+    { t:"00:05:12", tag:"BLOQ", who:"GATEWAY", text:"NEGADO // MOTIVO: PÓS-SETENTRIONAL // PROTOCOLO MAGENTA." },
+
+    { t:"00:05:19", tag:"ACESSO", who:"HARTMANN", text:"Se Corvo insistir, o canal se torna vetor. Se o canal se torna vetor, o arquivo vira porta." },
+    { t:"00:05:25", tag:"ACESSO", who:"HARTMANN", text:"A porta não abre. A porta aprende." },
+
+    { t:"00:05:31", tag:"SIS", who:"GATEWAY", text:"Tempo de leitura expirando. Limpando rastros. Purga final em 3…" },
+    { t:"00:05:32", tag:"SIS", who:"GATEWAY", text:"2…" },
+    { t:"00:05:33", tag:"SIS", who:"GATEWAY", text:"1…" },
+    { t:"00:05:34", tag:"SIS", who:"GATEWAY", text:"ENCERRADO." },
+  ];
+
+  let typing = false;
+  async function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  function makeEntry(line){
+    const row = document.createElement("div");
+    row.className = "entry";
+    const stamp = document.createElement("div");
+    stamp.className = "stamp";
+    stamp.textContent = line.t;
+    const msg = document.createElement("div");
+    msg.className = "msg";
+    const tag = document.createElement("span");
+    tag.className = "tag " + (line.tag === "BLOQ" ? "bad" : "sys");
+    tag.textContent = line.tag;
+    const who = document.createElement("span");
+    who.className = "who";
+    who.textContent = " " + line.who + ": ";
+    const content = document.createElement("span");
+    content.textContent = "";
+    msg.appendChild(tag);
+    msg.appendChild(who);
+    msg.appendChild(content);
+    row.appendChild(stamp);
+    row.appendChild(msg);
+    return { row, content };
+  }
+
+  async function typeTo(el, text, base=14){
+    el.textContent = "";
+    const cur = document.createElement("span");
+    cur.className = "cursor";
+    el.appendChild(cur);
+
+    for(let i=0;i<text.length;i++){
+      const ch = text[i];
+      cur.insertAdjacentText("beforebegin", ch);
+      const d =
+        ch === "\n" ? 120 :
+        ch === "." ? 80 :
+        ch === "," ? 55 :
+        ch === "…" ? 120 :
+        ch === " " ? 14 :
+        base + Math.floor(Math.random()*12);
+
+      await sleep(d);
+      $("#screen").scrollTop = $("#screen").scrollHeight;
+    }
+    el.textContent = text;
+  }
+
+  async function playLog(){
+    if(typing) return;
+    typing = true;
+    logEl.innerHTML = "";
+
+    for(let i=0;i<ACCESS_LOG.length;i++){
+      const line = ACCESS_LOG[i];
+      const { row, content } = makeEntry(line);
+      logEl.appendChild(row);
+      $("#screen").scrollTop = $("#screen").scrollHeight;
+
+      // subtle “bip” em bloqueios
+      if(line.tag === "BLOQ") beep("deny");
+
+      await typeTo(content, line.text, 12);
+    }
+
+    typing = false;
+    setStatus("bad", "Leitura encerrada. Qualquer nova operação do Corvo será negada.");
+  }
+
+  function startHack(){
+    if(fails >= 3){
+      setStatus("bad", "ERRO 978 // SESSÃO INTERDITADA // use RESETAR");
+      beep("deny");
+      return;
+    }
+    if(running) return;
+    running = true;
+    locked = false;
+    locks = 0;
+    seqIndex = 0;
+    locksEl.textContent = "0";
+    renderSeq();
+    setStatus("", "Intrusão em andamento. Trave o pulso na zona segura.");
+    progressEl.textContent = "INTRUSÃO";
+    loop();
+  }
+
+  function tryLock(){
+    if(!running) return;
+    if(locks >= 1) return;
+    if(inSafeZone()){
+      locks = 1;
+      locksEl.textContent = "1";
+      locked = true;
+      beep("ok");
+      setStatus("ok", "Pulso travado. Agora digite a sequência (↑ ↓ ← → …).");
+    }else{
+      punish("PULSO FORA DA ZONA");
+    }
+  }
+
+  function handleArrow(key){
+    if(!running) return;
+    if(!locked){
+      punish("SEQUÊNCIA ANTES DA TRAVA");
+      return;
+    }
+    const map = {
+      ArrowUp: "↑",
+      ArrowDown: "↓",
+      ArrowLeft: "←",
+      ArrowRight:"→"
+    };
+    const k = map[key];
+    if(!k) return;
+
+    const expected = SEQ[seqIndex];
+    if(k === expected){
+      seqIndex++;
+      renderSeq();
+      beep("ok");
+      if(seqIndex >= SEQ.length){
+        grant();
+      }
+    }else{
+      punish("SEQUÊNCIA INCORRETA");
+      // reinicia somente a sequência, não a trava (fica mais “minigame”)
+      seqIndex = 0;
+      renderSeq(true);
+    }
+  }
+
+  // Events
+  btnHack.addEventListener("click", () => { startHack(); beep("deny"); });
+  btnReset.addEventListener("click", () => { resetAll(); beep("ok"); });
+
+  document.addEventListener("click", () => {
+    // clicar também provoca “hostilidade”, mas não impede o minigame
+    if(!running && !typing) beep("deny");
+  });
+
+  document.addEventListener("keydown", (e) => {
+    // espaço trava o pulso
+    if(e.code === "Space"){
+      e.preventDefault();
+      tryLock();
+      return;
+    }
+    // setas = sequência
+    if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)){
+      e.preventDefault();
+      handleArrow(e.key);
+      return;
+    }
+
+    // qualquer outra tecla “irrita” o sistema durante intrusão
+    if(running && !typing && !e.repeat){
+      // pequena chance de punir para aumentar tensão
+      if(Math.random() < 0.14) punish("INTERFERÊNCIA DE ENTRADA");
+      else beep("deny");
+    }
+  });
+
+  // First paint
+  resetAll();
+})();
+</script>
+</body>
+</html>

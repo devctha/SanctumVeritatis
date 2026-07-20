@@ -1,0 +1,2743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/ConselhoSetentrional/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CONSELHO SETENTRIONAL • Guardiões das Runas Ancestrais</title>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cinzel:wght@400;500;600;700;800;900&family=Philosopher:wght@400;700&family=Jura:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Germania+One&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --ice-blue: #a3d9ff;
+      --ice-light: #e6f7ff;
+      --ice-dark: #0077be;
+      --ice-glow: rgba(163, 217, 255, 0.7);
+      --aurora-green: #00ff9d;
+      --aurora-purple: #bf40bf;
+      --aurora-blue: #4da6ff;
+      --silver: #c0c0c0;
+      --platinum: #e5e4e2;
+      --frost: #f0f8ff;
+      --black: #000000;
+      --black-ice: #0a0a0f;
+      --muted: #b8d4e8;
+      --border: rgba(163, 217, 255, 0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Jura', sans-serif; background: var(--black-ice); color: var(--frost); overflow-x: hidden; scroll-behavior: smooth; }
+
+    .bg-arctic {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, rgba(163, 217, 255, 0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 0% 100%, rgba(0, 255, 157, 0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse at 100% 100%, rgba(191, 64, 191, 0.08) 0%, transparent 50%),
+                  linear-gradient(180deg, rgba(10, 10, 15, 0.95) 0%, rgba(0, 0, 0, 1) 100%);
+    }
+
+    .aurora-effect {
+      position: absolute; inset: 0; opacity: 0.3;
+      background: 
+        linear-gradient(120deg, transparent 30%, rgba(0, 255, 157, 0.1) 50%, transparent 70%),
+        linear-gradient(240deg, transparent 30%, rgba(191, 64, 191, 0.1) 50%, transparent 70%);
+      background-size: 200% 200%;
+      animation: auroraWave 20s ease-in-out infinite;
+    }
+
+    @keyframes auroraWave {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .ice-crystals {
+      position: absolute; inset: 0;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(163, 217, 255, 0.02) 0%, transparent 3%),
+        radial-gradient(circle at 80% 70%, rgba(163, 217, 255, 0.02) 0%, transparent 3%),
+        radial-gradient(circle at 40% 80%, rgba(163, 217, 255, 0.02) 0%, transparent 3%);
+      background-size: 60px 60px;
+      animation: crystalFloat 15s linear infinite;
+    }
+
+    @keyframes crystalFloat {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-60px); }
+    }
+
+    .vignette-ice {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
+    }
+
+    .snowflakes {
+      position: absolute; inset: 0;
+    }
+
+    .snowflake {
+      position: absolute; color: var(--ice-light); font-size: 20px;
+      animation: snowfall linear infinite; opacity: 0;
+    }
+
+    @keyframes snowfall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      backdrop-filter: blur(30px) saturate(180%);
+      background: rgba(10, 10, 15, 0.9);
+      border-bottom: 2px solid var(--border);
+      box-shadow: 0 8px 60px rgba(163, 217, 255, 0.2);
+    }
+
+    .header-inner {
+      max-width: 1900px; margin: 0 auto; padding: 25px 70px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo-north {
+      display: flex; align-items: center; gap: 30px; text-decoration: none;
+    }
+
+    .rune-emblem {
+      width: 85px; height: 85px; border: 3px solid var(--ice-blue);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle, rgba(163, 217, 255, 0.2), transparent 70%);
+      box-shadow: 0 0 50px var(--ice-glow), inset 0 0 30px rgba(163, 217, 255, 0.15);
+      position: relative; animation: runePulse 6s ease-in-out infinite;
+    }
+
+    @keyframes runePulse {
+      0%, 100% { box-shadow: 0 0 50px var(--ice-glow), inset 0 0 30px rgba(163, 217, 255, 0.15); transform: rotate(0deg); }
+      50% { box-shadow: 0 0 80px var(--ice-glow), inset 0 0 50px rgba(163, 217, 255, 0.25); transform: rotate(180deg); }
+    }
+
+    .rune-emblem::before {
+      content: ''; position: absolute; inset: -3px;
+      border: 2px solid transparent; border-radius: 50%;
+      background: linear-gradient(45deg, var(--ice-blue), var(--aurora-green), var(--aurora-purple)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude; animation: runeRotate 12s linear infinite;
+    }
+
+    @keyframes runeRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    .rune-emblem svg {
+      width: 50px; height: 50px; fill: var(--ice-blue);
+      filter: drop-shadow(0 0 20px var(--ice-glow));
+    }
+
+    .brand-north {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .council-name {
+      font-family: 'Germania One', cursive; font-size: 44px; font-weight: 900;
+      letter-spacing: 10px; text-transform: uppercase;
+      background: linear-gradient(135deg, var(--ice-light) 0%, var(--aurora-blue) 50%, var(--aurora-green) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1; text-shadow: 0 0 60px var(--ice-glow);
+    }
+
+    .council-motto {
+      font-family: 'Crimson Text', serif; font-size: 14px;
+      font-style: italic; letter-spacing: 4px; color: var(--muted);
+      text-transform: lowercase;
+    }
+
+    nav {
+      display: flex; gap: 55px; align-items: center;
+    }
+
+    .nav-link {
+      font-family: 'Cinzel', serif; font-size: 14px; font-weight: 500;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--frost);
+      text-decoration: none; position: relative; padding: 10px 0;
+      transition: all 0.4s ease;
+    }
+
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 0; left: 50%; width: 0;
+      height: 2px; background: linear-gradient(90deg, transparent, var(--ice-blue), transparent);
+      transition: all 0.4s ease; transform: translateX(-50%);
+    }
+
+    .nav-link:hover {
+      color: var(--ice-light);
+    }
+
+    .nav-link:hover::after {
+      width: 120%;
+    }
+
+    .header-cta {
+      padding: 16px 45px; background: linear-gradient(135deg, var(--ice-blue) 0%, var(--aurora-blue) 100%);
+      border: none; border-radius: 8px; font-family: 'Cinzel', serif;
+      font-size: 13px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--black); cursor: pointer;
+      box-shadow: 0 0 50px rgba(163, 217, 255, 0.6); transition: all 0.4s ease;
+      position: relative; overflow: hidden;
+    }
+
+    .header-cta::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 0; height: 0; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .header-cta:hover::before {
+      width: 400px; height: 400px;
+    }
+
+    .header-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 70px rgba(163, 217, 255, 0.8);
+    }
+
+    .header-cta span {
+      position: relative; z-index: 1;
+    }
+
+    .hero-north {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 160px 70px 120px; overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 1700px; text-align: center; position: relative; z-index: 10;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 15px;
+      padding: 14px 35px; border: 2px solid var(--border);
+      border-radius: 60px; background: rgba(163, 217, 255, 0.08);
+      font-family: 'Crimson Text', serif; font-size: 16px;
+      font-style: italic; letter-spacing: 3px; color: var(--ice-light);
+      margin-bottom: 50px; box-shadow: 0 0 50px rgba(163, 217, 255, 0.2);
+      animation: badgeFade 1.5s ease-out;
+    }
+
+    @keyframes badgeFade {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .frost-light {
+      width: 14px; height: 14px; background: var(--ice-blue);
+      border-radius: 50%; box-shadow: 0 0 30px var(--ice-glow);
+      animation: frostPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes frostPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.8); opacity: 0.6; }
+    }
+
+    .hero-title {
+      font-family: 'Germania One', cursive; font-size: clamp(70px, 14vw, 155px);
+      font-weight: 900; line-height: 1.05; margin-bottom: 45px;
+      letter-spacing: 18px; text-transform: uppercase;
+      animation: titleAppear 2s ease-out 0.3s both;
+    }
+
+    @keyframes titleAppear {
+      from { opacity: 0; transform: translateY(70px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title .gradient-ice {
+      background: linear-gradient(135deg, var(--ice-light) 0%, var(--aurora-blue) 30%, var(--aurora-green) 60%, var(--aurora-purple) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size: 300% auto; animation: iceGradient 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 90px var(--ice-glow));
+    }
+
+    @keyframes iceGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-subtitle {
+      font-family: 'Crimson Text', serif; font-size: clamp(24px, 4vw, 38px);
+      line-height: 1.9; color: var(--muted); max-width: 1200px;
+      margin: 0 auto 50px; font-style: italic; font-weight: 400;
+      animation: subtitleAppear 2s ease-out 0.6s both;
+    }
+
+    @keyframes subtitleAppear {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .rune-divider {
+      width: 280px; height: 3px; margin: 50px auto;
+      background: linear-gradient(90deg, transparent, var(--ice-blue), var(--aurora-green), var(--ice-blue), transparent);
+      animation: runeDividerGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes runeDividerGlow {
+      0%, 100% { box-shadow: 0 0 25px var(--ice-glow); opacity: 0.5; }
+      50% { box-shadow: 0 0 50px var(--ice-glow); opacity: 1; }
+    }
+
+    .hero-runes {
+      font-family: 'Germania One', cursive; font-size: 24px; font-weight: 600;
+      letter-spacing: 12px; text-transform: uppercase; color: var(--ice-light);
+      margin-bottom: 60px; text-shadow: 0 0 50px var(--ice-glow);
+      animation: runesGlow 5s ease-in-out infinite;
+    }
+
+    @keyframes runesGlow {
+      0%, 100% { text-shadow: 0 0 50px var(--ice-glow); }
+      50% { text-shadow: 0 0 80px var(--ice-glow), 0 0 110px rgba(0, 255, 157, 0.5); }
+    }
+
+    .hero-cta-group {
+      display: flex; justify-content: center; gap: 35px; flex-wrap: wrap;
+      animation: ctaAppear 2s ease-out 1.2s both;
+    }
+
+    @keyframes ctaAppear {
+      from { opacity: 0; transform: translateY(60px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn {
+      padding: 24px 60px; font-family: 'Cinzel', serif; font-size: 16px;
+      font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+      text-decoration: none; border-radius: 12px; cursor: pointer;
+      transition: all 0.5s ease; position: relative; overflow: hidden;
+      border: none; display: inline-block;
+    }
+
+    .btn::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 0; height: 0; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.8s ease, height 0.8s ease;
+    }
+
+    .btn:hover::before {
+      width: 500px; height: 500px;
+    }
+
+    .btn span {
+      position: relative; z-index: 1;
+    }
+
+    .btn-ice {
+      background: linear-gradient(135deg, var(--ice-blue) 0%, var(--aurora-blue) 100%);
+      color: var(--black); box-shadow: 0 0 60px rgba(163, 217, 255, 0.6);
+    }
+
+    .btn-ice:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 80px rgba(163, 217, 255, 0.8);
+    }
+
+    .btn-frost {
+      background: transparent; color: var(--ice-light);
+      border: 2px solid var(--ice-blue); box-shadow: 0 0 40px rgba(163, 217, 255, 0.3);
+    }
+
+    .btn-frost:hover {
+      background: rgba(163, 217, 255, 0.1);
+      box-shadow: 0 0 60px rgba(163, 217, 255, 0.5);
+    }
+
+    section {
+      position: relative; padding: 140px 70px;
+      max-width: 1900px; margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center; margin-bottom: 100px; position: relative;
+    }
+
+    .section-badge {
+      display: inline-block; padding: 10px 30px;
+      border: 1px solid var(--ice-blue); border-radius: 50px;
+      background: rgba(163, 217, 255, 0.08);
+      font-family: 'Crimson Text', serif; font-size: 14px;
+      font-style: italic; letter-spacing: 3px; color: var(--ice-light);
+      margin-bottom: 30px; box-shadow: 0 0 40px rgba(163, 217, 255, 0.2);
+    }
+
+    .section-title {
+      font-family: 'Germania One', cursive; font-size: clamp(50px, 9vw, 90px);
+      font-weight: 900; margin-bottom: 35px;
+      background: linear-gradient(135deg, var(--frost) 0%, var(--muted) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1.2; letter-spacing: 10px; text-transform: uppercase;
+    }
+
+    .section-desc {
+      font-family: 'Crimson Text', serif; font-size: 24px;
+      color: var(--muted); max-width: 1100px; margin: 0 auto;
+      line-height: 1.9; font-style: italic;
+    }
+
+    .origins-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 55px; margin-top: 80px;
+    }
+
+    .origin-card {
+      border: 2px solid var(--border); border-radius: 25px;
+      background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
+      backdrop-filter: blur(20px); padding: 65px 55px;
+      transition: all 0.5s ease; position: relative; overflow: hidden;
+    }
+
+    .origin-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 5px; background: linear-gradient(90deg, var(--ice-blue), var(--aurora-green), var(--aurora-purple));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.6s ease;
+    }
+
+    .origin-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .origin-card:hover {
+      border-color: var(--ice-blue);
+      transform: translateY(-15px);
+      box-shadow: 0 35px 120px rgba(163, 217, 255, 0.5);
+    }
+
+    .origin-icon {
+      width: 95px; height: 95px; margin-bottom: 40px;
+      border: 3px solid var(--ice-blue); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle, rgba(163, 217, 255, 0.15), transparent);
+      box-shadow: 0 0 50px var(--ice-glow);
+    }
+
+    .origin-icon svg {
+      width: 55px; height: 55px; fill: var(--ice-blue);
+      filter: drop-shadow(0 0 20px var(--ice-glow));
+    }
+
+    .origin-title {
+      font-family: 'Germania One', cursive; font-size: 36px;
+      font-weight: 700; color: var(--frost); margin-bottom: 25px;
+      letter-spacing: 4px;
+    }
+
+    .origin-desc {
+      font-family: 'Crimson Text', serif; font-size: 18px;
+      line-height: 1.9; color: var(--muted); font-style: italic;
+    }
+
+    .arcanos-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 55px; margin-top: 80px;
+    }
+
+    .arcano-card {
+      border: 2px solid var(--border); border-radius: 25px;
+      background: rgba(10, 10, 15, 0.95); overflow: hidden;
+      transition: all 0.5s ease; position: relative;
+    }
+
+    .arcano-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(163, 217, 255, 0.05), transparent);
+      opacity: 0; transition: opacity 0.5s ease;
+    }
+
+    .arcano-card:hover::before {
+      opacity: 1;
+    }
+
+    .arcano-card:hover {
+      border-color: var(--ice-blue);
+      transform: translateY(-15px);
+      box-shadow: 0 35px 120px rgba(163, 217, 255, 0.5);
+    }
+
+    .arcano-portrait {
+      width: 100%; height: 340px; background: linear-gradient(135deg, rgba(163, 217, 255, 0.1), rgba(0, 255, 157, 0.1));
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; border-bottom: 2px solid var(--border);
+    }
+
+    .arcano-portrait::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, rgba(10, 10, 15, 0.1) 0px, transparent 2px
+      );
+    }
+
+    .portrait-rune {
+      width: 140px; height: 140px; fill: var(--ice-blue);
+      opacity: 0.5; filter: drop-shadow(0 0 40px var(--ice-glow));
+      position: relative; z-index: 1;
+    }
+
+    .arcano-info {
+      padding: 50px 45px;
+    }
+
+    .arcano-name {
+      font-family: 'Germania One', cursive; font-size: 30px;
+      font-weight: 700; color: var(--frost); margin-bottom: 15px;
+      letter-spacing: 3px;
+    }
+
+    .arcano-title {
+      font-family: 'Crimson Text', serif; font-size: 16px;
+      font-style: italic; color: var(--ice-light);
+      text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px;
+    }
+
+    .arcano-bio {
+      font-family: 'Crimson Text', serif; font-size: 17px;
+      line-height: 1.8; color: var(--muted); margin-bottom: 30px;
+    }
+
+    .arcano-runes {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+
+    .rune-tag {
+      padding: 8px 18px; background: rgba(163, 217, 255, 0.08);
+      border: 1px solid rgba(163, 217, 255, 0.3);
+      border-radius: 25px; font-size: 13px; color: var(--ice-blue);
+      letter-spacing: 1px;
+    }
+
+    .sanctuaries-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+      gap: 60px; margin-top: 80px;
+    }
+
+    .sanctuary-card {
+      padding: 65px 55px; border: 2px solid var(--border);
+      border-radius: 25px; background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(15px); transition: all 0.5s ease;
+      position: relative; overflow: hidden;
+    }
+
+    .sanctuary-card::after {
+      content: ''; position: absolute; top: -50%; right: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(163, 217, 255, 0.1) 0%, transparent 70%);
+      transform: scale(0); transition: transform 0.6s ease;
+    }
+
+    .sanctuary-card:hover::after {
+      transform: scale(1);
+    }
+
+    .sanctuary-card:hover {
+      border-color: var(--ice-blue);
+      transform: translateY(-15px);
+      box-shadow: 0 35px 120px rgba(163, 217, 255, 0.5);
+    }
+
+    .sanctuary-header {
+      display: flex; align-items: center; gap: 30px; margin-bottom: 40px;
+    }
+
+    .sanctuary-icon {
+      width: 85px; height: 85px; border: 3px solid var(--ice-blue);
+      border-radius: 20px; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(163, 217, 255, 0.1), transparent);
+      box-shadow: 0 0 50px var(--ice-glow); position: relative; z-index: 1;
+    }
+
+    .sanctuary-icon svg {
+      width: 50px; height: 50px; fill: var(--ice-blue);
+    }
+
+    .sanctuary-header-text {
+      flex: 1;
+    }
+
+    .sanctuary-name {
+      font-family: 'Germania One', cursive; font-size: 36px;
+      font-weight: 700; color: var(--frost); margin-bottom: 12px;
+      letter-spacing: 4px;
+    }
+
+    .sanctuary-location {
+      font-family: 'Crimson Text', serif; font-size: 16px;
+      font-style: italic; color: var(--ice-light);
+      text-transform: uppercase; letter-spacing: 3px;
+    }
+
+    .sanctuary-desc {
+      font-family: 'Crimson Text', serif; font-size: 18px;
+      line-height: 1.9; color: var(--muted); margin-bottom: 35px;
+      position: relative; z-index: 1;
+    }
+
+    .sanctuary-features {
+      list-style: none; padding: 0; position: relative; z-index: 1;
+    }
+
+    .sanctuary-features li {
+      padding: 16px 0; padding-left: 45px; color: var(--muted);
+      position: relative; font-size: 16px; border-bottom: 1px solid rgba(163, 217, 255, 0.1);
+    }
+
+    .sanctuary-features li:last-child {
+      border-bottom: none;
+    }
+
+    .sanctuary-features li::before {
+      content: '❄'; position: absolute; left: 0; top: 16px;
+      color: var(--ice-blue); font-size: 22px;
+    }
+
+    .magics-showcase {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 55px; margin-top: 80px;
+    }
+
+    .magic-card {
+      border: 2px solid var(--border); border-radius: 25px;
+      background: rgba(10, 10, 15, 0.95); overflow: hidden;
+      transition: all 0.5s ease; position: relative;
+    }
+
+    .magic-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 6px; background: linear-gradient(90deg, var(--ice-blue), var(--aurora-green), var(--aurora-purple), var(--ice-blue));
+      transform: scaleX(0); transition: transform 0.6s ease;
+    }
+
+    .magic-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .magic-card:hover {
+      border-color: var(--ice-blue);
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 35px 120px rgba(163, 217, 255, 0.5);
+    }
+
+    .magic-visual {
+      width: 100%; height: 300px;
+      background: linear-gradient(135deg, rgba(163, 217, 255, 0.08), rgba(191, 64, 191, 0.08));
+      display: flex; align-items: center; justify-content: center;
+      position: relative; border-bottom: 2px solid var(--border);
+    }
+
+    .magic-visual svg {
+      width: 130px; height: 130px; fill: var(--ice-blue);
+      opacity: 0.5; filter: drop-shadow(0 0 50px var(--ice-glow));
+    }
+
+    .magic-level {
+      position: absolute; top: 25px; right: 25px;
+      padding: 10px 22px; background: rgba(163, 217, 255, 0.15);
+      border: 1px solid var(--ice-blue); border-radius: 25px;
+      font-family: 'Cinzel', serif; font-size: 11px;
+      font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--ice-blue);
+      box-shadow: 0 0 40px var(--ice-glow);
+    }
+
+    .magic-info {
+      padding: 50px 45px;
+    }
+
+    .magic-name {
+      font-family: 'Germania One', cursive; font-size: 30px;
+      font-weight: 700; color: var(--frost); margin-bottom: 18px;
+      letter-spacing: 3px;
+    }
+
+    .magic-school {
+      font-family: 'Crimson Text', serif; font-size: 15px;
+      font-style: italic; color: var(--ice-light);
+      margin-bottom: 30px; letter-spacing: 2px;
+    }
+
+    .magic-desc {
+      font-family: 'Crimson Text', serif; font-size: 17px;
+      line-height: 1.8; color: var(--muted); margin-bottom: 30px;
+    }
+
+    .magic-properties {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+
+    .property-badge {
+      padding: 8px 16px; background: rgba(191, 64, 191, 0.15);
+      border: 1px solid rgba(191, 64, 191, 0.3);
+      border-radius: 20px; font-size: 12px;
+      color: var(--aurora-purple); letter-spacing: 1px;
+    }
+
+    .artifacts-gallery {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 55px; margin-top: 80px;
+    }
+
+    .artifact-card {
+      border: 2px solid var(--border); border-radius: 25px;
+      background: rgba(10, 10, 15, 0.95); overflow: hidden;
+      transition: all 0.5s ease; position: relative;
+    }
+
+    .artifact-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(163, 217, 255, 0.03), transparent);
+      opacity: 0; transition: opacity 0.5s ease;
+    }
+
+    .artifact-card:hover::before {
+      opacity: 1;
+    }
+
+    .artifact-card:hover {
+      border-color: var(--ice-blue);
+      transform: translateY(-15px);
+      box-shadow: 0 35px 120px rgba(163, 217, 255, 0.5);
+    }
+
+    .artifact-display {
+      width: 100%; height: 300px;
+      background: linear-gradient(135deg, rgba(163, 217, 255, 0.08), rgba(0, 255, 157, 0.08));
+      display: flex; align-items: center; justify-content: center;
+      position: relative; border-bottom: 2px solid var(--border);
+    }
+
+    .artifact-display svg {
+      width: 130px; height: 130px; fill: var(--ice-blue);
+      opacity: 0.5; filter: drop-shadow(0 0 50px var(--ice-glow));
+    }
+
+    .artifact-tier {
+      position: absolute; top: 25px; right: 25px;
+      padding: 10px 22px; background: rgba(163, 217, 255, 0.15);
+      border: 1px solid var(--ice-blue); border-radius: 25px;
+      font-family: 'Cinzel', serif; font-size: 11px;
+      font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--ice-blue);
+      box-shadow: 0 0 40px var(--ice-glow);
+    }
+
+    .artifact-info {
+      padding: 50px 45px;
+    }
+
+    .artifact-name {
+      font-family: 'Germania One', cursive; font-size: 30px;
+      font-weight: 700; color: var(--frost); margin-bottom: 18px;
+      letter-spacing: 3px;
+    }
+
+    .artifact-origin {
+      font-family: 'Crimson Text', serif; font-size: 15px;
+      font-style: italic; color: var(--ice-light);
+      margin-bottom: 30px; letter-spacing: 2px;
+    }
+
+    .artifact-desc {
+      font-family: 'Crimson Text', serif; font-size: 17px;
+      line-height: 1.8; color: var(--muted); margin-bottom: 30px;
+    }
+
+    .artifact-powers {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+
+    .power-tag {
+      padding: 8px 16px; background: rgba(0, 255, 157, 0.15);
+      border: 1px solid rgba(0, 255, 157, 0.3);
+      border-radius: 20px; font-size: 12px;
+      color: var(--aurora-green); letter-spacing: 1px;
+    }
+
+    .timeline-north {
+      position: relative; padding: 80px 0; margin-top: 80px;
+    }
+
+    .timeline-north::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 3px; background: linear-gradient(180deg, var(--ice-blue), var(--aurora-green), var(--aurora-purple), var(--ice-blue));
+      transform: translateX(-50%); box-shadow: 0 0 40px var(--ice-glow);
+    }
+
+    .timeline-event {
+      position: relative; margin-bottom: 130px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 90px; align-items: center;
+    }
+
+    .timeline-event:nth-child(even) .timeline-content {
+      order: 2;
+    }
+
+    .timeline-event:nth-child(even) .timeline-visual {
+      order: 1;
+    }
+
+    .timeline-marker {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); width: 45px; height: 45px;
+      background: var(--black-ice); border: 5px solid var(--ice-blue);
+      border-radius: 50%; box-shadow: 0 0 0 15px rgba(163, 217, 255, 0.2),
+                                      0 0 60px var(--ice-glow);
+      z-index: 10; animation: markerPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes markerPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.4); }
+    }
+
+    .timeline-content {
+      padding: 55px; border: 2px solid var(--border);
+      border-radius: 25px; background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(15px); transition: all 0.5s ease;
+    }
+
+    .timeline-content:hover {
+      border-color: var(--ice-blue);
+      transform: scale(1.04);
+      box-shadow: 0 30px 100px rgba(163, 217, 255, 0.5);
+    }
+
+    .timeline-year {
+      font-family: 'Germania One', cursive; font-size: 52px; font-weight: 900;
+      background: linear-gradient(135deg, var(--ice-light), var(--aurora-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 22px; letter-spacing: 8px;
+    }
+
+    .timeline-title {
+      font-family: 'Germania One', cursive; font-size: 30px;
+      font-weight: 700; color: var(--frost); margin-bottom: 22px;
+      letter-spacing: 3px;
+    }
+
+    .timeline-desc {
+      font-family: 'Crimson Text', serif; font-size: 18px;
+      line-height: 1.9; color: var(--muted); font-style: italic;
+    }
+
+    .timeline-visual {
+      height: 380px; border: 2px solid var(--border);
+      border-radius: 25px; background: linear-gradient(135deg, rgba(163, 217, 255, 0.05), rgba(0, 255, 157, 0.05));
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative; transition: all 0.5s ease;
+    }
+
+    .timeline-visual:hover {
+      border-color: var(--ice-blue);
+      box-shadow: 0 30px 100px rgba(163, 217, 255, 0.5);
+    }
+
+    .visual-rune {
+      width: 160px; height: 160px; fill: var(--ice-blue); opacity: 0.35;
+      filter: drop-shadow(0 0 50px var(--ice-glow));
+    }
+
+    .stats-ice {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 45px; padding: 110px 70px;
+      background: linear-gradient(135deg, rgba(10, 10, 15, 0.98) 0%, rgba(0, 0, 0, 1) 100%);
+      border-top: 2px solid var(--border); border-bottom: 2px solid var(--border);
+      position: relative;
+    }
+
+    .stats-ice::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(163, 217, 255, 0.05), transparent 70%);
+    }
+
+    .stat-item {
+      text-align: center; padding: 55px 35px;
+      border: 2px solid var(--border); border-radius: 20px;
+      background: rgba(10, 10, 15, 0.8); transition: all 0.5s ease;
+      position: relative; z-index: 1;
+    }
+
+    .stat-item:hover {
+      border-color: var(--ice-blue);
+      transform: translateY(-15px) scale(1.06);
+      box-shadow: 0 35px 120px rgba(163, 217, 255, 0.5);
+    }
+
+    .stat-value {
+      font-family: 'Germania One', cursive; font-size: 72px;
+      font-weight: 900; margin-bottom: 18px; line-height: 1;
+      background: linear-gradient(135deg, var(--ice-light), var(--aurora-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      font-family: 'Crimson Text', serif; font-size: 16px;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 3px;
+    }
+
+    .testimonials-ice {
+      padding: 130px 70px; background: rgba(10, 10, 15, 0.5);
+    }
+
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 55px; margin-top: 80px;
+    }
+
+    .testimonial-card {
+      padding: 55px 50px; border: 2px solid var(--border);
+      border-radius: 25px; background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(15px); transition: all 0.5s ease;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '"'; position: absolute; top: 35px; left: 40px;
+      font-family: 'Germania One', cursive; font-size: 150px;
+      font-weight: 900; color: rgba(163, 217, 255, 0.08);
+      line-height: 1; z-index: 0;
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--ice-blue);
+      transform: translateY(-15px);
+      box-shadow: 0 35px 120px rgba(163, 217, 255, 0.5);
+    }
+
+    .testimonial-text {
+      font-family: 'Crimson Text', serif; font-size: 19px;
+      line-height: 1.9; color: var(--muted); font-style: italic;
+      margin-bottom: 40px; position: relative; z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex; align-items: center; gap: 28px;
+      position: relative; z-index: 1;
+    }
+
+    .author-avatar {
+      width: 75px; height: 75px; border: 3px solid var(--ice-blue);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(163, 217, 255, 0.15), transparent);
+      box-shadow: 0 0 35px rgba(163, 217, 255, 0.4);
+    }
+
+    .author-avatar svg {
+      width: 42px; height: 42px; fill: var(--ice-blue);
+    }
+
+    .author-info {
+      flex: 1;
+    }
+
+    .author-name {
+      font-family: 'Germania One', cursive; font-size: 22px;
+      font-weight: 700; color: var(--frost); margin-bottom: 10px;
+    }
+
+    .author-position {
+      font-family: 'Crimson Text', serif; font-size: 14px;
+      font-style: italic; color: var(--ice-light); letter-spacing: 2px;
+    }
+
+    .cta-ice {
+      padding: 150px 70px; text-align: center;
+      background: linear-gradient(135deg, rgba(163, 217, 255, 0.05) 0%, rgba(0, 255, 157, 0.05) 100%);
+      border-top: 2px solid var(--border); border-bottom: 2px solid var(--border);
+    }
+
+    .cta-content {
+      max-width: 1400px; margin: 0 auto;
+    }
+
+    .cta-title {
+      font-family: 'Germania One', cursive; font-size: clamp(45px, 8vw, 85px);
+      font-weight: 900; margin-bottom: 40px; letter-spacing: 10px;
+      background: linear-gradient(135deg, var(--ice-light), var(--aurora-blue), var(--aurora-green));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .cta-desc {
+      font-family: 'Crimson Text', serif; font-size: 24px;
+      color: var(--muted); line-height: 1.9; margin-bottom: 65px;
+      max-width: 1000px; margin-left: auto; margin-right: auto;
+      font-style: italic;
+    }
+
+    .cta-buttons {
+      display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+    }
+
+    footer {
+      background: rgba(10, 10, 15, 0.98); border-top: 3px solid var(--border);
+      padding: 130px 70px 65px; position: relative;
+    }
+
+    .footer-content {
+      max-width: 1900px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 75px; margin-bottom: 85px;
+    }
+
+    .footer-section h4 {
+      font-family: 'Germania One', cursive; font-size: 26px;
+      font-weight: 700; margin-bottom: 35px; color: var(--ice-blue);
+      letter-spacing: 4px; text-transform: uppercase;
+    }
+
+    .footer-section p {
+      font-family: 'Crimson Text', serif; font-size: 17px;
+      color: var(--muted); line-height: 1.9; margin-bottom: 28px;
+    }
+
+    .footer-links {
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--muted); text-decoration: none;
+      transition: all 0.3s ease; padding-left: 35px; position: relative;
+      font-size: 15px;
+    }
+
+    .footer-links a::before {
+      content: '❄'; position: absolute; left: 0; color: var(--ice-blue);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--ice-light); padding-left: 40px;
+    }
+
+    .footer-links a:hover::before {
+      opacity: 1;
+    }
+
+    .footer-logo-section {
+      display: flex; flex-direction: column; gap: 28px;
+    }
+
+    .footer-logo {
+      display: flex; align-items: center; gap: 22px;
+    }
+
+    .footer-rune {
+      width: 65px; height: 65px; fill: var(--ice-blue);
+      filter: drop-shadow(0 0 25px var(--ice-glow));
+    }
+
+    .footer-brand {
+      font-family: 'Germania One', cursive; font-size: 36px;
+      font-weight: 900; color: var(--ice-blue); letter-spacing: 8px;
+    }
+
+    .footer-runes-display {
+      display: flex; gap: 18px; flex-wrap: wrap;
+    }
+
+    .footer-rune-badge {
+      padding: 10px 22px; background: rgba(163, 217, 255, 0.08);
+      border: 1px solid var(--border); border-radius: 25px;
+      font-size: 12px; color: var(--ice-blue); letter-spacing: 1px;
+    }
+
+    .footer-bottom {
+      max-width: 1900px; margin: 0 auto; padding-top: 65px;
+      border-top: 1px solid rgba(163, 217, 255, 0.2);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 35px; font-size: 14px; color: var(--muted);
+    }
+
+    .footer-seal {
+      display: flex; align-items: center; gap: 22px;
+      padding: 18px 35px; border: 1px solid var(--border);
+      border-radius: 12px; background: rgba(163, 217, 255, 0.05);
+    }
+
+    .seal-icon {
+      width: 40px; height: 40px; fill: var(--ice-blue);
+    }
+
+    .seal-text {
+      font-family: 'Cinzel', serif; font-size: 13px;
+      font-weight: 700; color: var(--ice-blue); letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .fade-in {
+      opacity: 0; transform: translateY(70px);
+      transition: all 1s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    @media (max-width: 1200px) {
+      .origins-grid, .sanctuaries-grid, .magics-showcase, .artifacts-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-north::before {
+        left: 35px;
+      }
+
+      .timeline-event {
+        grid-template-columns: 1fr;
+        padding-left: 90px;
+      }
+
+      .timeline-event:nth-child(even) .timeline-content,
+      .timeline-event:nth-child(even) .timeline-visual {
+        order: initial;
+      }
+
+      .timeline-marker {
+        left: 35px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      section, .hero-north, .stats-ice, footer, .cta-ice, .testimonials-ice {
+        padding-left: 35px; padding-right: 35px;
+      }
+
+      .header-inner {
+        padding: 22px 35px; flex-wrap: wrap;
+      }
+
+      nav {
+        order: 3; width: 100%; flex-direction: column;
+        gap: 22px; padding-top: 28px;
+        border-top: 1px solid var(--border);
+        display: none;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      .arcanos-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column; text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-arctic">
+    <div class="aurora-effect"></div>
+    <div class="ice-crystals"></div>
+    <div class="vignette-ice"></div>
+    <div class="snowflakes" id="snowflakes"></div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo-north">
+        <div class="rune-emblem">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
+          </svg>
+        </div>
+        <div class="brand-north">
+          <div class="council-name">SETENTRIONAL</div>
+          <div class="council-motto">Per Glaciem ad Astra</div>
+        </div>
+      </a>
+
+      <nav>
+        <a href="#origins" class="nav-link">Origens</a>
+        <a href="#arcanos" class="nav-link">Arcanos</a>
+        <a href="#sanctuaries" class="nav-link">Santuários</a>
+        <a href="#magic" class="nav-link">Magia Rúnica</a>
+        <a href="#artifacts" class="nav-link">Artefatos</a>
+      </nav>
+
+      <button class="header-cta">
+        <span>INICIAR JORNADA</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero-north">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="frost-light"></span>
+        <span>Fundado em 854 d.C. • Mestres das Artes Rúnicas do Norte</span>
+      </div>
+
+      <h1 class="hero-title">
+        CONSELHO<br>
+        <span class="gradient-ice">SETENTRIONAL</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Das terras gélidas do extremo norte, onde o sol da meia-noite dança com a aurora boreal, 
+        ergue-se o Conselho Setentrional. Há mais de mil anos, preservamos as runas sagradas dos antigos, 
+        dominamos as artes místicas dos povos nórdicos e guardamos os segredos das magias primordiais. 
+        Somos herdeiros dos völvas, guardiões do Yggdrasil místico, portadores da sabedoria que transcende 
+        o tempo e o gelo eterno.
+      </p>
+
+      <div class="rune-divider"></div>
+
+      <div class="hero-runes">
+        ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ • FUTHARK ANCESTRAL • ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ
+      </div>
+
+      <div class="hero-cta-group">
+        <a href="#origins" class="btn btn-ice">
+          <span>DESCUBRA NOSSA HISTÓRIA</span>
+        </a>
+        <a href="#contact" class="btn btn-frost">
+          <span>CANDIDATAR-SE</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="origins">
+    <div class="section-header fade-in">
+      <span class="section-badge">Raízes Ancestrais</span>
+      <h2 class="section-title">Nossa Origem</h2>
+      <div class="rune-divider"></div>
+      <p class="section-desc">
+        Nascidos do gelo e forjados pela sabedoria ancestral, o Conselho Setentrional representa a continuação 
+        ininterrupta de tradições mágicas que remontam à Era Viking e além. Cada princípio que nos guia foi 
+        esculpido nas pedras rúnicas pelos mestres que vieram antes de nós.
+      </p>
+    </div>
+
+    <div class="origins-grid">
+      <div class="origin-card fade-in">
+        <div class="origin-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99z"/>
+          </svg>
+        </div>
+        <h3 class="origin-title">Tradição Rúnica Milenar</h3>
+        <p class="origin-desc">
+          Fundado em 854 d.C. por nove völvas e mestres rúnicos escandinavos que uniram seus conhecimentos 
+          para preservar as artes místicas ameaçadas pela cristianização do norte. O Conselho nasceu sob a 
+          aurora boreal em uma noite de solstício de inverno, quando as nove linhagens juraram proteger o 
+          Futhark sagrado e todas as magias ancestrais. Durante 1.171 anos, mantivemos viva a chama do 
+          conhecimento nórdico, transmitindo as runas de geração em geração através de iniciações secretas 
+          em círculos de pedra ancestrais.
+        </p>
+      </div>
+
+      <div class="origin-card fade-in">
+        <div class="origin-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+          </svg>
+        </div>
+        <h3 class="origin-title">Linhagem dos Völvas</h3>
+        <p class="origin-desc">
+          Descendentes diretos das völvas (xamãs nórdicas), os mestres do Conselho carregam em suas veias 
+          o dom do seiðr - a magia de tecer destinos. Cada Arcano Magnus passa por 21 anos de treinamento 
+          intensivo que inclui domínio completo das 24 runas do Elder Futhark, comunhão com espíritos 
+          ancestrais, navegação dos Nove Mundos de Yggdrasil e despertar da visão seiðr. Apenas um em cada 
+          mil candidatos completa a jornada, tornando-se portador legítimo da tradição que moldou a 
+          civilização nórdica.
+        </p>
+      </div>
+
+      <div class="origin-card fade-in">
+        <div class="origin-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <h3 class="origin-title">Guardiões do Yggdrasil</h3>
+        <p class="origin-desc">
+          Nossa missão transcende a mera preservação - somos guardiões ativos da Árvore Mundial Místic, 
+          o Yggdrasil paranormal que conecta todas as dimensões da realidade. Através de rituais realizados 
+          nos oito festivais anuais (Yule, Imbolc, Ostara, Beltane, Litha, Lughnasadh, Mabon e Samhain), 
+          mantemos o equilíbrio entre os Nove Mundos. Nossas câmaras rúnicas em Uppsala, Islândia e 
+          Groenlândia servem como pontos de ancoragem dimensional, prevenindo colapsos entre realidades 
+          e mantendo os portais selados contra invasões de Jötnar e outras entidades primordiais.
+        </p>
+      </div>
+
+      <div class="origin-card fade-in">
+        <div class="origin-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/>
+          </svg>
+        </div>
+        <h3 class="origin-title">Biblioteca das Eddas</h3>
+        <p class="origin-desc">
+          Nossa coleção de textos rúnicos é a mais completa do mundo paranormal. 8.400 pedras rúnicas 
+          catalogadas, 340 manuscritos das Eddas (incluindo versões perdidas), 120 pergaminhos de seiðr, 
+          e mais de 1.500 grimórios de magia nórdica que datam do século VI ao século XXI. A Biblioteca 
+          Glacial, escavada 200 metros sob o gelo da Islândia, mantém temperatura constante de -5°C - 
+          ideal para preservação mágica. Cada texto é protegido por runas de guarda e apenas aqueles com 
+          permissão ancestral podem acessar os níveis mais profundos, onde residem os segredos proibidos 
+          do galdr negro.
+        </p>
+      </div>
+
+      <div class="origin-card fade-in">
+        <div class="origin-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+          </svg>
+        </div>
+        <h3 class="origin-title">Aliança com o Panteão</h3>
+        <p class="origin-desc">
+          Único entre as organizações paranormais, o Conselho Setentrional mantém pacto direto com os Æsir 
+          (deuses nórdicos). Em 1134, durante o Grande Ragnarök Menor, nossos mestres ajudaram a repelir 
+          invasão de Surt e suas hordas de fogo. Em gratidão, Odin concedeu ao Conselho três dádivas: 
+          Gungnir Menor (lança com 10% do poder da original), Draupnir Secundário (anel que multiplica 
+          recursos mágicos), e mais importante - o direito de invocar einherjar (guerreiros mortos de 
+          Valhalla) em momentos de necessidade extrema. Esta aliança, renovada a cada século através do 
+          Ritual do Sangue de Javalí, nos distingue como representantes mortais oficiais do panteão nórdico.
+        </p>
+      </div>
+
+      <div class="origin-card fade-in">
+        <div class="origin-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/>
+          </svg>
+        </div>
+        <h3 class="origin-title">Academia de Mistérios Rúnicos</h3>
+        <p class="origin-desc">
+          Formação completa de novos praticantes através da Academia de Uppsala, fundada em 1477. Programa 
+          de 14 anos dividido em sete níveis de iniciação: Neófito (2 anos - fundamentos rúnicos), 
+          Aprendiz (2 anos - magia prática), Adepto (2 anos - seiðr básico), Mestre (2 anos - galdr 
+          avançado), Alto Mestre (2 anos - navegação dimensional), Senhor Rúnico (2 anos - criação de runas), 
+          e Völva/Vitki (2 anos - maestria total). Apenas 3% dos iniciados alcançam o nível final. 
+          Graduados servem como mestres rúnicos em 34 países, expandindo a influência nórdica globalmente.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(0, 0, 0, 1) 100%);">
+    <div class="section-header fade-in">
+      <span class="section-badge">História Congelada no Tempo</span>
+      <h2 class="section-title">Linha Temporal</h2>
+      <div class="rune-divider"></div>
+      <p class="section-desc">
+        Mil anos de história gravados em pedras rúnicas e preservados no gelo eterno. Cada era marca 
+        uma conquista, cada século uma iniciação, cada milênio um ciclo completo de Yggdrasil.
+      </p>
+    </div>
+
+    <div class="timeline-north">
+      <div class="timeline-event fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">854</div>
+          <h3 class="timeline-title">O Primeiro Círculo</h3>
+          <p class="timeline-desc">
+            Na noite do solstício de inverno, sob a aurora mais brilhante registrada na história, nove 
+            mestres das artes rúnicas se reuniram no Círculo de Pedra de Uppsala. Representando as nove 
+            linhagens principais de völvas e vitkar da Escandinávia, juraram sobre a pedra ancestral de Odin 
+            preservar o conhecimento dos antigos contra a onda de cristianização. Assim nasceu o Conselho 
+            Setentrional, com Ragnar Loðbrók como primeiro Arcano Magnus e guardião supremo das runas.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-rune" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-event fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1134</div>
+          <h3 class="timeline-title">O Ragnarök Menor</h3>
+          <p class="timeline-desc">
+            Portal dimensional abriu-se em Thingvellir, Islândia, liberando hordas de Muspelheim lideradas 
+            por um avatar de Surt. Durante três dias e três noites, os mestres do Conselho realizaram o 
+            Ritual dos Nove Anéis, invocando poder diretamente de Yggdrasil. Com sacrifício de sete völvas 
+            que transformaram suas próprias essências em selos rúnicos vivos, conseguiram fechar o portal. 
+            Odin, impressionado, desceu de Asgard e concedeu ao Conselho as Três Dádivas que ainda possuímos 
+            hoje.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-rune" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-event fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1477</div>
+          <h3 class="timeline-title">Fundação da Academia</h3>
+          <p class="timeline-desc">
+            Com o Renascimento trazendo novo interesse pelo ocultismo, o Conselho estabeleceu a Academia de 
+            Uppsala para treinamento formal de novos praticantes. Primeira turma de 12 neófitos iniciou 
+            estudos sob tutoria de 33 mestres. Currículo inclui não apenas runas, mas também história 
+            nórdica, línguas antigas (nórdico antigo, proto-germânico), navegação astral, e combate mágico. 
+            Desde então, 847 völvas e vitkar se graduaram, espalhando magia nórdica pelos seis continentes.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-rune" viewBox="0 0 24 24">
+            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-event fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1756</div>
+          <h3 class="timeline-title">Descoberta da Biblioteca Glacial</h3>
+          <p class="timeline-desc">
+            Expedição liderada pela völva Astrid Björnsdóttir descobriu rede de cavernas sob geleira 
+            Vatnajökull na Islândia. Interior revelou cidade antiga construída por gigantes de gelo, 
+            completa com biblioteca contendo 2.300 tabletes rúnicos de origem pré-viking. Tradução levou 
+            140 anos e revelou magias perdidas do período de migração germânica. Conselho transformou local 
+            em repositório principal, protegido por 72 runas de guarda gravadas no próprio gelo vivo.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-rune" viewBox="0 0 24 24">
+            <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-event fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1943</div>
+          <h3 class="timeline-title">Guerra contra Thule</h3>
+          <p class="timeline-desc">
+            Sociedade Thule nazista tentou roubar artefatos do Conselho para programa ocultista de Hitler. 
+            Três santuários foram atacados simultaneamente por SS-Ahnenerbe. Batalha mais intensa ocorreu 
+            em Trondheim, durando 18 horas. Vitki invocaram berserkers ancestrais e einherjar de Valhalla, 
+            repelindo invasores. 23 mestres tombaram, mas nenhum artefato foi perdido. Após guerra, 
+            Conselho estabeleceu aliança com Shadow Company e Ordo Realitas para prevenir futuros ataques 
+            de organizações militarizadas.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-rune" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49L17.5 6.5 9.99 9.99 6.5 17.5zm5.5-6.6c.61 0 1.1.49 1.1 1.1s-.49 1.1-1.1 1.1-1.1-.49-1.1-1.1.49-1.1 1.1-1.1z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-event fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2003</div>
+          <h3 class="timeline-title">Renovação do Pacto com Odin</h3>
+          <p class="timeline-desc">
+            Cada 869 anos (número sagrado de Odin), o pacto entre Conselho e Æsir deve ser renovado através 
+            do Ritual de Sangue de Javalí. Cerimônia realizada no altar de Gamla Uppsala reuniu todos os 
+            149 mestres vivos do Conselho. Odin manifestou-se pessoalmente, acompanhado por Freyja e Thor. 
+            Renovação incluiu nova dádiva: permissão para estabelecer portal permanente para Asgard em caso 
+            de emergência apocalíptica. Evento testemunhado por embaixadores de 12 organizações paranormais.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-rune" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-event fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2025</div>
+          <h3 class="timeline-title">Era da Nova Aurora</h3>
+          <p class="timeline-desc">
+            Entramos no segundo milênio de existência preparados como nunca. Rede global de 23 santuários, 
+            234 mestres ativos, 1.890 estudantes em treinamento, e alianças com todas as principais 
+            organizações paranormais. Estabelecimento de Divisão de Runas Digitais para adaptar magia 
+            ancestral à era tecnológica. Projeto de criar 13º santuário em Antártida para estudar runas de 
+            gelo primordial. Conselho Setentrional entra em sua era mais ambiciosa, pronto para enfrentar 
+            desafios do século XXI mantendo fidelidade às tradições milenares.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-rune" viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="arcanos">
+    <div class="section-header fade-in">
+      <span class="section-badge">Os Nove Iluminados</span>
+      <h2 class="section-title">Conselho de Arcanos</h2>
+      <div class="rune-divider"></div>
+      <p class="section-desc">
+        Nove mestres supremos que representam as nove linhagens originais e governam o Conselho Setentrional. 
+        Cada um domina completamente um dos nove aspectos da magia rúnica e serve como guardião de um dos 
+        Nove Mundos de Yggdrasil.
+      </p>
+    </div>
+
+    <div class="arcanos-grid">
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Arcano Magnus Corvus</h3>
+          <p class="arcano-title">Guardião Supremo • Portador de Odin</p>
+          <p class="arcano-bio">
+            Líder do Conselho há 47 anos, 89 anos de idade (aparenta 60 devido a magia de longevidade). 
+            Mestre absoluto de galdr (canto rúnico) e seiðr (magia de alteração de destino). Único vivo a 
+            ter completado o Ritual de Sacrifício de Odin - pendurou-se na Árvore Sagrada por nove dias e 
+            nove noites sem comida nem água, perfurando-se com lança, para receber visão direta das runas. 
+            Possui visão de Odin - pode ver passado, presente e futuro simultaneamente. Mentor de 34 mestres 
+            atuais.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Seiðr</span>
+            <span class="rune-tag">Galdr</span>
+            <span class="rune-tag">Visão Odinica</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Völva Suprema Eira Frostborn</h3>
+          <p class="arcano-title">Mestra das Névoas • Porta-voz de Freyja</p>
+          <p class="arcano-bio">
+            74 anos, mais poderosa praticante de seiðr viva. Capaz de tecer destinos, alterar probabilidades 
+            e ver todos os futuros potenciais. Realizou mais de 8.000 leituras de runas com 98.7% de precisão. 
+            Durante lua cheia, pode manifestar valquírias menores para proteção. Conselheira de 23 chefes de 
+            estado (secretamente) e preveniu 47 guerras através de manipulação sutil de eventos. Guardiã de 
+            Sessrúmnir, salão de Freyja em Fólkvangr.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Tecelagem de Destino</span>
+            <span class="rune-tag">Premonição</span>
+            <span class="rune-tag">Seiðr Supremo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Vitki Supremo Bjorn Ironfist</h3>
+          <p class="arcano-title">Senhor do Trovão • Campeão de Thor</p>
+          <p class="arcano-bio">
+            67 anos, ex-berserker que dominou fúria através de disciplina rúnica. Mestre de runas de batalha 
+            e proteção. Pode invocar Mjölnir Menor em combate - martelo com 15% do poder original de Thor. 
+            Veterano de 340 batalhas paranormais, nunca derrotado em combate direto. Treinou pessoalmente 
+            156 guerreiros rúnicos. Durante fúria controlada, canalizapower direto de Thor através de tatuagens 
+            rúnicas vivas que cobrem 70% de seu corpo. Guardião de Bilskirnir, salão de Thor.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Runas de Batalha</span>
+            <span class="rune-tag">Força Divina</span>
+            <span class="rune-tag">Berserker Rúnico</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Völva Saga Runescribe</h3>
+          <p class="arcano-title">Guardiã dos Registros • Escriba de Mímir</p>
+          <p class="arcano-bio">
+            61 anos, memória eidética aprimorada por runas de Ansuz. Conhece todas as 8.400 pedras rúnicas 
+            da biblioteca de cor, pode recitar Eddas completas sem erro, e fala 17 línguas incluindo 
+            dialetos extintos. Desenvolveu sistema de catalog
+ação rúnica digital usado globalmente. Supervisiona tradução de todos os textos antigos e criação de novas runas para fenômenos modernos. Única pessoa viva que bebeu do Poço de Mímir (versão diluída) - pagou com visão de um olho em troca de sabedoria ancestral. Guardiã de Brunnr Mimisbrunnr, fonte de sabedoria.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Memória Total</span>
+            <span class="rune-tag">Linguística Mística</span>
+            <span class="rune-tag">Criação Rúnica</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Völva Astrid Stormcaller</h3>
+          <p class="arcano-title">Senhora das Tempestades • Filha de Njörðr</p>
+          <p class="arcano-bio">
+            58 anos, mestra de magia elemental focada em gelo, vento e água. Pode invocar blizzards, congelar 
+            lagos inteiros instantaneamente, e cavalgar ventos do norte a velocidades supersônicas. Durante 
+            inverno ártico, seus poderes triplicam. Lidera todas as expedições ao extremo norte e estabeleceu 
+            três santuários em regiões polares. Responsável por manter barreiras climáticas que protegem 
+            santuários de detecção satellite. Guardiã de Nóatún, salão de Njörðr à beira-mar.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Magia de Gelo</span>
+            <span class="rune-tag">Controle Climático</span>
+            <span class="rune-tag">Voo Rúnico</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Vitki Heimdall Watchful</h3>
+          <p class="arcano-title">Guardião dos Portais • Olhos de Heimdall</p>
+          <p class="arcano-bio">
+            71 anos, especialista em runas de proteção e selagem dimensional. Pode ver através de Yggdrasil 
+            para os Nove Mundos, detectar invasões dimensionais antes que ocorram, e selar brechas entre 
+            realidades. Dorme apenas 3 horas por noite devido a ritual de vigilância eterna. Instalou pessoalmente 
+            todas as 1.840 runas de guarda nos 23 santuários do Conselho. Ouve sussurros de grama crescendo 
+            e lã de ovelha se formando - sentidos aprimorados por magia. Guardião de Himinbjörg, fortaleza 
+            na ponte Bifröst.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Vigilância Eterna</span>
+            <span class="rune-tag">Selagem Dimensional</span>
+            <span class="rune-tag">Sentidos Divinos</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Völva Freya Goldenhair</h3>
+          <p class="arcano-title">Mestra da Cura • Sacerdotisa de Eir</p>
+          <p class="arcano-bio">
+            54 anos, mais habilidosa curadora rúnica do mundo. Domina todas as 18 runas de cura, pode regenerar 
+            membros perdidos, curar doenças incuráveis, e até trazer recém-mortos de volta (dentro de 3 minutos). 
+            Estabeleceu 12 clínicas de cura rúnica em países nórdicos que tratam 8.000 pacientes anualmente. 
+            Desenvolveu 23 novos rituais de cura combinando medicina moderna com magia ancestral. Seus serviços 
+            são procurados por organizações paranormais globalmente. Guardiã de Álfheimr, reino dos elfos de luz.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Cura Divina</span>
+            <span class="rune-tag">Regeneração</span>
+            <span class="rune-tag">Ressurreição Menor</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Vitki Loki Shadowweaver</h3>
+          <p class="arcano-title">Mestre da Ilusão • Aprendiz de Loki</p>
+          <p class="arcano-bio">
+            49 anos (idade real desconhecida devido a manipulação temporal), mestre de runas de engano, ilusão 
+            e transformação. Pode mudar de forma completamente, criar ilusões indistinguíveis da realidade, e 
+            caminhar entre sombras. Controverso por métodos não-ortodoxos, mas inegavelmente eficaz. Responsável 
+            por operações secretas do Conselho e infiltração em organizações hostis. Salvou o Conselho 34 vezes 
+            através de truques brilhantes. Único membro com permissão de Loki para usar seu nome. Guardião de 
+            Svartálfheimr, reino dos elfos escuros.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Metamorfose</span>
+            <span class="rune-tag">Ilusionismo Supremo</span>
+            <span class="rune-tag">Caminhante das Sombras</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arcano-card fade-in">
+        <div class="arcano-portrait">
+          <svg class="portrait-rune" viewBox="0 0 24 24">
+            <path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+          </svg>
+        </div>
+        <div class="arcano-info">
+          <h3 class="arcano-name">Völva Hel Deathwhisperer</h3>
+          <p class="arcano-title">Senhora dos Mortos • Emissária de Hel</p>
+          <p class="arcano-bio">
+            63 anos, única necromante aceita pelo Conselho devido a abordagem honrosa. Pode comunicar-se com 
+            mortos, navegar por Helheim, e até mesmo negociar libertação de almas com a deusa Hel. Metade de 
+            seu corpo parece morto (lado esquerdo pálido e frio) devido a pacto com Hel aos 21 anos. Realiza 
+            funerais rúnicos que garantem passagem segura para afterlife apropriado. Consultora de 8 organizações 
+            sobre assuntos relacionados a mortos-vivos. Guardiã de Niflheimr, mundo primordial de gelo e névoa.
+          </p>
+          <div class="arcano-runes">
+            <span class="rune-tag">Necromancia Honrada</span>
+            <span class="rune-tag">Caminhante de Helheim</span>
+            <span class="rune-tag">Guia de Almas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sanctuaries" style="background: linear-gradient(135deg, rgba(163, 217, 255, 0.03) 0%, rgba(0, 255, 157, 0.03) 100%);">
+    <div class="section-header fade-in">
+      <span class="section-badge">Fortalezas do Norte</span>
+      <h2 class="section-title">Santuários Sagrados</h2>
+      <div class="rune-divider"></div>
+      <p class="section-desc">
+        Vinte e três fortalezas rúnicas espalhadas pelo mundo, cada uma um nexo de poder místico conectado 
+        diretamente a Yggdrasil. Protegidos por mil anos de magia acumulada e guardados pelos melhores 
+        guerreiros rúnicos.
+      </p>
+    </div>
+
+    <div class="sanctuaries-grid">
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Templo de Uppsala</h3>
+            <p class="sanctuary-location">Suécia • Sede Principal</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          Santuário original fundado em 854 d.C. sobre ruínas de templo pagão pré-viking. Complexo de 12 
+          edifícios incluindo Grande Salão com capacidade para 500 pessoas, biblioteca secundária com 12.000 
+          volumes, salas de ritual para cada uma das 24 runas, e câmaras de meditação subterrâneas. Centro 
+          administrativo onde Conselho de Arcanos se reúne mensalmente sob lua cheia.
+        </p>
+        <ul class="sanctuary-features">
+          <li>Pedra de Odin - altar onde Odin manifestou-se em 1134</li>
+          <li>Academia de Uppsala com 340 estudantes ativos</li>
+          <li>Arsenal contendo 840 armas rúnicas históricas</li>
+          <li>Árvore de Yggdrasil Menor plantada em 892 d.C.</li>
+          <li>72 runas de proteção gravadas em fundação</li>
+        </ul>
+      </div>
+
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Biblioteca Glacial</h3>
+            <p class="sanctuary-location">Islândia • Repositório Principal</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          200 metros sob geleira Vatnajökull, descoberto em 1756. Temperatura constante de -5°C mantida por 
+          runas de gelo perpétuo. Três níveis: Superior (textos comuns), Médio (grimórios restritos), Profundo 
+          (conhecimento proibido). Sistema de catalogação místico permite localização mental de qualquer texto. 
+          Acessível apenas por portal rúnico ou elevador de gelo.
+        </p>
+        <ul class="sanctuary-features">
+          <li>8.400 pedras rúnicas catalogadas desde século VI</li>
+          <li>340 manuscritos das Eddas incluindo 12 versões perdidas</li>
+          <li>Sala do Galdr Negro selada com 144 runas</li>
+          <li>Laboratório de restauração de textos antigos</li>
+          <li>23 bibliotecários residentes permanentes</li>
+        </ul>
+      </div>
+
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Fortaleza de Trondheim</h3>
+            <p class="sanctuary-location">Noruega • Bastião Militar</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          Castelo medieval fortificado com magia rúnica em 1203. Centro de treinamento militar e combate 
+          paranormal. 89 guerreiros rúnicos residentes, campos de treinamento que simulam nove ambientes 
+          diferentes, arena de combate capaz de conter entidades Classe-A. Repeliu ataque nazista em 1943 
+          através de invocação de einherjar.
+        </p>
+        <ul class="sanctuary-features">
+          <li>Arsenal com armas abençoadas por Thor pessoalmente</li>
+          <li>Simuladores de batalha dimensional avançados</li>
+          <li>Enfermaria com 12 völvas curadoras</li>
+          <li>Muralhas gravadas com runas de Tyr (guerra justa)</li>
+          <li>Quartel para 200 guerreiros em mobilização total</li>
+        </ul>
+      </div>
+
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Observatório de Tromsø</h3>
+            <p class="sanctuary-location">Noruega • Nexo de Aurora</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          Localizado no Círculo Polar Ártico onde aurora boreal é visível 240 noites por ano. Especializado 
+          em magia celestial e comunicação com Asgard. Torre de observação de 60 metros permite visualização 
+          de todos os Nove Mundos durante conjunções planetárias. Portal permanente para Asgard ativável em 
+          emergências fica aqui.
+        </p>
+        <ul class="sanctuary-features">
+          <li>Telescópio Místico capaz de ver através de dimensões</li>
+          <li>Sala de Invocação onde Æsir manifestam-se fisicamente</li>
+          <li>18 völvas especializadas em astrologia rúnica</li>
+          <li>Antenas captam sussurros de Yggdrasil</li>
+          <li>Durante inverno polar, poder mágico multiplica por 3</li>
+        </ul>
+      </div>
+
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Clínica de Bergen</h3>
+            <p class="sanctuary-location">Noruega • Centro de Cura</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          Hospital rúnico estabelecido em 1834 pela völva Ingrid Healer. Trata doenças mundanas e paranormais 
+          usando combinação de medicina moderna e magia de cura. 34 curandeiros residentes tratam 8.000 pacientes 
+          anualmente. Taxa de cura de 97.8% - melhor que qualquer hospital convencional. Aceita pacientes de 
+          organizações aliadas.
+        </p>
+        <ul class="sanctuary-features">
+          <li>23 salas de cura especializadas em diferentes males</li>
+          <li>Fontes termais naturais infundidas com runas Uruz</li>
+          <li>Jardim de ervas místicas com 340 espécies</li>
+          <li>Pesquisa em cura regenerativa rúnica avançada</li>
+          <li>Ala especial para vítimas de maldições e possessões</li>
+        </ul>
+      </div>
+
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Forja de Reykjavik</h3>
+            <p class="sanctuary-location">Islândia • Criação de Artefatos</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          Forja sagrada estabelecida em 1067 sobre fenda vulcânica ativa. Magma natural fornece calor místico 
+          necessário para forjar armas e artefatos rúnicos. 12 mestres ferreiros trabalham aqui, cada um 
+          especializado em diferentes materiais (ferro meteórico, prata lunar, bronze draconiano). Produziu 
+          mais de 4.000 itens mágicos em 958 anos.
+        </p>
+        <ul class="sanctuary-features">
+          <li>Bigorna de Brokk e Sindri (anões lendários)</li>
+          <li>Depósito de 18 metais místicos raros</li>
+          <li>Runas de Forjamento gravadas em paredes de lava</li>
+          <li>Laboratório de encantamento permanente</li>
+          <li>Cada arma produzida testada por Bjorn Ironfist</li>
+        </ul>
+      </div>
+
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Retiro de Lofoten</h3>
+            <p class="sanctuary-location">Noruega • Santuário de Meditação</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          Arquipélago isolado acessível apenas por barco ou portal. Local de retiros espirituais e iniciações 
+          finais. Candidatos a völva/vitki passam 90 dias aqui em isolamento total, meditando, jejuando, e 
+          atravessando provações místicas. Conexão com Yggdrasil é mais forte aqui - possível entrar 
+          fisicamente na Árvore Mundial durante solstícios.
+        </p>
+        <ul class="sanctuary-features">
+          <li>23 cabanas individuais de isolamento</li>
+          <li>Círculo de Pedra com 5.000 anos de idade</li>
+          <li>Caverna de Visões onde seiðr é mais poderoso</li>
+          <li>Nenhuma tecnologia moderna permitida</li>
+          <li>Guardado por espíritos de völvas ancestrais</li>
+        </ul>
+      </div>
+
+      <div class="sanctuary-card fade-in">
+        <div class="sanctuary-header">
+          <div class="sanctuary-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>
+            </svg>
+          </div>
+          <div class="sanctuary-header-text">
+            <h3 class="sanctuary-name">Centro de Nuuk</h3>
+            <p class="sanctuary-location">Groenlândia • Pesquisa Ártica</p>
+          </div>
+        </div>
+        <p class="sanctuary-desc">
+          Estabelecido em 1998 para estudar fenômenos paranormais do Ártico extremo. 45 pesquisadores residentes 
+          investigam runas de gelo primordial, comunicação com espíritos Inuit, e efeitos da aurora boreal em 
+          magia. Coopera com universidades locais e povos nativos. Descobriu 89 novas runas em geleiras antigas.
+        </p>
+        <ul class="sanctuary-features">
+          <li>Laboratórios de última geração para análise de gelo</li>
+          <li>Aliança respeitosa com xamãs Inuit locais</li>
+          <li>Estação meteorológica mística rastreia energias árticas</li>
+          <li>Base para expedições ao Polo Norte magnético</li>
+          <li>Protocolo de estudo de runas derretendo com mudança climática</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="magic">
+    <div class="section-header fade-in">
+      <span class="section-badge">Artes Místicas Ancestrais</span>
+      <h2 class="section-title">Magia Rúnica</h2>
+      <div class="rune-divider"></div>
+      <p class="section-desc">
+        O sistema mágico mais antigo da Europa, preservado e refinado através de 1.171 anos de prática 
+        ininterrupta. Cada runa é um portal para forças primordiais do universo, cada galdr um canto que 
+        tece realidade, cada seiðr uma dança com o destino.
+      </p>
+    </div>
+
+    <div class="magics-showcase">
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL MESTRE</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Galdr - Canto Rúnico</h3>
+          <p class="magic-school">Escola: Encantamento Vocal</p>
+          <p class="magic-desc">
+            Arte de cantar runas para manifestar seus poderes. Cada runa tem frequência vibracional específica 
+            que ressoa com aspecto da realidade. Mestre de galdr pode quebrar montanhas, curar ferimentos, ou 
+            amaldiçoar inimigos apenas com voz. Requer 12 anos de treinamento para dominar tons corretos. 
+            Arcano Magnus Corvus pode cantar todas as 24 runas simultaneamente em harmonia impossível.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Vocal</span>
+            <span class="property-badge">Versátil</span>
+            <span class="property-badge">Ressonância</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL SUPREMO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Seiðr - Tecelagem de Destino</h3>
+          <p class="magic-school">Escola: Alteração Probabilística</p>
+          <p class="magic-desc">
+            Magia mais poderosa e perigosa dos völvas. Permite ver fios de wyrd (destino) que conectam todas 
+            as coisas e puxá-los para alterar futuros. Praticante entra em transe xamânico, viaja astralmente, 
+            e literalmente tece nova realidade. Uso excessivo causa loucura - ver todos os futuros possíveis 
+            simultaneamente quebra mentes mortais. Apenas 34 mestres vivos dominam seiðr completamente.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Destino</span>
+            <span class="property-badge">Transe</span>
+            <span class="property-badge">Perigoso</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL AVANÇADO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Ristir - Gravação Rúnica</h3>
+          <p class="magic-school">Escola: Encantamento Permanente</p>
+          <p class="magic-desc">
+            Arte de gravar runas em objetos para encantamentos permanentes. Faca gravada com Tiwaz nunca erra 
+            alvo. Porta com Algiz repele inimigos automaticamente. Complexidade varia - runa única leva 3 horas, 
+            combinação de 9 runas leva 3 dias de concentração ininterrupta. Erros são catastróficos - runa mal 
+            gravada pode explodir, amaldiçoar criador, ou invocar entidades indesejadas. 156 mestres de ristir ativos.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Permanente</span>
+            <span class="property-badge">Encantamento</span>
+            <span class="property-badge">Preciso</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL MESTRE</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Ályðr - Magia Elemental</h3>
+          <p class="magic-school">Escola: Manipulação Primordial</p>
+          <p class="magic-desc">
+            Controle sobre elementos primordiais através de runas específicas. Isa (gelo), Kenaz (fogo), Laguz 
+            (água), Jera (terra), Ansuz (ar). Praticantes avançados combinam runas para efeitos devastadores - 
+            tempestade de gelo com Isa + Ansuz, erupção vulcânica com Kenaz + Jera. Astrid Stormcaller pode 
+            invocar blizzard que cobre 50km² e dura três dias. Limitado apenas por força de vontade do conjurador.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Elemental</span>
+            <span class="property-badge">Combate</span>
+            <span class="property-badge">Destrutivo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL AVANÇADO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Lækning - Cura Rúnica</h3>
+          <p class="magic-school">Escola: Restauração Vital</p>
+          <p class="magic-desc">
+            18 runas diferentes para cura, cada uma tratando tipo específico de mal. Uruz (vitalidade bruta), 
+            Sowilo (energia vital), Berkana (regeneração celular). Völva especializada pode curar venenos, 
+            doenças, ferimentos críticos, e até ressuscitar recém-mortos (dentro de 3 minutos). Freya Goldenhair 
+            regenerou braço completamente decepado em 6 horas usando combinação de 7 runas. Clínica de Bergen 
+            trata 8.000 pacientes anualmente com 97.8% sucesso.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Cura</span>
+            <span class="property-badge">Regeneração</span>
+            <span class="property-badge">Vida</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL SUPREMO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Heimsvísir - Navegação de Mundos</h3>
+          <p class="magic-school">Escola: Viagem Dimensional</p>
+          <p class="magic-desc">
+            Técnica para viajar entre os Nove Mundos de Yggdrasil. Requer traçar vegvísir (bússola rúnica) 
+            com sangue do viajante, cantar galdr de Raidho (jornada), e projetar consciência através da Árvore. 
+            Corpo permanece em transe enquanto essência explora outros planos. Perigoso - viajantes podem se 
+            perder em Ginnungagap (vazio primordial) ou ser capturados por entidades. 67 mestres certificados 
+            para navegação dimensional.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Dimensional</span>
+            <span class="property-badge">Astral</span>
+            <span class="property-badge">Avançado</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL MESTRE</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Vörður - Magia Protetiva</h3>
+          <p class="magic-school">Escola: Defesa e Selagem</p>
+          <p class="magic-desc">
+            Sistema defensivo usando Algiz (proteção), Eihwaz (defesa), Thurisaz (espinhos). Pode criar escudos 
+            rúnicos invisíveis, selos que prendem entidades, e barreiras que repelem ataques físicos e místicos. 
+            Heimdall Watchful instalou 1.840 runas de guarda protegendo 23 santuários - nenhum foi invadido com 
+            sucesso em 278 anos. Runas mais poderosas requerem sacrifício (geralmente sangue) para ativação 
+            permanente.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Proteção</span>
+            <span class="property-badge">Selagem</span>
+            <span class="property-badge">Defesa</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="magic-card fade-in">
+        <div class="magic-visual">
+          <span class="magic-level">NÍVEL PROIBIDO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/>
+          </svg>
+        </div>
+        <div class="magic-info">
+          <h3 class="magic-name">Dauðar - Necromancia Rúnica</h3>
+          <p class="magic-school">Escola: Artes Proibidas</p>
+          <p class="magic-desc">
+            Magia de morte usando Hagalaz (destruição), Nauthiz (necessidade), Isa (estase). Praticantes podem 
+            comunicar-se com mortos, navegar Helheim, vincular almas a corpos, e até ressuscitar mortos (com 
+            consequências terríveis). Hel Deathwhisperer é única praticante ética autorizada - usa poder para 
+            guiar almas perdidas e negociar com deusa Hel. Todos os outros usos são estritamente proibidos sob 
+            pena de execução.
+          </p>
+          <div class="magic-properties">
+            <span class="property-badge">Necromancia</span>
+            <span class="property-badge">Proibido</span>
+            <span class="property-badge">Perigoso</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="artifacts" style="background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(0, 0, 0, 1) 100%);">
+    <div class="section-header fade-in">
+      <span class="section-badge">Tesouros dos Æsir</span>
+      <h2 class="section-title">Artefatos Lendários</h2>
+      <div class="rune-divider"></div>
+      <p class="section-desc">
+        Objetos de poder incomparável, forjados por anões, abençoados por deuses, ou descobertos em ruínas 
+        antigas. Cada artefato carrega história de mil anos e poder suficiente para mudar destinos.
+      </p>
+    </div>
+
+    <div class="artifacts-gallery">
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">DIVINO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Gungnir Menor</h3>
+          <p class="artifact-origin">Dádiva de Odin • 1134 d.C.</p>
+          <p class="artifact-desc">
+            Lança com 10% do poder de Gungnir original de Odin. Forjada pelos mesmos anões Brokk e Sindri que 
+            criaram original. Nunca erra alvo uma vez arremessada - persegue inimigo através de dimensões se 
+            necessário. Retorna à mão do portador instantaneamente após impacto. Pode perfurar qualquer escudo, 
+            armadura ou barreira mágica. Apenas Arcano Magnus pode empunhá-la - outros são queimados por poder 
+            divino.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Precisão Absoluta</span>
+            <span class="power-tag">Penetração Total</span>
+            <span class="power-tag">Retorno Automático</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">DIVINO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.59-8 8-8 8 3.59 8 8-3.58 8-8 8z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Draupnir Secundário</h3>
+          <p class="artifact-origin">Dádiva de Odin • 1134 d.C.</p>
+          <p class="artifact-desc">
+            Anel dourado que multiplica recursos mágicos. A cada nove noites, produz oito anéis idênticos menores 
+            que podem ser usados para amplificar magia rúnica ou comercializados por recursos. Portador pode 
+            canalizar três vezes mais poder em rituais sem exaustão. Usado em rotação pelos nove Arcanos - cada um 
+            usa por ano, gerando 40 anéis menores anualmente. Estes são distribuídos a mestres de alto nível ou 
+            vendidos a organizações aliadas por favores.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Multiplicação</span>
+            <span class="power-tag">Amplificação</span>
+            <span class="power-tag">Riqueza Infinita</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">LENDÁRIO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Livro de Völuspá</h3>
+          <p class="artifact-origin">Manuscrito Original • Século IX</p>
+          <p class="artifact-desc">
+            Manuscrito original da Völuspá (Profecia da Vidente) escrito pela völva que teve visão do Ragnarök. 
+            Páginas são feitas de velino encantado que nunca envelhece. Texto muda dependendo do leitor - revela 
+            profecias personalizadas sobre destino individual. Última página permanece em branco - diz-se que 
+            revelará data do verdadeiro Ragnarök quando tempo chegar. Guardado em câmara selada com 72 runas. 
+            Apenas Arcano Magnus pode abri-lo.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Profecia</span>
+            <span class="power-tag">Visão de Destino</span>
+            <span class="power-tag">Verdade Absoluta</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">ÉPICO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Vegvísir de Hrafn</h3>
+          <p class="artifact-origin">Islândia • Século XIII</p>
+          <p class="artifact-desc">
+            Bússola rúnica lendária criada por Hrafn the Wise para navegação entre mundos. Agulha sempre aponta 
+            para destino desejado do portador, seja em Midgard ou outros Oito Mundos. Permite viagem dimensional 
+            segura sem se perder em Ginnungagap. Gravado em disco de prata com sangue de jötunn. Símbolos brilham 
+            com luz azul quando próximo a portais. Essencial para qualquer expedição aos outros reinos. Heimdall 
+            Watchful o carrega sempre.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Navegação Dimensional</span>
+            <span class="power-tag">Orientação Perfeita</span>
+            <span class="power-tag">Detecção de Portais</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">ÉPICO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Galdrakver Completo</h3>
+          <p class="artifact-origin">Islândia • Século XVII</p>
+          <p class="artifact-desc">
+            Grimório islandês contendo 47 galdrastafir (sigilos mágicos) e instruções para uso. Inclui Ægishjálmur 
+            (Elmo do Terror), Vegvísir (Bússola), Gapaldur e Ginfaxi (par para vitória). Cada sigilo é runa 
+            composta extremamente complexa. Original possui anotações de 12 gerações de praticantes. Alguns sigilos 
+            são tão poderosos que foram marcados como "usar apenas em Ragnarök". Biblioteca Glacial possui única 
+            cópia completa conhecida.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Sigilos Complexos</span>
+            <span class="power-tag">Magia Avançada</span>
+            <span class="power-tag">Conhecimento Raro</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">RARO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Corno de Gjallarhorn</h3>
+          <p class="artifact-origin">Réplica Menor • Século X</p>
+          <p class="artifact-desc">
+            Corno de guerra nórdico encantado com fração de poder do Gjallarhorn de Heimdall. Quando soprado, 
+            som viaja através de dimensões alertando todos os membros do Conselho simultaneamente independente de 
+            localização. Usado apenas para emergências apocalípticas - foi soprado três vezes na história: durante 
+            Ragnarök Menor (1134), ataque nazista (1943), e Crise das Três Portas (2003). Som causa terror 
+            primordial em inimigos. Guardado em Uppsala sob 24 runas de proteção.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Comunicação Dimensional</span>
+            <span class="power-tag">Terror</span>
+            <span class="power-tag">Convocação</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">RARO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10v5h2v-5h-2zm0 6v2h2v-2h-2z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Martelo de Hephaestus</h3>
+          <p class="artifact-origin">Forja de Reykjavik • Século XI</p>
+          <p class="artifact-desc">
+            Martelo de forja usado para criar todos os artefatos rúnicos. Cabeça de martelo é meteorito que caiu 
+            na Islândia em 1067. Cabo de madeira de Yggdrasil Menor cultivado em Uppsala. Cada golpe imprime runas 
+            moleculares no metal, fazendo encantamentos permanentes verdadeiramente eternos. Apenas mestres 
+            ferreiros de nível 7+ podem empunhá-lo sem queimar mãos. Responsável por forjar mais de 4.000 itens 
+            mágicos em 958 anos.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Forjamento Divino</span>
+            <span class="power-tag">Encantamento Eterno</span>
+            <span class="power-tag">Precisão Mística</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="artifact-card fade-in">
+        <div class="artifact-display">
+          <span class="artifact-tier">LENDÁRIO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </div>
+        <div class="artifact-info">
+          <h3 class="artifact-name">Pedra de Jelling Primordial</h3>
+          <p class="artifact-origin">Dinamarca • Século X</p>
+          <p class="artifact-desc">
+            Pedra rúnica mais antiga em posse do Conselho, erguida pelo rei Harald Bluetooth em 965. Marca 
+            transição do paganismo para cristianismo mas contém runas ocultas apenas visíveis sob lua cheia que 
+            preservam conhecimento dos velhos deuses. Pedra ressoa com Yggdrasil - tocar durante equinócio permite 
+            breve comunicação direta com Æsir. Pesa 10 toneladas. Movida secretamente para Uppsala em 1889 para 
+            proteção.
+          </p>
+          <div class="artifact-powers">
+            <span class="power-tag">Comunicação Divina</span>
+            <span class="power-tag">Conhecimento Oculto</span>
+            <span class="power-tag">Nexo de Poder</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-ice">
+    <div class="stat-item fade-in">
+      <div class="stat-value">1,171</div>
+      <div class="stat-label">Anos de História</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">23</div>
+      <div class="stat-label">Santuários Globais</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">8.4K</div>
+      <div class="stat-label">Pedras Rúnicas</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">234</div>
+      <div class="stat-label">Mestres Ativos</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">1,890</div>
+      <div class="stat-label">Estudantes</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">4K+</div>
+      <div class="stat-label">Artefatos Criados</div>
+    </div>
+  </section>
+
+  <section class="testimonials-ice">
+    <div class="section-header fade-in">
+      <span class="section-badge">Vozes dos Aliados</span>
+      <h2 class="section-title">Testemunhos</h2>
+      <div class="rune-divider"></div>
+      <p class="section-desc">
+        Palavras daqueles que testemunharam o poder ancestral das runas e a sabedoria milenar do Conselho 
+        Setentrional.
+      </p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "O Conselho Setentrional carrega em si mil anos de sabedoria que nenhuma organização moderna pode 
+          igualar. Suas runas salvaram minha vida três vezes, e seu conhecimento de magia antiga é inigualável. 
+          Quando precisamos de expertise em ocultismo nórdico, há apenas um nome que confiamos completamente."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Dr. Alexander Ashford III</div>
+            <div class="author-position">Fundação Prometheus</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "Durante operação no Círculo Ártico, enfrentamos entidades que nossa tecnologia não conseguia deter. 
+          Um vitki do Conselho Setentrional traçou três runas no gelo e as criaturas simplesmente... 
+          desapareceram. A eficácia da magia rúnica em combate é assustadora. Aprendi a nunca subestimar os 
+          métodos antigos."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">General Marcus Stone</div>
+            <div class="author-position">Shadow Company</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "A völva Eira previu o ataque à nossa sede com três meses de antecedência. Seus avisos nos permitiram 
+          preparar defesas e evacuar artefatos críticos. Não houve baixas porque seguimos suas profecias ao pé 
+          da letra. O dom de seiðr do Conselho é real e salvou inúmeras vidas. São aliados inestimáveis."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Lady Seraphina Drake</div>
+            <div class="author-position">Casa Draconia</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "Quando nossa ordem precisou de proteções contra entidades demoníacas, o Conselho enviou Heimdall 
+          Watchful que instalou 120 runas de guarda em nosso monastério. Não houve uma única invasão paranormal 
+          em 15 anos. A eficácia de suas barreiras místicas supera até bênçãos papais tradicionais."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Padre Antonio Moretti</div>
+            <div class="author-position">Sanctum Veritatis</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "A troca de conhecimento com o Conselho Setentrional expandiu nossa compreensão de magia ritual 
+          imensamente. Seus sistemas rúnicos complementam perfeitamente nossa tradição hermética. Juntos, 
+          desenvolvemos três rituais híbridos que combinam o melhor de ambas as escolas. Colaboração verdadeiramente 
+          frutífera."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Grão-Mestre Friedrich Von Stein</div>
+            <div class="author-position">Ordo Realitas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "Fui tratado na Clínica de Bergen após ser amaldiçoado por necromante rival. Medicina convencional 
+          não funcionava. Em três dias, as völvas curadoras removeram completamente a maldição e regeneraram 
+          danos que médicos disseram ser permanentes. A magia de cura rúnica é simplesmente milagrosa."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Mago Independente K. Larsson</div>
+            <div class="author-position">Testemunho Pessoal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-ice">
+    <div class="cta-content">
+      <h2 class="cta-title">Inicie Sua Jornada Rúnica</h2>
+      <div class="rune-divider"></div>
+      <p class="cta-desc">
+        O Conselho Setentrional aceita candidatos excepcionais que demonstram afinidade com as artes místicas 
+        ancestrais. Se você sente o chamado das runas, se a aurora boreal fala ao seu espírito, se o gelo 
+        eterno ressoa em sua alma - talvez seja hora de descobrir seu verdadeiro destino entre os guardiões 
+        do conhecimento nórdico.
+      </p>
+      <div class="cta-buttons">
+        <a href="#apply" class="btn btn-ice">
+          <span>CANDIDATAR-SE AGORA</span>
+        </a>
+        <a href="#contact" class="btn btn-frost">
+          <span>AGENDAR CONSULTA</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section footer-logo-section">
+        <div class="footer-logo">
+          <svg class="footer-rune" viewBox="0 0 24 24">
+            <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99z"/>
+          </svg>
+          <span class="footer-brand">SETENTRIONAL</span>
+        </div>
+        <p>
+          Desde 854 d.C., preservando as runas sagradas e a sabedoria mágica dos povos nórdicos. 
+          Guardiões de Yggdrasil, portadores da chama ancestral que arde sob o gelo eterno.
+        </p>
+        <div class="footer-runes-display">
+          <span class="footer-rune-badge">Est. 854 d.C.</span>
+          <span class="footer-rune-badge">1.171 Anos</span>
+          <span class="footer-rune-badge">23 Santuários</span>
+          <span class="footer-rune-badge">Pacto com Æsir</span>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>O Conselho</h4>
+        <div class="footer-links">
+          <a href="#">História Milenar</a>
+          <a href="#">Conselho de Arcanos</a>
+          <a href="#">Estrutura Organizacional</a>
+          <a href="#">Filosofia e Princípios</a>
+          <a href="#">Santuários Globais</a>
+          <a href="#">Código dos Rúnicos</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Magia Rúnica</h4>
+        <div class="footer-links">
+          <a href="#">Galdr - Canto Rúnico</a>
+          <a href="#">Seiðr - Tecelagem de Destino</a>
+          <a href="#">Ristir - Gravação Rúnica</a>
+          <a href="#">Elder Futhark Completo</a>
+          <a href="#">Grimórios e Galdrakver</a>
+          <a href="#">Rituais Tradicionais</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Academia</h4>
+        <div class="footer-links">
+          <a href="#">Academia de Uppsala</a>
+          <a href="#">Programa de 14 Anos</a>
+          <a href="#">Requisitos de Entrada</a>
+          <a href="#">Níveis de Iniciação</a>
+          <a href="#">Mestres Instrutores</a>
+          <a href="#">Graduados Ilustres</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Recursos</h4>
+        <div class="footer-links">
+          <a href="#">Biblioteca Glacial</a>
+          <a href="#">Catálogo de Artefatos</a>
+          <a href="#">Textos Traduzidos</a>
+          <a href="#">Pesquisas Ativas</a>
+          <a href="#">Publicações Acadêmicas</a>
+          <a href="#">Guia de Runas</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contato</h4>
+        <div class="footer-links">
+          <a href="#">contact@setentrional.is</a>
+          <a href="#">Portal do Candidato</a>
+          <a href="#">Emergências Rúnicas</a>
+          <a href="#">Parcerias</a>
+          <a href="#">Consultas Místicas</a>
+          <a href="#">Localização Uppsala</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>
+        <p>&copy; 2025 Conselho Setentrional. Todos os direitos reservados.</p>
+        <p style="font-size: 13px; margin-top: 8px; font-family: 'Crimson Text', serif; font-style: italic;">
+          Per Glaciem ad Astra - Através do Gelo até as Estrelas
+        </p>
+      </div>
+      <div class="footer-seal">
+        <svg class="seal-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <span class="seal-text">Est. 854 d.C.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const snowflakesContainer = document.getElementById('snowflakes');
+    for (let i = 0; i < 50; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.className = 'snowflake';
+      snowflake.innerHTML = '❄';
+      snowflake.style.left = Math.random() * 100 + '%';
+      snowflake.style.animationDuration = (Math.random() * 15 + 10) + 's';
+      snowflake.style.animationDelay = Math.random() * 10 + 's';
+      snowflake.style.fontSize = (Math.random() * 10 + 15) + 'px';
+      snowflakesContainer.appendChild(snowflake);
+    }
+
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -80px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 120,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    document.querySelectorAll('.btn-ice, .header-cta').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        if (this.getAttribute('href') === '#apply' || this.getAttribute('href') === '#contact') {
+          e.preventDefault();
+          alert('Portal de candidatura em desenvolvimento. Em breve você poderá iniciar sua jornada para se tornar um mestre rúnico através de nosso sistema de inscrição ancestral!');
+        }
+      });
+    });
+
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      document.querySelectorAll('.fade-in').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+
+      lastScroll = currentScroll;
+    });
+
+    window
+.addEventListener('load', () => {
+      document.querySelectorAll('.fade-in').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

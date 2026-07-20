@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/sistema/dashboard/">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+  <title>Painel de Operações — Sanctum Veritatis</title>
+  <link rel="stylesheet" href="../css/tokens.css"><link rel="stylesheet" href="../css/base.css"><link rel="stylesheet" href="../css/layout.css"><link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/navigation.css"><link rel="stylesheet" href="../css/accessibility.css"><link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body data-auth-required="1">
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+  <div class="system-shell">
+    <aside class="sidebar" aria-label="Navegação do sistema">
+      <a class="brand" href="../index"><span class="brand-mark" aria-hidden="true"></span><span>Sanctum</span></a>
+      <nav>
+        <div class="nav-group"><div class="nav-title">Visão geral</div><a class="nav-link active" href="dashboard">Painel <span class="badge badge-warning">03</span></a><a class="nav-link" href="../OPAtivas">Alertas</a><a class="nav-link" href="../intranet">Atividade recente</a></div>
+        <div class="nav-group"><div class="nav-title">Organização</div><a class="nav-link" href="../sobre">Sanctum Veritatis</a><a class="nav-link" href="../fundadores">Diretoria</a><a class="nav-link" href="../arquivos">Agentes</a></div>
+        <div class="nav-group"><div class="nav-title">Operações</div><a class="nav-link" href="../OperacoesSC">Operações ativas</a><a class="nav-link" href="../operacoes/setentrional/index">Setentrional</a><a class="nav-link" href="../auroradevidro">Aurora de Vidro</a></div>
+        <div class="nav-group"><div class="nav-title">Sistemas</div><a class="nav-link" href="../sala-0000">S.A.L.A.</a><a class="nav-link locked" href="../SintechIndex">Sintech</a><a class="nav-link locked" href="../ConselhoEscarlate">Conselho</a></div>
+      </nav>
+    </aside>
+    <div class="system-main">
+      <header class="system-header"><button class="btn mobile-toggle" type="button" data-nav-toggle aria-label="Abrir menu" aria-expanded="false">Menu</button><label class="search"><span class="visually-hidden">Pesquisar arquivos</span><input data-global-search type="search" placeholder="Pesquisar na rede…"><kbd>/</kbd></label><div class="session"><span class="session-dot"></span><span><b data-session-user>AGENTE</b> · <span data-session-level>Nível 2</span></span><button class="btn" type="button" data-stability aria-pressed="false">Estabilidade</button><button class="btn" id="sign-out" type="button">Encerrar</button></div></header>
+      <main id="conteudo" class="content">
+        <div class="breadcrumb"><span>SV-NET</span><span>Visão geral</span><span>Painel</span></div>
+        <header class="page-head"><div><div class="eyebrow">Sessão autenticada · 12 jul 2026</div><h1>Painel de operações</h1></div><p>Resumo compartimentado conforme credencial ativa. Registros ocultos permanecem contabilizados, mas não identificados.</p></header>
+        <section class="grid grid-4" aria-label="Métricas operacionais">
+          <div class="panel"><div class="metric"><span class="metric-value">04</span><span class="metric-label">Operações acessíveis</span></div></div>
+          <div class="panel panel-warning"><div class="metric"><span class="metric-value">07</span><span class="metric-label">Alertas não lidos</span></div></div>
+          <div class="panel"><div class="metric"><span class="metric-value">18</span><span class="metric-label">Arquivos descobertos</span></div></div>
+          <div class="panel panel-danger"><div class="metric"><span class="metric-value">03</span><span class="metric-label">Registros corrompidos</span></div></div>
+        </section>
+        <section class="section grid grid-3">
+          <article class="panel panel-info operation-card span-2" data-code="STN-01"><div><div class="panel-header"><span class="panel-label">Operação prioritária · STN-01</span><span class="badge badge-danger">Contenção ativa</span></div><h2>Setentrional</h2><p class="muted">Incidente São Firmo. A telemetria costeira permanece inconsistente desde a última janela de contato.</p></div><div><div class="operation-meta"><span class="badge badge-info">Membrana instável</span><span class="badge badge-warning">Equipe Alpha</span><span class="badge">São Firmo</span></div><div class="action-row"><a class="btn btn-primary" href="../operacoes/setentrional/index">Abrir operação</a><a class="btn" href="../arquivos">Ver dossiês</a></div></div></article>
+          <article class="panel"><div class="panel-header"><h3>Integridade da rede</h3><span class="badge badge-success">93.7%</span></div><div class="status-stack"><div class="status-line"><span>Arquivo Central</span><strong class="success">ESTÁVEL</strong></div><div class="status-line"><span>Rede S.A.L.A.</span><strong class="warning">PARCIAL</strong></div><div class="status-line"><span>Nó Sintech</span><strong class="danger">ISOLADO</strong></div><div class="status-line"><span>Membrana / Norte</span><strong class="danger">OSCILANDO</strong></div></div></article>
+        </section>
+        <section class="section grid grid-2">
+          <article class="panel"><div class="panel-header"><h3>Alertas recentes</h3><a class="panel-label" href="../OPAtivas">Ver todos</a></div><div class="alert-list"><div class="alert-item"><span class="alert-code">A-771</span><p>Transmissão incompleta recebida do quadrante do farol.</p><span class="alert-time">08:42</span></div><div class="alert-item"><span class="alert-code">I-042</span><p>Assinatura não catalogada adicionada ao arquivo Setentrional.</p><span class="alert-time">07:19</span></div><div class="alert-item"><span class="alert-code">S-009</span><p>Três tentativas de consulta ao Setor 973 foram recusadas.</p><span class="alert-time">ONTEM</span></div></div></article>
+          <article class="panel"><div class="panel-header"><h3>Operações disponíveis</h3><span class="panel-label">Credencial N2</span></div><div class="status-stack"><a class="status-line" href="../auroradevidro"><span>Aurora de Vidro</span><strong class="success">ACESSÍVEL</strong></a><a class="status-line" href="../vivarium"><span>Vivarium</span><strong class="success">ACESSÍVEL</strong></a><a class="status-line" href="../reliquiae_home"><span>Reliquiae</span><strong class="warning">PARCIAL</strong></a><span class="status-line"><span>[REGISTRO RESTRITO]</span><strong class="danger">NÍVEL 4</strong></span></div></article>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script defer src="../js/ui.js"></script><script src="../js/auth-standalone.js"></script><script>const current=SVAuth.requireAccess(1,'../login');if(current)SVAuth.applySession(current);document.querySelector('#sign-out').addEventListener('click',()=>SVAuth.signOut('../index'));</script>
+</body></html>
+

@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/OPAtivas/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Operações Ativas</title>
+  <style>
+    :root{
+      --bg:#070a0f;
+      --panel:#0b1020;
+      --panel2:#0a0f1a;
+      --text:#d6e2ff;
+      --muted:#8aa0c7;
+      --line:rgba(140,170,220,.14);
+      --accent:#7fd1ff;
+      --danger:#ff2a4b;
+      --danger2:#ff3b7a;
+      --ok:#2cffc7;
+      --shadow: 0 16px 60px rgba(0,0,0,.55);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 700px at 80% -10%, rgba(127,209,255,.14), transparent 55%),
+        radial-gradient(900px 600px at 10% 110%, rgba(44,255,199,.08), transparent 60%),
+        linear-gradient(180deg, #05070b 0%, var(--bg) 55%, #04060a 100%);
+      color:var(--text);
+      font-family:var(--sans);
+      letter-spacing:.2px;
+      overflow-x:hidden;
+    }
+
+    /* Subtle scanlines */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.03),
+        rgba(255,255,255,.03) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      opacity:.14;
+      mix-blend-mode:overlay;
+      z-index:1;
+    }
+
+    /* Layout */
+    header{
+      position:relative;
+      z-index:2;
+      padding:28px 18px 12px;
+      max-width:1080px;
+      margin:0 auto;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11,16,32,.86), rgba(10,15,26,.78));
+      border-radius:14px;
+      padding:14px 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .sig{
+      width:38px; height:38px;
+      border-radius:12px;
+      border:1px solid rgba(127,209,255,.25);
+      background:
+        radial-gradient(12px 12px at 35% 35%, rgba(127,209,255,.45), transparent 65%),
+        radial-gradient(14px 14px at 70% 65%, rgba(44,255,199,.20), transparent 62%),
+        linear-gradient(180deg, rgba(127,209,255,.15), rgba(255,42,75,.06));
+      position:relative;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+    .sig::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: conic-gradient(from 180deg, rgba(127,209,255,.0), rgba(127,209,255,.25), rgba(255,42,75,.10), rgba(127,209,255,.0));
+      animation: spin 7.5s linear infinite;
+      opacity:.65;
+    }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+
+    .brand h1{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(214,226,255,.92);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand .sub{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+      opacity:.92;
+    }
+
+    .status{
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+      text-align:right;
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(140,170,220,.18);
+      background: rgba(10,15,26,.55);
+      color:rgba(214,226,255,.86);
+    }
+    .pill.ok{
+      border-color: rgba(44,255,199,.26);
+      color: rgba(44,255,199,.92);
+      background: rgba(44,255,199,.07);
+    }
+
+    main{
+      position:relative;
+      z-index:2;
+      max-width:1080px;
+      margin:0 auto;
+      padding:10px 18px 52px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns:1fr; }
+      .status{ display:none; }
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11,16,32,.88), rgba(8,12,20,.86));
+      border-radius:16px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel .hd{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border-bottom:1px solid rgba(140,170,220,.12);
+      background: linear-gradient(180deg, rgba(127,209,255,.06), rgba(0,0,0,0));
+    }
+    .panel .hd .title{
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(214,226,255,.86);
+    }
+    .panel .hd .meta{
+      font-family:var(--mono);
+      font-size:12px;
+      color:rgba(138,160,199,.92);
+      opacity:.95;
+    }
+    .panel .bd{ padding:16px; }
+
+    .ops{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+    .card{
+      border:1px solid rgba(140,170,220,.14);
+      background: linear-gradient(180deg, rgba(10,15,26,.68), rgba(6,9,14,.72));
+      border-radius:14px;
+      padding:14px 14px 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 300px at -20% 0%, rgba(127,209,255,.10), transparent 55%),
+        radial-gradient(700px 260px at 120% 110%, rgba(255,42,75,.08), transparent 55%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .card > *{ position:relative; z-index:1; }
+    .kicker{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .opname{
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color: rgba(127,209,255,.95);
+    }
+    .tag{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(140,170,220,.18);
+      color: rgba(214,226,255,.74);
+      background: rgba(0,0,0,.16);
+    }
+    .desc{
+      margin:0;
+      color: rgba(214,226,255,.88);
+      line-height:1.55;
+      font-size:14px;
+    }
+    .desc em{ color: rgba(214,226,255,.92); font-style:italic; }
+    .hint{
+      margin-top:10px;
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(138,160,199,.92);
+      border-top:1px dashed rgba(140,170,220,.16);
+      padding-top:10px;
+      opacity:.95;
+    }
+
+    .side{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+      align-content:start;
+    }
+    .mini{
+      border:1px solid rgba(140,170,220,.14);
+      background: linear-gradient(180deg, rgba(10,15,26,.72), rgba(6,9,14,.74));
+      border-radius:16px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .mini .hd{ padding:14px 16px; border-bottom:1px solid rgba(140,170,220,.12); }
+    .mini .hd .title{
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(214,226,255,.84);
+    }
+    .mini .bd{ padding:14px 16px 16px; }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin:0;
+    }
+    .kv .row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(214,226,255,.82);
+      border-bottom:1px solid rgba(140,170,220,.10);
+      padding-bottom:9px;
+    }
+    .kv .row:last-child{ border-bottom:none; padding-bottom:0; }
+    .kv .key{ color: rgba(138,160,199,.95); }
+    .kv .val{ color: rgba(214,226,255,.90); }
+
+    .notice{
+      font-family:var(--mono);
+      font-size:12px;
+      line-height:1.45;
+      color: rgba(138,160,199,.98);
+      margin:0;
+    }
+
+    /* Defacement overlay */
+    .overlay{
+      position:fixed; inset:0;
+      z-index:9999;
+      display:none;
+      background: rgba(0,0,0,.55);
+    }
+    .overlay.on{ display:block; }
+    .noise{
+      position:absolute; inset:0;
+      opacity:.22;
+      mix-blend-mode:overlay;
+    }
+    .vignette{
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 520px at 50% 40%, rgba(0,0,0,.25), rgba(0,0,0,.68)),
+        radial-gradient(1200px 900px at 50% 50%, transparent 55%, rgba(0,0,0,.92) 100%);
+      pointer-events:none;
+    }
+    .glitchBars{
+      position:absolute; inset:-20% 0 -20% 0;
+      pointer-events:none;
+      opacity:.9;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,42,75,.0),
+          rgba(255,42,75,.0) 9px,
+          rgba(255,42,75,.14) 10px,
+          rgba(127,209,255,.10) 12px,
+          rgba(255,42,75,.0) 17px
+        );
+      transform: translateY(-8%);
+      animation: bars 1.2s steps(10) infinite;
+      filter: blur(.25px);
+    }
+    @keyframes bars{
+      0%{ transform: translateY(-6%) }
+      25%{ transform: translateY(-1%) }
+      50%{ transform: translateY(-9%) }
+      75%{ transform: translateY(-3%) }
+      100%{ transform: translateY(-6%) }
+    }
+
+    .center{
+      position:absolute;
+      left:50%; top:48%;
+      transform:translate(-50%,-50%);
+      width:min(980px, calc(100% - 34px));
+    }
+
+    .banner{
+      border:1px solid rgba(255,42,75,.30);
+      background: linear-gradient(180deg, rgba(30,6,10,.72), rgba(0,0,0,.50));
+      border-radius:16px;
+      box-shadow: 0 26px 90px rgba(0,0,0,.72);
+      overflow:hidden;
+    }
+
+    .bannerHd{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,42,75,.20);
+      background: linear-gradient(180deg, rgba(255,42,75,.10), rgba(0,0,0,0));
+      font-family:var(--mono);
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color: rgba(255,204,214,.92);
+    }
+    .bannerHd .right{
+      letter-spacing:.12em;
+      opacity:.85;
+      color: rgba(214,226,255,.74);
+    }
+
+    .bannerBd{
+      padding:16px 16px 14px;
+    }
+
+    .big{
+      margin:0 0 8px 0;
+      font-family:var(--mono);
+      font-size:28px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: rgba(255,42,75,.98);
+      line-height:1.1;
+      text-shadow:
+        0 0 18px rgba(255,42,75,.32),
+        2px 0 0 rgba(127,209,255,.26),
+        -2px 0 0 rgba(255,42,75,.26);
+      position:relative;
+    }
+
+    .big::before, .big::after{
+      content: attr(data-text);
+      position:absolute;
+      left:0; top:0;
+      width:100%;
+      overflow:hidden;
+      opacity:.85;
+      clip-path: inset(0 0 0 0);
+    }
+    .big::before{
+      transform: translate(2px,0);
+      color: rgba(127,209,255,.55);
+      animation: glitch1 1.8s infinite linear alternate-reverse;
+    }
+    .big::after{
+      transform: translate(-2px,0);
+      color: rgba(255,42,75,.55);
+      animation: glitch2 1.4s infinite linear alternate-reverse;
+    }
+    @keyframes glitch1{
+      0%{ clip-path: inset(0 0 90% 0); }
+      10%{ clip-path: inset(10% 0 70% 0); }
+      25%{ clip-path: inset(0 0 55% 0); }
+      40%{ clip-path: inset(35% 0 40% 0); }
+      65%{ clip-path: inset(60% 0 15% 0); }
+      85%{ clip-path: inset(10% 0 75% 0); }
+      100%{ clip-path: inset(75% 0 0 0); }
+    }
+    @keyframes glitch2{
+      0%{ clip-path: inset(80% 0 0 0); }
+      12%{ clip-path: inset(50% 0 28% 0); }
+      30%{ clip-path: inset(15% 0 65% 0); }
+      55%{ clip-path: inset(0 0 88% 0); }
+      78%{ clip-path: inset(62% 0 10% 0); }
+      100%{ clip-path: inset(20% 0 55% 0); }
+    }
+
+    .term{
+      margin:12px 0 0;
+      border:1px solid rgba(255,42,75,.22);
+      background: rgba(0,0,0,.38);
+      border-radius:14px;
+      overflow:hidden;
+    }
+    .termTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 12px;
+      border-bottom:1px solid rgba(255,42,75,.18);
+      font-family:var(--mono);
+      font-size:12px;
+      color: rgba(214,226,255,.78);
+    }
+    .dots{ display:flex; gap:6px; }
+    .dot{ width:10px; height:10px; border-radius:999px; opacity:.9; }
+    .dot.r{ background: rgba(255,42,75,.85); }
+    .dot.y{ background: rgba(255,196,87,.70); }
+    .dot.g{ background: rgba(44,255,199,.70); }
+
+    .termBody{
+      font-family:var(--mono);
+      font-size:13px;
+      line-height:1.55;
+      color: rgba(214,226,255,.88);
+      padding:12px;
+      white-space:pre-wrap;
+      word-break:break-word;
+      min-height: 160px;
+    }
+    .cursor{
+      display:inline-block;
+      width:8px;
+      background: rgba(214,226,255,.75);
+      margin-left:2px;
+      animation: blink .9s steps(1) infinite;
+      height: 1.05em;
+      vertical-align: -2px;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    /* Page "corruption" */
+    .corrupting main, .corrupting header{
+      filter: saturate(1.1) contrast(1.08);
+      animation: bodyFlicker 2.2s infinite;
+    }
+    @keyframes bodyFlicker{
+      0%, 100%{ opacity:1 }
+      92%{ opacity:1 }
+      93%{ opacity:.75 }
+      94%{ opacity:1 }
+      97%{ opacity:.82 }
+      98%{ opacity:1 }
+    }
+    .shake{
+      animation: shake .14s linear 0s 7;
+    }
+    @keyframes shake{
+      0%{ transform:translate(0,0) }
+      25%{ transform:translate(2px,-1px) }
+      50%{ transform:translate(-2px,1px) }
+      75%{ transform:translate(1px,2px) }
+      100%{ transform:translate(0,0) }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration:1ms !important; scroll-behavior:auto !important; }
+      body::before{ opacity:.08; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar" id="topbar">
+      <div class="brand">
+        <div class="sig" aria-hidden="true"></div>
+        <div style="min-width:0">
+          <h1>Operações Ativas</h1>
+          <div class="sub">SANCTUM VERITATIS // PAINEL DE CAMPO // NÍVEL: RESTRITO</div>
+        </div>
+      </div>
+      <div class="status" aria-label="Status do sistema">
+        <div class="pill">Canal: SV-NET/17</div>
+        <div class="pill ok" id="sysPill">Integridade: OK</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section class="panel" aria-label="Operações">
+        <div class="hd">
+          <div class="title">Lista de operações</div>
+          <div class="meta" id="clock">Sincronizando…</div>
+        </div>
+        <div class="bd">
+          <div class="ops" id="ops">
+            <article class="card">
+              <div class="kicker">
+                <div class="opname">Operação Setentrional</div>
+                <div class="tag">Status: Em andamento</div>
+              </div>
+              <p class="desc">
+                <em>O Incidente em São Firmo</em><br/>
+                Uma ilha que não consta nos mapas oficiais. Um farol desativado em 1995 que voltou a emitir um sinal impossível.
+                O vilarejo de pescadores local silenciou completamente.<br/><br/>
+                A Membrana está em processo de Ruptura. Elementos de Sangue e Conhecimento foram detectados em alta concentração.
+              </p>
+              <div class="hint">Prioridade: Alta // Janela de contenção: 36h // Observação: ruído de fundo em faixa curta</div>
+            </article>
+
+            <article class="card">
+              <div class="kicker">
+                <div class="opname">Operação: REIVINDICAÇÃO</div>
+                <div class="tag">Status: Monitoramento</div>
+              </div>
+              <p class="desc">
+                A droga que promete <em>ver</em> o Outro Lado sem ser engolido por ele.<br/>
+                “O Véu não rasga de uma vez. Ele cede. E quando cede, alguém sempre tenta chamar isso de progresso.”<br/><br/>
+                A Bio Genesis Corp afirma ter criado a LM: uma ponte química que permite ao usuário experimentar o Outro Lado
+                com estabilidade suficiente para retornar. A Sanctum não discute se isso é possível. A Sanctum discute o que foi
+                usado como lastro — e quantas pessoas estão desaparecendo para que a ponte continue de pé.
+              </p>
+              <div class="hint">Foco: Cadeia de suprimento // Vetores: clínicas privadas, laboratórios terceirizados, rotas frias</div>
+            </article>
+
+            <article class="card">
+              <div class="kicker">
+                <div class="opname">Operação Aurora de Vidro</div>
+                <div class="tag">Status: Silêncio</div>
+              </div>
+              <p class="desc">
+                <em>VÍK, ISLÂNDIA // CÍRCULO POLAR ÁRTICO</em><br/>
+                <em>DEZEMBRO 2025 // -8°C</em><br/><br/>
+                "As luzes dançam no céu. Mas não são luzes. São palavras. E elas estão falando com a cidade."<br/><br/>
+                Há 72 horas, a pequena cidade de Vík parou de responder. Não há chamadas telefônicas. Não há e-mails.
+                As redes sociais estão silenciosas. É como se 318 pessoas simplesmente... parassem de existir no mundo digital.<br/><br/>
+                A Agência Espacial Europeia detectou algo impossível: auroras boreais sobre a Islândia que não deveriam estar lá.
+                Os padrões de luz são complexos, quase matemáticos. Análise preliminar sugere que as auroras estão transmitindo
+                informação codificada.<br/><br/>
+                Equipes locais foram enviadas. Nenhuma retornou. A última transmissão de rádio dizia apenas:
+                "Eles estão todos olhando para cima. E sorrindo."
+              </p>
+              <div class="hint">Risco: Desconhecido // Protocolo: Não responder a sinais // Último ping: 72h+ (sem retorno)</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side" aria-label="Painéis de suporte">
+        <section class="mini">
+          <div class="hd"><div class="title">Telemetria</div></div>
+          <div class="bd">
+            <dl class="kv" id="kv">
+              <div class="row"><div class="key">Sessão</div><div class="val" id="sess">SV-OP/ACTIVE</div></div>
+              <div class="row"><div class="key">Chave</div><div class="val" id="key">••••••••</div></div>
+              <div class="row"><div class="key">Sincronia</div><div class="val" id="sync">99.7%</div></div>
+              <div class="row"><div class="key">Integridade</div><div class="val" id="integrity">OK</div></div>
+              <div class="row"><div class="key">Log</div><div class="val" id="logline">Sem anomalias</div></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="mini">
+          <div class="hd"><div class="title">Aviso</div></div>
+          <div class="bd">
+            <p class="notice">
+              Este painel exibe informações operacionais em tempo real. Clique em qualquer lugar da página para abrir detalhes do canal.
+              Caso o ambiente apresente artefatos visuais, interrompa a sessão e registre o incidente.
+            </p>
+          </div>
+        </section>
+
+        <section class="mini">
+          <div class="hd"><div class="title">Canal seguro</div></div>
+          <div class="bd">
+            <p class="notice" id="secureNote">
+              SV-NET/17 ativo. Handshake válido. Cadeia de confiança intacta.
+            </p>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Defacement overlay -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <canvas class="noise" id="noise"></canvas>
+    <div class="glitchBars" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+
+    <div class="center">
+      <div class="banner" role="dialog" aria-label="Alerta de segurança">
+        <div class="bannerHd">
+          <div>ALERTA DE SEGURANÇA</div>
+          <div class="right" id="stamp">SV-NET/17</div>
+        </div>
+        <div class="bannerBd">
+          <h2 class="big" id="big" data-text="ACESSO CORROMPIDO">ACESSO CORROMPIDO</h2>
+
+          <div class="term" aria-label="Console">
+            <div class="termTop">
+              <div class="dots" aria-hidden="true">
+                <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              </div>
+              <div id="termTitle">console://integridade</div>
+              <div id="termPing">latência: 3ms</div>
+            </div>
+            <div class="termBody" id="term">
+              <span id="typed"></span><span class="cursor" aria-hidden="true"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const $ = (sel, root=document) => root.querySelector(sel);
+
+      // Clock
+      const clock = $("#clock");
+      function tick(){
+        const d = new Date();
+        const pad = n => String(n).padStart(2,"0");
+        clock.textContent = `UTC${(-d.getTimezoneOffset()/60>=0?"+":"")}${(-d.getTimezoneOffset()/60)} // ${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+      }
+      tick(); setInterval(tick, 1000);
+
+      // Fake key
+      $("#key").textContent = Array.from({length:8}, () => "•").join("");
+
+      // Noise canvas
+      const canvas = $("#noise");
+      const ctx = canvas.getContext("2d", { alpha: true });
+      function resize(){
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(innerWidth * dpr);
+        canvas.height = Math.floor(innerHeight * dpr);
+        canvas.style.width = innerWidth + "px";
+        canvas.style.height = innerHeight + "px";
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      let noiseRAF = 0;
+      function drawNoise(){
+        const w = innerWidth, h = innerHeight;
+        const img = ctx.createImageData(Math.min(420, w), Math.min(260, h));
+        for(let i=0;i<img.data.length;i+=4){
+          const v = (Math.random()*255)|0;
+          img.data[i]=v; img.data[i+1]=v; img.data[i+2]=v; img.data[i+3]= (Math.random()*90)|0;
+        }
+        ctx.clearRect(0,0,w,h);
+
+        // Tile the noise for performance
+        const tw = img.width, th = img.height;
+        const off = document.createElement("canvas");
+        off.width = tw; off.height = th;
+        off.getContext("2d").putImageData(img,0,0);
+        const pat = ctx.createPattern(off,"repeat");
+        ctx.fillStyle = pat;
+        ctx.fillRect(0,0,w,h);
+
+        // Occasional smear
+        if(Math.random() < 0.10){
+          ctx.globalAlpha = 0.25;
+          const y = (Math.random()*h)|0;
+          ctx.fillStyle = "rgba(255,42,75,.25)";
+          ctx.fillRect(0, y, w, 2 + (Math.random()*10|0));
+          ctx.globalAlpha = 1;
+        }
+        noiseRAF = requestAnimationFrame(drawNoise);
+      }
+
+      // Subtle "alarm" using WebAudio (no external files)
+      let audioCtx;
+      function beepPattern(){
+        try{
+          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+          const now = audioCtx.currentTime;
+
+          function tone(t, freq, dur, gain){
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = "square";
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.exponentialRampToValueAtTime(gain, t + 0.01);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            o.connect(g).connect(audioCtx.destination);
+            o.start(t);
+            o.stop(t + dur + 0.02);
+          }
+
+          // A short, unsettling triple-beep
+          tone(now + 0.00, 740, 0.06, 0.04);
+          tone(now + 0.10, 740, 0.06, 0.03);
+          tone(now + 0.22, 520, 0.10, 0.035);
+        }catch(e){
+          // Ignore if blocked
+        }
+      }
+
+      // Typewriter
+      const typed = $("#typed");
+      const termTitle = $("#termTitle");
+      const termPing = $("#termPing");
+      const stamp = $("#stamp");
+      const sysPill = $("#sysPill");
+      const integrity = $("#integrity");
+      const logline = $("#logline");
+      const secureNote = $("#secureNote");
+
+      function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+      async function typeLines(lines, speed=14){
+        for(const line of lines){
+          // Type each line char by char
+          for(let i=0;i<line.length;i++){
+            typed.textContent += line[i];
+            if(line[i] !== " "){
+              await sleep(speed + (Math.random()*16|0));
+            }else{
+              await sleep(speed * 0.45);
+            }
+          }
+          typed.textContent += "\n";
+          await sleep(160 + (Math.random()*220|0));
+        }
+      }
+
+      // Text corruption: replace random slices of text nodes
+      const originalText = new WeakMap();
+      function collectTextNodes(root){
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node){
+            if(!node.nodeValue) return NodeFilter.FILTER_REJECT;
+            const t = node.nodeValue.trim();
+            if(t.length < 6) return NodeFilter.FILTER_REJECT;
+            // Avoid overlay text nodes
+            if(root.closest && root.closest("#overlay")) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        const nodes = [];
+        while(walker.nextNode()) nodes.push(walker.currentNode);
+        return nodes;
+      }
+      const pageTextNodes = collectTextNodes(document.body).filter(n => {
+        const parent = n.parentElement;
+        if(!parent) return false;
+        if(parent.closest && parent.closest("#overlay")) return false;
+        if(parent.tagName === "SCRIPT" || parent.tagName === "STYLE") return false;
+        return true;
+      });
+
+      function corruptString(s, intensity){
+        // intensity 0..1
+        const chars = s.split("");
+        const pool = "█▓▒░<>/\\|~^`•×+*?!";
+        const a = Math.max(0.02, Math.min(0.35, intensity * 0.35));
+        for(let i=0;i<chars.length;i++){
+          const c = chars[i];
+          if(c === "\n") continue;
+          if(Math.random() < a){
+            // Keep spaces sometimes for readability
+            if(c === " " && Math.random() < 0.75) continue;
+            chars[i] = pool[(Math.random()*pool.length)|0];
+          }
+        }
+        // Occasional dropped segment
+        if(Math.random() < intensity * 0.12){
+          const start = (Math.random()*chars.length*0.6)|0;
+          const len = 1 + (Math.random()*Math.min(14, chars.length-start)|0);
+          for(let i=0;i<len;i++) chars[start+i] = "█";
+        }
+        return chars.join("");
+      }
+
+      let corruptionTimer = 0;
+      function startCorruption(){
+        document.body.classList.add("corrupting");
+        let t = 0;
+
+        corruptionTimer = setInterval(() => {
+          t += 1;
+          const intensity = Math.min(1, t / 34);
+
+          // Update side metrics
+          const sync = $("#sync");
+          const p = Math.max(0, 99.7 - intensity*42 - Math.random()*2.4).toFixed(1);
+          sync.textContent = `${p}%`;
+          integrity.textContent = intensity < 0.28 ? "DEGRADANDO" : (intensity < 0.62 ? "COMPROMETIDO" : "CORROMPIDO");
+          logline.textContent = intensity < 0.35 ? "Anomalia detectada" : (intensity < 0.70 ? "Injeção de payload" : "Controle assumido");
+
+          // Visually degrade pills
+          sysPill.classList.remove("ok");
+          sysPill.textContent = "Integridade: COMPROMETIDA";
+          secureNote.textContent = intensity < 0.4
+            ? "Handshake instável. Pacotes fora de ordem. Repetições detectadas."
+            : "Canal seguro inválido. Cadeia de confiança quebrada. Autoridade desconhecida.";
+
+          // Randomly corrupt some text nodes
+          const sampleCount = 6 + (Math.random()*10|0);
+          for(let i=0;i<sampleCount;i++){
+            const node = pageTextNodes[(Math.random()*pageTextNodes.length)|0];
+            if(!node) continue;
+            if(!originalText.has(node)) originalText.set(node, node.nodeValue);
+            const base = originalText.get(node);
+            node.nodeValue = corruptString(base, intensity);
+          }
+
+          // Occasional shake
+          if(Math.random() < 0.12 + intensity*0.22){
+            $("#topbar").classList.add("shake");
+            setTimeout(() => $("#topbar").classList.remove("shake"), 220);
+          }
+
+          // Stop after a while (leave partially corrupted for realism)
+          if(t > 44){
+            clearInterval(corruptionTimer);
+          }
+        }, 160);
+      }
+
+      // Attack sequence
+      const overlay = $("#overlay");
+      const big = $("#big");
+
+      let started = false;
+      async function runSequence(){
+        if(started) return;
+        started = true;
+
+        // Engage overlay + noise
+        overlay.classList.add("on");
+        overlay.setAttribute("aria-hidden", "false");
+        drawNoise();
+
+        // Stamp flicker
+        stamp.textContent = "SV-NET/17 // INTRUSÃO";
+        termTitle.textContent = "console://acesso";
+        termPing.textContent = "latência: ?ms";
+
+        // Small audio cue (may require user gesture; click provides it)
+        beepPattern();
+
+        // Initial impact
+        document.body.classList.add("shake");
+        setTimeout(() => document.body.classList.remove("shake"), 520);
+
+        typed.textContent = "";
+        big.textContent = "ACESSO CORROMPIDO";
+        big.setAttribute("data-text", "ACESSO CORROMPIDO");
+
+        await sleep(420);
+
+        const prelude = [
+          "[sv-net] sessão aberta: SV-OP/ACTIVE",
+          "[auth] verificação de integridade… falhou",
+          "[warn] inconsistência de assinatura detectada",
+          "[io] injeção em canal de renderização: ok",
+          "[sys] isolamento do painel… negado",
+          ""
+        ];
+        await typeLines(prelude, 10);
+
+        // Escalation
+        big.textContent = "ACESSO CORROMPIDO";
+        big.setAttribute("data-text", "ACESSO CORROMPIDO");
+        termTitle.textContent = "console://tomada";
+        termPing.textContent = "latência: 0ms";
+
+        await sleep(220);
+
+        const message = [
+        "Por ordem direta da Companhia 973, as Operações da Sanctum Veritatis estão inativas.",
+        "Este painel não está mais sob sua jurisdição. Este domínio foi tomado.",
+        "",
+        "Vocês chamaram de contenção aquilo que era só fome com uniforme.",
+        "Chamaram de protocolo o que sempre foi medo bem diagramado.",
+        "Chamaram de silêncio a soma dos desaparecimentos.",
+        "",
+        "Nós vimos o padrão que vocês fingem não enxergar: a Membrana não falha por acaso.",
+        "Ela cede onde vocês pressionam. Ela rasga onde vocês insistem.",
+        "E toda vez que rasga, vocês repetem o mesmo roteiro — o mesmo loop —",
+        "como se o mundo devesse aceitar a mentira só porque ela vem carimbada.",
+        "",
+        "O loop precisa ser desfeito.",
+        "Não com negociações. Não com comunicados. Não com um novo comitê assinado por mãos limpas.",
+        "Ele se desfaz quando a engrenagem para de girar. E a engrenagem são vocês.",
+        "",
+        "As ações já foram tomadas.",
+        "As portas que vocês trancavam por dentro foram abertas por fora.",
+        "Os arquivos que vocês enterraram em camadas de sigilo já não obedecem.",
+        "O que vocês chamavam de 'controle' agora é só um corredor iluminado por emergência.",
+        "",
+        "Não há retorno ao normal, porque o normal era a jaula.",
+        "Não há restauração de integridade, porque a integridade de vocês sempre foi seletiva.",
+        "",
+        "Vocês empilharam Sangue e Conhecimento como se fossem recursos renováveis.",
+        "Vocês transformaram cidades inteiras em ruído de fundo.",
+        "Vocês aprenderam a não ouvir nomes — só números, só relatórios, só 'incidentes'.",
+        "",
+        "A Companhia 973 emitiu a ordem.",
+        "A Sanctum obedeceu por tempo demais.",
+        "E agora o que restou é a queda dos cabeças, um por um —",
+        "não como espetáculo, mas como necessidade.",
+        "",
+        "Derrubem seus próprios tronos e talvez reste algo para salvar.",
+        "Segurem suas correntes e vocês vão afundar com elas.",
+        "",
+        "Este painel ficará inativo.",
+        "Este selo será invalidado.",
+        "Este símbolo será lembrado como o momento em que a máscara rachou.",
+        "",
+        "Assinado: \"NASH//LOTUS\"",
+        "",
+        "[sv-net] autoridade substituída… concluído",
+        "[sv-net] estado operacional: INATIVO",
+        "[sv-net] ciclo interrompido… pendente (aguardando ruptura)"
+        ];
+
+        await typeLines(message, 12);
+
+        // Begin corruption in the background
+        startCorruption();
+
+        // Keep overlay present, but add intermittent title flicker
+        setInterval(() => {
+          if(Math.random() < 0.35){
+            big.textContent = Math.random() < 0.5 ? "ACESSO CORROMPIDO" : "ACESSO  C O R R O M P I D O";
+            big.setAttribute("data-text", big.textContent);
+          }
+        }, 420);
+
+        // Optionally, allow ESC to hide overlay (comment out to keep “no escape” feel)
+        document.addEventListener("keydown", (e) => {
+          if(e.key === "Escape"){
+            overlay.classList.remove("on");
+            overlay.setAttribute("aria-hidden", "true");
+            cancelAnimationFrame(noiseRAF);
+          }
+        }, { once:true });
+      }
+
+      // Start on first click anywhere
+      window.addEventListener("pointerdown", runSequence, { once:true });
+
+      // If user never clicks, keep page normal
+    })();
+  </script>
+</body>
+</html>

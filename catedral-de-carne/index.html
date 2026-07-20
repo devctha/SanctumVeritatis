@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/catedral-de-carne/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catedral de Carne — Ordem Paranormal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #06030a;
+    --deep: #0d0510;
+    --crimson: #6b0000;
+    --blood: #8b0000;
+    --flesh: #c4784a;
+    --pale: #d9b99b;
+    --bone: #e8d5b7;
+    --sickly: #7a6c3a;
+    --dim: #3a2a2a;
+    --text: #c9b08a;
+    --accent: #c0392b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--flesh);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, background 0.2s, border-color 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-dot {
+    width: 4px; height: 4px;
+    background: var(--flesh);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+  }
+  .cursor.hovering { transform: translate(-50%, -50%) scale(2.5); background: rgba(196,120,74,0.15); border-color: var(--accent); }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 9998;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--crimson); }
+
+  /* NAVIGATION */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 1.2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(to bottom, rgba(6,3,10,0.95), transparent);
+    backdrop-filter: blur(1px);
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(6,3,10,0.97); border-bottom: 1px solid rgba(139,0,0,0.25); }
+  .nav-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--pale);
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--text); text-decoration: none;
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-family: 'Special Elite', serif;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1px; background: var(--flesh);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .nav-links a:hover { color: var(--flesh); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 2rem 4rem;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 60%, rgba(107,0,0,0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 30% 80%, rgba(139,0,0,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 70% 20%, rgba(60,10,10,0.3) 0%, transparent 60%),
+      var(--black);
+  }
+
+  /* Organic pulsing veins in background */
+  .vein-container {
+    position: absolute; inset: 0; z-index: 1;
+    overflow: hidden; opacity: 0.25;
+  }
+  .vein-container svg { width: 100%; height: 100%; }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+  .eyebrow {
+    font-family: 'Special Elite', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--flesh);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--bone);
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+    text-shadow:
+      0 0 80px rgba(139,0,0,0.6),
+      0 0 20px rgba(196,120,74,0.2);
+  }
+  .hero-title .de { font-size: 0.5em; display: block; color: var(--pale); letter-spacing: 0.3em; font-weight: 400; margin: 0.3em 0; }
+  .hero-title .carne {
+    display: block;
+    background: linear-gradient(135deg, var(--bone) 0%, var(--flesh) 40%, var(--blood) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fleshPulse 4s ease-in-out 1.6s infinite;
+  }
+
+  .hero-line {
+    width: 120px; height: 1px;
+    background: linear-gradient(to right, transparent, var(--crimson), transparent);
+    margin: 2rem auto;
+    opacity: 0; animation: fadeIn 1s 1s forwards;
+  }
+
+  .hero-headline {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--pale);
+    max-width: 650px;
+    margin: 0 auto 2.5rem;
+    opacity: 0; animation: fadeUp 1s 1.2s forwards;
+  }
+
+  .hero-cta-group {
+    display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 1s 1.5s forwards;
+  }
+
+  .btn {
+    padding: 0.9rem 2.2rem;
+    font-family: 'Special Elite', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none; cursor: none;
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: inline-block;
+  }
+  .btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,0.08);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { transform: translateY(-2px); }
+
+  .btn-primary {
+    background: var(--blood);
+    color: var(--bone);
+    box-shadow: 0 0 20px rgba(139,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .btn-primary:hover { box-shadow: 0 0 35px rgba(139,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1); }
+
+  .btn-discord {
+    background: transparent;
+    color: var(--pale);
+    border: 1px solid rgba(196,120,74,0.4);
+    box-shadow: 0 0 15px rgba(196,120,74,0.1);
+  }
+  .btn-discord:hover { border-color: var(--flesh); box-shadow: 0 0 25px rgba(196,120,74,0.25); color: var(--bone); }
+
+  .btn-discord svg { vertical-align: middle; margin-right: 0.5rem; }
+
+  .scroll-indicator {
+    position: absolute; bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    opacity: 0; animation: fadeIn 1s 2.5s forwards;
+  }
+  .scroll-indicator span {
+    font-size: 0.65rem; letter-spacing: 0.3em; color: var(--sickly); text-transform: uppercase;
+    font-family: 'Special Elite', serif;
+  }
+  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--crimson), transparent); animation: scrollAnim 2s ease-in-out infinite; }
+
+  /* ─── SECTIONS SHARED ─── */
+  section { padding: 7rem 2rem; position: relative; }
+
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+
+  .section-tag {
+    font-family: 'Special Elite', serif;
+    font-size: 0.68rem; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--flesh); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-tag::before {
+    content: ''; display: block; width: 30px; height: 1px; background: var(--flesh);
+  }
+
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    color: var(--bone); line-height: 1.2;
+    margin-bottom: 2rem;
+  }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ─── PITCH / SINOPSE ─── */
+  #sinopse { background: var(--deep); }
+  #sinopse::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--crimson), transparent);
+  }
+
+  .pitch-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .pitch-text p { margin-bottom: 1.5rem; color: var(--pale); font-size: 1.1rem; }
+  .pitch-text p strong { color: var(--bone); font-weight: 600; }
+
+  .pitch-visual {
+    position: relative; display: flex; justify-content: center; align-items: center;
+  }
+  .flesh-circle {
+    width: 320px; height: 320px; border-radius: 50%;
+    background: radial-gradient(ellipse at 40% 40%, var(--dim) 0%, #1a0505 40%, var(--black) 100%);
+    border: 1px solid rgba(139,0,0,0.3);
+    box-shadow: 0 0 60px rgba(139,0,0,0.3), inset 0 0 40px rgba(0,0,0,0.8);
+    position: relative; overflow: hidden;
+    animation: breathe 5s ease-in-out infinite;
+  }
+  .flesh-circle::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 40%, rgba(196,120,74,0.12) 0%, transparent 60%);
+    animation: rotateSlow 20s linear infinite;
+  }
+  .flesh-symbol {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 5rem; color: rgba(139,0,0,0.4);
+    text-shadow: 0 0 20px rgba(139,0,0,0.5);
+    animation: breathe 5s ease-in-out infinite;
+    z-index: 1;
+  }
+  .flesh-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(139,0,0,0.2);
+    animation: ringExpand 4s ease-out infinite;
+  }
+  .flesh-ring:nth-child(2) { width: 360px; height: 360px; animation-delay: 0s; }
+  .flesh-ring:nth-child(3) { width: 420px; height: 420px; animation-delay: 1.3s; }
+  .flesh-ring:nth-child(4) { width: 480px; height: 480px; animation-delay: 2.6s; }
+
+  /* ─── DIFERENCIAL ─── */
+  #diferenciais { background: var(--black); }
+  .diff-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .diff-card {
+    background: rgba(13,5,16,0.8);
+    border: 1px solid rgba(107,0,0,0.25);
+    padding: 2rem 1.8rem;
+    position: relative; overflow: hidden;
+    transition: border-color 0.4s, transform 0.3s;
+  }
+  .diff-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 0; background: var(--blood);
+    transition: height 0.4s;
+  }
+  .diff-card:hover { border-color: rgba(139,0,0,0.5); transform: translateY(-3px); }
+  .diff-card:hover::before { height: 100%; }
+  .diff-icon {
+    font-size: 1.8rem; margin-bottom: 1rem; display: block;
+    filter: grayscale(0.3);
+  }
+  .diff-card h3 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.9rem; color: var(--pale);
+    margin-bottom: 0.7rem; letter-spacing: 0.05em;
+  }
+  .diff-card p { font-size: 0.95rem; color: var(--text); line-height: 1.6; }
+
+  /* ─── SINOPSE EXPANDIDA ─── */
+  #expandida {
+    background: linear-gradient(180deg, var(--black) 0%, var(--deep) 40%, rgba(60,0,0,0.15) 100%);
+  }
+  .timeline {
+    position: relative; margin-top: 3rem;
+    padding-left: 2rem;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px; background: linear-gradient(to bottom, transparent, var(--crimson) 20%, var(--crimson) 80%, transparent);
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 3rem; padding-left: 2.5rem;
+  }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -2.35rem; top: 0.5rem;
+    width: 8px; height: 8px; background: var(--blood); border-radius: 50%;
+    box-shadow: 0 0 10px rgba(139,0,0,0.6);
+  }
+  .timeline-item::after {
+    content: ''; position: absolute; left: -2.28rem; top: 0.58rem;
+    width: 6px; height: 6px; border-radius: 50%;
+    border: 1px solid var(--flesh);
+    animation: breathe 3s ease-in-out infinite;
+  }
+  .timeline-item h3 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem; color: var(--bone); margin-bottom: 0.5rem;
+  }
+  .timeline-item p { color: var(--text); font-style: italic; font-size: 1rem; }
+
+  /* ─── ESTRUTURA ─── */
+  #estrutura { background: var(--deep); }
+  #estrutura::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--crimson), transparent);
+  }
+  .estrutura-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    margin-top: 3rem; border: 1px solid rgba(107,0,0,0.2);
+  }
+  .estrutura-cell {
+    padding: 2.5rem 2rem; background: rgba(6,3,10,0.7);
+    border-right: 1px solid rgba(107,0,0,0.15);
+    position: relative; overflow: hidden;
+    transition: background 0.4s;
+  }
+  .estrutura-cell:last-child { border-right: none; }
+  .estrutura-cell:hover { background: rgba(107,0,0,0.08); }
+  .estrutura-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 3rem; color: rgba(139,0,0,0.2); line-height: 1;
+    margin-bottom: 1rem; display: block;
+  }
+  .estrutura-cell h3 { font-family: 'Cinzel Decorative', serif; font-size: 0.85rem; color: var(--pale); margin-bottom: 0.8rem; letter-spacing: 0.05em; }
+  .estrutura-cell ul { list-style: none; }
+  .estrutura-cell ul li { font-size: 0.9rem; color: var(--text); padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .estrutura-cell ul li::before { content: '↳ '; color: var(--flesh); font-size: 0.75rem; }
+
+  /* ─── INCLUSO ─── */
+  #incluso { background: var(--black); }
+  .incluso-list {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem;
+  }
+  .incluso-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.3rem 1.5rem;
+    background: rgba(13,5,16,0.6);
+    border: 1px solid rgba(107,0,0,0.15);
+    transition: border-color 0.3s;
+  }
+  .incluso-item:hover { border-color: rgba(139,0,0,0.4); }
+  .incluso-check {
+    width: 22px; height: 22px; background: rgba(139,0,0,0.3);
+    border: 1px solid var(--crimson); border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+    color: var(--flesh); font-size: 0.7rem;
+  }
+  .incluso-item p { font-size: 0.95rem; color: var(--pale); }
+  .incluso-item strong { color: var(--bone); display: block; margin-bottom: 0.2rem; }
+
+  /* ─── PARA QUEM ─── */
+  #para-quem {
+    background: linear-gradient(180deg, var(--black) 0%, var(--deep) 100%);
+    text-align: center;
+  }
+  .audience-grid {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem;
+  }
+  .audience-card {
+    width: 260px; padding: 2.5rem 2rem; text-align: center;
+    border: 1px solid rgba(107,0,0,0.2);
+    background: rgba(6,3,10,0.8);
+    position: relative; overflow: hidden;
+    transition: transform 0.4s, border-color 0.4s;
+  }
+  .audience-card:hover { transform: translateY(-5px); border-color: rgba(139,0,0,0.5); }
+  .audience-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(to right, transparent, var(--blood), transparent);
+    transform: scaleX(0); transition: transform 0.4s;
+  }
+  .audience-card:hover::after { transform: scaleX(1); }
+  .audience-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .audience-card h3 { font-family: 'Cinzel Decorative', serif; font-size: 0.8rem; color: var(--pale); margin-bottom: 0.7rem; }
+  .audience-card p { font-size: 0.9rem; color: var(--text); }
+
+  /* ─── AVISO ─── */
+  #avisos {
+    background: rgba(40,0,0,0.3);
+    border-top: 1px solid rgba(139,0,0,0.2);
+    border-bottom: 1px solid rgba(139,0,0,0.2);
+    padding: 4rem 2rem;
+  }
+  .aviso-inner {
+    max-width: 800px; margin: 0 auto; text-align: center;
+  }
+  .aviso-box {
+    background: rgba(6,3,10,0.9);
+    border: 1px solid rgba(139,0,0,0.35);
+    padding: 2.5rem 3rem;
+    position: relative;
+  }
+  .aviso-box::before {
+    content: '⚠'; position: absolute; top: -1.1rem; left: 50%; transform: translateX(-50%);
+    background: var(--black); padding: 0 1rem;
+    color: var(--blood); font-size: 1.4rem;
+  }
+  .aviso-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem; color: var(--accent);
+    letter-spacing: 0.1em; margin-bottom: 1.5rem;
+  }
+  .aviso-tags { display: flex; flex-wrap: wrap; gap: 0.7rem; justify-content: center; margin-top: 1.2rem; }
+  .aviso-tag {
+    padding: 0.35rem 1rem;
+    border: 1px solid rgba(139,0,0,0.4);
+    font-size: 0.8rem; color: var(--flesh);
+    font-family: 'Special Elite', serif;
+    letter-spacing: 0.1em;
+    background: rgba(139,0,0,0.08);
+  }
+
+  /* ─── DEPOIMENTOS ─── */
+  #depoimentos { background: var(--deep); }
+  #depoimentos::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, rgba(107,0,0,0.5), transparent);
+  }
+  .testimonials-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem;
+  }
+  .testimonial {
+    background: rgba(6,3,10,0.8);
+    border: 1px solid rgba(107,0,0,0.2);
+    padding: 2rem 2rem 1.5rem;
+    position: relative; overflow: hidden;
+    transition: border-color 0.4s;
+  }
+  .testimonial:hover { border-color: rgba(139,0,0,0.45); }
+  .testimonial::before {
+    content: '"'; position: absolute; top: -0.5rem; left: 1rem;
+    font-family: 'Crimson Pro', serif;
+    font-size: 6rem; line-height: 1;
+    color: rgba(139,0,0,0.15);
+    pointer-events: none;
+  }
+  .testimonial-text {
+    font-size: 0.95rem; line-height: 1.7; color: var(--pale);
+    font-style: italic; position: relative; z-index: 1;
+    margin-bottom: 1.2rem;
+  }
+  .testimonial-author {
+    font-family: 'Special Elite', serif;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    color: var(--flesh); text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .testimonial-author::before {
+    content: ''; display: block; width: 20px; height: 1px; background: var(--flesh);
+  }
+  .testimonial.featured { grid-column: span 2; background: rgba(107,0,0,0.08); }
+
+  /* ─── CTA / DISCORD ─── */
+  #discord {
+    background: var(--black);
+    text-align: center;
+    padding: 8rem 2rem;
+  }
+  #discord::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--crimson), transparent);
+  }
+  .discord-inner { max-width: 700px; margin: 0 auto; }
+  .discord-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem); color: var(--bone);
+    line-height: 1.2; margin-bottom: 1.5rem;
+  }
+  .discord-sub { font-size: 1.1rem; color: var(--text); margin-bottom: 3rem; font-style: italic; }
+  .cta-big {
+    padding: 1.2rem 3.5rem;
+    font-size: 0.9rem; letter-spacing: 0.25em;
+  }
+  .discord-divider { margin: 2.5rem 0; display: flex; align-items: center; gap: 1.5rem; }
+  .discord-divider::before,
+  .discord-divider::after { content: ''; flex: 1; height: 1px; background: rgba(107,0,0,0.3); }
+  .discord-divider span { font-size: 0.7rem; letter-spacing: 0.3em; color: var(--sickly); text-transform: uppercase; font-family: 'Special Elite', serif; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--deep); padding: 2.5rem 3rem;
+    border-top: 1px solid rgba(107,0,0,0.15);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo { font-family: 'Cinzel Decorative', serif; font-size: 0.7rem; color: var(--dim); letter-spacing: 0.3em; text-transform: uppercase; }
+  .footer-tag { font-size: 0.75rem; color: var(--sickly); font-family: 'Special Elite', serif; letter-spacing: 0.15em; }
+  .footer-order { font-size: 0.75rem; color: rgba(107,0,0,0.5); font-family: 'Special Elite', serif; }
+
+  /* ─── BLOOD DRIP ─── */
+  .drip-container {
+    position: absolute; top: 0; left: 0; right: 0; height: 80px;
+    pointer-events: none; overflow: hidden; z-index: 2;
+  }
+  .drip {
+    position: absolute; top: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--blood), transparent);
+    border-radius: 0 0 50% 50%;
+    animation: drip 6s ease-in infinite;
+    opacity: 0.4;
+  }
+
+  /* ─── KEYFRAMES ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes fleshPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15) saturate(1.2); }
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+  @keyframes ringExpand {
+    0% { opacity: 0.5; transform: scale(0.8); }
+    100% { opacity: 0; transform: scale(1.1); }
+  }
+  @keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes scrollAnim {
+    0%, 100% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+    50% { opacity: 0.3; transform: scaleY(0.5); transform-origin: top; }
+  }
+  @keyframes drip {
+    0% { height: 0; opacity: 0.4; }
+    40% { height: 60px; opacity: 0.6; }
+    100% { height: 60px; opacity: 0; top: 60px; }
+  }
+  @keyframes veinPulse {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .pitch-grid { grid-template-columns: 1fr; }
+    .pitch-visual { display: none; }
+    .estrutura-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .testimonial.featured { grid-column: span 1; }
+    .incluso-list { grid-template-columns: 1fr; }
+    section { padding: 5rem 1.5rem; }
+    footer { flex-direction: column; text-align: center; }
+    .flesh-ring { display: none; }
+  }
+
+  /* Hover glow for btn */
+  a, button { cursor: none; }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Catedral de Carne</div>
+  <ul class="nav-links">
+    <li><a href="#sinopse">Sinopse</a></li>
+    <li><a href="#diferenciais">Diferenciais</a></li>
+    <li><a href="#estrutura">Estrutura</a></li>
+    <li><a href="#depoimentos">Depoimentos</a></li>
+    <li><a href="https://discord.gg/u3GmJt6Ts6" target="_blank">Discord</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <div class="vein-container">
+    <svg viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        .vein { stroke: #8b0000; stroke-width: 1; fill: none; animation: veinPulse 6s ease-in-out infinite; }
+        .vein2 { stroke: #c4784a; stroke-width: 0.5; fill: none; animation: veinPulse 8s ease-in-out 2s infinite; }
+        @keyframes veinPulse { 0%,100%{opacity:0.2} 50%{opacity:0.5} }
+      </style>
+      <path class="vein" d="M700,0 C700,100 750,150 680,250 C610,350 780,400 750,500 C720,600 650,650 700,800 C750,950 700,900 700,900"/>
+      <path class="vein" d="M0,200 C100,200 150,220 200,280 C300,380 250,420 350,480 C450,540 500,500 600,560 C700,620 700,700 800,730 C900,760 950,740 1000,790 C1100,860 1200,820 1400,850"/>
+      <path class="vein" d="M1400,150 C1300,150 1200,200 1100,250 C1000,300 900,280 800,350 C700,420 650,450 600,520 C550,590 580,650 500,700 C420,750 300,720 200,780 C100,840 50,880 0,900"/>
+      <path class="vein2" d="M700,0 C680,80 720,120 690,200 C660,280 730,320 720,400 C710,480 680,520 700,600 C720,680 690,760 700,900"/>
+      <path class="vein2" d="M350,0 C360,100 400,150 380,250 C360,350 320,380 340,480 C360,580 400,600 380,700 C360,800 350,850 340,900"/>
+      <path class="vein2" d="M1050,0 C1040,100 1000,160 1020,260 C1040,360 1080,380 1060,480 C1040,580 1000,620 1020,720 C1040,820 1060,860 1050,900"/>
+      <circle cx="700" cy="450" r="150" stroke="#6b0000" stroke-width="0.5" fill="none" opacity="0.15"/>
+      <circle cx="700" cy="450" r="250" stroke="#6b0000" stroke-width="0.5" fill="none" opacity="0.1"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="eyebrow">Ordem Paranormal · Campanha Original</p>
+
+    <h1 class="hero-title">
+      Catedral
+      <span class="de">de</span>
+      <span class="carne">Carne</span>
+    </h1>
+
+    <div class="hero-line"></div>
+
+    <p class="hero-headline">
+      "A cidade está sendo construída… com carne. E algo aguarda para ser completado."
+    </p>
+
+    <div class="hero-cta-group">
+      <a href="#discord" class="btn btn-primary cta-big">Começar a Investigação</a>
+      <a href="https://discord.gg/u3GmJt6Ts6" target="_blank" class="btn btn-discord">
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><path d="M15.25 1.18A14.9 14.9 0 0 0 11.57 0c-.16.3-.35.7-.48 1.02a13.78 13.78 0 0 0-4.18 0A10.42 10.42 0 0 0 6.42 0 14.97 14.97 0 0 0 2.73 1.19 15.87 15.87 0 0 0 .07 11.68a14.97 14.97 0 0 0 4.58 2.32c.37-.5.7-1.04.98-1.6a9.78 9.78 0 0 1-1.54-.74l.37-.29a10.68 10.68 0 0 0 9.08 0l.38.3c-.49.28-1 .52-1.55.74.28.56.6 1.1.98 1.6a14.94 14.94 0 0 0 4.58-2.33A15.86 15.86 0 0 0 15.25 1.18ZM6.01 9.57c-.9 0-1.64-.83-1.64-1.85 0-1.01.72-1.85 1.64-1.85.92 0 1.65.84 1.64 1.85 0 1.02-.72 1.85-1.64 1.85Zm6 0c-.9 0-1.64-.83-1.64-1.85 0-1.01.72-1.85 1.64-1.85.92 0 1.65.84 1.64 1.85 0 1.02-.72 1.85-1.64 1.85Z"/></svg>
+        Entrar no Discord
+      </a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Descer</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ─── SINOPSE ─── -->
+<section id="sinopse">
+  <div class="section-inner">
+    <div class="pitch-grid">
+      <div class="pitch-text reveal">
+        <p class="section-tag">A Premissa</p>
+        <h2 class="section-title">A cidade está mudando.<br>Você vai descobrir por quê.</h2>
+        <p>
+          Desaparecimentos silenciosos. Paredes que respiram. Corpos que nunca são encontrados — porque foram <strong>incorporados</strong>. Em algum lugar entre os becos e edifícios desta cidade, algo antigo desperta, e cada tijolo que sobe é construído a partir do que foi alguém.
+        </p>
+        <p>
+          <strong>Catedral de Carne</strong> é uma campanha de investigação paranormal de horror psicológico pesado para Ordem Paranormal. Os jogadores não são heróis. São investigadores tentando compreender o incompreensível — antes que se tornem parte dele.
+        </p>
+        <p>
+          A cidade não está sendo destruída. Ela está sendo <em>transformada</em>.
+        </p>
+      </div>
+
+      <div class="pitch-visual reveal">
+        <div class="flesh-ring"></div>
+        <div class="flesh-ring"></div>
+        <div class="flesh-ring"></div>
+        <div class="flesh-circle">
+          <div class="flesh-symbol">✝</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DIFERENCIAIS ─── -->
+<section id="diferenciais">
+  <div class="section-inner">
+    <p class="section-tag reveal">O que torna diferente</p>
+    <h2 class="section-title reveal">Não é uma campanha comum.<br>Nunca foi para ser.</h2>
+    <div class="diff-grid">
+      <div class="diff-card reveal">
+        <span class="diff-icon">🩸</span>
+        <h3>Horror Corporal Pesado</h3>
+        <p>Ambientes, criaturas e eventos que desafiam o que o corpo humano pode e não pode ser. Imagens que ficam.</p>
+      </div>
+      <div class="diff-card reveal">
+        <span class="diff-icon">🏛️</span>
+        <h3>Ambientes Vivos e Mutáveis</h3>
+        <p>Locais que mudam entre visitas. Arquitetura que respira. Cada retorno a um lugar é uma nova ameaça.</p>
+      </div>
+      <div class="diff-card reveal">
+        <span class="diff-icon">🔍</span>
+        <h3>Investigação + Progressão de Mistério</h3>
+        <p>Nada é entregue. Cada pista conquista confiança. A narrativa se constrói a partir do que os jogadores descobrem.</p>
+      </div>
+      <div class="diff-card reveal">
+        <span class="diff-icon">⚖️</span>
+        <h3>Consequências Permanentes Reais</h3>
+        <p>Decisões importam de verdade. Personagens carregam marcas, traumas e perdas que não desaparecem no próximo descanso.</p>
+      </div>
+      <div class="diff-card reveal">
+        <span class="diff-icon">🧠</span>
+        <h3>Foco Psicológico Intenso</h3>
+        <p>O horror maior não está nas criaturas, mas no que elas representam. Sanidade é recurso — e custa caro usá-la.</p>
+      </div>
+      <div class="diff-card reveal">
+        <span class="diff-icon">⚙️</span>
+        <h3>Mecânicas Originais</h3>
+        <p>Sistema de ambiente vivo, sanidade progressiva, e inimigos que usam estratégia real. Eles pensam. Eles se adaptam.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SINOPSE EXPANDIDA ─── -->
+<section id="expandida">
+  <div class="section-inner">
+    <div style="max-width:700px">
+      <p class="section-tag reveal">Sinopse</p>
+      <h2 class="section-title reveal">O que está acontecendo<br>com a cidade</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <h3>A cidade está mudando</h3>
+        <p>Prédios antigos apresentam estruturas que não existiam antes. Moradores relatam sons úmidos nas paredes. Ninguém sabe quando começou — mas todos percebem que está piorando.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <h3>Pessoas desaparecem. Sem rastro.</h3>
+        <p>Não há cadáveres. Não há fugas. Há apenas ausência onde havia presença — e às vezes, uma mancha orgânica onde alguém deveria estar.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <h3>Os locais ficam vivos</h3>
+        <p>Hospital, igreja, casarão, fábrica abandonada. Cada lugar que os investigadores visitam parece mais vivo que da última vez. Calor onde não deveria haver. Batimentos onde não há coração.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <h3>Um padrão está emergindo</h3>
+        <p>Os desaparecimentos não são aleatórios. Os locais não são aleatórios. Há uma geometria no horror — e quanto mais os investigadores a compreendem, mais ela os envolve.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <h3>Algo maior está sendo construído</h3>
+        <p>A entidade não destrói. Ela <em>constrói</em>. E cada pessoa que some, cada parede que muda, cada estrutura que surge — é mais um tijolo na Catedral que ela projeta há séculos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ESTRUTURA ─── -->
+<section id="estrutura">
+  <div class="section-inner">
+    <p class="section-tag reveal">Estrutura da Campanha</p>
+    <h2 class="section-title reveal">Três atos. Uma única verdade.</h2>
+    <div class="estrutura-grid reveal">
+      <div class="estrutura-cell">
+        <span class="estrutura-num">I</span>
+        <h3>Carne e Concreto</h3>
+        <ul>
+          <li>Introdução aos desaparecimentos</li>
+          <li>Primeiros locais orgânicos</li>
+          <li>Estabelecimento do mistério</li>
+          <li>NPCs e ganchos iniciais</li>
+          <li>Primeiros sinais da entidade</li>
+        </ul>
+      </div>
+      <div class="estrutura-cell">
+        <span class="estrutura-num">II</span>
+        <h3>Dentro das Paredes</h3>
+        <ul>
+          <li>Revelação do padrão</li>
+          <li>Locais completamente vivos</li>
+          <li>Confrontos com a geometria</li>
+          <li>Perdas e traumas reais</li>
+          <li>A arquitetura se fecha</li>
+        </ul>
+      </div>
+      <div class="estrutura-cell">
+        <span class="estrutura-num">III</span>
+        <h3>O Último Tijolo</h3>
+        <ul>
+          <li>O coração da Catedral</li>
+          <li>Encontro com a entidade</li>
+          <li>Decisões impossíveis</li>
+          <li>Finais múltiplos e pesados</li>
+          <li>Nada sai ileso</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INCLUSO ─── -->
+<section id="incluso">
+  <div class="section-inner">
+    <p class="section-tag reveal">O que está incluso</p>
+    <h2 class="section-title reveal">Tudo que um Mestre precisa.</h2>
+    <div class="incluso-list reveal">
+      <div class="incluso-item">
+        <div class="incluso-check">✓</div>
+        <p><strong>PDF Completo da Campanha</strong>Três atos com guias de cena, eventos e narração detalhada.</p>
+      </div>
+      <div class="incluso-item">
+        <div class="incluso-check">✓</div>
+        <p><strong>NPCs Detalhados</strong>Ficha de personalidade, motivação, segredos e como cada um reage ao horror.</p>
+      </div>
+      <div class="incluso-item">
+        <div class="incluso-check">✓</div>
+        <p><strong>Locais Completos</strong>Hospital, Igreja, Casarão, Fábrica — com descrições para cada visita e como mudam.</p>
+      </div>
+      <div class="incluso-item">
+        <div class="incluso-check">✓</div>
+        <p><strong>Mecânicas Especiais</strong>Sistema de sanidade progressiva, ambiente vivo, e inimigos táticos com comportamento próprio.</p>
+      </div>
+      <div class="incluso-item">
+        <div class="incluso-check">✓</div>
+        <p><strong>Ganchos Narrativos</strong>Opções para conectar a campanha a personagens e histórias já existentes.</p>
+      </div>
+      <div class="incluso-item">
+        <div class="incluso-check">✓</div>
+        <p><strong>Finais Alternativos</strong>Múltiplos desfechos com consequências únicas — alguns piores que a morte.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PARA QUEM ─── -->
+<section id="para-quem">
+  <div class="section-inner">
+    <p class="section-tag reveal" style="justify-content:center">Público</p>
+    <h2 class="section-title reveal">Para quem foi feita</h2>
+    <div class="audience-grid">
+      <div class="audience-card reveal">
+        <span class="audience-icon">🎲</span>
+        <h3>Mestres de Ordem Paranormal</h3>
+        <p>Que querem uma campanha pronta com identidade própria, sem abrir mão da profundidade.</p>
+      </div>
+      <div class="audience-card reveal">
+        <span class="audience-icon">👁️</span>
+        <h3>Grupos de Horror Pesado</h3>
+        <p>Que não fogem de gore, corpo e violência psicológica — e sabem que o horror de verdade deixa marca.</p>
+      </div>
+      <div class="audience-card reveal">
+        <span class="audience-icon">📖</span>
+        <h3>Jogadores de Narrativa Densa</h3>
+        <p>Que preferem investigar, sentir e decidir — em vez de apenas avançar e combater.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AVISO ─── -->
+<section id="avisos">
+  <div class="aviso-inner">
+    <div class="aviso-box reveal">
+      <div class="aviso-title">Aviso de Conteúdo</div>
+      <p style="color:var(--pale); font-size:0.95rem; line-height:1.7">
+        Esta campanha contém material perturbador e intenso. Não foi criada para ser leve.
+        Foi criada para ser <em>real</em>. Antes de rodar, converse com sua mesa.
+      </p>
+      <div class="aviso-tags">
+        <span class="aviso-tag">Horror Corporal</span>
+        <span class="aviso-tag">Violência Psicológica</span>
+        <span class="aviso-tag">Temas Perturbadores</span>
+        <span class="aviso-tag">Desconforto Intencional</span>
+        <span class="aviso-tag">Consequências Permanentes</span>
+        <span class="aviso-tag">Conteúdo Gore</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DEPOIMENTOS ─── -->
+<section id="depoimentos">
+  <div class="section-inner">
+    <p class="section-tag reveal">Depoimentos</p>
+    <h2 class="section-title reveal">O que a mesa disse.</h2>
+    <div class="testimonials-grid">
+
+      <div class="testimonial featured reveal">
+        <p class="testimonial-text">
+          A mesa foi intensa e bem conduzida. O clima investigativo esteve presente o tempo todo, com espaço para silêncio, dúvida e decisões difíceis. As situações não serviram só para avançar a história — fizeram a gente refletir como jogador também. Nada veio pronto. Tudo precisou ser sentido e escolhido. Foi uma experiência pesada, envolvente, e que realmente marcou.
+        </p>
+        <div class="testimonial-author">hehe1290</div>
+      </div>
+
+      <div class="testimonial reveal">
+        <p class="testimonial-text">
+          É a minha primeira vez jogando uma mesa tão bem feita de Ordem. A atmosfera criada, a música, os detalhes — tudo está muito bem encaixado. O mestre está fazendo um trabalho incrível. Espero poder participar de mais mesas assim, porque está sendo uma experiência muito foda.
+        </p>
+        <div class="testimonial-author">astrophoennix</div>
+      </div>
+
+      <div class="testimonial reveal">
+        <p class="testimonial-text">
+          O Corvo gosta de narrações mais prolongadas e descritivas. Prestem atenção e façam anotações — podem ser importantes. Os monstros aqui não são só andar pra frente e bater: eles usam estratégias. E saiba que o Corvo lida de um jeito especial com a espécie "combeiro". Tanto o Corvo quanto a Mariposa são pessoas incríveis, cada um com seu carisma único.
+        </p>
+        <div class="testimonial-author">darkness_trj</div>
+      </div>
+
+      <div class="testimonial reveal">
+        <p class="testimonial-text">
+          O que mais chama atenção é a originalidade e a dedicação absurda dos ADMs Corvo e Mariposa. Dá para sentir o cuidado em cada detalhe. As mecânicas novas não parecem forçadas — elas enriquecem o jogo e deixam as situações mais imprevisíveis. É uma mesa que foge do comum, respeita a essência de Ordem Paranormal, mas não tem medo de experimentar. Parabéns pelo trabalho — é nítido que isso vai muito além de "só uma mesa de RPG".
+        </p>
+        <div class="testimonial-author">jcsdl</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── DISCORD CTA ─── -->
+<section id="discord">
+  <div class="discord-inner reveal">
+    <p class="section-tag" style="justify-content:center; margin-bottom:1.5rem">Entre para a investigação</p>
+    <h2 class="discord-title">A Catedral<br>está esperando.</h2>
+    <p class="discord-sub">Junte-se à comunidade, acompanhe as sessões ao vivo, e entre em contato com Corvo e Mariposa diretamente no Discord.</p>
+    <a href="https://discord.gg/u3GmJt6Ts6" target="_blank" class="btn btn-primary cta-big">
+      <svg width="20" height="15" viewBox="0 0 20 15" fill="currentColor" style="vertical-align:middle; margin-right:0.6rem"><path d="M16.93 1.24A16.55 16.55 0 0 0 12.86 0c-.18.32-.38.76-.52 1.1a15.3 15.3 0 0 0-4.65 0A11.3 11.3 0 0 0 7.14 0 16.63 16.63 0 0 0 3.05 1.25 17.6 17.6 0 0 0 .08 12.97a16.63 16.63 0 0 0 5.09 2.58c.41-.56.78-1.16 1.09-1.78a9.84 9.84 0 0 1-1.71-.82l.41-.32a11.86 11.86 0 0 0 10.09 0l.42.32c-.55.31-1.12.58-1.72.82.31.62.68 1.22 1.09 1.78a16.6 16.6 0 0 0 5.09-2.6A17.62 17.62 0 0 0 16.93 1.24ZM6.68 10.63c-1 0-1.82-.92-1.82-2.06 0-1.12.8-2.06 1.82-2.06 1.02 0 1.83.94 1.82 2.06 0 1.14-.8 2.06-1.82 2.06Zm6.66 0c-1 0-1.82-.92-1.82-2.06 0-1.12.8-2.06 1.82-2.06 1.02 0 1.83.94 1.82 2.06 0 1.14-.8 2.06-1.82 2.06Z"/></svg>
+      Entrar no Servidor
+    </a>
+    <div class="discord-divider"><span>ou navegue pelo site</span></div>
+    <p style="font-size:0.85rem; color:var(--sickly); font-family:'Special Elite',serif; letter-spacing:0.1em;">discord.gg/u3GmJt6Ts6</p>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">Catedral de Carne</div>
+  <div class="footer-tag">Campanha Original · Ordem Paranormal</div>
+  <div class="footer-order">Corvo &amp; Mariposa Production</div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const dot = document.getElementById('cursorDot');
+  let mx = 0, my = 0, cx = 0, cy = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+  });
+
+  function animateCursor() {
+    cx += (mx - cx) * 0.12;
+    cy += (my - cy) * 0.12;
+    cursor.style.left = cx + 'px'; cursor.style.top = cy + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  document.querySelectorAll('a, button, .diff-card, .audience-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+  });
+
+  // NAVBAR SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 80);
+  });
+
+  // REVEAL ON SCROLL
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // STAGGER REVEALS IN SAME PARENT
+  document.querySelectorAll('.diff-grid, .incluso-list, .testimonials-grid, .audience-grid').forEach(container => {
+    const children = container.querySelectorAll('.reveal');
+    children.forEach((child, i) => {
+      const orig = child.style.transition || '';
+      child.style.transitionDelay = (i * 0.1) + 's';
+    });
+  });
+
+  // PARALLAX HERO
+  window.addEventListener('scroll', () => {
+    const scroll = window.scrollY;
+    const heroBg = document.querySelector('.hero-bg');
+    const vein = document.querySelector('.vein-container');
+    if (heroBg) heroBg.style.transform = `translateY(${scroll * 0.3}px)`;
+    if (vein) vein.style.transform = `translateY(${scroll * 0.15}px)`;
+  });
+
+  // SMOOTH SECTION TAG STAGGER
+  document.querySelectorAll('.diff-grid .reveal').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.08}s`;
+  });
+</script>
+</body>
+</html>

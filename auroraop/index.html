@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/auroraop/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>SV.OP — Aurora de Vidro</title>
+  <style>
+    :root{
+      --bg:#07070a;
+      --panel:rgba(255,255,255,.05);
+      --panel2:rgba(255,255,255,.075);
+      --line:rgba(255,255,255,.10);
+      --muted:rgba(255,255,255,.65);
+      --text:rgba(255,255,255,.90);
+
+      --gold:#AD974F;
+      --gold2:#8E793E;
+      --gold3:#E7D7A6;
+
+      --danger:#ff4d6d;
+      --ok:#36d399;
+
+      --radius:16px;
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --shadow2:0 12px 30px rgba(0,0,0,.55);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 0%, rgba(173,151,79,.10), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(142,121,62,.10), transparent 60%),
+        radial-gradient(900px 600px at 50% 100%, rgba(255,255,255,.05), transparent 70%),
+        linear-gradient(180deg, #050508, #07070a 45%, #06060a);
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    button, input { font:inherit; }
+
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:sticky;
+      top:0;
+      height:100vh;
+      padding:22px 18px;
+      border-right:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      backdrop-filter: blur(10px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 10px 14px;
+      border-radius:14px;
+      border:1px solid rgba(173,151,79,.18);
+      background: linear-gradient(180deg, rgba(173,151,79,.10), rgba(255,255,255,.02));
+      box-shadow: var(--shadow2);
+    }
+
+    .sigil{
+      width:42px; height:42px;
+      border-radius:12px;
+      position:relative;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(231,215,166,.35), transparent 55%),
+        linear-gradient(135deg, rgba(173,151,79,.35), rgba(142,121,62,.15));
+      border: 1px solid rgba(231,215,166,.35);
+      overflow:hidden;
+    }
+    .sigil:before{
+      content:"";
+      position:absolute;
+      inset:-20px;
+      background:
+        conic-gradient(from 180deg,
+          rgba(231,215,166,.0),
+          rgba(231,215,166,.35),
+          rgba(231,215,166,.0),
+          rgba(173,151,79,.0),
+          rgba(173,151,79,.30),
+          rgba(173,151,79,.0)
+        );
+      animation: spin 8s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+
+    .brand h1{
+      margin:0;
+      font-size:14px;
+      line-height:1.1;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .brand small{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      letter-spacing:.06em;
+      font-family:var(--mono);
+      font-size:11px;
+    }
+
+    .nav{
+      margin-top:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      padding: 8px 2px;
+    }
+
+    .nav a{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid transparent;
+      color: rgba(255,255,255,.82);
+      transition:.15s ease;
+      user-select:none;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,.04);
+      border-color: rgba(255,255,255,.08);
+    }
+    .nav a.active{
+      background: linear-gradient(180deg, rgba(173,151,79,.14), rgba(255,255,255,.02));
+      border-color: rgba(173,151,79,.30);
+      color: rgba(255,255,255,.92);
+    }
+    .ico{
+      width:26px; height:26px;
+      border-radius:10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      display:grid;
+      place-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(231,215,166,.95);
+    }
+
+    .sidebar-footer{
+      position:absolute;
+      left:18px;
+      right:18px;
+      bottom:18px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(173,151,79,.25);
+      background: rgba(173,151,79,.08);
+      font-family: var(--mono);
+      font-size:11px;
+      letter-spacing:.02em;
+      color: rgba(231,215,166,.95);
+      white-space:nowrap;
+    }
+    .dot{ width:8px; height:8px; border-radius:50%; background: var(--ok); box-shadow: 0 0 0 6px rgba(54,211,153,.08); }
+
+    .mono{ font-family:var(--mono); font-size:12px; color: rgba(255,255,255,.80); line-height:1.6; }
+    .dim{ color: rgba(255,255,255,.55); }
+
+    /* Main */
+    .main{
+      padding:22px 22px 44px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .crumbs{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .crumbs a{
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      box-shadow: var(--shadow2);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.80);
+    }
+    .crumbs a:hover{ border-color: rgba(231,215,166,.30); }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .btn{
+      border:1px solid rgba(173,151,79,.28);
+      background: rgba(173,151,79,.10);
+      color: rgba(231,215,166,.95);
+      padding:8px 10px;
+      border-radius:12px;
+      cursor:pointer;
+      transition:.15s ease;
+      font-family: var(--mono);
+      font-size:12px;
+    }
+    .btn:hover{
+      border-color: rgba(231,215,166,.45);
+      background: rgba(173,151,79,.14);
+    }
+    .btn.ghost{
+      border-color: rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: rgba(255,255,255,.78);
+    }
+    .btn.danger{
+      border-color: rgba(255,77,109,.35);
+      background: rgba(255,77,109,.08);
+      color: rgba(255,190,200,.95);
+    }
+
+    .card{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero{
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(1200px 360px at 12% 0%, rgba(173,151,79,.20), transparent 60%),
+        radial-gradient(900px 320px at 85% 5%, rgba(231,215,166,.10), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.20), rgba(255,255,255,.02));
+      position:relative;
+    }
+
+    .op-title{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+
+    .op-title h2{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+    }
+    .subtitle{
+      margin-top:8px;
+      color: rgba(255,255,255,.74);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.04em;
+    }
+
+    .tags{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .tag{
+      font-family: var(--mono);
+      font-size:11px;
+      letter-spacing:.03em;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color: rgba(255,255,255,.78);
+      white-space:nowrap;
+    }
+    .tag.gold{
+      border-color: rgba(173,151,79,.30);
+      background: rgba(173,151,79,.10);
+      color: rgba(231,215,166,.95);
+    }
+    .tag.warn{
+      border-color: rgba(255,77,109,.35);
+      background: rgba(255,77,109,.08);
+      color: rgba(255,190,200,.95);
+    }
+
+    .quote{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(173,151,79,.22);
+      background: rgba(0,0,0,.18);
+      box-shadow: var(--shadow2);
+      font-style: italic;
+      color: rgba(231,215,166,.92);
+      line-height: 1.55;
+    }
+
+    .content{
+      padding: 14px 18px 18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+      align-items:start;
+    }
+
+    .panel{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+    }
+
+    .panel h3{
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      color: rgba(231,215,166,.95);
+    }
+
+    .hr{ height:1px; background: rgba(255,255,255,.10); margin: 12px 0; }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .kv .cell{
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      line-height: 1.4;
+    }
+
+    .kv b{ color: rgba(231,215,166,.95); font-weight: 600; }
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin: 0 0 12px;
+    }
+    .tab{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color: rgba(255,255,255,.78);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-family: var(--mono);
+      font-size: 12px;
+      transition:.15s ease;
+    }
+    .tab.active{
+      border-color: rgba(173,151,79,.35);
+      background: rgba(173,151,79,.10);
+      color: rgba(231,215,166,.95);
+    }
+
+    .tabview{ display:none; }
+    .tabview.active{ display:block; }
+
+    details{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      padding: 10px 10px;
+      margin: 10px 0;
+    }
+    summary{
+      cursor:pointer;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(231,215,166,.95);
+      letter-spacing:.02em;
+    }
+    details p, details ul{
+      margin: 10px 0 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      line-height: 1.65;
+    }
+    ul{ padding-left: 18px; }
+    li{ margin: 6px 0; }
+
+    .terminal{
+      border-radius: 16px;
+      border: 1px solid rgba(173,151,79,.25);
+      background: rgba(0,0,0,.28);
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(231,215,166,.92);
+      overflow:auto;
+      max-height: 240px;
+    }
+    .terminal .ok{ color: rgba(54,211,153,.90); }
+    .terminal .warn{ color: rgba(255,77,109,.90); }
+    .terminal .dim{ color: rgba(255,255,255,.55); }
+
+    .filelist{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .file{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .file strong{
+      display:block;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.02em;
+      text-transform: none;
+      color: rgba(231,215,166,.95);
+      margin-bottom: 6px;
+    }
+    .file small{
+      display:block;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,.62);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 980px){
+      .app{ grid-template-columns: 1fr; }
+      .sidebar{ position:relative; height:auto; }
+      .sidebar-footer{ position:relative; left:auto; right:auto; bottom:auto; margin-top: 12px; }
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    @media print{
+      .sidebar, .topbar, .actions, .tabs { display:none !important; }
+      body{ background:#fff; color:#000; }
+      .card{ box-shadow:none; }
+      .hero{ background:#fff; }
+      .panel, details, .file{ border:1px solid #ccc; background:#fff; }
+      .terminal{ border:1px solid #ccc; background:#fff; color:#000; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="sigil" aria-hidden="true"></div>
+        <div>
+          <h1>Sanctum Veritatis</h1>
+          <small>SV.OP // DOSSIÊ DE OPERAÇÃO</small>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navegação do dossiê">
+        <a class="active" href="#visao-geral" data-tab="overview">
+          <span class="ico">01</span><span>Visão geral</span>
+        </a>
+        <a href="#inteligencia" data-tab="intel">
+          <span class="ico">02</span><span>Inteligência</span>
+        </a>
+        <a href="#cronologia" data-tab="timeline">
+          <span class="ico">03</span><span>Cronologia</span>
+        </a>
+        <a href="#evidencias" data-tab="files">
+          <span class="ico">04</span><span>Anexos</span>
+        </a>
+        <a href="#pessoal" data-tab="people">
+          <span class="ico">05</span><span>Pessoal</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <span class="pill"><span class="dot"></span> Acesso: Leitura</span>
+          <span class="pill">Nível 01</span>
+        </div>
+        <div class="hr"></div>
+        <div class="mono" style="display:flex; justify-content:space-between; gap:10px;">
+          <span class="dim">Código interno:</span>
+          <span style="color:rgba(231,215,166,.95);">HORDA</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="crumbs">
+          <a href="#" onclick="history.back(); return false;">← Intranet</a>
+          <a href="#/operacoes" class="dim" title="Link diegético">/operacoes</a>
+          <a href="#visao-geral">Aurora de Vidro</a>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" onclick="window.print()">IMPRIMIR</button>
+          <button class="btn" id="btnExport">EXPORTAR</button>
+          <button class="btn danger" id="btnSeal">LACRAR</button>
+        </div>
+      </div>
+
+      <article class="card" aria-label="Dossiê da Operação Aurora de Vidro">
+        <header class="hero">
+          <div class="op-title">
+            <div>
+              <h2>Operação Aurora de Vidro</h2>
+              <div class="subtitle">
+                VÍK, ISLÂNDIA // CÍRCULO POLAR ÁRTICO<br/>
+                DEZEMBRO 2025 // -8°C
+              </div>
+            </div>
+
+            <div class="tags">
+              <span class="tag gold">ATIVA</span>
+              <span class="tag">INTERNO</span>
+              <span class="tag warn" title="Comms blackout">SILÊNCIO</span>
+              <span class="tag">SV-OP-AV</span>
+            </div>
+          </div>
+
+          <div class="quote">
+            “As luzes dançam no céu. Mas não são luzes. São palavras. E elas estão falando com a cidade.”
+          </div>
+        </header>
+
+        <section class="content">
+          <div class="grid">
+            <!-- Left: Main narrative + tabs -->
+            <div>
+              <div class="tabs" role="tablist" aria-label="Seções do dossiê">
+                <button class="tab active" data-tab="overview" role="tab" aria-selected="true">Visão geral</button>
+                <button class="tab" data-tab="intel" role="tab" aria-selected="false">Inteligência</button>
+                <button class="tab" data-tab="timeline" role="tab" aria-selected="false">Cronologia</button>
+                <button class="tab" data-tab="files" role="tab" aria-selected="false">Anexos</button>
+                <button class="tab" data-tab="people" role="tab" aria-selected="false">Pessoal</button>
+              </div>
+
+              <!-- OVERVIEW -->
+              <div class="tabview active" id="tab-overview">
+                <div class="panel" id="visao-geral">
+                  <h3>Sumário executivo</h3>
+                  <p class="mono">
+                    Há 72 horas, a cidade de Vík deixou de responder. Chamadas não completam, e-mails retornam sem destino,
+                    e qualquer tentativa de tráfego externo é devolvida com silêncio administrativo — como se a cidade tivesse sido
+                    removida do mundo digital sem deixar rastros.
+                  </p>
+                  <p class="mono">
+                    A Agência Espacial Europeia detectou um evento incompatível com as condições locais: auroras sobre a Islândia
+                    que não deveriam estar ali. O padrão não “se move”; ele <span class="dim">(quase)</span> se organiza. Linhas, ciclos, repetições.
+                    Uma coreografia precisa demais para ser somente luz.
+                  </p>
+                  <p class="mono">
+                    Equipes locais foram enviadas. Nenhuma retornou. A última transmissão de rádio continha apenas uma frase, dita sem pressa:
+                    “Eles estão todos olhando para cima. E sorrindo.”
+                  </p>
+
+                  <div class="hr"></div>
+
+                  <details open>
+                    <summary>Anomalia de silêncio detectada</summary>
+                    <p>
+                      Nos últimos três meses, Vík apresenta um comportamento estatisticamente impossível: zero registros criminais,
+                      zero acidentes de trânsito, zero ruído financeiro fora do padrão, e uma uniformidade de comunicação externa que
+                      não combina com erro — combina com curadoria.
+                    </p>
+                    <p>
+                      A hipótese operacional não é “apagão”. É substituição: uma cidade que continua funcionando, mas deixou de ser
+                      observável pelos instrumentos comuns.
+                    </p>
+                  </details>
+
+                  <details open>
+                    <summary>Missão</summary>
+                    <ul>
+                      <li>Infiltrar Vík sem acionar padrões de vigilância do fenômeno.</li>
+                      <li>Identificar a origem do silêncio (infraestrutura, entidade, vetor memético ou combinação).</li>
+                      <li>Determinar se os habitantes retêm individualidade e autonomia.</li>
+                      <li>Se viável, interromper ou conter a propagação antes que ultrapasse o perímetro do Círculo Polar.</li>
+                      <li>Preservar evidências brutas. Sem compressão. Sem filtros. Sem “melhorias”.</li>
+                    </ul>
+                  </details>
+
+                  <details>
+                    <summary>Hipótese principal</summary>
+                    <p>
+                      O Sanctum Veritatis suspeita de correlação com o <b>Elemento Conhecimento</b>:
+                      uma força que não mata — cataloga. Que não destrói — reescreve. Que não domina — integra.
+                      Consciências individuais podem estar sendo fundidas em uma mente coletiva funcional.
+                    </p>
+                    <p class="dim">
+                      Nota: essa hipótese não constitui confirmação. A linguagem do fenômeno sugere intenção, mas intenção não
+                      implica humanidade.
+                    </p>
+                  </details>
+                </div>
+
+                <div class="panel" style="margin-top:12px;">
+                  <h3>Regras de campo (resumo)</h3>
+                  <ul class="mono">
+                    <li>Não permaneça mais de 30 segundos “olhando para cima” sem observador secundário.</li>
+                    <li>Qualquer sorriso involuntário deve ser reportado imediatamente (sintoma precoce).</li>
+                    <li>Registros visuais devem ser feitos em RAW sempre que possível.</li>
+                    <li>Se ouvir “palavras” nas luzes: não transcreva em voz alta; apenas registre.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- INTEL -->
+              <div class="tabview" id="tab-intel">
+                <div class="panel" id="inteligencia">
+                  <h3>Inteligência e avaliação</h3>
+
+                  <details open>
+                    <summary>O que se sabe</summary>
+                    <ul>
+                      <li>O blackout não é ruído: é ausência organizada.</li>
+                      <li>O fenômeno apresenta estrutura repetível e “métrica” (padrões quase matemáticos).</li>
+                      <li>Perdas: duas equipes locais não retornaram; sem corpos, sem sinais, sem tráfego.</li>
+                      <li>Última transmissão: “olhando para cima” + “sorrindo” (indício comportamental).</li>
+                    </ul>
+                  </details>
+
+                  <details open>
+                    <summary>O que se suspeita</summary>
+                    <ul>
+                      <li>Vetor memético/semiótico: informação que afeta o observador ao ser compreendida.</li>
+                      <li>Assimilação em massa: cidade operando como um único sistema cognitivo distribuído.</li>
+                      <li>Camuflagem ativa: o fenômeno decide o que o exterior enxerga.</li>
+                    </ul>
+                  </details>
+
+                  <details>
+                    <summary>O que não se sabe (e importa)</summary>
+                    <ul>
+                      <li>Qual é o gatilho exato: visão direta, áudio, padrões em tela, ou inferência.</li>
+                      <li>Se há “origem” física: antena, artefato, pessoa, local, evento astronômico.</li>
+                      <li>Se a assimilação é reversível — e qual o custo.</li>
+                    </ul>
+                  </details>
+
+                  <div class="hr"></div>
+
+                  <div class="terminal" aria-label="Trecho de auditoria do SV.AUDIT">
+<span class="dim">sv.audit:</span> event=COMMS_ANOMALY location=VIK-ISL window=72h severity=HIGH
+<span class="dim">sv.audit:</span> event=PATTERN_DETECTED source=ESA feed=OPT-LOWLIGHT score=0.91
+<span class="dim">sv.audit:</span> event=TEAM_LOST unit=LOCAL-01 last_msg="...olhando para cima. E sorrindo."
+<span class="dim">sv.audit:</span> event=THREAT_MODEL hypothesis=KNOWLEDGE-ENTITY codename=HORDA
+                  </div>
+                </div>
+
+                <div class="panel" style="margin-top:12px;">
+                  <h3>Protocolos recomendados</h3>
+                  <ul class="mono">
+                    <li>Dupla observação: ninguém observa o céu sozinho.</li>
+                    <li>Comunicação em janela: transmissões curtas e temporizadas.</li>
+                    <li>Regra de eco: se uma frase “quer ser repetida”, ela não deve ser.</li>
+                    <li>Isolamento de mídia: nada de upload ao vivo; tudo em buffer local.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- TIMELINE -->
+              <div class="tabview" id="tab-timeline">
+                <div class="panel" id="cronologia">
+                  <h3>Cronologia (consolidada)</h3>
+
+                  <details open>
+                    <summary>T-90 a T-30 dias — “calma perfeita”</summary>
+                    <ul>
+                      <li>Queda gradual de incidentes: trânsito, registros, chamados.</li>
+                      <li>Uniformização de comportamento digital: postagens repetitivas, horários rígidos.</li>
+                      <li>Redução de ruído: menos contradição, menos divergência, menos “pessoa”.</li>
+                    </ul>
+                  </details>
+
+                  <details open>
+                    <summary>T-72 horas — desaparecimento digital</summary>
+                    <ul>
+                      <li>Interrupção total de comunicação externa detectada.</li>
+                      <li>Roteamento e telecom retornam silêncio: sem erro, sem resposta.</li>
+                      <li>ESA reporta auroras “fora de lugar” com padrão estruturado.</li>
+                    </ul>
+                  </details>
+
+                  <details open>
+                    <summary>T-48 horas — equipes locais</summary>
+                    <ul>
+                      <li>Local-01 entra no perímetro; sem retorno.</li>
+                      <li>Local-02 entra; última transmissão cita observação coletiva e sorriso.</li>
+                      <li>Sem sinais posteriores: nada em rádio, nada em tráfego civil, nada em rede.</li>
+                    </ul>
+                  </details>
+
+                  <details>
+                    <summary>T-06 horas — autorização Sanctum Veritatis</summary>
+                    <ul>
+                      <li>Operação recebe status ATIVA e codinome HORDA.</li>
+                      <li>Protocolos de custódia reforçados; anexos em modo leitura.</li>
+                      <li>Mandantes notificados e matriz de risco atualizada.</li>
+                    </ul>
+                  </details>
+                </div>
+
+                <div class="panel" style="margin-top:12px;">
+                  <h3>Indicadores de escalada</h3>
+                  <ul class="mono">
+                    <li>Luzes começam a “responder” a pensamentos (sincronia com frases internas).</li>
+                    <li>Habitantes repetem palavras idênticas com a mesma entonação.</li>
+                    <li>Qualquer dispositivo que grava apresenta checksum inconsistente (sem causa mecânica).</li>
+                    <li>Sonhos compartilhados entre membros da equipe.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- FILES -->
+              <div class="tabview" id="tab-files">
+                <div class="panel" id="evidencias">
+                  <h3>Anexos (modo leitura)</h3>
+
+                  <div class="filelist">
+                    <div class="file" data-hash="EVD-AV-01">
+                      <div>
+                        <strong>EVD-AV-01.jpg</strong>
+                        <small>/ops/aurora_vidro/anexos/ — Imagem em baixa luz. Observação: ruído “geométrico” em bordas de nuvem.</small>
+                        <small class="dim">Integridade: checksum inconsistente (ver SV.AUDIT).</small>
+                      </div>
+                      <button class="btn ghost" disabled>BAIXAR</button>
+                    </div>
+
+                    <div class="file" data-hash="EVD-AV-02">
+                      <div>
+                        <strong>EVD-AV-02.wav</strong>
+                        <small>/ops/aurora_vidro/anexos/ — Rádio (último contato Local-02). Ruído de fundo com padrão repetitivo.</small>
+                        <small class="dim">Nota: não transcrever em voz alta.</small>
+                      </div>
+                      <button class="btn ghost" disabled>BAIXAR</button>
+                    </div>
+
+                    <div class="file" data-hash="RPT-AV-00">
+                      <div>
+                        <strong>RPT-AV-00.pdf</strong>
+                        <small>/ops/aurora_vidro/anexos/ — Relatório preliminar (versão redigida). 9 páginas.</small>
+                        <small class="dim">Redação aplicada: CORVIN // Custódia: KURODA</small>
+                      </div>
+                      <button class="btn ghost" disabled>ABRIR</button>
+                    </div>
+
+                    <div class="file" data-hash="NOTA-AV">
+                      <div>
+                        <strong>NOTA-AV.txt</strong>
+                        <small>/ops/aurora_vidro/anexos/ — Nota curta do analista. “Não é um desenho. É uma gramática.”</small>
+                        <small class="dim">Indexado: há 06h.</small>
+                      </div>
+                      <button class="btn ghost" disabled>ABRIR</button>
+                    </div>
+                  </div>
+
+                  <!-- Hints (diegéticos) -->
+                  <!--
+                    sv.audit hint:
+                    "quando o padrão se repete, ele não está falhando — está treinando você."
+                    vault path (restricted): /vault/hor_da/lexicon/
+                  -->
+                </div>
+
+                <div class="panel" style="margin-top:12px;">
+                  <h3>Procedimento de custódia</h3>
+                  <ul class="mono">
+                    <li>Registrar origem, operador, horário, dispositivo e modo de captura.</li>
+                    <li>Lacrar mídia física e gerar hash local; enviar hash em canal separado.</li>
+                    <li>Não reprocessar o arquivo; qualquer “melhoria” destrói a evidência.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- PEOPLE -->
+              <div class="tabview" id="tab-people">
+                <div class="panel" id="pessoal">
+                  <h3>Mandantes e responsabilidades</h3>
+
+                  <details open>
+                    <summary>Autoridade operacional</summary>
+                    <ul>
+                      <li>Dr. Hartmann — Direção de Operações (autorização final / exceções).</li>
+                      <li>Cmd. McRae — Coordenação Tática (extração, perímetro, contingência).</li>
+                    </ul>
+                  </details>
+
+                  <details open>
+                    <summary>Controle e sigilo</summary>
+                    <ul>
+                      <li>Pe. Damián Corvin — Conformidade & Sigilo (redação, encobrimento, controle narrativo).</li>
+                      <li>Helena Kuroda — Arquivo & Custódia (lacres, cadeia de evidência, quarentena).</li>
+                    </ul>
+                  </details>
+
+                  <details open>
+                    <summary>Inteligência e análise</summary>
+                    <ul>
+                      <li>Yara Saldanha — Inteligência (correlação, padrão, hipótese “Conhecimento”).</li>
+                      <li>Selene Varga — Pesquisa (validação de padrão, modelagem semiótica).</li>
+                      <li>Bruno Nasser — Tecnologia (infra, backups, isolamento de mídia).</li>
+                    </ul>
+                  </details>
+
+                  <details>
+                    <summary>Nota interna (não publicada)</summary>
+                    <p>
+                      “Se a cidade inteira sorri ao mesmo tempo, a pergunta não é por quê.
+                      A pergunta é: quem decidiu que sorrir é necessário?”
+                    </p>
+                    <p class="dim">— anotação sem assinatura, anexada ao caso após T-72h.</p>
+                  </details>
+
+                  <div class="hr"></div>
+
+                  <div class="terminal" aria-label="Trecho de autorização">
+<span class="dim">sv.ops:</span> op=aurora_vidro status=ACTIVE clearance=INTERNAL codename=HORDA
+<span class="dim">sv.ops:</span> authority=HARTMANN tactical=McRAE intel=SALDANHA
+<span class="dim">sv.ops:</span> secrecy=CORVIN custody=KURODA
+<span class="dim">sv.audit:</span> directive="preservar registros brutos; não reproduzir padrões verbalmente"
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Quick facts -->
+            <aside>
+              <div class="panel">
+                <h3>Ficha rápida</h3>
+                <div class="kv">
+                  <div class="cell"><b>Status</b><br/>Ativa</div>
+                  <div class="cell"><b>Sigilo</b><br/>Interno</div>
+                  <div class="cell"><b>Código</b><br/>SV-OP-AV</div>
+                  <div class="cell"><b>Codinome</b><br/>HORDA</div>
+                  <div class="cell"><b>Janela</b><br/>72 horas</div>
+                  <div class="cell"><b>Risco</b><br/>Alto</div>
+                </div>
+              </div>
+
+              <div class="panel" style="margin-top:12px;">
+                <h3>Objetivos</h3>
+                <ul class="mono">
+                  <li>Mapear origem do blackout.</li>
+                  <li>Confirmar vetor (visual, auditivo, memético).</li>
+                  <li>Resgatar/confirmar destino das equipes locais.</li>
+                  <li>Conter propagação do fenômeno.</li>
+                </ul>
+              </div>
+
+              <div class="panel" style="margin-top:12px;">
+                <h3>Condições</h3>
+                <ul class="mono">
+                  <li>-8°C (campo reportado).</li>
+                  <li>Visibilidade variável; baixa luz persistente.</li>
+                  <li>Comunicação externa: instável/inexistente.</li>
+                  <li>Comportamento civil: uniforme.</li>
+                </ul>
+              </div>
+
+              <div class="panel" style="margin-top:12px;">
+                <h3>Nota do sistema</h3>
+                <p class="mono">
+                  Alguns anexos podem aparentar “corrupção”. Não trate isso como erro até verificar contexto.
+                  O SV.OS registrou inconsistências recorrentes de checksum.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </section>
+      </article>
+    </main>
+  </div>
+
+  <script>
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+    // Tabs: sidebar + buttons
+    function activate(tab){
+      $$(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+      $$(".nav a").forEach(a => a.classList.toggle("active", a.dataset.tab === tab));
+      $$(".tabview").forEach(v => v.classList.toggle("active", v.id === "tab-" + tab));
+    }
+
+    $$(".tab").forEach(btn => btn.addEventListener("click", () => activate(btn.dataset.tab)));
+    $$(".nav a").forEach(a => a.addEventListener("click", (e) => {
+      e.preventDefault();
+      activate(a.dataset.tab);
+      const anchor = a.getAttribute("href");
+      if(anchor && anchor.startsWith("#")) history.replaceState(null, "", anchor);
+    }));
+
+    // Default to hash if present
+    const hash = (location.hash || "").toLowerCase();
+    if(hash.includes("inteligencia")) activate("intel");
+    else if(hash.includes("cronologia")) activate("timeline");
+    else if(hash.includes("evidencias")) activate("files");
+    else if(hash.includes("pessoal")) activate("people");
+    else activate("overview");
+
+    // Faux export / seal (diegético)
+    const btnExport = document.getElementById("btnExport");
+    const btnSeal = document.getElementById("btnSeal");
+
+    btnExport.addEventListener("click", () => {
+      btnExport.textContent = "EXPORTADO";
+      btnExport.disabled = true;
+      setTimeout(() => {
+        btnExport.textContent = "EXPORTAR";
+        btnExport.disabled = false;
+      }, 1400);
+    });
+
+    btnSeal.addEventListener("click", () => {
+      btnSeal.textContent = "LACRADO";
+      btnSeal.disabled = true;
+
+      // optional diegetic marker (could be used later by your "hack" puzzles)
+      document.documentElement.setAttribute("data-sealed", "true");
+      setTimeout(() => {
+        btnSeal.textContent = "LACRAR";
+        btnSeal.disabled = false;
+        document.documentElement.removeAttribute("data-sealed");
+      }, 1600);
+    });
+  </script>
+</body>
+</html>

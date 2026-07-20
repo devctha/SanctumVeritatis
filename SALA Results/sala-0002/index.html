@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SALA Results/sala-0002/">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0002 – O INSTRUMENTO QUE LEMBRA A MORTE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #14060b;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #1a0000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(4deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.5));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line {
+            margin: 4px 0;
+            white-space: pre-wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 0.85em;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(139,0,0,0.24);
+            color: var(--gold);
+        }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 4</div>
+        <h1>S.A.L.A-0002</h1>
+        <p class="designation">"O INSTRUMENTO QUE LEMBRA A MORTE"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0002 / ARTEFATO-RITUAL-PORTO-ALEGRE</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Instrumento Ritual – Eixo <span class="highlight">MORTE/CONHECIMENTO</span></span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>MODERADO a ALTO (dependendo do operador e do número de usos)</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>4 – Secreto / Autorização direta da Congregação Escarlate</span>
+
+            <span class="label">LOCALIZAÇÃO DE RECUPERAÇÃO:</span>
+            <span>Porto Alegre, Rio Grande do Sul, Brasil – Cripta sob o Cemitério da <span class="redacted">███████████</span></span>
+
+            <span class="label">LOCALIZAÇÃO ATUAL:</span>
+            <span>Câmara de Artefatos Mortuários – Subsolo 3, Santuário Escarlate (Setor Sul)</span>
+
+            <span class="label">ESTADO ATUAL:</span>
+            <span>Contido – Uso ritual estritamente regulado, máximo 3 ativações por ano</span>
+        </div>
+    </section>
+
+    <h2>§ I. DESCRIÇÃO FÍSICA</h2>
+
+    <p>S.A.L.A-0002 é um instrumento musical de cordas que lembra uma mistura entre uma viola de arco e um violoncelo, porém com proporções anômalas. Mede 1,35m de altura, com corpo alongado e estreito, confeccionado em uma madeira negra não identificada (amostras revelam ausência de anéis de crescimento e de qualquer padrão celular conhecido).</p>
+
+    <p>A superfície do instrumento é recoberta por entalhes que, à primeira vista, parecem meros ornamentos barrocos. Análise posterior indicou tratar-se de uma sequência contínua de sigilos mortuários, muitos deles idênticos a símbolos usados em rituais do Elemento Morte ligados ao Outro Lado.</p>
+
+    <p>O que seria o braço do instrumento contém quatro cordas, mas nenhuma delas é feita de material reconhecível: não se tratam de metal, nylon, seda ou tripa. Ao microscópio, as cordas se assemelham a <span class="highlight">fios de tecido cicatrizado</span>, como se fossem costuras arrancadas de feridas antigas.</p>
+
+    <p>O arco associado ao instrumento não possui crina. Em seu lugar, uma lâmina fina e sem corte visível, feita de um material translúcido entre o vidro e o osso, que vibra levemente quando aproximada do corpo humano.</p>
+
+    <h2>§ II. HISTÓRICO E RECUPERAÇÃO</h2>
+
+    <p>0002 foi recuperado durante a investigação de uma série de mortes inexplicáveis em Porto Alegre, todas ligadas a um mesmo velório. Entre 2004 e 2010, pelo menos 27 pessoas com doenças terminais foram reportadas como "curadas" após assistirem a uma cerimônia de despedida em que um músico anônimo tocava um instrumento incomum ao lado do caixão.</p>
+
+    <p>Coincidentemente, em todos os casos, <i>alguém relacionado ao falecido</i> morria em até 13 dias, em circunstâncias variadas, assumindo os sintomas da doença do falecido original. Exames posteriores mostraram que tumores, cicatrizes e marcas de lesões migravam literalmente de um corpo a outro.</p>
+
+    <div class="incident">
+        <h3>INCIDENTE "O MÚSICO DA CRIPTA"</h3>
+        <p><b>Data:</b> 09/09/2010<br>
+           <b>Local:</b> Cemitério da <span class="redacted">███████████</span>, Porto Alegre</p>
+
+        <p>Agente de Campo <b>Rafael Moretti</b>, infiltrado como coveiro, relatou a presença constante de um homem de idade indefinida, sempre vestido de preto, tocando um estranho instrumento nas noites que antecediam velórios de casos "milagrosos". Ninguém sabia seu nome. Ninguém lembrava quando ele começara a aparecer. "Ele sempre esteve aqui", diziam.</p>
+
+        <blockquote>
+            <b>Declaração do Agente Moretti:</b><br><br>
+            "A música não era triste. Isso foi o que mais me assustou. Não era uma marcha fúnebre nem nada assim. Era... serena. Como se a morte fosse um descanso merecido, uma promessa cumprida.<br><br>
+            Mas enquanto ele tocava, eu via algo no ar. Como se fios fossem puxados dos corpos nos caixões, atravessassem a sala, e se conectassem aos vivos. Como se a doença estivesse sendo gentilmente reposicionada."<br>
+        </blockquote>
+
+        <p>Quando a Congregação decidiu intervir, o músico desapareceu. O instrumento foi encontrado na cripta mais antiga do cemitério, apoiado contra um túmulo sem nome. No mármore, apenas uma frase em latim, parcialmente erodida:</p>
+
+        <div class="ritual">
+            "MEMORIAE MORTEM • MORTI MEMORIAM"<br>
+            (À memória da morte • À morte, a memória)
+        </div>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Transferência de Carga Mortal</h3>
+    <p>Quando 0002 é tocado corretamente em um ambiente onde há um morto recente (24h ou menos) e um grupo de vivos em luto, o instrumento induz um fenômeno de <span class="highlight">transferência de carga mortal</span>: a morte "se desloca" do falecido para outro indivíduo presente, com uma lógica que mistura laços emocionais, culpa, medo e desejo inconsciente.</p>
+
+    <p>Em testes controlados, a Congregação observou que:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Doenças terminais, ferimentos fatais e maldições de Morte podem ser "retirados" de um corpo e "oferecidos" a outro.</li>
+        <li>O alvo raramente é consciente da escolha. A decisão parece ser influenciada pelo artefato, que lê vulnerabilidades emocionais.</li>
+        <li>Em alguns casos raros, a carga mortal é dividida entre duas ou mais pessoas, resultando em mortes simultâneas.</li>
+    </ul>
+
+    <h3>III-B. Memória da Morte</h3>
+    <p>Indivíduos expostos à execução completa de uma peça ritual com 0002 relatam, posteriormente, <i>lembranças vívidas de mortes que nunca viveram</i>: sensações de sufocamento, quedas, tiros, envelhecimento acelerado, etc. Esses episódios ocorrem durante sonhos ou ataques de pânico.</p>
+
+    <p>Pesquisas com ocultistas treinados indicam que o artefato armazena, de alguma forma, "ecos" de mortes associadas a ele, e as redistribui como experiências sensoriais completas.</p>
+
+    <blockquote>
+        "0002 não só move a morte de um corpo para outro. Ele a arquiva. Catalogada. Afinada. Cada nota é uma morte que já aconteceu e uma morte que ainda vai acontecer."<br><br>
+        – Irmã Cecília Andrade (antes do incidente com S.A.L.A-0000)
+    </blockquote>
+
+    <h3>III-C. Afinidade com o Elemento Morte</h3>
+    <p>Testes com agentes sensíveis ao Elemento Morte mostram que apenas aqueles com alta afinidade conseguem produzir som do instrumento. Para pessoas comuns, 0002 é pesado, inerte, silencioso. Para ocultistas, cada arco produz notas que ressoam no Outro Lado, ecoando em zonas sob domínio de entidades ligadas à Morte.</p>
+
+    <h2>§ IV. TESTES CONTROLADOS</h2>
+
+    <div class="log">
+        <div class="log-line"><b>TESTE 0002-A – "A DOENÇA QUE MUDA DE DONO"</b></div>
+        <div class="log-line">Data: 04/02/2013</div>
+        <div class="log-line">Local: Câmara Mortuária Experimental – Setor Sul</div>
+        <br>
+        <div class="log-line"><b>Sujeitos:</b></div>
+        <div class="log-line">– S1: Paciente terminal com câncer de pulmão em estágio IV.</div>
+        <div class="log-line">– S2: Voluntário da Congregação, saudável, sem histórico de doenças graves.</div>
+        <br>
+        <div class="log-line"><b>Procedimento:</b> 0002 foi tocado por Ocultista Grau-III (Agente Navarrete) por 11 minutos, ao lado do leito de S1. S2 permaneceu ao pé da cama, segurando a mão de S1.</div>
+        <br>
+        <div class="log-line"><b>Resultado:</b></div>
+        <div class="log-line">– Após 24 horas, S1 apresentou regressão completa de sinais clínicos de câncer.</div>
+        <div class="log-line">– Em 72 horas, S2 começou a apresentar sintomas idênticos aos de S1 (dor torácica, tosse com sangue, perda de peso).</div>
+        <div class="log-line">– Exames comprovaram a aparição de tumores idênticos, na mesma localização, no corpo de S2.</div>
+        <div class="log-line">– S2 morreu em 19 dias. S1 permanece vivo, até a data deste relatório.</div>
+        <br>
+        <div class="log-line"><i>Conclusão:</i> Transferência bem-sucedida. O Instrumento designou o portador da carga mortal com base na relação de afeto e culpa: S2 havia confessado, antes do teste, desejar "poder trocar de lugar" com S1.</div>
+    </div>
+
+    <div class="log">
+        <div class="log-line"><b>TESTE 0002-D – "VELÓRIO SIMULADO"</b></div>
+        <div class="log-line">Data: 21/07/2015</div>
+        <div class="log-line">Local: Capela interna da Congregação – Ala Experimental</div>
+        <br>
+        <div class="log-line"><b>Sujeitos:</b> 12 agentes, sendo 3 com doenças crônicas leves, 9 saudáveis.</div>
+        <div class="log-line"><b>Procedimento:</b> Simulação de velório com caixão vazio. 0002 foi tocado por 15 minutos.</div>
+        <br>
+        <div class="log-line"><b>Resultado:</b></div>
+        <div class="log-line">– Em 48 horas, todos os 3 agentes com doenças crônicas relataram alívio total de sintomas.</div>
+        <div class="log-line">– Em 10 dias, 4 dos agentes saudáveis desenvolveram, simultaneamente, as mesmas doenças (mesmo tipo, mesma progressão). Os demais permaneceram íntegros.</div>
+        <div class="log-line">– Investigação psicológica revelou que os 4 agentes que adoeceram tinham, em algum nível, ressentimento reprimido em relação aos 3 "curados".</div>
+        <br>
+        <div class="log-line"><i>Conclusão:</i> 0002 não escolhe aleatoriamente. Ele "escuta" o que as pessoas não admitem em voz alta.</div>
+    </div>
+
+    <h2>§ V. RELAÇÃO COM O OUTRO LADO E LORE</h2>
+
+    <p>Estudos teológicos da Congregação conectam 0002 a cultos antigos do sul do Brasil, possivelmente ligados a migrações de ordens europeias que lidavam com o Elemento Morte. Em registros cifrados encontrados em um mosteiro demolido em 1890, há menção a um "Instrumento que faz a morte se lembrar de quem a chamou primeiro".</p>
+
+    <p>Além disso, rituais recentes envolvendo KAIRA (ver arquivo correspondente) sugerem que a própria ideia de "curar" é profundamente ambígua no Outro Lado. Se o sangue de KAIRA cura ao preço de fortalecer um Deus estrangeiro (Muka'an), 0002 <span class="highlight">cura ao preço de deslocar a sentença</span>. Nada é apagado. Apenas reescrito.</p>
+
+    <blockquote>
+        "Se o sangue de KAIRA é a misericórdia cruel, 0002 é a justiça torcida. Nenhuma doença desaparece; ela apenas encontra outro nome para assinar na certidão de óbito."<br><br>
+        – Grão-Mestre Augusto Richter
+    </blockquote>
+
+    <h2>§ VI. PROTOCOLOS DE USO E CONTENÇÃO</h2>
+
+    <p>001. 0002 deve ser mantido em estojo ritual selado com sal negro e símbolos de Morte neutralizada.</p>
+    <p>002. A sala de contenção deve permanecer insonorizada. Nenhum som pode sair quando o instrumento é tocado.</p>
+    <p>003. Qualquer execução de 0002 requer:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Autorização por escrito de três membros do Conselho Escarlate.</li>
+        <li>Presença de pelo menos um Observador da Congregação não envolvido emocionalmente com os sujeitos.</li>
+        <li>Registro integral em vídeo, áudio e registro metafísico (quando possível).</li>
+    </ul>
+
+    <p>004. É expressamente proibido que um ocultista toque 0002 se:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Guardar desejo de "salvar" alguém específico.</li>
+        <li>Estiver em luto recente.</li>
+        <li>Estiver sob influência do Elemento Medo acima de 50% de saturação.</li>
+    </ul>
+
+    <p>005. O uso em campo (fora da Congregação) só é permitido em cenários de ameaça existencial, onde a transferência de carga mortal possa impedir uma catástrofe maior.</p>
+
+    <div class="addendum">
+        <h2>ADENDO 0002-Ω: A ÚLTIMA MÚSICA DO MÚSICO SEM ROSTO</h2>
+
+        <p>Em 2021, câmeras internas da Câmara Mortuária registraram um evento não autorizado. Às 03:17, as luzes piscaram por 11 segundos. Quando o sistema voltou, 0002 estava fora do estojo, posicionado no centro da sala.</p>
+
+        <p>As gravações mostram uma figura indistinta, borrada, sentada com o instrumento entre as pernas. Não há rosto visível. Não há som registrado, mas os sensores de vibração indicam que 0002 foi tocado por exatamente 3 minutos e 33 segundos.</p>
+
+        <p>No dia seguinte, 33 pacientes em hospitais diferentes de Porto Alegre — todos em estado terminal — foram declarados em remissão inexplicável. Em contrapartida, 33 pessoas sem relação aparente, em cidades diversas, morreram subitamente de falência múltipla de órgãos.</p>
+
+        <blockquote>
+            No chão da câmara, ao lado do pedestal, alguém escreveu com sangue, em letra precisa:<br><br>
+            "VOCÊS O TOMARAM DE MIM, MAS NÃO PODEM TOMAR A MÚSICA."<br>
+            – Assinatura: <span class="redacted">██████████</span><br><br>
+            Cruzamento posterior com registros antigos indica forte probabilidade de ser o nome do músico anônimo que tocava nos velórios em Porto Alegre entre 2004 e 2010.
+        </blockquote>
+
+        <p>Desde então, 0002 permanece em silêncio. Nenhum ocultista consegue extrair som dele. A Congregação acredita que o Instrumento aguarda um novo "Músico da Cripta", alguém disposto a aceitar o peso de decidir quem morre em lugar de quem.</p>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo integra o acervo da Biblioteca da Congregação Escarlate.</p>
+        <p>Alterações não autorizadas serão tratadas como contaminação ritual.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"A morte não se perde. Ela apenas muda de endereço."</i></p>
+    </div>
+</div>
+
+</body>
+</html>

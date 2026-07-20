@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/equipe-alpha/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • EQUIPE ALPHA • COMPÊNDIO DE DENOMINAÇÕES</title>
+
+  <style>
+    :root{
+      --bg0:#04030a;
+      --bg1:#07081b;
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted: rgba(219,234,254,.65);
+      --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.20);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .12;
+      --noise-opacity: .08;
+      --flicker: .055;
+      --shake: 0px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 16% 12%, rgba(168,85,247,.12), transparent 62%),
+        radial-gradient(900px 650px at 86% 22%, rgba(56,189,248,.10), transparent 60%),
+        radial-gradient(900px 650px at 50% 92%, rgba(34,197,94,.08), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, rgba(239,68,68,.10), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(14px, 2vw, 22px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(12px, 1.6vw, 18px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.03), transparent 22%, rgba(0,255,255,.02) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.55;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.60) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-7px,5px,0); }
+      50%{ transform: translate3d(6px,-5px,0); }
+      75%{ transform: translate3d(-4px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 4.4s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      33%{ opacity: calc(var(--flicker) * 1.2); }
+      34%{ opacity: 0; }
+      58%{ opacity: calc(var(--flicker) * .8); }
+      59%{ opacity: 0; }
+      88%{ opacity: calc(var(--flicker) * 1.45); }
+      89%{ opacity: 0; }
+    }
+
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,24,.70), rgba(5,6,10,.44));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: clamp(14px, 1.7vw, 16px);
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.72);
+      line-height:1.35;
+      max-width: 100ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.24);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowB);
+      font-size: 12px;
+      color: rgba(219,234,254,.82);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--orange);
+      box-shadow: 0 0 14px rgba(251,146,60,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(168,85,247,.16);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(251,146,60,.22);
+      background: linear-gradient(180deg, rgba(251,146,60,.18), rgba(239,68,68,.10));
+      color: #ffe4c7;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowO), var(--shadowR);
+      user-select:none;
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .ghost{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowB);
+      user-select:none;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      padding: 16px;
+      min-height:0;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+      display:grid;
+      gap: 14px;
+    }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.25);
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.06);
+      overflow:hidden;
+    }
+
+    .cardHead{
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .cardHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.80);
+    }
+
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.28);
+      font-size: 12px;
+      color: rgba(219,234,254,.60);
+    }
+    .chip b{ color: rgba(219,234,254,.88); }
+
+    .cardBody{ padding: 12px; }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      padding: 10px 10px;
+      box-shadow: var(--shadowV);
+    }
+    .kv .k{ font-size: 11px; letter-spacing:.12em; text-transform:uppercase; color: rgba(219,234,254,.55); }
+    .kv .v{ margin-top:6px; font-size: 13px; line-height:1.6; color: rgba(219,234,254,.82); }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      box-shadow: var(--shadowV);
+    }
+    th, td{
+      text-align:left;
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.12);
+      vertical-align:top;
+      font-size: 13px;
+      line-height:1.45;
+      color: rgba(219,234,254,.82);
+    }
+    th{
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.72);
+      background: rgba(2,6,23,.24);
+    }
+    tr:last-child td{ border-bottom:none; }
+
+    .warn{ color: rgba(251,146,60,.88); text-shadow: var(--shadowO); }
+    .danger{ color: rgba(239,68,68,.88); text-shadow: var(--shadowR); }
+    .ok{ color: rgba(34,197,94,.88); text-shadow: var(--shadowG); }
+
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+    }
+    .introCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.90), rgba(3,6,18,.64));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 48px rgba(168,85,247,.18),
+        0 0 56px rgba(56,189,248,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .introTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      font-size: 13px;
+    }
+    .introTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+      max-width: 95ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      font-size: 12px;
+      min-height: 220px;
+      max-height: min(58vh, 600px);
+      overflow:auto;
+    }
+    .introActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.62);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,.25);
+      background: rgba(251,146,60,.08);
+      color: #ffe4c7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="title">S.A.S / Compêndio • “Equipe Alpha”</div>
+          <div class="sub">
+            “Alpha” não é uma unidade específica: é uma denominação recorrente para primeiras equipes, células de impacto,
+            grupos de contenção ou times inaugurais.<br/>
+            Este arquivo lista esquadrões “Alpha” registrados em múltiplas organizações paranormais (inclui organizações, cultos e mercenários).
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>FILE: ALPHA_INDEX • MODE: REFERENCE</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <div class="k">REFERENCE / INDEX</div>
+        <div class="actions">
+          <button class="ghost" id="btnNoise" type="button">Ruído</button>
+          <button class="btn" id="btnCollapse" type="button">Compactar: OFF</button>
+          <button class="ghost" id="btnTop" type="button">Topo</button>
+        </div>
+      </div>
+
+      <div class="wrap" id="scrollArea">
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Definição operacional</div>
+            <div class="chips">
+              <span class="chip"><b>Uso</b> primeira linha</span>
+              <span class="chip"><b>Risco</b> alto</span>
+              <span class="chip"><b>Nota</b> “Alpha” muda de significado</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="kv">
+              <div class="k">Padrão observado</div>
+              <div class="v">
+                Em quase todas as organizações, “Alpha” aparece por um dos motivos: (1) equipe inaugural, (2) célula de resposta imediata,
+                (3) grupo de teste para novos protocolos, ou (4) propaganda interna para moral e recrutamento.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Organizações (28)</div>
+            <div class="chips">
+              <span class="chip"><b>Inclui</b> as 6-base + 22 extras</span>
+              <span class="chip"><b>Total</b> 28</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <table id="tblOrgs">
+              <thead>
+                <tr>
+                  <th>Organização</th>
+                  <th>Denominação</th>
+                  <th>Membros (Equipe Alpha)</th>
+                  <th>Nota curta</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Cultos (13)</div>
+            <div class="chips">
+              <span class="chip"><b>Total</b> 13</span>
+              <span class="chip"><b>Perfil</b> ritual/segredo</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <table id="tblCults">
+              <thead>
+                <tr>
+                  <th>Culto</th>
+                  <th>Denominação</th>
+                  <th>Membros (Célula Alpha)</th>
+                  <th>Nota curta</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Mercenários (7)</div>
+            <div class="chips">
+              <span class="chip"><b>Total</b> 7</span>
+              <span class="chip"><b>Perfil</b> contrato</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <table id="tblMercs">
+              <thead>
+                <tr>
+                  <th>Grupo</th>
+                  <th>Denominação</th>
+                  <th>Membros (Alpha)</th>
+                  <th>Nota curta</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução Equipe Alpha">
+    <div class="introCard">
+      <div class="introTop">
+        <div>
+          <div class="h">SARCOPHAGUS / OPEN FILE</div>
+          <div class="s">
+            Índice de designações “Alpha”. Nomes podem ser históricos, simbólicos ou deliberadamente falsos.<br/>
+            Use como referência de contexto — não como prova.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>MODE: INDEX</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="introActions">
+        <button class="btn" id="btnEnter" type="button">Entrar</button>
+        <div class="kbd">Atalhos: <code>Enter</code> entrar • <code>/</code> ruído • <code>T</code> topo • <code>C</code> compactar</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const typebox = document.getElementById("typebox");
+    const scrollArea = document.getElementById("scrollArea");
+
+    const btnNoise = document.getElementById("btnNoise");
+    const btnTop = document.getElementById("btnTop");
+    const btnEnter = document.getElementById("btnEnter");
+    const btnCollapse = document.getElementById("btnCollapse");
+
+    let compact = false;
+
+    function setVars(scan, noise, flick, shake){
+      document.documentElement.style.setProperty("--scan-opacity", scan);
+      document.documentElement.style.setProperty("--noise-opacity", noise);
+      document.documentElement.style.setProperty("--flicker", flick);
+      document.documentElement.style.setProperty("--shake", shake);
+    }
+
+    function dopaminePulse(){
+      const scan = (0.08 + Math.random()*0.12).toFixed(2);
+      const noise = (0.06 + Math.random()*0.10).toFixed(2);
+      const flick = (0.04 + Math.random()*0.08).toFixed(3);
+      const shake = (Math.random() < 0.14) ? ((Math.random() * 2 - 1).toFixed(1) + "px") : "0px";
+      setVars(scan, noise, flick, shake);
+      setTimeout(() => setVars(".12",".08",".055","0px"), 1100);
+    }
+
+    function closeIntro(){
+      intro.style.display = "none";
+      dopaminePulse();
+      scrollArea.scrollTop = 0;
+    }
+
+    function updateCompact(){
+      btnCollapse.textContent = "Compactar: " + (compact ? "ON" : "OFF");
+      document.querySelectorAll("td, th").forEach(el=>{
+        el.style.padding = compact ? "7px 9px" : "10px 10px";
+        el.style.fontSize = compact ? "12px" : "13px";
+      });
+      document.querySelectorAll(".cardBody").forEach(el=>{
+        el.style.padding = compact ? "10px" : "12px";
+      });
+    }
+
+    const boot = [
+      "[S.A.S] mount: SAS Results/",
+      "[S.A.S] file: equipe-alpha.html",
+      "[S.A.S] type: index/reference",
+      "[S.A.S] note: designação reutilizada por múltiplas entidades",
+      "",
+      "EQUIPE ALPHA • COMPÊNDIO",
+      "Organizações: 28 | Cultos: 13 | Mercenários: 7",
+      "",
+      "Pressione ENTER para abrir."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        const base = 30;
+        const jitter = Math.random()*90;
+        setTimeout(tick, base + jitter);
+      };
+      tick();
+    }
+
+    // === DATA ===
+    // 28 organizações (6 fornecidas + 22 criadas)
+    const orgs = [
+      {
+        org: "Sanctum Veritatis",
+        denom: "Equipe Alpha (Célula de Verdade)",
+        members: ["Marcus", "Yin", "Elias", "Sophia", "Klaus"],
+        note: "Primeira célula após o cisma; foco em prova, não em contenção."
+      },
+      {
+        org: "DRACONIA",
+        denom: "Alpha / Lança de Vidro",
+        members: ["Vespert", "Torcida", "Almir", "Sereia", "Vulkan", "Zcno"],
+        note: "Resposta de exploração do outro lado; linguagem como risco."
+      },
+      {
+        org: "Conselho Escarlate",
+        denom: "Alpha / Comissão Rubra",
+        members: ["Cardeal Lúcio Varnay", "Irmã Mireya", "Otávio Sable", "Rafaela Nox", "Bento Ardent"],
+        note: "Primeira linha política: controle de catálogo, veto e execução."
+      },
+      {
+        org: "Fundação",
+        denom: "Alpha / Contenção Primária",
+        members: ["Dr. Hiram Kline", "Ag. Noemi Rook", "Técn. Dario Quent", "Cap. Salma Vird", "Oper. “Latch”"],
+        note: "Equipe que entra antes do relatório existir."
+      },
+      {
+        org: "Shadow Company",
+        denom: "Alpha / Black Ledger",
+        members: ["Ronan Kreel", "Maya “Glyph” Serrat", "Kenji Harlow", "Zara Flint", "Oleg “Mute”"],
+        note: "Recuperação de ativo e silêncio pós-evento."
+      },
+      {
+        org: "Companhia 978",
+        denom: "Alpha / Linha Zero",
+        members: ["Soren Vale", "Iris Calder", "Mateo Kross", "Lina Dorne", "Breno “Silt”"],
+        note: "Testes de protocolo: onde o erro vira doutrina."
+      },
+
+      // 22 organizações criadas
+      { org:"COSMO", denom:"Alpha / Astral Audit", members:["Alexander Casanova","Dr. Celina Mar","Nilo Harken","Tess “Arc”","Jonas Ketter"], note:"Auditoria de fenômenos; quando o “cálculo” vira culto." },
+      { org:"Setentrional Bureau", denom:"Alpha / Cartógrafos", members:["Bruna Fenn","Raul Jäger","Idris Koan","Svetla Rami","Thiago Voss"], note:"Mapeamento de zonas frias e corredores que não constam." },
+      { org:"Prometheus Directorate", denom:"Alpha / Firebreak", members:["Helena Pryce","Gustav Ren","Mika Osei","Evan “Cinder”","Soraya Lenz"], note:"Contenção por queima: corta o fenômeno pelo rastro." },
+      { org:"Vigilância Liminal", denom:"Alpha / Portas", members:["Padre Afonso Velar","Inês Malk","Rui Vento","Sami Kadar","Vera Kest"], note:"Guardiões de passagem; juramento acima de comando." },
+      { org:"Consórcio Helix", denom:"Alpha / Biomassa", members:["Dr. Isadora Kelm","Ravi Singh","Tomas “Splice”","Lia Brant","Hugo Trine"], note:"Biotecnologia anômala; ética negociável." },
+      { org:"Núcleo Umbra", denom:"Alpha / Sombras", members:["Gael Noct","Marina Avel","Eliot Rusk","Anya “Shade”","Paulo Lorn"], note:"Operações sem assinatura; o relatório é um boato." },
+      { org:"Oráculo de Níquel", denom:"Alpha / Prognose", members:["Dália Rho","Mauro Canto","Kio Watan","Loren “Tide”","Nara Bex"], note:"Predição e ruído; acertar custa memória." },
+      { org:"Arquivistas do Véu", denom:"Alpha / Catalogação Viva", members:["Sílvia Morn","Basil Trent","Otto Fahl","Rebeca Mire","Yago “Index”"], note:"Quando o arquivo respira, eles são o pulmão." },
+      { org:"Liga Meridian", denom:"Alpha / Meridian 1", members:["César Vahl","Priya Nand","Gabi Rell","Rasmus Holt","Tânia Korr"], note:"Rede logística; entrega antes do fenômeno terminar." },
+      { org:"Coalizão de Selo", denom:"Alpha / Selo Branco", members:["General Armand Doye","Catarina “Seal”","Félix Moro","Nadia Kestrel","Silas Venn"], note:"Trancas e decretos; tranca também pessoas." },
+      { org:"Observatório Hécate", denom:"Alpha / Lua Morta", members:["Dr. Leandro Bris","Sofia Ruan","Maksim Yurev","Ana “Wane”","Beto Cyr"], note:"Astronomia do impossível; céu como campo." },
+      { org:"Diretoria Caligo", denom:"Alpha / Neblina", members:["Rosa Caligo","Teo Nair","Viktor Senn","Luana Fer","Gideon Pike"], note:"Interdição de área; negação como arma." },
+      { org:"Hospício de Ferro", denom:"Alpha / Triagem", members:["Dra. Míriam Koss","Enf. Paulo “Clamp”","Noah Sarr","Cíntia Vale","Rafael Dusk"], note:"Saúde e contenção se confundem demais." },
+      { org:"Câmara de Sal", denom:"Alpha / Salmoura", members:["Oriana Salt","Hassan Jibril","Mira “Brine”","Dante Roan","Júlio Kelm"], note:"Rituais de preservação; o sal não esquece." },
+      { org:"Expedição Boreal", denom:"Alpha / Norte Real", members:["Erik Madsen","Lara Skoog","Vítor Nyx","Aisha Noor","Breno Kall"], note:"Operação em frio anômalo; bússolas ‘aprendem’." },
+      { org:"Sindicância Arcana", denom:"Alpha / Corregedoria", members:["Marcos Lira","Aline Kett","Said Aram","Bruno “Gavel”","Tereza Foy"], note:"Investigam as outras organizações; inimigos em todo lugar." },
+      { org:"Rede Cérbero", denom:"Alpha / Tríade", members:["Helmut Drei","Carla Neme","João Cerna","Jade “Bite”","Igor Vulk"], note:"Interceptação e captura; três portas, um inferno." },
+      { org:"Círculo de Contenção Áurea", denom:"Alpha / Ouro Frio", members:["Valéria Aurum","Ciro Gant","Nina Sol","Pietro Lox","Vera Lumen"], note:"Contenção por símbolo; símbolos cobram juros." },
+      { org:"Departamento Mnemônico", denom:"Alpha / Apagadores", members:["Dr. Caio Mnemos","Lúcia Hush","Miguel Arden","Sara Lint","Otávio “Blank”"], note:"Contenção de memórias; às vezes apagam a pessoa inteira." },
+      { org:"Bastião Noctiluca", denom:"Alpha / Lampiras", members:["Rita Noct","Felipe Glint","Yuri Sava","Maia Lune","Dario “Glow”"], note:"Luz como ferramenta; não ilumina sem custo." },
+      { org:"Instituto Palimpsesto", denom:"Alpha / Reescrita", members:["Dr. Helena Palim","Renato Quill","Sora Kit","Vivi Rask","Eder “Draft”"], note:"Reescrevem relatórios e realidade; perigoso por definição." },
+      { org:"Cartório de Ossos", denom:"Alpha / Registro Morto", members:["Notário Silvano Oss","Lia Mortis","Pablo Vane","Tati Krow","Rúben Sarth"], note:"Burocracia do fim; selos que prendem mais que portas." }
+    ];
+
+    // 13 cultos (criados)
+    const cults = [
+      { org:"Culto do Coração-Cinzento", denom:"Alpha / Iniciados do Batimento", members:["Mãe Cindra","Ivo “Pulse”","Samira Karr","Neto Vahl","Eugênia Roe"], note:"Ritual de ritmo; batida errada abre rachadura." },
+      { org:"Ordem das Sete Chaves", denom:"Alpha / Chaveiro", members:["Prior Gedeão","Irmã Lysa","Milo Ketch","Aron Nox","Clara Venn"], note:"Portas como doutrina; cada chave é um juramento." },
+      { org:"Coro do Véu Partido", denom:"Alpha / Primeira Voz", members:["Voz-0 (título)","Nina “Chant”","Rui Marrow","Saha Bell","Eloy Fray"], note:"Canto memético; notas “contêm” pessoas." },
+      { org:"Igreja do Sal Negro", denom:"Alpha / Salmistas", members:["Pastor Garan","Helena Drow","Cássio Mire","Joana Kelp","Ícaro Silt"], note:"Conserva o impossível; o sal aprende nomes." },
+      { org:"Confraria do Olho Único", denom:"Alpha / Pupila", members:["O Vigia","Tessa Vorn","Breno Pike","Lívia Rune","Danilo Kett"], note:"Vigilância total; olhar como contrato." },
+      { org:"Semeadores do Vazio", denom:"Alpha / Semente", members:["Marta Null","Oran Grey","Pietra Dusk","Guto Vale","Sirin Fahl"], note:"Promessa de ‘paz’ pela ausência; atraem apagamento." },
+      { org:"Liturgia do Ferro Manso", denom:"Alpha / Martelo", members:["Abade Ferrum","Lourenço “Anvil”","Mina Vask","Célia Hark","Tomás Rook"], note:"Dor como disciplina; disciplina como passagem." },
+      { org:"Círculo da Boca Selada", denom:"Alpha / Mudos", members:["Mestre Selado","Iara “Hush”","Ramon Dray","Viktor Clay","Noemi Korr"], note:"Voto de silêncio; silêncio que chama." },
+      { org:"Oratório do Norte Invertido", denom:"Alpha / Setas", members:["Irmão Boreas","Elisa Frost","Khaled Noor","Bruna Kline","Sandro Morn"], note:"Bússolas ritualísticas; norte como entidade." },
+      { org:"Conclave das Cinzas Vivas", denom:"Alpha / Brasas", members:["Dama Ash","Rafa “Cinder”","Miro Kest","Sofia Lorn","Adri Quent"], note:"Queima sem fogo; restam decisões." },
+      { org:"Filhos do Sussurro", denom:"Alpha / Ouvidos", members:["Pai Murmur","Bia Venn","Dario Coil","Luna Mire","Caio Senn"], note:"Informação como fé; segredos viram comida." },
+      { org:"Monges da Fenda Clara", denom:"Alpha / Lâmina", members:["Monge Ishan","Téo Vahl","Maya Lint","Rosa Kadar","Rui Jett"], note:"Corte de membrana por gesto; risco extremo." },
+      { org:"Conselho do Altar Frio", denom:"Alpha / Primeiros", members:["Arconte Sable","Cris “Frost”","Nilo Dorne","Jana Pike","Otávio Rell"], note:"Hierarquia ritual; ‘primeiros’ são descartáveis." }
+    ];
+
+    // 7 mercenários (criados)
+    const mercs = [
+      { org:"Mercenários Vant-13", denom:"Alpha / Contrato Inicial", members:["Rex Vant","Mila “Scope”","Ivan Rutt","César “Knox”","Lea Korr"], note:"Captura e escolta de relíquias; cobram por risco." },
+      { org:"Legião Hushline", denom:"Alpha / Silencers", members:["Gunnar Hush","Nia “Quiet”","Paulo Vex","Sven Mar","Lara Bolt"], note:"Trabalham para quem paga e para quem ameaça." },
+      { org:"Companhia Pálida", denom:"Alpha / Whitecut", members:["Serguei Pale","Mara Flint","João Sleet","Yumi “Blade”","Hugo Varn"], note:"Operações limpas; rastro vira mito." },
+      { org:"Lobos de Cobalto", denom:"Alpha / Cobalto-1", members:["Afonso “Cobalt”","Rina Vox","Mateus Dren","Kira Holt","Ibrahim Senn"], note:"Contraentidades por força; falham caro." },
+      { org:"Sombra Rubra Merc", denom:"Alpha / Redshift", members:["Dante Redd","Silvia “Shift”","Renan Kross","Maya Kelm","Otto Pike"], note:"Intervenção rápida; preferem apagar do que conter." },
+      { org:"Rook & Rook Solutions", denom:"Alpha / DoubleRook", members:["Evan Rook","Noemi Rook-II","Said Venn","Célia Voss","Igor Quill"], note:"Família e contrato; legalidade flexível." },
+      { org:"Coluna Vésper", denom:"Alpha / Vesper-Prime", members:["Vésper Rami","Tanya Gant","Rui Marlow","Sora Kett","Breno Doye"], note:"Operações noturnas; usam o medo como cortina." }
+    ];
+
+    function rowHTML(item){
+      const members = item.members.join(", ");
+      return `
+        <tr>
+          <td>${item.org}</td>
+          <td>${item.denom}</td>
+          <td>${members}</td>
+          <td>${item.note}</td>
+        </tr>
+      `;
+    }
+
+    function render(){
+      document.querySelector("#tblOrgs tbody").innerHTML = orgs.map(rowHTML).join("");
+      document.querySelector("#tblCults tbody").innerHTML = cults.map(rowHTML).join("");
+      document.querySelector("#tblMercs tbody").innerHTML = mercs.map(rowHTML).join("");
+      updateCompact();
+    }
+
+    btnNoise.addEventListener("click", dopaminePulse);
+    btnTop.addEventListener("click", () => scrollArea.scrollTop = 0);
+    btnCollapse.addEventListener("click", () => { compact = !compact; updateCompact(); dopaminePulse(); });
+
+    btnEnter.addEventListener("click", closeIntro);
+
+    window.addEventListener("keydown", (e) => {
+      if (intro.style.display !== "none") {
+        if (e.key === "Enter") closeIntro();
+        return;
+      }
+      if (e.key === "/") { e.preventDefault(); dopaminePulse(); }
+      if (e.key.toLowerCase() === "t") scrollArea.scrollTop = 0;
+      if (e.key.toLowerCase() === "c") { compact = !compact; updateCompact(); dopaminePulse(); }
+    });
+
+    function closeIntro(){
+      intro.style.display = "none";
+      dopaminePulse();
+      scrollArea.scrollTop = 0;
+    }
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        const base = 30;
+        const jitter = Math.random()*90;
+        setTimeout(tick, base + jitter);
+      };
+      tick();
+    }
+
+    // init
+    typeBoot();
+    render();
+    updateCompact();
+  </script>
+</body>
+</html>

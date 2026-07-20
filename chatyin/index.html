@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/chatyin/">
+  <meta charset="UTF-8">
+  <title>SANCTUM // Canal Segurado – Agente Yin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FONTES -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-0: #020617;
+      --bg-1: #020617;
+      --bg-2: #020618;
+      --bg-term: #020617;
+      --accent: #00f5ff;
+      --accent-soft: rgba(0, 245, 255, 0.16);
+      --accent-warn: #ffb800;
+      --accent-bad: #ff3366;
+      --accent-good: #00ff9d;
+      --accent-secondary: #a855ff;
+      --text-0: #e5e7eb;
+      --text-1: #9ca3af;
+      --text-2: #6b7280;
+      --border-soft: rgba(148, 163, 253, 0.25);
+      --border-strong: rgba(148, 163, 253, 0.6);
+      --shadow-soft: 0 18px 60px rgba(0, 0, 0, 0.9);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --transition-fast: 0.18s ease-out;
+      --transition-med: 0.3s ease-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #111827 0, #020617 55%, #000000 100%);
+      color: var(--text-0);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .frame {
+      max-width: 1100px;
+      width: 100%;
+      border-radius: 24px;
+      padding: 2px;
+      border: 1px solid var(--border-strong);
+      background:
+        linear-gradient(135deg,
+          rgba(0, 245, 255, 0.32),
+          rgba(168, 85, 255, 0.25),
+          rgba(15, 23, 42, 0.5));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .shell {
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top left, rgba(0, 245, 255, 0.12), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(168, 85, 255, 0.18), transparent 60%),
+        linear-gradient(145deg, rgba(3, 7, 18, 0.96), rgba(15, 23, 42, 0.98));
+      padding: 1.6rem 1.8rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.6rem;
+      position: relative;
+    }
+
+    @media (max-width: 960px) {
+      .shell {
+        grid-template-columns: 1fr;
+        padding: 1.4rem;
+      }
+    }
+
+    /* Sidebar de status */
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 1rem 1.1rem;
+      background:
+        linear-gradient(135deg,
+          rgba(0, 245, 255, 0.12),
+          transparent 60%),
+        rgba(15, 23, 42, 0.9);
+      min-height: 260px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--text-0);
+    }
+
+    .sidebar-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 0.14rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .sidebar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-1);
+    }
+
+    .sidebar-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-2);
+    }
+
+    .sidebar-value {
+      color: var(--accent);
+    }
+
+    .rep-bar-wrapper {
+      margin-top: 0.4rem;
+    }
+
+    .rep-bar-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+    }
+
+    .rep-bar-fill {
+      height: 100%;
+      width: 50%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-bad), var(--accent), var(--accent-good));
+      transition: width var(--transition-med);
+    }
+
+    .sidebar-hint {
+      margin-top: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* Terminal de chat */
+
+    .terminal {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-strong);
+      background:
+        radial-gradient(circle at top, rgba(15, 23, 42, 0.8), transparent 75%),
+        #020617;
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+      max-height: 620px;
+    }
+
+    .term-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem 0.9rem;
+      border-bottom: 1px solid rgba(30, 64, 175, 0.9);
+      background: rgba(15, 23, 42, 0.98);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .term-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.08rem;
+    }
+
+    .term-title-main {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+      color: var(--text-0);
+    }
+
+    .term-title-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-2);
+    }
+
+    .term-indicators {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-2);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-good);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
+      animation: pulseDot 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(34, 197, 94, 0.8); }
+      50% { transform: scale(1.15); box-shadow: 0 0 18px rgba(34, 197, 94, 1); }
+    }
+
+    .term-body {
+      flex: 1;
+      padding: 0.9rem;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-0);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.8), transparent 60%);
+    }
+
+    .term-body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .term-body::-webkit-scrollbar-track {
+      background: #020617;
+    }
+
+    .term-body::-webkit-scrollbar-thumb {
+      background: rgba(55, 65, 81, 0.9);
+      border-radius: 999px;
+    }
+
+    .msg-row {
+      margin-bottom: 0.6rem;
+      display: flex;
+    }
+
+    .msg-row.system .msg-bubble {
+      color: var(--accent-secondary);
+    }
+
+    .msg-row.yin {
+      justify-content: flex-start;
+    }
+
+    .msg-row.player {
+      justify-content: flex-end;
+    }
+
+    .msg-bubble {
+      max-width: 88%;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 10px;
+      padding: 0.45rem 0.55rem;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.9);
+      position: relative;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .msg-bubble.player {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(59, 130, 246, 0.9);
+    }
+
+    .msg-meta {
+      font-size: 0.6rem;
+      color: var(--text-2);
+      margin-bottom: 0.15rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .msg-meta span.name-yin {
+      color: var(--accent);
+    }
+
+    .msg-meta span.name-player {
+      color: var(--accent-secondary);
+    }
+
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.55rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-2);
+    }
+
+    .dots {
+      display: inline-flex;
+      gap: 3px;
+    }
+
+    .dot-typing {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--accent);
+      animation: bounce 1.2s infinite;
+    }
+
+    .dot-typing:nth-child(2) { animation-delay: 0.2s; }
+    .dot-typing:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    .term-input {
+      border-top: 1px solid rgba(30, 64, 175, 0.9);
+      padding: 0.6rem 0.7rem;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      background: rgba(15, 23, 42, 0.98);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 0.45rem;
+      align-items: center;
+    }
+
+    .input-field {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      padding: 0.55rem 0.9rem;
+      background: #020617;
+      color: var(--text-0);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(0, 245, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-send {
+      border-radius: 999px;
+      border: 1px solid var(--border-strong);
+      background: linear-gradient(135deg, var(--accent), #38bdf8);
+      color: #020617;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 0.55rem 0.9rem;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-send:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(56, 189, 248, 0.65);
+    }
+
+    .input-hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      color: var(--text-2);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .input-hint span.key {
+      color: var(--accent);
+    }
+
+    /* Estados de fim */
+
+    .ending-banner {
+      margin-top: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent-warn);
+      display: none;
+    }
+
+    .ending-banner.good {
+      color: var(--accent-good);
+    }
+
+    .ending-banner.bad {
+      color: var(--accent-bad);
+    }
+  </style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="shell">
+
+    <!-- SIDEBAR DE STATUS -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Painel de Avaliação</div>
+        <div class="sidebar-badge">Canal: YIN-2012</div>
+      </div>
+
+      <div class="sidebar-row">
+        <div class="sidebar-label">Reputação</div>
+        <div class="sidebar-value" id="repLabel">Neutra</div>
+      </div>
+      <div class="rep-bar-wrapper">
+        <div class="rep-bar-track">
+          <div class="rep-bar-fill" id="repBar"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-row">
+        <div class="sidebar-label">Falhas do Protocolo</div>
+        <div class="sidebar-value" id="errorCount">0</div>
+      </div>
+
+      <div class="sidebar-row">
+        <div class="sidebar-label">Estado do Vínculo</div>
+        <div class="sidebar-value" id="bondState">Instável</div>
+      </div>
+
+      <div class="sidebar-row">
+        <div class="sidebar-label">Ano Percebido por Yin</div>
+        <div class="sidebar-value">2012</div>
+      </div>
+
+      <p class="sidebar-hint">
+        Yin acredita estar em 2012. Não corrija a cronologia de forma direta.  
+        Perguntas vagas ou invasivas reduzem reputação.  
+        Objetivo: extrair a localização exata dela na Ilha de São Firmo (ponto físico, referência clara).
+      </p>
+
+      <p class="ending-banner" id="endingBanner"></p>
+    </aside>
+
+    <!-- TERMINAL / CHAT -->
+    <section class="terminal" aria-label="Canal de comunicação com Agente Yin">
+      <header class="term-header">
+        <div class="term-title">
+          <div class="term-title-main">SANCTUM // Canal Seguro</div>
+          <div class="term-title-sub">Operadora Remota &lt;VOCÊ&gt; // Agente de Campo &lt;YIN&gt;</div>
+        </div>
+        <div class="term-indicators">
+          <span class="dot"></span>
+          <span>Nó Estável</span>
+        </div>
+      </header>
+
+      <div class="term-body" id="chatLog">
+        <!-- Mensagens iniciais serão injetadas via JS -->
+      </div>
+
+      <div class="typing-indicator" id="typingIndicator">
+        <span>Yin está digitando</span>
+        <span class="dots">
+          <span class="dot-typing"></span>
+          <span class="dot-typing"></span>
+          <span class="dot-typing"></span>
+        </span>
+      </div>
+
+      <footer class="term-input">
+        <div class="input-row">
+          <input
+            type="text"
+            class="input-field"
+            id="userInput"
+            placeholder="Digite a próxima mensagem para Yin aqui..."
+            autocomplete="off"
+          >
+          <button class="btn-send" id="sendBtn">Enviar</button>
+        </div>
+        <div class="input-hint">
+          <span><span class="key">ENTER</span> para enviar • Seja específico, mas não autoritário.</span>
+          <span>Evite confrontar o ano diretamente; use datas e eventos como pistas.</span>
+        </div>
+      </footer>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  /*
+    SISTEMA DE CHAT – AGENTE YIN
+    -----------------------------------
+    - Yin acredita estar em 2012.
+    - O jogador precisa descobrir a localização exata dela na Ilha de São Firmo.
+    - Reputação começa em 50, vai de 0 a 100.
+    - Perguntas boas: empáticas, situacionais, investigativas (clima, referências físicas, rotina, barulhos, cheiros).
+    - Perguntas ruins: agressivas, acusatórias, meta-temporais diretas (“você está em 2025”), perguntas genéricas vazias.
+    - Erros aumentam contagem, baixam reputação; boa condução aumenta.
+    - Sistema de estágios para conversa longa, com múltiplas pistas e ramificações.
+  */
+
+  const chatLog = document.getElementById('chatLog');
+  const userInput = document.getElementById('userInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const typingIndicator = document.getElementById('typingIndicator');
+
+  const repBar = document.getElementById('repBar');
+  const repLabel = document.getElementById('repLabel');
+  const errorCountEl = document.getElementById('errorCount');
+  const bondStateEl = document.getElementById('bondState');
+  const endingBanner = document.getElementById('endingBanner');
+
+  // ESTADO GLOBAL DO JOGO
+  let reputation = 50;        // 0–100
+  let errorCount = 0;
+  let stage = 0;              // estágio da investigação
+  let finished = false;
+  let discoveredLocation = false;
+
+  // OBJETIVO NARRATIVO:
+  // Localização alvo: EXATA – “base inferior do farol, nível de manutenção, próximo ao gerador a diesel,
+  // lado norte da Ilha de São Firmo, quase à beira do penhasco”.
+
+  // FUNÇÕES DE UI
+
+  function appendMessage({ from, text, system = false }) {
+    const row = document.createElement('div');
+    row.classList.add('msg-row');
+
+    if (system) {
+      row.classList.add('system');
+    } else if (from === 'yin') {
+      row.classList.add('yin');
+    } else {
+      row.classList.add('player');
+    }
+
+    const bubble = document.createElement('div');
+    bubble.classList.add('msg-bubble');
+
+    if (from === 'player') {
+      bubble.classList.add('player');
+    }
+
+    const meta = document.createElement('div');
+    meta.classList.add('msg-meta');
+
+    if (system) {
+      meta.innerHTML = `<span class="name-yin">[SISTEMA]</span><span>Canal</span>`;
+    } else if (from === 'yin') {
+      meta.innerHTML = `<span class="name-yin">YIN</span><span>${formatTime()}</span>`;
+    } else {
+      meta.innerHTML = `<span class="name-player">VOCÊ</span><span>${formatTime()}</span>`;
+    }
+
+    const content = document.createElement('div');
+    content.textContent = text;
+
+    bubble.appendChild(meta);
+    bubble.appendChild(content);
+    row.appendChild(bubble);
+    chatLog.appendChild(row);
+
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
+
+  function formatTime() {
+    const d = new Date();
+    return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function setTyping(on) {
+    typingIndicator.style.display = on ? 'flex' : 'none';
+  }
+
+  function updateReputation(delta, reason) {
+    reputation = Math.max(0, Math.min(100, reputation + delta));
+    repBar.style.width = reputation + '%';
+
+    if (reputation <= 20) {
+      repLabel.textContent = 'Hostil';
+      bondStateEl.textContent = 'Em Ruptura';
+    } else if (reputation <= 40) {
+      repLabel.textContent = 'Desconfiada';
+      bondStateEl.textContent = 'Frágil';
+    } else if (reputation <= 60) {
+      repLabel.textContent = 'Neutra';
+      bondStateEl.textContent = 'Instável';
+    } else if (reputation <= 80) {
+      repLabel.textContent = 'Aberta';
+      bondStateEl.textContent = 'Solidificada';
+    } else {
+      repLabel.textContent = 'Vínculo Forte';
+      bondStateEl.textContent = 'Alinhada';
+    }
+
+    if (reason) {
+      console.debug('Reputação alterada:', delta, reason);
+    }
+
+    // Condição de “falha geral” se reputação muito baixa
+    if (reputation <= 5 && !finished) {
+      finished = true;
+      appendMessage({
+        from: 'yin',
+        text: 'Chega. Vocês não são da minha equipe. Encerrando canal. Se tentarem de novo, eu corto o gerador de rádio.',
+      });
+      showEnding(false, 'Yin encerrou o canal por perda total de confiança.');
+    }
+  }
+
+  function registerError(reason) {
+    errorCount++;
+    errorCountEl.textContent = errorCount;
+    updateReputation(-6, reason || 'Erro de condução do protocolo');
+  }
+
+  function showEnding(good, text) {
+    finished = true;
+    endingBanner.style.display = 'block';
+    endingBanner.classList.remove('good', 'bad');
+    endingBanner.classList.add(good ? 'good' : 'bad');
+    endingBanner.textContent = (good ? '[CONCLUSÃO – SUCESSO] ' : '[CONCLUSÃO – FALHA] ') + text;
+  }
+
+  // ANÁLISE SIMPLES DA ENTRADA
+
+  function normalize(str) {
+    return str
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+
+  function containsAny(str, keywords) {
+    return keywords.some(k => str.includes(k));
+  }
+
+  function isMetaTemporalQuestion(msg) {
+    const n = normalize(msg);
+    return containsAny(n, [
+'2012?',
+  '2013',
+  '2014',
+  '2020',
+  '2021',
+  '2022',
+  '2023',
+  '2024',
+  '2025',
+  '2026',
+  '2027',
+  '2010',
+  '2011',
+  '2015',
+  '2016',
+  '2017',
+  '2018',
+  '2019',
+  '2028',
+  '2029',
+  '2030',
+  '2031',
+  '2032',
+  '2012',
+  '2012 agora',
+  '2012 ainda',
+  '2012 mesmo',
+  '2012 certo',
+  'que ano',
+  'qual ano',
+  'que ano e',
+  'qual ano e',
+  'que ano eh',
+  'qual ano eh',
+  'que ano agora',
+  'qual ano agora',
+  'que ano hoje',
+  'qual ano hoje',
+  'que ano estamos',
+  'qual ano estamos',
+  'que ano a gente ta',
+  'qual ano a gente ta',
+  'que ano nois ta',
+  'qual ano nois ta',
+  'ano voce esta',
+  'ano você está',
+  'ano voce esta agora',
+  'ano você está agora',
+  'ano voce ta',
+  'ano você ta',
+  'ano vc esta',
+  'ano vc ta',
+  'ano vc tá',
+  'vc ta em',
+  'vc tá em',
+  'vc esta em',
+  'vc está em',
+  'vc ta em que ano',
+  'vc está em que ano',
+  'vc ta em qual ano',
+  'vc está em qual ano',
+  'voce ta em',
+  'voce tá em',
+  'voce esta em',
+  'voce está em',
+  'voce ta em que ano',
+  'voce está em que ano',
+  'voce ta em qual ano',
+  'você ta em',
+  'você tá em',
+  'você esta em',
+  'você está em',
+  'você ta em que ano',
+  'você está em que ano',
+  'você ta em qual ano',
+  'ano atual',
+  'ano atual agora',
+  'ano atual hoje',
+  'ano atual mesmo',
+  'ano atual qual',
+  'ano de agora',
+  'ano de hoje',
+  'ano presente',
+  'ano corrente',
+  'ano vigente',
+  'ano em curso',
+  'tempo atual',
+  'tempo presente',
+  'periodo atual',
+  'epoca atual',
+  'linha do tempo atual',
+  'passou de 2012',
+  'ja passou de 2012',
+  'já passou de 2012',
+  'passou do ano 2012',
+  'depois de 2012',
+  'alem de 2012',
+  'além de 2012',
+  'fora de 2012',
+  'fora do ano 2012',
+  'apos 2012',
+  'nao e 2012',
+  'não e 2012',
+  'não é 2012',
+  'nao eh 2012',
+  'ja nao e 2012',
+  'já não é 2012',
+  'nao esta em 2012',
+  'nao está em 2012',
+  'não esta em 2012',
+  'não está em 2012',
+  'nao estamos em 2012',
+  'não estamos em 2012',
+  'isso nao e 2012',
+  'isso não é 2012',
+  'ano diferente de 2012',
+  'tempo diferente de 2012',
+  'epoca diferente de 2012',
+  'periodo diferente de 2012',
+  'estamos em outro ano',
+  'estamos em ano diferente',
+  'ano mudou',
+  'ano ja mudou',
+  'ano já mudou',
+  'em que ano',
+  'em qual ano',
+  'em que ano agora',
+  'em qual ano agora',
+  'em que ano hoje',
+  'em qual ano hoje',
+  'qual o ano',
+  'qual o ano atual',
+  'qual o ano agora',
+  'qual o ano de hoje',
+  'qual o ano presente',
+  'que ano e esse',
+  'qual ano e esse',
+  'que ano eh esse',
+  'qual ano eh esse',
+  'ano q vc ta',
+  'ano q vc tá',
+  'ano q voce ta',
+  'ano q você ta',
+  'ano q vc esta',
+  'ano q voce esta',
+  'ano sistema',
+  'ano do sistema',
+  'ano desse sistema',
+  'ano que sistema esta',
+  'ano que sistema está',
+  'ano da ia',
+  'ano dessa ia',
+  'ano que essa ia esta',
+  'ano que essa ia está',
+  'ano bot',
+  'ano do bot',
+  'ano que bot esta',
+  'ano que bot está',
+  'agora nao e 2012',
+  'agora não é 2012',
+  'hoje nao e 2012',
+  'hoje não é 2012',
+  'ano atual nao e 2012',
+  'ano atual não é 2012',
+  'tempo atual nao e 2012',
+  'tempo atual não é 2012',
+  'ano?',
+  'que ano?',
+  'qual ano?',
+  'ano atual?',
+  'ano agora?',
+  'ano hoje?'
+    ]);
+  }
+
+  function isAggressive(msg) {
+    const n = normalize(msg);
+    return containsAny(n, [
+      'idiota',
+      'burra',
+      'inutil',
+      'inútil',
+      'calada',
+      'cala a boca',
+      'nao confio em voce',
+      'não confio em voce',
+      'nao confio em você',
+      'voce ta mentindo',
+      'você ta mentindo',
+      'voce esta mentindo',
+      'você está mentindo',
+      'isso e mentira',
+      'isso é mentira'
+    ]);
+  }
+
+  function isLocationFocused(msg) {
+    const n = normalize(msg);
+    return containsAny(n, [
+      'onde voce esta',
+      'onde você está',
+      'onde vc ta',
+      'sua posicao',
+      'sua posição',
+      'sua localizacao',
+      'sua localização',
+      'descreve onde ta',
+      'descreve o lugar',
+      'que parte da ilha',
+      'ilha de sao firmo',
+      'ilha de são firmo',
+      'perto de que',
+      'ponto de referencia',
+      'ponto de referência',
+      'ao redor de voce',
+      'ao redor de você',
+      'que barulho voce ouve',
+      'que barulho você ouve',
+      'ouve o mar',
+      'ouve ondas',
+      'ouve vento',
+      'ouve gerador',
+      'perto do farol',
+      'no farol',
+      'proximo ao farol',
+      'próximo ao farol',
+      'no penhasco',
+      'beira do penhasco'
+    ]);
+  }
+
+  function mentionsFarol(msg) {
+    const n = normalize(msg);
+    return containsAny(n, ['farol', 'lanterna gigante']);
+  }
+
+  function mentionsInterior(msg) {
+    const n = normalize(msg);
+    return containsAny(n, ['porao', 'porão', 'subsolo', 'baixo', 'andar de baixo', 'nivel inferior', 'nível inferior', 'sala de manutencao', 'sala de manutenção']);
+  }
+
+  function mentionsGerador(msg) {
+    const n = normalize(msg);
+    return containsAny(n, ['gerador', 'diesel', 'gasoleo', 'gasóleo', 'cheiro de gasolina', 'cheiro de diesel']);
+  }
+
+  function mentionsPenhascoNorte(msg) {
+    const n = normalize(msg);
+    return containsAny(n, ['lado norte', 'norte da ilha', 'penhasco', 'beira do penhasco', 'borda do penhasco']);
+  }
+
+  function isEmpathic(msg) {
+    const n = normalize(msg);
+    return containsAny(n, [
+      'calma',
+      'respira',
+      'respire',
+      'vou ajudar',
+      'estou aqui',
+      'tamo junto',
+      'estamos juntos',
+      'nao esta sozinha',
+      'não está sozinha',
+      'confia em mim'
+    ]);
+  }
+
+  // RESPOSTAS DA YIN POR ESTÁGIO
+
+  function respondStage0(playerMsg) {
+    // Estágio 0 – abertura, apresentar Yin, estabelecer confiança básica.
+    const n = normalize(playerMsg);
+
+    if (isAggressive(playerMsg)) {
+      registerError('Abordagem agressiva logo na abertura.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Se você veio pra me pressionar, pode desligar agora. Tenho coisa demais acontecendo aqui.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (isEmpathic(playerMsg)) {
+      updateReputation(+6, 'Empatia inicial demonstrada.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: '…Obrigada. A linha tá oscilando, mas ouvir alguém falando assim ajuda. Quem é você na cadeia de comando?'
+        });
+      }, 700);
+      stage = 1;
+      return;
+    }
+
+    if (containsAny(n, ['quem e voce', 'quem é voce', 'quem é você', 'sua funcao', 'sua função'])) {
+      updateReputation(+4, 'Buscou entender o papel dela antes de dar ordens.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Agente Yin, setor de reconhecimento e contenção. Designada para Ilha de São Firmo desde março. Estou presa em algum tipo de… apagão operacional.'
+        });
+      }, 700);
+      stage = 1;
+      return;
+    }
+
+    // Genérico, mas não ruim
+    updateReputation(+2, 'Contato inicial neutro.');
+    setTimeout(() => {
+      appendMessage({
+        from: 'yin',
+        text: 'Canal ativo… finalmente. Estou recebendo você, mas tem interferência. Confirma identidade e função, por favor.'
+      });
+    }, 700);
+    stage = 1;
+  }
+
+  function respondStage1(playerMsg) {
+    // Estágio 1 – situar missão, início de coleta de contexto (sem ainda fincar a posição exata)
+    const n = normalize(playerMsg);
+
+    if (isMetaTemporalQuestion(playerMsg)) {
+      registerError('Confronto direto com a linha temporal.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Que pergunta é essa? 2012, claro. Março. O relógio aqui já é confuso o bastante, não precisa de jogos do outro lado da linha.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (isAggressive(playerMsg)) {
+      registerError('Tom agressivo durante o vínculo inicial.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Fica aí, do outro lado do canal, fácil de ser valente. Aqui não tem luxo pra esse tipo de postura.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (isLocationFocused(playerMsg)) {
+      // Jogador já tenta ir direto à localização
+      updateReputation(+4, 'Foco antecipado na posição física.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Oficialmente? “Estação de Observação, Ilha de São Firmo, perímetro setentrional”. Extra-oficialmente, numa parte da ilha que não aparece igual em todos os mapas.'
+        });
+      }, 700);
+      // avanços para próximo estágio
+      stage = 2;
+      return;
+    }
+
+    if (containsAny(n, ['missao', 'missão', 'objetivo', 'protocolo'])) {
+      updateReputation(+4, 'Buscou entender o objetivo antes de extrair informação.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Missão primária: monitorar anomalia de sinal no entorno do farol e das construções antigas. Algo aqui dobra as rotas, as datas, até as memórias.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (containsAny(n, ['como voce esta', 'como você está', 'ta bem', 'tá bem', 'voce ta bem', 'você ta bem'])) {
+      updateReputation(+5, 'Cuidado com o estado mental dela.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Exausta, com frio e com a sensação constante de que estou alguns segundos atrasada de mim mesma. Mas funcional. Por enquanto.'
+        });
+      }, 700);
+      return;
+    }
+
+    // fallback
+    updateReputation(+1, 'Resposta neutra em estágio 1.');
+    setTimeout(() => {
+      appendMessage({
+        from: 'yin',
+        text: 'Se você tem clearance pra falar comigo, sabe por que estou aqui. Não tenho visão clara da ilha inteira, só do meu entorno imediato.'
+      });
+    }, 700);
+  }
+
+  function respondStage2(playerMsg) {
+    // Estágio 2 – coletar referências físicas: clima, sons, cheiros, estruturas
+    const n = normalize(playerMsg);
+
+    if (isMetaTemporalQuestion(playerMsg)) {
+      registerError('Insistência na quebra de cronologia.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Se continuar brincando com o calendário, eu desligo. Preciso de ancoragem, não de confusão extra.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (isLocationFocused(playerMsg)) {
+      // Muito bom, foco correto
+      updateReputation(+7, 'Perguntas diretas sobre entorno e posição.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            'Ao meu redor… paredes de concreto cru, úmidas. Tem um cheiro forte de diesel velho e maresia entrando por alguma fresta. ' +
+            'Ouço o mar bem perto, batendo em pedra alta, e um gerador teimoso vibrando sob o piso.'
+        });
+      }, 700);
+      stage = 3;
+      return;
+    }
+
+    if (containsAny(n, ['clima', 'tempo ai', 'tempo aí', 'clima ai', 'clima aí', 'temperatura'])) {
+      updateReputation(+3, 'Tentou situar clima como pista.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Frio úmido. Não é o frio seco de montanha, é água no ar o tempo todo. Dá pra ouvir o vento batendo em alguma estrutura alta, metálica, lá em cima.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (containsAny(n, ['que barulho', 'barulhos', 'sons', 'o que voce ouve', 'o que você ouve'])) {
+      updateReputation(+5, 'Foco em evidência sonora.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Vento, ondas batendo em rocha e o mesmo gerador de sempre… Faz um ronco grave, compassado. Quando ele falha, tudo aqui parece… se mexer um pouco.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (containsAny(n, ['cheiro', 'cheira', 'odor'])) {
+      updateReputation(+4, 'Uso de pistas sensoriais não visuais.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Cheiro de óleo, ferrugem, mofo e sal. Como se alguém tivesse enfiado um motor num porão molhado e esquecido aqui por anos.'
+        });
+      }, 700);
+      return;
+    }
+
+    // fallback
+    updateReputation(+1, 'Diálogo neutro em estágio 2.');
+    setTimeout(() => {
+      appendMessage({
+        from: 'yin',
+        text: 'O importante é: não estou em área aberta. Nenhuma árvore por perto, nenhum solo macio. Só concreto e metal.'
+      });
+    }, 700);
+  }
+
+  function respondStage3(playerMsg) {
+    // Estágio 3 – aproximar do farol e do nível: base, interior, gerador
+    const n = normalize(playerMsg);
+
+    if (isAggressive(playerMsg)) {
+      registerError('Agressão em estágio sensível.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Se começar a gritar ordem daqui, eu simplesmente paro de responder. Já tenho sussurros demais desse lugar.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (mentionsFarol(playerMsg)) {
+      updateReputation(+6, 'Conectou sons e clima à estrutura do farol.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            'Sim… tenho certeza que estou na estrutura associada ao farol. Mas não vejo a luz diretamente. É como se eu estivesse num anel inferior, abaixo da base principal.'
+        });
+      }, 700);
+      return;
+    }
+
+    if (mentionsInterior(playerMsg) || mentionsGerador(playerMsg)) {
+      updateReputation(+6, 'Apertando o foco na parte inferior e na sala técnica.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            'Tem um painel velho, um quadro de força enferrujado, tubulações no teto. O gerador vibra tão perto que as lâmpadas piscam com o ritmo. ' +
+            'Tem uma escada de metal que sobe em direção a uma porta trancada, provavelmente levando ao nível onde a luz do farol fica.'
+        });
+      }, 700);
+      stage = 4;
+      return;
+    }
+
+    if (isLocationFocused(playerMsg)) {
+      updateReputation(+3, 'Continua forçando localização, mas sem especificar.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Repito: estou em alguma parte inferior da estrutura. Se vocês têm mapa da ilha, procurem por salas técnicas anexas ao farol principal.'
+        });
+      }, 700);
+      return;
+    }
+
+    // Perguntas empáticas ainda ajudam
+    if (isEmpathic(playerMsg)) {
+      updateReputation(+3, 'Mantém vínculo emocional enquanto investiga.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text: 'Eu consigo continuar. Só preciso que você traduza esse caos em um ponto fixo no mapa.'
+        });
+      }, 700);
+      return;
+    }
+
+    // fallback
+    updateReputation(+1, 'Resposta neutra em estágio 3.');
+    setTimeout(() => {
+      appendMessage({
+        from: 'yin',
+        text: 'Tem um eco específico aqui. Piso oco em alguns trechos, como se houvesse água ou rocha vazia logo abaixo.'
+      });
+    }, 700);
+  }
+
+  function respondStage4(playerMsg) {
+    // Estágio 4 – exigir formulação do jogador: ele deve descrever, em texto, a localização exata.
+    const n = normalize(playerMsg);
+
+    if (mentionsFarol(playerMsg) && mentionsInterior(playerMsg) && mentionsGerador(playerMsg) && mentionsPenhascoNorte(playerMsg)) {
+      // Jogador chegou muito perto / exatamente lá: farol + base inferior + gerador + penhasco norte
+      updateReputation(+10, 'Descrição praticamente exata do ponto.');
+      discoveredLocation = true;
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            '…Isso bate com tudo que estou sentindo. Base inferior do farol, nível de manutenção, encostado no gerador, quase na borda do penhasco do lado norte da ilha. ' +
+            'Se conseguirem fixar esse ponto, eu posso seguir suas instruções de evacuação.'
+        });
+      }, 800);
+
+      // Encerramento bom se reputação não for extremamente baixa
+      setTimeout(() => {
+        if (reputation >= 40) {
+          showEnding(
+            true,
+            'Você ancorou a posição de Yin na Ilha de São Firmo: base inferior do farol, sala de manutenção junto ao gerador a diesel, lado norte, à beira do penhasco.'
+          );
+        } else {
+          showEnding(
+            true,
+            'Você encontrou a posição de Yin, mas o vínculo está fragilizado. Ela seguirá o protocolo, porém sem confiar completamente nas ordens recebidas.'
+          );
+        }
+      }, 2100);
+
+      return;
+    }
+
+    // Jogador chegou perto, mas não incluiu todos os elementos — dar feedback e pedir refino
+    if (mentionsFarol(playerMsg) && (mentionsInterior(playerMsg) || mentionsGerador(playerMsg))) {
+      updateReputation(+5, 'Localização quase completa.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            'Você está quase lá. Confirma no mapa se essa sala de manutenção fica voltada pro lado do penhasco, com o mar bem embaixo, ' +
+            'ou se fica mais pro interior da ilha. Eu ouço as ondas direto, bem abaixo.'
+        });
+      }, 800);
+      return;
+    }
+
+    if (mentionsFarol(playerMsg) && mentionsPenhascoNorte(playerMsg)) {
+      updateReputation(+5, 'Localizou estrutura e lado da ilha, mas não o nível exato.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            'Farol do lado norte combina com o vento e o barulho. Falta amarrar em que parte da estrutura eu estou: cima, meio ou base técnica.'
+        });
+      }, 800);
+      return;
+    }
+
+    if (isLocationFocused(playerMsg)) {
+      // Ainda muito genérico
+      registerError('Tentativa de localização vaga no estágio final.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            '“Perto do farol” não basta pra equipe chegar viva até aqui. Preciso que você seja específico: lado da ilha, nível da estrutura, referências.'
+        });
+      }, 800);
+      return;
+    }
+
+    if (isMetaTemporalQuestion(playerMsg) || isAggressive(playerMsg)) {
+      registerError('Desvio crítico no estágio final.');
+      setTimeout(() => {
+        appendMessage({
+          from: 'yin',
+          text:
+            'Você teve a linha inteira pra fazer essas perguntas. Agora preciso de coordenadas, não de filosofia.'
+        });
+      }, 800);
+      return;
+    }
+
+    // fallback: orientar o jogador a descrever
+    updateReputation(-1, 'Perdeu tempo em estágio final sem focar na resposta.');
+    setTimeout(() => {
+      appendMessage({
+        from: 'yin',
+        text:
+          'Me descreve, como se fosse um relatório, a posição exata onde VOCÊ acha que eu estou. Estrutura, lado da ilha, proximidade com o mar, altura.'
+      });
+    }, 800);
+  }
+
+  // CONTROLADOR PRINCIPAL
+
+  function handlePlayerMessage() {
+    if (finished) return;
+
+    const msg = userInput.value.trim();
+    if (!msg) return;
+
+    // mostra mensagem do jogador
+    appendMessage({ from: 'player', text: msg });
+    userInput.value = '';
+
+    // decide resposta da Yin
+    setTyping(true);
+
+    const delay = 500 + Math.min(1500, msg.length * 10);
+
+    setTimeout(() => {
+      setTyping(false);
+      routeResponse(msg);
+    }, delay);
+  }
+
+  function routeResponse(msg) {
+    if (stage === 0) {
+      respondStage0(msg);
+    } else if (stage === 1) {
+      respondStage1(msg);
+    } else if (stage === 2) {
+      respondStage2(msg);
+    } else if (stage === 3) {
+      respondStage3(msg);
+    } else {
+      respondStage4(msg);
+    }
+  }
+
+  // MENSAGENS INICIAIS
+
+  function initChat() {
+    appendMessage({
+      from: 'system',
+      system: true,
+      text: '[LINK ESTABELECIDO] Canal seguro com Agente Yin – Ilha de São Firmo, instância 2012.'
+    });
+    appendMessage({
+      from: 'system',
+      system: true,
+      text: '[OBJETIVO] Descobrir a localização exata de Yin na ilha, em termos práticos de resgate.'
+    });
+    setTimeout(() => {
+      appendMessage({
+        from: 'yin',
+        text:
+          '…Alô? Aqui é Yin. Registro San-73. Se alguém do outro lado ainda estiver me ouvindo, responde. Não tenho certeza de quantos minutos essa janela fica aberta.'
+      });
+    }, 900);
+  }
+
+  initChat();
+
+  // EVENTOS
+
+  sendBtn.addEventListener('click', handlePlayerMessage);
+  userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handlePlayerMessage();
+    }
+  });
+</script>
+
+</body>
+</html>

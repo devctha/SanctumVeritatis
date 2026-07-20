@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/logaurora/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Log de Operação — Aurora de Vidro</title>
+  <meta name="theme-color" content="#05080c" />
+
+  <style>
+    :root{
+      --bg0:#020409;
+      --bg1:#05080c;
+      --panel:#070c12;
+      --ink:#d7f4ff;
+      --muted:#7bbad0;
+      --arctic:#5fe3ff;
+      --arctic2:#2bb7d6;
+      --danger:#ff4a5a;
+      --warn:#ffd05a;
+      --ok:#5dffb3;
+      --line:rgba(95,227,255,.18);
+      --glass:rgba(95,227,255,.08);
+      --shadow:rgba(0,0,0,.65);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--mono);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 700px at 25% 10%, rgba(95,227,255,.10), transparent 55%),
+        radial-gradient(1000px 600px at 80% 35%, rgba(43,183,214,.08), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    /* subtle scanlines + noise */
+    .fx::before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,.04) 0px,
+          rgba(255,255,255,.04) 1px,
+          rgba(0,0,0,0) 3px,
+          rgba(0,0,0,0) 6px
+        );
+      mix-blend-mode:overlay;
+      opacity:.09;
+    }
+    .fx::after{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      opacity:.035;
+      mix-blend-mode:soft-light;
+    }
+
+    .wrap{
+      height:100%;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      gap:14px;
+      padding:18px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      padding:14px 14px 12px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(7,12,18,.86), rgba(7,12,18,.66));
+      box-shadow:0 18px 50px var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    header::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        linear-gradient(90deg, transparent, rgba(95,227,255,.14), transparent);
+      transform:translateX(-80%);
+      animation:sweep 7.5s linear infinite;
+      opacity:.5;
+      pointer-events:none;
+    }
+    @keyframes sweep{
+      0%{ transform:translateX(-80%); }
+      100%{ transform:translateX(80%); }
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .title h1{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--arctic);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .title .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 16px;
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.04em;
+    }
+    .pill{
+      border:1px solid rgba(95,227,255,.22);
+      background:rgba(95,227,255,.06);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .pill b{ color:var(--ink); font-weight:600; }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    button{
+      appearance:none;
+      border:1px solid rgba(95,227,255,.25);
+      background:rgba(95,227,255,.07);
+      color:var(--ink);
+      font-family:var(--mono);
+      font-size:12px;
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      transition:transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    button:hover{ background:rgba(95,227,255,.11); border-color:rgba(95,227,255,.35); }
+    button:active{ transform:translateY(1px); }
+    button.danger{ border-color:rgba(255,74,90,.35); background:rgba(255,74,90,.08); }
+    button.danger:hover{ background:rgba(255,74,90,.12); }
+    .toggle{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .toggle input{ accent-color:var(--arctic); }
+
+    main{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(7,12,18,.78), rgba(7,12,18,.55));
+      box-shadow:0 18px 50px var(--shadow);
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:auto 1fr;
+      min-height:0;
+      position:relative;
+    }
+
+    .banner{
+      padding:10px 14px;
+      border-bottom:1px solid rgba(95,227,255,.16);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .statusline{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background:var(--ok);
+      box-shadow:0 0 12px rgba(93,255,179,.35);
+    }
+    .dot.warn{ background:var(--warn); box-shadow:0 0 12px rgba(255,208,90,.28); }
+    .dot.danger{ background:var(--danger); box-shadow:0 0 12px rgba(255,74,90,.30); }
+
+    .log{
+      padding:14px;
+      overflow:auto;
+      scrollbar-width:thin;
+      scrollbar-color:rgba(95,227,255,.22) transparent;
+    }
+    .log::-webkit-scrollbar{ width:10px; }
+    .log::-webkit-scrollbar-thumb{
+      background:rgba(95,227,255,.18);
+      border-radius:999px;
+      border:2px solid transparent;
+      background-clip:padding-box;
+    }
+
+    .entry{
+      display:grid;
+      grid-template-columns: 112px 1fr;
+      gap:10px;
+      padding:8px 10px;
+      border:1px solid rgba(95,227,255,.0);
+      border-radius:12px;
+      margin-bottom:10px;
+      background:rgba(95,227,255,.03);
+    }
+    .entry:hover{
+      border-color:rgba(95,227,255,.10);
+      background:rgba(95,227,255,.04);
+    }
+    .stamp{
+      color:rgba(123,186,208,.95);
+      font-size:12px;
+      letter-spacing:.04em;
+      white-space:nowrap;
+    }
+    .msg{
+      min-width:0;
+      line-height:1.35;
+      font-size:13px;
+      color:var(--ink);
+      word-wrap:break-word;
+      white-space:pre-wrap;
+    }
+
+    .who{
+      color:var(--arctic);
+    }
+    .who.op{ color:rgba(95,227,255,.95); }
+    .who.alert{ color:var(--danger); }
+    .tag{
+      display:inline-block;
+      margin-right:8px;
+      padding:2px 7px;
+      border-radius:999px;
+      border:1px solid rgba(95,227,255,.18);
+      background:rgba(95,227,255,.06);
+      font-size:11px;
+      color:rgba(215,244,255,.92);
+    }
+    .tag.alert{
+      border-color:rgba(255,74,90,.35);
+      background:rgba(255,74,90,.10);
+      color:rgba(255,230,233,.92);
+    }
+    .tag.warn{
+      border-color:rgba(255,208,90,.30);
+      background:rgba(255,208,90,.10);
+      color:rgba(255,244,214,.92);
+    }
+    .tag.sys{
+      border-color:rgba(95,227,255,.14);
+      background:rgba(95,227,255,.04);
+      color:rgba(215,244,255,.82);
+    }
+
+    /* type cursor */
+    .cursor{
+      display:inline-block;
+      width:9px;
+      margin-left:2px;
+      border-bottom:2px solid rgba(95,227,255,.95);
+      transform:translateY(-1px);
+      animation:blink .9s steps(2,end) infinite;
+    }
+    @keyframes blink{ 50%{ opacity:0; } }
+
+    /* glitch moment */
+    .glitch{
+      position:relative;
+      text-shadow:
+        0 0 18px rgba(95,227,255,.12),
+        0 0 2px rgba(95,227,255,.18);
+    }
+    .glitch::before, .glitch::after{
+      content:attr(data-txt);
+      position:absolute;
+      left:0; top:0;
+      opacity:.55;
+      pointer-events:none;
+      clip-path:inset(0 0 0 0);
+    }
+    .glitch::before{
+      transform:translate(1px,0);
+      color:rgba(255,74,90,.55);
+      animation:g1 1.3s infinite linear;
+    }
+    .glitch::after{
+      transform:translate(-1px,0);
+      color:rgba(95,227,255,.65);
+      animation:g2 1.1s infinite linear;
+    }
+    @keyframes g1{
+      0%{ clip-path:inset(0 0 80% 0); }
+      10%{ clip-path:inset(0 0 55% 0); }
+      20%{ clip-path:inset(25% 0 40% 0); }
+      30%{ clip-path:inset(55% 0 15% 0); }
+      40%{ clip-path:inset(10% 0 60% 0); }
+      50%{ clip-path:inset(70% 0 10% 0); }
+      60%{ clip-path:inset(35% 0 35% 0); }
+      70%{ clip-path:inset(5% 0 75% 0); }
+      80%{ clip-path:inset(45% 0 25% 0); }
+      90%{ clip-path:inset(60% 0 18% 0); }
+      100%{ clip-path:inset(0 0 80% 0); }
+    }
+    @keyframes g2{
+      0%{ clip-path:inset(80% 0 0 0); }
+      12%{ clip-path:inset(55% 0 0 0); }
+      24%{ clip-path:inset(40% 0 0 0); }
+      36%{ clip-path:inset(15% 0 0 0); }
+      48%{ clip-path:inset(60% 0 0 0); }
+      60%{ clip-path:inset(10% 0 0 0); }
+      72%{ clip-path:inset(35% 0 0 0); }
+      84%{ clip-path:inset(75% 0 0 0); }
+      100%{ clip-path:inset(80% 0 0 0); }
+    }
+
+    footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      color:rgba(123,186,208,.9);
+      font-size:11px;
+      letter-spacing:.04em;
+      padding:0 4px;
+    }
+    .kbd{
+      border:1px solid rgba(95,227,255,.22);
+      background:rgba(95,227,255,.06);
+      padding:2px 6px;
+      border-radius:7px;
+      color:rgba(215,244,255,.88);
+    }
+
+    /* responsive */
+    @media (max-width:720px){
+      .entry{ grid-template-columns: 1fr; }
+      .stamp{ opacity:.9; }
+      header{ flex-direction:column; align-items:stretch; }
+      .controls{ justify-content:flex-start; }
+    }
+  </style>
+</head>
+
+<body class="fx">
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Log de Operação — Aurora de Vidro</h1>
+        <div class="meta">
+          <span class="pill">Operador: <b>Corvo</b></span>
+          <span class="pill">Destino: <b>Vík</b></span>
+          <span class="pill">Canal: <b>criptografado</b></span>
+          <span class="pill" id="clock">—</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="btnStart">Iniciar</button>
+        <button id="btnPause">Pausar</button>
+        <button id="btnSkip" class="danger">Pular digitação</button>
+        <label class="toggle">
+          <input id="chkGlitch" type="checkbox" checked />
+          Ruído / interferência
+        </label>
+        <label class="toggle">
+          <input id="chkAutoScroll" type="checkbox" checked />
+          Auto-scroll
+        </label>
+      </div>
+    </header>
+
+    <main>
+      <div class="banner">
+        <div class="statusline" id="statusLine">
+          <span class="dot warn" id="dot"></span>
+          <span id="statusText">Aguardando reprodução do log…</span>
+        </div>
+        <div>
+          Atalhos: <span class="kbd">Espaço</span> Pausar/Continuar • <span class="kbd">S</span> Pular
+        </div>
+      </div>
+
+      <div class="log" id="log" aria-live="polite"></div>
+    </main>
+
+    <footer>
+      <div>Registro local: cache desativado • Integridade: verificação parcial</div>
+      <div id="progress">0/0</div>
+    </footer>
+  </div>
+
+  <script>
+    const $ = (q) => document.querySelector(q);
+
+    const logEl = $("#log");
+    const btnStart = $("#btnStart");
+    const btnPause = $("#btnPause");
+    const btnSkip  = $("#btnSkip");
+    const chkGlitch = $("#chkGlitch");
+    const chkAutoScroll = $("#chkAutoScroll");
+    const statusText = $("#statusText");
+    const dot = $("#dot");
+    const progressEl = $("#progress");
+    const clockEl = $("#clock");
+
+    // Real clock (local)
+    function tickClock(){
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2,"0");
+      clockEl.textContent = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+    setInterval(tickClock, 1000); tickClock();
+
+    // Agents (5) + operator
+    const N = {
+      op: "CORVO",
+      a1: "ÁGATA",
+      a2: "NADIR",
+      a3: "SOREN",
+      a4: "MAÍRA",
+      a5: "IVO"
+    };
+
+    // Log script
+    // Timestamps are diegético: HH:MM:SS, not tied to system time.
+    const SCRIPT = [
+      { t:"23:17:09", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Canal estabelecido. Confirmem leitura. Vík — perímetro costeiro. Temperatura: -1°C. Vento lateral. Visibilidade ruim." },
+      { t:"23:17:14", who:`${N.a1}`, tag:"ÁGATA", tone:"ok", text:"Leitura confirmada. Chegamos na estrada de cascalho. As luzes da cidade parecem… apagadas demais." },
+      { t:"23:17:21", who:`${N.a3}`, tag:"SOREN", tone:"ok", text:"Confirmado. O mar tá batendo com força, mas o som tá estranho. Como se tivesse algodão no ouvido." },
+      { t:"23:17:28", who:`${N.a2}`, tag:"NADIR", tone:"warn", text:"Sinal de rádio oscilando. Tem uma linha verde no horizonte. Não é aurora normal, Corvo." },
+      { t:"23:17:35", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Mantenham formação. Chamado original: desaparecimentos e relatos de “brilho dentro do gelo”. Vocês são cinco. Repetindo: cinco." },
+
+      { t:"23:18:02", who:`${N.a4}`, tag:"MAÍRA", tone:"warn", text:"Corvo… tem pegada no gelo. Não é bota. Parece… arrasto. Como se alguém tivesse puxado um saco pesado." },
+      { t:"23:18:10", who:`${N.a5}`, tag:"IVO", tone:"ok", text:"Deixa eu ver. Eu tô com a lanterna UV." },
+      { t:"23:18:12", who:`${N.a1}`, tag:"ÁGATA", tone:"warn", text:"Ivo, não encosta." },
+      { t:"23:18:16", who:`${N.a5}`, tag:"IVO", tone:"warn", text:"Já encostei. É… áspero. Parece areia… só que brilha." },
+
+      { t:"23:18:31", who:`${N.a2}`, tag:"NADIR", tone:"warn", text:"Isso não é areia. São microfragmentos. Vidro moído. Tem isso por toda parte, como neve falsa." },
+      { t:"23:18:43", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Registrem. Não respirem sem filtro. Reforçando protocolo: nada de contato direto com material desconhecido." },
+
+      { t:"23:19:07", who:`${N.a5}`, tag:"IVO", tone:"warn", text:"Tarde. Minha mão… tá formigando. E tem um risco aqui, mas eu não cortei em nada." },
+      { t:"23:19:14", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Ivo, descreve. Cor. Profundidade." },
+      { t:"23:19:18", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"É como se a pele tivesse… rachado por dentro. Um brilho bem fraco, azul. Tá subindo pro pulso." },
+
+      { t:"23:19:33", who:`${N.a3}`, tag:"SOREN", tone:"warn", text:"Tem alguém na rua principal. Parado. Sem casaco." },
+      { t:"23:19:38", who:`${N.a4}`, tag:"MAÍRA", tone:"warn", text:"Eu vi também. Ele tá… olhando pra gente sem mexer o pescoço." },
+      { t:"23:19:44", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Evitem aproximação. Nadir, tenta imagem térmica." },
+
+      { t:"23:20:01", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Sem assinatura térmica. Zero. Não é que tá frio… é ausência." },
+      { t:"23:20:07", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Ivo tá tremendo. Ele tá suando, mas o suor… congela na hora." },
+      { t:"23:20:12", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Eu tô bem. Eu tô bem. Só… escutando um estalo." },
+      { t:"23:20:16", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Que estalo?" },
+      { t:"23:20:19", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Dentro do meu dente. Dentro do osso." },
+
+      { t:"23:20:35", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Abortem contato. Recuem para o veículo. Ivo em isolamento dentro do carro, máscara e luvas. Ágata, você comanda." },
+      { t:"23:20:52", who:`${N.a3}`, tag:"SOREN", tone:"warn", text:"A figura na rua… se mexeu. Só o braço. Apontando pro mar." },
+
+      { t:"23:21:10", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Corvo, Ivo não quer entrar. Ele tá encarando a água como se tivesse reconhecido alguém." },
+      { t:"23:21:16", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Não é água. É um espelho. Eu vi… eu vi a gente chegando, antes de chegar." },
+      { t:"23:21:22", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Isso é sintoma. Corvo, ele tá delirando." },
+
+      { t:"23:21:31", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Ivo, obedeça. Agora." },
+      { t:"23:21:38", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Se eu entrar, eu quebro. Eu escuto vidro onde deveria ter sangue." },
+
+      { t:"23:22:05", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Ele caiu. Do nada. Como se desligasse." },
+      { t:"23:22:11", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Pulso fraco. Tá ficando mais fraco. Nadir, ajuda aqui!" },
+      { t:"23:22:18", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Pulso sumindo. Pupila… dilatando. A pele dele tá ficando opaca, tipo gelo velho." },
+      { t:"23:22:24", who:`${N.a3}`, tag:"SOREN", tone:"alert", text:"A figura da rua tá mais perto. Eu não ouvi passo nenhum." },
+
+      { t:"23:22:36", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Prioridade: contenção e retirada. Não deixem civis se aproximarem. Reportem estado do Ivo." },
+      { t:"23:22:44", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Corvo… ele parou." },
+      { t:"23:22:48", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Sem pulso. Sem respiração." },
+      { t:"23:22:52", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Hora: 23:22. Confirmo óbito clínico." },
+
+      { t:"23:23:05", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Mantenham distância do corpo. Não toquem nos olhos. Não exponham a boca. Repetindo: distância." },
+      { t:"23:23:14", who:`${N.a3}`, tag:"SOREN", tone:"alert", text:"Tarde. Ele… abriu os olhos." },
+
+      { t:"23:23:18", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Ivo? Ivo, me escuta!" },
+      { t:"23:23:22", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Eu escuto. Eu escuto melhor agora." },
+      { t:"23:23:26", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Ele não tá respirando." },
+      { t:"23:23:30", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"E ainda assim ele falou." },
+
+      { t:"23:23:41", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Não cheguem perto. Tem coisa nos meus pulmões que não é ar. É… pó de janela." },
+      { t:"23:23:48", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Corvo, ele voltou. Eu não sei como. Ele tá consciente." },
+      { t:"23:23:55", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Consciente não significa seguro. Ivo, identifique-se com código de chamada." },
+      { t:"23:24:02", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Eu era Ivo. Agora eu sou… a rachadura. A aurora entra por mim." },
+
+      { t:"23:24:17", who:`${N.a3}`, tag:"SOREN", tone:"alert", text:"A figura da rua tá sorrindo. Só que… o rosto não mexe. O sorriso aparece como risco de caneta." },
+      { t:"23:24:24", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Eu ouvi uma risada dentro do rádio. Não foi nenhum de vocês." },
+
+      { t:"23:24:37", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Nadir, reporte sinais vitais do Ivo. Se estiver instável, contenham. Se estiver… anômalo, contenham do mesmo jeito." },
+      { t:"23:24:48", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Sem batimento. Sem calor. Mas a pele emite luminosidade fraca em padrão… como se fosse escrita." },
+      { t:"23:24:56", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Que escrita?" },
+      { t:"23:25:01", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Linhas finas, repetindo. Parece: A U R O R A. E mais embaixo: V I D R O." },
+
+      { t:"23:25:16", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Vocês tão falando meu nome como se chamassem um cachorro no escuro." },
+      { t:"23:25:21", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Ivo, onde você tá machucado?" },
+      { t:"23:25:26", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Eu não tô machucado. Eu tô aberto." },
+
+      { t:"23:25:39", who:`${N.a3}`, tag:"SOREN", tone:"alert", text:"A figura apontou de novo pro mar. E agora tem mais duas atrás dela. Todas sem calor." },
+      { t:"23:25:44", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"O vento mudou. Traz um barulho… de copo trincando. Tá vindo da praia." },
+
+      { t:"23:26:01", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Retirada imediata. Ágata, leva a equipe pro carro. Ivo vai em compartimento isolado. Soren, cobertura. Maíra, não perca o rádio." },
+      { t:"23:26:10", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Entendido. Ivo, vem comigo. Devagar." },
+      { t:"23:26:14", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Não tem carro. Só tem caminho. O vidro lembra." },
+
+      { t:"23:26:26", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Ele tá virando o rosto sem mexer o pescoço… igual aos da rua." },
+      { t:"23:26:31", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Eu juro que vi reflexo dentro do olho dele. Não era eu. Era… a praia, de dia." },
+
+      { t:"23:26:47", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Corvo, você tá aí? Eu consigo ver sua sala. A luz do monitor. Você tá sozinho." },
+      { t:"23:26:53", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Ivo, pare de falar. Essa informação não está no canal." },
+      { t:"23:27:00", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Tá. Não tá no canal. Tá no vidro." },
+
+      { t:"23:27:16", who:`${N.a3}`, tag:"SOREN", tone:"alert", text:"Eles tão vindo. E eu… eu não ouço nada além de estalo. Como se a cidade inteira estivesse trincando." },
+      { t:"23:27:23", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Maíra, tranca o carro. Nadir, amarra o Ivo com a cinta." },
+      { t:"23:27:29", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"A porta não fecha. Ela encosta e volta. Como se tivesse algo invisível no vão." },
+
+      { t:"23:27:41", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Eu encostei na janela do carro e… senti outra temperatura do outro lado. Como se o vidro fosse… pele." },
+      { t:"23:27:48", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"É pele. E ela tá com fome." },
+
+      { t:"23:28:02", who:`${N.op}`, tag:"ALERTA", tone:"alert", text:"CORTEM TRANSMISSÃO SE O IVO TOMAR O CANAL. REPETINDO: CORTEM." },
+      { t:"23:28:09", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Corvo, eu não consigo… a minha mão tá colando na maçaneta. Tem… fragmentos saindo do metal." },
+
+      { t:"23:28:21", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Não briguem. Vocês já chegaram. Vocês só não perceberam ainda." },
+      { t:"23:28:28", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Eu tô ouvindo meu próprio nome… vindo de trás do meu ouvido." },
+      { t:"23:28:34", who:`${N.a3}`, tag:"SOREN", tone:"alert", text:"Tem alguém batendo no vidro do carro. Mas não tem ninguém ali. Só o som. Toc. Toc. Toc." },
+
+      { t:"23:28:49", who:`${N.op}`, tag:"SIS", tone:"sys", text:"Última instrução: se perderem referência visual, fechem os olhos e sigam pelo som do motor. Não olhem reflexos. Não olhem vitrines. Não olhem água." },
+      { t:"23:28:57", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"Corvo… o motor tá desligado." },
+      { t:"23:29:01", who:`${N.a2}`, tag:"NADIR", tone:"alert", text:"E mesmo assim… eu escuto ele funcionando." },
+
+      { t:"23:29:12", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Vocês escutam porque ele tá lembrando. Tudo aqui lembra. Tudo aqui reflete. Até o que não existe." },
+      { t:"23:29:20", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Ivo, cala a boca. Cala a boca, por favor." },
+      { t:"23:29:27", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Eu não tô falando. É a fenda falando por mim." },
+
+      { t:"23:29:44", who:`${N.op}`, tag:"ALERTA", tone:"alert", text:"Encerrando log por risco de comprometimento. Se este arquivo estiver sendo reproduzido, vocês já estão atrasados." },
+      { t:"23:29:50", who:`${N.a4}`, tag:"MAÍRA", tone:"alert", text:"Ágata… atrás de você." },
+      { t:"23:29:54", who:`${N.a1}`, tag:"ÁGATA", tone:"alert", text:"Eu não vou virar." },
+      { t:"23:29:58", who:`${N.a5}`, tag:"IVO", tone:"alert", text:"Vira." },
+    ];
+
+    progressEl.textContent = `0/${SCRIPT.length}`;
+
+    let running = false;
+    let paused = false;
+    let skipTyping = false;
+    let currentIndex = 0;
+
+    function setStatus(kind, text){
+      statusText.textContent = text;
+      dot.className = "dot " + (kind || "");
+    }
+
+    function scrollToBottom(){
+      if(!chkAutoScroll.checked) return;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function sleep(ms){
+      return new Promise(r => setTimeout(r, ms));
+    }
+
+    function makeEntry({t, who, tag, tone, text}){
+      const entry = document.createElement("div");
+      entry.className = "entry";
+
+      const stamp = document.createElement("div");
+      stamp.className = "stamp";
+      stamp.textContent = t;
+
+      const msg = document.createElement("div");
+      msg.className = "msg";
+
+      const tagSpan = document.createElement("span");
+      tagSpan.className = "tag " + (tone === "alert" ? "alert" : tone === "warn" ? "warn" : (tone==="sys"?"sys":""));
+      tagSpan.textContent = tag;
+
+      const whoSpan = document.createElement("span");
+      whoSpan.className = "who " + (tone === "alert" ? "alert" : (tag==="SIS" || tag==="ALERTA" ? "op" : ""));
+      whoSpan.textContent = who + ":";
+
+      const contentSpan = document.createElement("span");
+      contentSpan.className = "content";
+      contentSpan.textContent = " ";
+
+      msg.appendChild(tagSpan);
+      msg.appendChild(whoSpan);
+      msg.appendChild(contentSpan);
+
+      entry.appendChild(stamp);
+      entry.appendChild(msg);
+
+      return { entry, contentSpan, msg };
+    }
+
+    function shouldGlitchLine(line){
+      if(!chkGlitch.checked) return false;
+      // more likely to glitch on "IVO" and ALERTA lines
+      const hot = /IVO|ALERTA|vidro|aurora|fenda|reflete/i.test(line.text);
+      return hot ? Math.random() < 0.45 : Math.random() < 0.14;
+    }
+
+    async function typeText(el, full, baseDelay=16){
+      el.textContent = "";
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      el.appendChild(cursor);
+
+      let i = 0;
+      while(i < full.length){
+        if(!running) return;
+
+        while(paused){
+          await sleep(80);
+          if(!running) return;
+        }
+
+        if(skipTyping){
+          // flush instantly
+          el.textContent = full;
+          return;
+        }
+
+        // small pacing variation
+        const ch = full[i];
+        const delay =
+          ch === "\n" ? 120 :
+          ch === "."  ? 95 :
+          ch === ","  ? 70 :
+          ch === "…"  ? 140 :
+          ch === " "  ? 18 :
+          baseDelay + Math.floor(Math.random()*18);
+
+        // insert before cursor
+        cursor.insertAdjacentText("beforebegin", ch);
+        i++;
+
+        // occasional micro-stutter
+        if(chkGlitch.checked && Math.random() < 0.03){
+          await sleep(40 + Math.random()*70);
+        }
+
+        await sleep(delay);
+        scrollToBottom();
+      }
+
+      // remove cursor at end
+      const txt = el.textContent.replace(/\u200B/g,"");
+      el.textContent = txt;
+    }
+
+    function applyGlitch(msgNode, text){
+      // Wrap whole message as glitch moment (visual only)
+      const span = document.createElement("span");
+      span.className = "glitch";
+      span.setAttribute("data-txt", text);
+      span.textContent = text;
+      msgNode.textContent = "";
+      msgNode.appendChild(span);
+    }
+
+    async function play(){
+      if(running) return;
+      running = true;
+      paused = false;
+      skipTyping = false;
+
+      setStatus("warn", "Reproduzindo log…");
+      progressEl.textContent = `${currentIndex}/${SCRIPT.length}`;
+
+      while(currentIndex < SCRIPT.length && running){
+        const line = SCRIPT[currentIndex];
+        const { entry, contentSpan } = makeEntry(line);
+        logEl.appendChild(entry);
+        scrollToBottom();
+
+        // Decide if this line gets glitch treatment after typing
+        const glitchThis = shouldGlitchLine(line);
+
+        // Speed ramps slightly as tension grows
+        const tension = Math.min(1, currentIndex / (SCRIPT.length - 1));
+        const baseDelay = 18 - Math.floor(tension * 8); // 18 -> 10
+
+        // Type
+        await typeText(contentSpan, line.text, baseDelay);
+
+        // Visual glitch after typed
+        if(chkGlitch.checked && glitchThis && !skipTyping){
+          // brief flicker
+          const original = line.text;
+          applyGlitch(contentSpan, original);
+          await sleep(220 + Math.random()*260);
+
+          // restore
+          contentSpan.textContent = original;
+        }
+
+        currentIndex++;
+        progressEl.textContent = `${currentIndex}/${SCRIPT.length}`;
+
+        // Status escalation near end
+        if(currentIndex > SCRIPT.length * 0.60) setStatus("danger", "Sinal instável. Integridade do canal comprometida.");
+        else if(currentIndex > SCRIPT.length * 0.25) setStatus("warn", "Interferência detectada. Evite reflexos.");
+      }
+
+      if(running){
+        setStatus("danger", "Fim do log. Arquivo marcado como comprometido.");
+      }
+
+      running = false;
+      paused = false;
+      skipTyping = false;
+    }
+
+    function pauseToggle(){
+      if(!running) return;
+      paused = !paused;
+      setStatus(paused ? "warn" : "danger", paused ? "Pausado. Não confie no silêncio." : "Reproduzindo…");
+    }
+
+    function skip(){
+      if(!running){
+        // If not running, start then skip quickly
+        skipTyping = true;
+        play();
+        return;
+      }
+      skipTyping = true;
+      setStatus("danger", "Pulo ativado. Renderizando tudo de uma vez…");
+      // dump remaining instantly
+      while(currentIndex < SCRIPT.length){
+        const line = SCRIPT[currentIndex];
+        const { entry, contentSpan } = makeEntry(line);
+        logEl.appendChild(entry);
+        contentSpan.textContent = line.text;
+        currentIndex++;
+      }
+      progressEl.textContent = `${currentIndex}/${SCRIPT.length}`;
+      scrollToBottom();
+      running = false;
+      paused = false;
+      setStatus("danger", "Fim do log. Arquivo marcado como comprometido.");
+    }
+
+    function reset(){
+      running = false;
+      paused = false;
+      skipTyping = false;
+      currentIndex = 0;
+      logEl.innerHTML = "";
+      progressEl.textContent = `0/${SCRIPT.length}`;
+      setStatus("warn", "Aguardando reprodução do log…");
+    }
+
+    btnStart.addEventListener("click", () => {
+      if(!running && currentIndex >= SCRIPT.length) reset();
+      play();
+    });
+    btnPause.addEventListener("click", pauseToggle);
+    btnSkip.addEventListener("click", skip);
+
+    document.addEventListener("keydown", (e) => {
+      if(e.code === "Space"){
+        e.preventDefault();
+        if(!running){
+          play();
+        }else{
+          pauseToggle();
+        }
+      }
+      if(e.key.toLowerCase() === "s"){
+        e.preventDefault();
+        skip();
+      }
+      if(e.key.toLowerCase() === "r"){
+        e.preventDefault();
+        reset();
+      }
+    });
+
+    // initial
+    setStatus("warn", "Aguardando reprodução do log…");
+  </script>
+</body>
+</html>

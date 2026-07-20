@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/conselho-escarlate-morte/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACESSO RESTRITO: CONSELHO ESCARLATE // RELÍQUIAS DE MORTE</title>
+    <style>
+        :root {
+            --primary: #e0e0e0; /* Cinza pálido (cadavérico) */
+            --secondary: #2b0000; /* Vinho quase preto */
+            --accent: #6b0000; /* Sangue escuro */
+            --bg: #020203; /* Negro profundo */
+            --text: #dcdcdc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        
+        body {
+            background: radial-gradient(circle at top, #1a1a1a 0, #000 55%);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.03) 0px,
+                rgba(255,255,255,0.03) 1px,
+                rgba(0,0,0,0.2) 2px,
+                rgba(0,0,0,0.2) 4px
+            );
+            z-index: 10;
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+            animation: scan 8s linear infinite;
+        }
+
+        .crt-flicker {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.05), rgba(0,0,0,0.8));
+            opacity: 0.1;
+            z-index: 9;
+            pointer-events: none;
+            animation: flicker 0.18s infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: "CONSELHO ESCARLATE";
+            position: absolute;
+            left: 3px;
+            top: 0;
+            color: var(--secondary);
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
+            animation: glitch 2.3s infinite linear alternate-reverse;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        .warning-box {
+            border: 1px solid var(--accent);
+            background: rgba(0,0,0,0.6);
+            padding: 10px 15px;
+            color: var(--primary);
+            font-size: 0.75rem;
+            margin-bottom: 18px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .relics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 28px;
+        }
+
+        .relic-card {
+            border: 1px solid #222;
+            background: radial-gradient(circle at top, #111 0, #050505 60%, #000 100%);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .relic-card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: conic-gradient(from 180deg, transparent 0 40%, rgba(255,255,255,0.08) 45%, transparent 55% 100%);
+            mix-blend-mode: screen;
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .relic-card:hover::before {
+            opacity: 1;
+            transform: rotate(25deg);
+        }
+
+        .relic-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 25px rgba(107,0,0,0.6);
+            transform: translateY(-4px);
+        }
+
+        .relic-icon {
+            font-size: 3.2rem;
+            text-align: center;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 4px var(--accent));
+            transition: 0.4s;
+        }
+
+        .relic-card:hover .relic-icon {
+            transform: scale(1.1) rotate(-4deg);
+            filter: drop-shadow(0 0 14px var(--accent));
+        }
+
+        .data-label {
+            color: #666;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .relic-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            border-left: 3px solid var(--accent);
+            padding-left: 10px;
+            text-transform: uppercase;
+        }
+
+        .encrypted-text {
+            color: #8a8a8a;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            min-height: 82px;
+            transition: color 0.3s;
+        }
+
+        .relic-card:hover .encrypted-text {
+            color: #cfcfcf;
+        }
+
+        .origin-tag {
+            display: inline-block;
+            background: rgba(0,0,0,0.8);
+            color: #b8b8b8;
+            padding: 3px 9px;
+            font-size: 0.7rem;
+            margin-top: 14px;
+            border: 1px solid var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .aspect-tag {
+            float: right;
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .demonlarium-section {
+            margin-top: 60px;
+            border-top: 1px dashed #333;
+            padding-top: 20px;
+            opacity: 0.55;
+            transition: 0.8s;
+        }
+
+        .demonlarium-section:hover {
+            opacity: 1;
+        }
+
+        .demonlarium-section h3 {
+            color: var(--accent);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .demonlarium-section p {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            max-width: 620px;
+            line-height: 1.6;
+            color: #b5b5b5;
+        }
+
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.94);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            width: 82%;
+            max-width: 640px;
+            border: 2px solid var(--accent);
+            background: radial-gradient(circle, #111 0, #000 70%);
+            padding: 26px 26px 22px;
+            box-shadow: 0 0 45px rgba(0,0,0,0.9);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 6px;
+            right: 12px;
+            color: var(--accent);
+            font-size: 1.7rem;
+            cursor: pointer;
+        }
+
+        #modal-title {
+            color: var(--primary);
+            font-size: 1.35rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        #modal-body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            color: #d0d0d0;
+            line-height: 1.6;
+        }
+
+        #modal-body strong {
+            color: var(--accent);
+        }
+
+        .modal-status {
+            margin-top: 16px;
+            border: 1px solid #333;
+            padding: 8px 10px;
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes glitch {
+            0% { clip: rect(8px, 9999px, 60px, 0); transform: skew(0.5deg); }
+            20% { clip: rect(45px, 9999px, 14px, 0); transform: skew(0.2deg); }
+            40% { clip: rect(18px, 9999px, 70px, 0); transform: skew(0.1deg); }
+            60% { clip: rect(4px, 9999px, 90px, 0); transform: skew(0.7deg); }
+            80% { clip: rect(52px, 9999px, 24px, 0); transform: skew(0.2deg); }
+            100% { clip: rect(70px, 9999px, 10px, 0); transform: skew(0.4deg); }
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.09; }
+            10% { opacity: 0.16; }
+            50% { opacity: 0.12; }
+            100% { opacity: 0.1; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.1rem; letter-spacing: 3px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="crt-flicker"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="warning-box">
+                ⚠ PROTOCOLO M-0R73 ATIVO // EXPOSIÇÃO PROLONGADA ÀS RELÍQUIAS DE MORTE REDUZ EXPECTATIVA DE VIDA EM 87%.
+            </div>
+            <h1>CONSELHO ESCARLATE</h1>
+            <p class="subtitle">Arquivo: Relíquias de Morte // Origem: Demonlarium</p>
+        </header>
+
+        <main class="relics-grid">
+            <!-- RELÍQUIA DE MORTE 1 -->
+            <div class="relic-card" onclick="openModal('ampulheta')">
+                <span class="data-label">Relíquia M-001 // Classe: Morte Pura</span>
+                <span class="aspect-tag">Aspecto: Morte</span>
+                <div class="relic-icon">⏳</div>
+                <h2 class="relic-title">Ampulheta do Último Sopro</h2>
+                <p class="encrypted-text" data-original="Cada grão representa o último segundo de alguém que já morreu. Virar a ampulheta força o tempo de um vivo a ser trocado com o tempo de um morto, roubando seus últimos instantes.">
+                    0xDEAD: fluxo_temporal >> vítima; eco_residual = [ININTELIGÍVEL]...
+                </p>
+                <div class="origin-tag">Recuperada em um colapso de linha temporal parcial.</div>
+            </div>
+
+            <!-- RELÍQUIA DE MORTE 2 -->
+            <div class="relic-card" onclick="openModal('mortuarium')">
+                <span class="data-label">Relíquia M-002 // Classe: Necro-Âncora</span>
+                <span class="aspect-tag">Aspecto: Morte</span>
+                <div class="relic-icon">⚰️</div>
+                <h2 class="relic-title">Máscara do Mortuarium</h2>
+                <p class="encrypted-text" data-original="Quando colocada, apaga o rosto do portador da memória coletiva. Ninguém consegue lembrar que ele existiu. Em troca, o usuário vê todos os mortos que deixou pelo caminho. Eles sussurram direções, segredos... e dívidas não pagas.">
+                    ::: ERRO DE IDENTIDADE ::: ROSTO NÃO ENCONTRADO ::: PROCURE NA MORTE...
+                </p>
+                <div class="origin-tag">Encontrada em necrotério desacoplado da realidade local.</div>
+            </div>
+
+            <!-- RELÍQUIA DE MORTE 3 -->
+            <div class="relic-card" onclick="openModal('cicatriz')">
+                <span class="data-label">Relíquia M-003 // Classe: Parasita Fúnebre</span>
+                <span class="aspect-tag">Aspecto: Morte</span>
+                <div class="relic-icon">🕯️</div>
+                <h2 class="relic-title">Cicatriz de Cera Negra</h2>
+                <p class="encrypted-text" data-original="Uma vela que nunca apaga completamente. A chama consome lembranças ao invés de oxigênio. Queimar o próprio nome na cera impede sua morte por meios naturais, mas apaga todo laço afetivo que alguém tinha com você.">
+                    [NOME REDIGIDO] → CINZAS DE MEMÓRIAS // VIDA ≠ SIGNIFICADO
+                </p>
+                <div class="origin-tag">Coletada após ritual abortado em cemitério sem registros.</div>
+            </div>
+        </main>
+
+        <div class="demonlarium-section">
+            <h3>>> ANEXO: SUB-SETOR DE MORTE DO DEMONLARIUM</h3>
+            <p>
+                O setor de Morte do Demonlarium não é um lugar, é um acervo. Cada morte que já ocorreu, ou que ainda vai ocorrer, existe ali como um objeto arquivado, empilhado em corredores que nunca terminam. 
+                As relíquias de Morte são vazamentos desse arquivo: ferramentas criadas para manipular a bibliografia da existência, arrancando páginas inteiras da história de alguém e colando em outro corpo.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body"></div>
+            <div class="modal-status">
+                STATUS: CONTENÇÃO PARCIAL // USO RESTRITO A OPERADORES AUTORIZADOS PELO CONSELHO ESCARLATE.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
+
+        document.querySelectorAll('.encrypted-text').forEach(element => {
+            const originalText = element.getAttribute('data-original');
+            let running = false;
+
+            element.addEventListener('mouseover', event => {
+                if (running) return;
+                running = true;
+                let iterations = 0;
+                let interval = setInterval(() => {
+                    event.target.innerText = originalText
+                        .split("")
+                        .map((letter, index) => {
+                            if (index < iterations) return originalText[index];
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join("");
+
+                    if (iterations >= originalText.length) {
+                        clearInterval(interval);
+                        running = false;
+                    }
+
+                    iterations += 0.5;
+                }, 30);
+            });
+        });
+
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.2 + 0.4;
+                this.speedX = (Math.random() * 0.7) - 0.35;
+                this.speedY = (Math.random() * 0.7) - 0.35;
+                const isAsh = Math.random() > 0.8;
+                this.color = isAsh 
+                    ? `rgba(180, 180, 180, ${Math.random() * 0.7})`
+                    : `rgba(80, 0, 0, ${Math.random() * 0.8})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.15) this.size -= 0.008;
+                if (
+                    this.size <= 0.15 ||
+                    this.x < -10 || this.x > canvas.width + 10 ||
+                    this.y < -10 || this.y > canvas.height + 10
+                ) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const particles = [];
+        function initParticles() {
+            for (let i = 0; i < 120; i++) {
+                particles.push(new Particle());
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        const modal = document.getElementById('modal-overlay');
+        const mTitle = document.getElementById('modal-title');
+        const mBody = document.getElementById('modal-body');
+
+        const db = {
+            'ampulheta': {
+                t: 'AMPULHETA DO ÚLTIMO SOPRO (M-001)',
+                b: `
+                    <strong>Origem conhecida:</strong> Interceptada durante falha de colapso cronológico em uma capela abandonada.<br><br>
+                    <strong>Efeito Primário:</strong> Ao ser virada com o nome de uma vítima escrito em sua base, a vítima perde 1d10 anos de sua expectativa de vida. 
+                    O portador da ampulheta recebe metade desse tempo em forma de resistência à morte (bônus em testes resistindo a dano letal).<br><br>
+                    <strong>Efeito Colateral:</strong> Cada uso gera um "eco de morte" que segue o portador. 
+                    Após 3 ecos acumulados, o próximo teste de Morte realizado por ele é automaticamente considerado uma falha crítica narrativa.
+                `
+            },
+            'mortuarium': {
+                t: 'MÁSCARA DO MORTUARIUM (M-002)',
+                b: `
+                    <strong>Procedimento de Vínculo:</strong> Para ativar, o usuário deve colocá-la sobre o rosto e permanecer 10 minutos imóvel em completo silêncio.<br><br>
+                    <strong>Efeito Primário:</strong> Enquanto estiver usando a máscara, o portador é tratado como <em>“ausente da narrativa social”</em>: 
+                    testes para ser lembrado, rastreado ou identificado sofrem penalidade severa, e qualquer descrição sua nas memórias de terceiros torna-se vaga e inconsistente.<br><br>
+                    <strong>Compensação Paranormal:</strong> Em troca, o usuário passa a enxergar e ouvir todos os mortos diretamente afetados por suas ações. 
+                    Eles podem fornecer pistas, vantagens em investigações e informações sobre o Demonlarium, mas exigem pagamento em novas mortes.
+                `
+            },
+            'cicatriz': {
+                t: 'CICATRIZ DE CERA NEGRA (M-003)',
+                b: `
+                    <strong>Ativação:</strong> O nome completo do portador é escrito na cera aquecida. Ao solidificar, o nome desaparece, e uma cicatriz escura surge no peito do usuário.<br><br>
+                    <strong>Efeito Primário:</strong> Enquanto a cicatriz existir, o portador não pode morrer por condições comuns (doença, idade, acidentes “mundanos”). 
+                    Ataques ou efeitos diretamente ligados ao Paranormal ainda podem matá-lo normalmente.<br><br>
+                    <strong>Custo Existencial:</strong> Cada dia em que a cicatriz permanece ativa, uma lembrança afetiva é apagada da mente das pessoas que o conhecem. 
+                    Ao final, todos se lembram apenas da sensação de que “faltava alguém”, sem conseguir nomear quem.
+                `
+            }
+        };
+
+        function openModal(id) {
+            mTitle.innerText = db[id].t;
+            mBody.innerHTML = db[id].b;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal();
+        });
+
+        console.log("%c CONSELHO ESCARLATE // RELÍQUIAS DE MORTE", "color: #e0e0e0; font-size: 14px; font-weight: bold; background: #000; padding: 4px;");
+        console.log("Sub-sistema de Morte conectado ao Demonlarium.");
+        console.log("Cada acesso a este arquivo reduz algo que você não percebeu que tinha.");
+    </script>
+</body>
+</html>

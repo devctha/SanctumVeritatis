@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/brayfog/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • [PROIBIDO] • BRAYFOG</title>
+
+  <style>
+    :root{
+      --bg0:#04030a;
+      --bg1:#07081b;
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted: rgba(219,234,254,.68);
+      --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.20);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      /* CRT knobs (normal) */
+      --scan-opacity: .13;
+      --noise-opacity: .09;
+      --flicker: .070;
+      --shake: 0px;
+
+      --fz: 13px;
+      --fzSmall: 12px;
+      --pad: 12px;
+      --padSmall: 10px;
+      --line: 1.55;
+
+      /* “Proibido” */
+      --deny: rgba(239,68,68,.92);
+      --haz: rgba(251,146,60,.92);
+      --ok: rgba(34,197,94,.92);
+      --ice: rgba(56,189,248,.92);
+      --vio: rgba(168,85,247,.92);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 900px at 20% 18%, rgba(239,68,68,.13), transparent 62%),
+        radial-gradient(900px 650px at 84% 22%, rgba(168,85,247,.10), transparent 60%),
+        radial-gradient(900px 650px at 50% 92%, rgba(56,189,248,.08), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(12px, 2vw, 20px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(10px, 1.6vw, 16px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+
+    /* CRT overlay */
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.04), transparent 22%, rgba(0,255,255,.03) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.58;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.65) 50%, rgba(255,255,255,.05) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 7.5s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(14px)} }
+
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.62'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 2.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-9px,7px,0); }
+      50%{ transform: translate3d(8px,-6px,0); }
+      75%{ transform: translate3d(-5px,-3px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .03);
+      opacity:0;
+      animation: flicker 3.2s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      17%{ opacity: calc(var(--flicker) * 1.2); }
+      18%{ opacity: 0; }
+      41%{ opacity: calc(var(--flicker) * .85); }
+      42%{ opacity: 0; }
+      76%{ opacity: calc(var(--flicker) * 1.5); }
+      77%{ opacity: 0; }
+    }
+
+    /* Glitch helpers */
+    .glitch{
+      position:relative;
+      display:inline-block;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #ffe4e6;
+      text-shadow: 0 0 18px rgba(239,68,68,.28);
+    }
+    .glitch::before, .glitch::after{
+      content: attr(data-text);
+      position:absolute;
+      left:0; top:0;
+      width:100%;
+      overflow:hidden;
+      opacity:.8;
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    .glitch::before{
+      transform: translate(-1px,0);
+      color: rgba(56,189,248,.80);
+      clip-path: inset(0 0 55% 0);
+      animation: g1 2.6s infinite linear;
+    }
+    .glitch::after{
+      transform: translate(1px,0);
+      color: rgba(168,85,247,.80);
+      clip-path: inset(45% 0 0 0);
+      animation: g2 2.1s infinite linear;
+    }
+    @keyframes g1{
+      0%{ clip-path: inset(0 0 62% 0); }
+      20%{ clip-path: inset(18% 0 40% 0); }
+      40%{ clip-path: inset(6% 0 70% 0); }
+      60%{ clip-path: inset(28% 0 38% 0); }
+      80%{ clip-path: inset(12% 0 66% 0); }
+      100%{ clip-path: inset(0 0 62% 0); }
+    }
+    @keyframes g2{
+      0%{ clip-path: inset(52% 0 0 0); }
+      25%{ clip-path: inset(40% 0 14% 0); }
+      50%{ clip-path: inset(58% 0 0 0); }
+      75%{ clip-path: inset(44% 0 10% 0); }
+      100%{ clip-path: inset(52% 0 0 0); }
+    }
+
+    .redact{
+      display:inline-block;
+      padding: 0 6px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(0,0,0,.86), rgba(0,0,0,.62));
+      border: 1px solid rgba(239,68,68,.26);
+      color: rgba(255,255,255,.10);
+      user-select:none;
+      filter: blur(.15px);
+      text-shadow: none;
+    }
+
+    .burn{
+      color: rgba(251,146,60,.90);
+      text-shadow: 0 0 14px rgba(251,146,60,.18);
+    }
+
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(12,4,10,.74), rgba(3,6,18,.48));
+      border: 1px solid rgba(239,68,68,.22);
+      box-shadow: 0 0 18px rgba(239,68,68,.16), 0 0 26px rgba(168,85,247,.12);
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .title{
+      font-size: 15px;
+      line-height:1.1;
+      max-width: 80ch;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: var(--fzSmall);
+      color: rgba(219,234,254,.72);
+      line-height:1.35;
+      max-width: 110ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(239,68,68,.30);
+      background: rgba(2,6,23,.35);
+      box-shadow: 0 0 18px rgba(239,68,68,.16);
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--red);
+      box-shadow: 0 0 14px rgba(239,68,68,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,8,18,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(239,68,68,.16);
+      box-shadow: 0 0 22px rgba(239,68,68,.10), 0 0 20px rgba(56,189,248,.10);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(86, 88, 240, .10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(86, 88, 240, .10) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.40;
+      z-index:0;
+      filter: saturate(0.85);
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:1;
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(239,68,68,.12);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.72);
+    }
+
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn, .ghost{
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn{
+      border: 1px solid rgba(239,68,68,.28);
+      background: linear-gradient(180deg, rgba(239,68,68,.16), rgba(251,146,60,.08));
+      color: #ffe4e6;
+      box-shadow: 0 0 18px rgba(239,68,68,.15);
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .ghost{
+      border: 1px solid rgba(56,189,248,.20);
+      background: rgba(2,6,23,.18);
+      color: rgba(219,234,254,.78);
+      box-shadow: 0 0 14px rgba(56,189,248,.12);
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      padding: 14px;
+      min-height:0;
+      overflow:auto;
+      scrollbar-color: rgba(239,68,68,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+      display:grid;
+      gap: 12px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.10);
+      background: rgba(2,6,23,.22);
+      box-shadow: inset 0 0 0 1px rgba(239,68,68,.05);
+      overflow:hidden;
+      min-width: 0;
+      position:relative;
+    }
+
+    .cardHead{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(239,68,68,.12);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      min-width: 0;
+    }
+    .cardHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.74);
+      min-width: 0;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(239,68,68,.14);
+      background: rgba(2,6,23,.24);
+      font-size: 12px;
+      color: rgba(255,255,255,.58);
+      white-space:nowrap;
+    }
+    .chip b{ color: rgba(255,255,255,.84); }
+
+    .cardBody{ padding: var(--pad); min-width:0; }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(239,68,68,.12);
+      background: rgba(3,6,18,.42);
+      padding: var(--padSmall);
+      box-shadow: 0 0 18px rgba(239,68,68,.08);
+      min-width: 0;
+      position:relative;
+      overflow:hidden;
+    }
+    .kv .k{
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.52);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .kv .v{
+      margin-top:6px;
+      font-size: var(--fz);
+      line-height: var(--line);
+      color: rgba(219,234,254,.78);
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+
+    .danger{ color: rgba(239,68,68,.92); text-shadow: 0 0 14px rgba(239,68,68,.15); }
+
+    /* Corruption stripes */
+    .corrupt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        linear-gradient(90deg,
+          rgba(0,0,0,0) 0%,
+          rgba(239,68,68,.08) 18%,
+          rgba(0,0,0,0) 36%,
+          rgba(56,189,248,.07) 52%,
+          rgba(0,0,0,0) 68%,
+          rgba(168,85,247,.07) 85%,
+          rgba(0,0,0,0) 100%);
+      opacity:.85;
+      mix-blend-mode: overlay;
+      pointer-events:none;
+      animation: bars 3.4s linear infinite;
+    }
+    @keyframes bars{
+      0%{ transform: translateX(-40%); }
+      100%{ transform: translateX(40%); }
+    }
+
+    /* Big deny overlay */
+    .denyOverlay{
+      position:fixed;
+      inset:0;
+      z-index: 40;
+      display:none;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.70);
+      backdrop-filter: blur(8px);
+    }
+    .denyCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(239,68,68,.28);
+      background: linear-gradient(180deg, rgba(8,4,8,.94), rgba(3,6,18,.62));
+      box-shadow: 0 0 70px rgba(239,68,68,.14), 0 0 40px rgba(56,189,248,.10);
+      overflow:hidden;
+      position:relative;
+    }
+    .denyTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(239,68,68,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .denyTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #ffe4e6;
+      text-shadow: 0 0 18px rgba(239,68,68,.18);
+      font-size: 13px;
+    }
+    .denyTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.62);
+      line-height:1.35;
+      max-width: 110ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.70);
+      font-size: 12px;
+      min-height: 210px;
+      max-height: min(55vh, 620px);
+      overflow:auto;
+    }
+    .denyActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.60);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(239,68,68,.26);
+      background: rgba(239,68,68,.08);
+      color: #ffe4e6;
+    }
+
+    /* Compact mode */
+    body.compact{
+      --fz: 12px;
+      --fzSmall: 11px;
+      --pad: 10px;
+      --padSmall: 9px;
+      --line: 1.45;
+    }
+  </style>
+</head>
+
+<body class="compact">
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header class="corrupt">
+      <div class="top">
+        <div>
+          <div class="title">
+            <span class="glitch" data-text="S.A.S / ARQUIVO PROIBIDO">S.A.S / ARQUIVO PROIBIDO</span>
+          </div>
+          <div class="sub">
+            Entidade: <span class="burn">BRAYFOG</span> • Organização: <span class="danger">BLHKT</span>.<br/>
+            Estado: <span class="danger">DESERTOR</span> • Última confirmação: “atravessando <span class="danger">para o outro lado</span>”.<br/>
+            Operação associada: <span class="burn">LÂMINA NOTURNA</span>.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>ACCESS: DENIED / CORRUPTED</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <div class="k">FORBIDDEN / DO NOT CACHE</div>
+        <div class="actions">
+          <button class="ghost" id="btnSpike" type="button">Interferência</button>
+          <button class="btn" id="btnRead" type="button">Modo: COMPACTO</button>
+          <button class="ghost" id="btnDeny" type="button">Revalidar</button>
+        </div>
+      </div>
+
+      <div class="wrap" id="scrollArea">
+
+        <section class="card corrupt">
+          <div class="cardHead">
+            <div class="h">Identificação (fragmentada)</div>
+            <div class="chip"><b>Status</b> PROIBIDO</div>
+          </div>
+          <div class="cardBody">
+            <div class="grid2">
+              <div class="kv corrupt">
+                <div class="k">Nome</div>
+                <div class="v">
+                  <span class="redact">████████████</span> “Brayfog” (alias operacional).<br/>
+                  Registro civil: <span class="redact">██████ ████████</span>.
+                </div>
+              </div>
+
+              <div class="kv corrupt">
+                <div class="k">Vínculo</div>
+                <div class="v">
+                  Organização: <span class="danger">BLHKT</span> (célula não indexada).<br/>
+                  Função anterior: <span class="redact">██████████</span> / infiltração / extração.
+                </div>
+              </div>
+            </div>
+
+            <div class="kv corrupt" style="margin-top:10px">
+              <div class="k">Assinatura de presença</div>
+              <div class="v">
+                “Neblina” no registro: lacunas, datas que pulam, e linhas que insistem em se reescrever.<br/>
+                Observação: ao tentar fixar detalhes, ocorre <span class="danger">distorção</span> e queda de cache.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card corrupt">
+          <div class="cardHead">
+            <div class="h">Operação: Lâmina Noturna</div>
+            <div class="chip"><b>Último log</b> CORROMPIDO</div>
+          </div>
+          <div class="cardBody">
+            <div class="kv corrupt">
+              <div class="k">Resumo (parcial)</div>
+              <div class="v">
+                A operação “<span class="burn">LÂMINA NOTURNA</span>” visava localizar um ponto de passagem e
+                executar fechamento controlado.<br/>
+                Brayfog <span class="danger">desertou</span> durante a janela de contenção.<br/>
+                Última linha íntegra: “<span class="danger">ele atravessou</span>”.
+              </div>
+            </div>
+
+            <div class="kv corrupt" style="margin-top:10px">
+              <div class="k">Trechos recuperados</div>
+              <div class="v" id="snips">
+                [0x01] “não confiem no mapa”<br/>
+                [0x02] “a lâmina não corta o escuro — ela corta o <span class="redact">████████</span>”<br/>
+                [0x03] “se alguém chamar meu nome, <span class="redact">████████████████</span>”<br/>
+                [0x04] “BLHKT não perde agente — <span class="danger">apaga</span>”
+              </div>
+            </div>
+
+            <div class="kv corrupt" style="margin-top:10px">
+              <div class="k">Hipóteses (não confirmadas)</div>
+              <div class="v">
+                - Atravessou voluntariamente e mantém consciência do “lado de lá”.<br/>
+                - Foi levado como “contrapartida” pela passagem. <span class="redact">██████████</span><br/>
+                - A BLHKT encenou deserção para criar ruído e fechar rastreio.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card corrupt">
+          <div class="cardHead">
+            <div class="h">Avisos do sistema</div>
+            <div class="chip"><b>Perigo</b> MEMÉTICO</div>
+          </div>
+          <div class="cardBody">
+            <div class="kv corrupt">
+              <div class="k">S.A.S / ALERTA</div>
+              <div class="v">
+                Este arquivo apresenta comportamento de “puxar olhar”: a leitura prolongada aumenta eventos de falha.<br/>
+                Se notar repetição de palavras, pausas involuntárias ou sensação de “já li isso”, encerre o acesso.
+              </div>
+            </div>
+
+            <div class="kv corrupt" style="margin-top:10px">
+              <div class="k">Linhas que não deveriam existir</div>
+              <div class="v" id="forbiddenLines"></div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Deny overlay -->
+  <div class="denyOverlay" id="deny" role="dialog" aria-modal="true" aria-label="Acesso negado">
+    <div class="denyCard">
+      <div class="denyTop">
+        <div>
+          <div class="h">ACESSO NEGADO / ARQUIVO VIVO</div>
+          <div class="s">
+            Tentativa de leitura detectada. O arquivo responde com ruído e lacunas.
+            Revalidação não garante integridade.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>BLHKT: HANDSHAKE FAILED</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="denyActions">
+        <button class="btn" id="btnEnter" type="button">Forçar abertura</button>
+        <div class="kbd">Atalhos: <code>Enter</code> forçar • <code>/</code> interferência • <code>R</code> leitura</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const deny = document.getElementById("deny");
+    const typebox = document.getElementById("typebox");
+    const btnEnter = document.getElementById("btnEnter");
+
+    const btnSpike = document.getElementById("btnSpike");
+    const btnRead = document.getElementById("btnRead");
+    const btnDeny = document.getElementById("btnDeny");
+
+    const forbiddenLines = document.getElementById("forbiddenLines");
+    const snips = document.getElementById("snips");
+
+    let compact = true;
+
+    function setVars(scan, noise, flick, shake){
+      document.documentElement.style.setProperty("--scan-opacity", scan);
+      document.documentElement.style.setProperty("--noise-opacity", noise);
+      document.documentElement.style.setProperty("--flicker", flick);
+      document.documentElement.style.setProperty("--shake", shake);
+    }
+
+    function spike(intense=false){
+      const scan = (intense ? 0.26 : 0.14) + Math.random()*0.18;
+      const noise = (intense ? 0.16 : 0.09) + Math.random()*0.16;
+      const flick = (intense ? 0.10 : 0.06) + Math.random()*0.08;
+      const shake = (Math.random() < (intense?0.85:0.45))
+        ? ((Math.random()*6 - 3).toFixed(1) + "px")
+        : "0px";
+      setVars(scan.toFixed(2), noise.toFixed(2), flick.toFixed(3), shake);
+      setTimeout(() => setVars(".13",".09",".070","0px"), intense?1600:1100);
+      microCorrupt();
+    }
+
+    function updateReadMode(){
+      document.body.classList.toggle("compact", compact);
+      btnRead.textContent = "Modo: " + (compact ? "COMPACTO" : "LEGÍVEL");
+      spike(false);
+    }
+
+    function openDeny(){
+      deny.style.display = "grid";
+      typeBoot();
+      spike(true);
+    }
+
+    function closeDeny(){
+      deny.style.display = "none";
+      spike(true);
+    }
+
+    // “Corruption” on text blocks
+    function corruptToken(){
+      const blocks = ["██████","██████████","███","██████████████","█████ █████","████████"];
+      return blocks[Math.floor(Math.random()*blocks.length)];
+    }
+
+    function microCorrupt(){
+      // Randomly replace a few letters with glyph noise in snips
+      const glyphs = ["▒","░","█","⟟","⟊","⧄","⧅","⧆","⧈","⧉","⧊","⌁","⌗"];
+      const p = 0.12;
+      const text = snips.innerHTML
+        .replace(/&nbsp;/g," ")
+        .replace(/<br\s*\/?>/gi,"\n")
+        .replace(/<[^>]*>/g,"");
+      const out = text.split("").map(ch => {
+        if (ch === "\n") return "\n";
+        if (Math.random() < p) return glyphs[Math.floor(Math.random()*glyphs.length)];
+        return ch;
+      }).join("");
+      snips.innerHTML = out.split("\n").map(l => l ? (l + "<br/>") : "<br/>").join("");
+    }
+
+    function fillForbiddenLines(){
+      const lines = [];
+      const base = [
+        "“ele não desertou — ele voltou antes de ir”",
+        "“o outro lado escreve com o que falta”",
+        "“BLHKT não é sigla, é aviso”",
+        "“se a lâmina noturna abre, algo entra”",
+        "“não pronuncie brayfog em sala de espelho”",
+        "“arquivo tenta se defender do leitor”"
+      ];
+      for (let i=0; i<10; i++){
+        const left = Math.random() < 0.45 ? corruptToken() : "";
+        const right = Math.random() < 0.35 ? (" " + corruptToken()) : "";
+        const mid = base[Math.floor(Math.random()*base.length)];
+        lines.push(`[${String(i).padStart(2,"0")}] ${left} ${mid} ${right}`.replace(/\s+/g," "));
+      }
+      forbiddenLines.innerHTML = lines.map(l => l.replace(/brayfog/ig, "<span class='burn'>brayfog</span>")).join("<br/>");
+    }
+
+    const boot = [
+      "[S.A.S] file: brayfog.html",
+      "[S.A.S] class: forbidden / corrupted / living file",
+      "",
+      "ENTITY: BRAYFOG",
+      "AFFILIATION: BLHKT",
+      "EVENT: OP ‘LÂMINA NOTURNA’",
+      "LAST SEEN: crossing → ‘OTHER SIDE’",
+      "",
+      "WARNING: do not cache • do not quote • do not repeat names",
+      "HANDSHAKE: FAILED",
+      "",
+      "Pressione ENTER para forçar."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        setTimeout(tick, 22 + Math.random()*70);
+      };
+      tick();
+    }
+
+    // actions
+    btnSpike.addEventListener("click", () => spike(true));
+    btnRead.addEventListener("click", () => { compact = !compact; updateReadMode(); });
+    btnDeny.addEventListener("click", openDeny);
+    btnEnter.addEventListener("click", closeDeny);
+
+    // keys
+    window.addEventListener("keydown", (e) => {
+      if (deny.style.display === "grid"){
+        if (e.key === "Enter") closeDeny();
+        if (e.key === "/") { e.preventDefault(); spike(true); }
+        if (e.key.toLowerCase() === "r") { compact = !compact; updateReadMode(); }
+        return;
+      }
+      if (e.key === "/") { e.preventDefault(); spike(true); }
+      if (e.key.toLowerCase() === "r") { compact = !compact; updateReadMode(); }
+      if (e.key.toLowerCase() === "v") { openDeny(); }
+    });
+
+    // init
+    fillForbiddenLines();
+    setTimeout(openDeny, 380); // já abre “negado” de cara
+    setInterval(() => {
+      if (Math.random() < 0.18) spike(false);
+      if (Math.random() < 0.12) microCorrupt();
+      if (Math.random() < 0.08) fillForbiddenLines();
+    }, 2200);
+  </script>
+</body>
+</html>

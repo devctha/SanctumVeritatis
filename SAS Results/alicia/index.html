@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/alicia/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • A.L.I.C.I.A • ROGUE / “PRESA DO OUTRO LADO”</title>
+  <style>
+    :root{
+      --bg0:#04030a;
+      --bg1:#07081b;
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted: rgba(219,234,254,.65);
+      --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.20);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .12;
+      --noise-opacity: .08;
+      --flicker: .055;
+      --shake: 0px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 16% 12%, rgba(168,85,247,.12), transparent 62%),
+        radial-gradient(900px 650px at 86% 22%, rgba(56,189,248,.10), transparent 60%),
+        radial-gradient(900px 650px at 50% 92%, rgba(34,197,94,.08), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, rgba(239,68,68,.10), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(14px, 2vw, 22px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(12px, 1.6vw, 18px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.03), transparent 22%, rgba(0,255,255,.02) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.55;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.60) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-7px,5px,0); }
+      50%{ transform: translate3d(6px,-5px,0); }
+      75%{ transform: translate3d(-4px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 4.4s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      33%{ opacity: calc(var(--flicker) * 1.2); }
+      34%{ opacity: 0; }
+      58%{ opacity: calc(var(--flicker) * .8); }
+      59%{ opacity: 0; }
+      88%{ opacity: calc(var(--flicker) * 1.45); }
+      89%{ opacity: 0; }
+    }
+
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,24,.70), rgba(5,6,10,.44));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: clamp(14px, 1.7vw, 16px);
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.72);
+      line-height:1.35;
+      max-width: 92ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.24);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowB);
+      font-size: 12px;
+      color: rgba(219,234,254,.82);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--orange);
+      box-shadow: 0 0 14px rgba(251,146,60,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(168,85,247,.16);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:1;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(251,146,60,.22);
+      background: linear-gradient(180deg, rgba(251,146,60,.18), rgba(239,68,68,.10));
+      color: #ffe4c7;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowO), var(--shadowR);
+      user-select:none;
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .ghost{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      box-shadow: var(--shadowB);
+      user-select:none;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      padding: 16px;
+      min-height:0;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.25);
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.06);
+      overflow:hidden;
+    }
+
+    .cardHead{
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .cardHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.80);
+    }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.28);
+      font-size: 12px;
+      color: rgba(219,234,254,.60);
+    }
+    .chip b{ color: rgba(219,234,254,.88); }
+
+    .cardBody{ padding: 12px; }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      padding: 10px 10px;
+      box-shadow: var(--shadowV);
+    }
+    .kv .k{ font-size: 11px; letter-spacing:.12em; text-transform:uppercase; color: rgba(219,234,254,.55); }
+    .kv .v{ margin-top:6px; font-size: 13px; line-height:1.5; color: rgba(219,234,254,.82); }
+
+    .log{
+      height: clamp(390px, 60vh, 840px);
+      overflow:auto;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.40);
+      border: 1px solid rgba(251,146,60,.16);
+      box-shadow: var(--shadowO), inset 0 0 0 1px rgba(56,189,248,.06);
+      white-space: pre-wrap;
+      line-height: 1.55;
+      color: rgba(219,234,254,.82);
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+    }
+
+    .warn{ color: rgba(251,146,60,.88); text-shadow: var(--shadowO); }
+    .danger{ color: rgba(239,68,68,.88); text-shadow: var(--shadowR); }
+    .ok{ color: rgba(34,197,94,.88); text-shadow: var(--shadowG); }
+
+    .redact{
+      background: linear-gradient(90deg, rgba(239,68,68,.16), rgba(0,0,0,.0));
+      border-left: 3px solid rgba(239,68,68,.55);
+      padding: 10px 10px;
+      border-radius: 12px;
+      margin: 10px 0;
+    }
+    .redact .k{ font-size: 11px; letter-spacing:.12em; text-transform:uppercase; color: rgba(239,68,68,.78); }
+    .redact .v{ margin-top:6px; font-size: 13px; line-height:1.5; color: rgba(219,234,254,.76); }
+
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+    }
+    .introCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.90), rgba(3,6,18,.64));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 48px rgba(168,85,247,.18),
+        0 0 56px rgba(56,189,248,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .introTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      font-size: 13px;
+    }
+    .introTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+      max-width: 90ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      font-size: 12px;
+      min-height: 220px;
+      max-height: min(58vh, 600px);
+      overflow:auto;
+    }
+    .introActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.62);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,.25);
+      background: rgba(251,146,60,.08);
+      color: #ffe4c7;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .crt::after, .noise, .flicker{ animation:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="title">S.A.S / DOSSIÊ • A.L.I.C.I.A</div>
+          <div class="sub">
+            Status: <span class="warn">ROGUE</span> (deserção confirmada). Destino provável: <span class="danger">presa do outro lado</span>.<br/>
+            Observação: a agente adotou o próprio codinome como identidade funcional — a sigla vira nome, e o nome vira <span class="danger">chave</span>.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>FILE: ALICIA_Rogue.log • INTEGRITY: 74%</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <div class="k">ARCHIVE VIEW • INTERNAL ONLY</div>
+        <div class="actions">
+          <button class="ghost" id="btnNoise" type="button">Ruído</button>
+          <button class="btn" id="btnAutoscroll" type="button">Auto-scroll: ON</button>
+          <button class="ghost" id="btnTop" type="button">Topo</button>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Identificação</div>
+            <div class="chips">
+              <span class="chip"><b>Codinome</b> A.L.I.C.I.A</span>
+              <span class="chip"><b>Status</b> Rogue</span>
+              <span class="chip"><b>Risco</b> Alto</span>
+            </div>
+          </div>
+
+          <div class="cardBody">
+            <div class="grid2">
+              <div class="kv">
+                <div class="k">Descrição curta</div>
+                <div class="v">
+                  Operadora de interface/linguagem (perfil: investigação, interceptação, contenção semântica).
+                  Desertou após acesso a arquivos de “procedimento” que descreviam pessoas como insumos.
+                </div>
+              </div>
+              <div class="kv">
+                <div class="k">Ponto de ruptura</div>
+                <div class="v">
+                  A agente descobriu que parte do controle não era “sobre o outro lado”, mas sobre o <span class="warn">que pode ser dito</span>.
+                  A deserção começou com uma recusa: obedecer sem entender.
+                </div>
+              </div>
+              <div class="kv">
+                <div class="k">Último registro confiável</div>
+                <div class="v">
+                  Entrada voluntária em zona de Membrana instável para “esconder informação onde ninguém quer olhar”.
+                  Comunicação terminou com uma frase repetida três vezes, cada vez com menos vogais.
+                </div>
+              </div>
+              <div class="kv">
+                <div class="k">Hipótese atual</div>
+                <div class="v">
+                  A.L.I.C.I.A não morreu. Foi “aceita” pelo outro lado como ferramenta, prisioneira, ou tradutora.
+                  O padrão indica aprisionamento por <span class="danger">contrato de linguagem</span>.
+                </div>
+              </div>
+            </div>
+
+            <div class="redact">
+              <div class="k">Nota de quarentena</div>
+              <div class="v">
+                Não repetir a sigla completa em áudio em ambientes instáveis.
+                A sigla foi usada pela própria agente como “âncora”; âncoras viram portas.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Log • Rogue / Captura</div>
+            <div class="chips">
+              <span class="chip"><b>Formato</b> chat + telemetria</span>
+              <span class="chip"><b>Fase</b> deserção → perda de sinal</span>
+              <span class="chip"><b>Nota</b> conteúdo hostil</span>
+            </div>
+          </div>
+
+          <div class="cardBody">
+            <div class="log" id="log">
+[INÍCIO DO REGISTRO • “ALICIA_Rogue” • HASH: A-12/ROGUE]
+origem: extração parcial de mensagens / transcrição de rádio / bloco de notas recuperado
+----------------------------------------------------------------------------------------------------
+
+D-21 23:18:02  [SISTEMA] Acesso elevado detectado. Terminal interno aberto fora de janela.
+D-21 23:18:11  A.L.I.C.I.A: Eu só queria confirmar uma coisa.
+D-21 23:18:15  A.L.I.C.I.A: Mas as confirmações são piores que as dúvidas.
+D-21 23:18:21  A.L.I.C.I.A: “Procedimento de descarte” não é procedimento. É confissão.
+D-21 23:18:27  A.L.I.C.I.A: Eles chamam de contenção o que é, na verdade, administração de culpa.
+
+D-20 02:05:44  [CANAL INTERNO] Supervisor: Você está fora do escopo.
+D-20 02:05:50  A.L.I.C.I.A: Escopo é a palavra bonita para “coleira”.
+D-20 02:05:56  Supervisor: Volte para o seu posto.
+D-20 02:06:00  A.L.I.C.I.A: Meu posto é a mentira. Eu não volto.
+
+D-18 17:40:12  [ANOTAÇÃO MANUAL] “Se eles conseguem conter o outro lado, por que precisam conter pessoas?”
+D-18 17:40:28  [ANOTAÇÃO MANUAL] “Se o medo é ferramenta, quem segura a ferramenta?”
+D-18 17:40:45  [ANOTAÇÃO MANUAL] “Quando a verdade aparece, a hierarquia pede silêncio — não resposta.”
+
+D-15 11:09:01  [SISTEMA] Credenciais revogadas (parcial). Rastreamento iniciado.
+D-15 11:09:08  A.L.I.C.I.A: Eu sabia. Quando você aprende a ler, eles queimam o alfabeto.
+D-15 11:09:14  A.L.I.C.I.A: Então eu vou escrever no lugar que não aceita fogo.
+
+D-14 03:28:33  [RÁDIO] Equipe de contenção: Visual no alvo.
+D-14 03:28:38  A.L.I.C.I.A: Não cheguem perto.
+D-14 03:28:41  Contenção: Rendição imediata. Você está comprometida.
+D-14 03:28:47  A.L.I.C.I.A: Comprometida eu estava antes, quando eu obedecia.
+
+D-14 03:29:05  [TELEMETRIA] Pulso: alto. Respiração: controlada. Tremor: baixo.
+D-14 03:29:12  Contenção: Você está sozinha.
+D-14 03:29:16  A.L.I.C.I.A: Não existe “sozinha”. Existe “sem testemunha”.
+D-14 03:29:21  Contenção: Não faça isso.
+D-14 03:29:24  A.L.I.C.I.A: “Isso” é a única parte honesta da missão.
+
+----------------------------------------------------------------------------------------------------
+D-12 22:13:07  [DESLOCAMENTO] A.L.I.C.I.A cruza perímetro de Membrana instável (zona urbana abandonada).
+D-12 22:13:12  A.L.I.C.I.A (áudio): Se vocês me seguirem, vocês viram notícia do outro lado.
+D-12 22:13:18  Contenção: Último aviso.
+D-12 22:13:21  A.L.I.C.I.A: Aviso é o que se dá a quem importa.
+
+D-12 22:14:02  [FENÔMENO] Interferência sem origem. Palavras surgem no ruído como se o rádio tivesse memória.
+D-12 22:14:08  Ruído: “diga seu nome”
+D-12 22:14:12  A.L.I.C.I.A: Não.
+D-12 22:14:16  Ruído: “então nós daremos”
+D-12 22:14:21  Contenção: Recuar. Isso está tentando engajar.
+D-12 22:14:25  A.L.I.C.I.A: Já engajou. Faz tempo. Engajou quando eu li o arquivo.
+
+D-12 22:15:04  [VISUAL] A luz da rua “falha”, mas o escuro não entra — fica parado na borda.
+D-12 22:15:09  A.L.I.C.I.A: O outro lado é educado. Ele espera convite.
+D-12 22:15:12  Contenção: Você está delirando.
+D-12 22:15:15  A.L.I.C.I.A: Delírio é quando a realidade não tem documento.
+
+----------------------------------------------------------------------------------------------------
+D-12 22:16:40  [MARCADOR] A.L.I.C.I.A chega ao ponto “FENDA”.
+D-12 22:16:44  Contenção: Alvo em contato visual. Distância: 18m.
+D-12 22:16:49  A.L.I.C.I.A: Vocês querem me apagar? Eu vou me arquivar.
+
+D-12 22:17:03  [ECO] Voz não identificada (próxima, porém sem direção):
+                “vocês chamam de Membrana. nós chamamos de Véu.”
+D-12 22:17:10  Contenção: Quem está falando com você?!
+D-12 22:17:14  A.L.I.C.I.A: Alguém que não precisa de crachá.
+
+D-12 22:17:41  [TELEMETRIA] Temperatura ambiente cai. Ruído vira padrão. Padrão vira frase.
+D-12 22:17:45  Ruído: “você nos trouxe uma história”
+D-12 22:17:49  A.L.I.C.I.A: Eu trouxe uma prova.
+D-12 22:17:52  Ruído: “provas são comida”
+D-12 22:17:55  A.L.I.C.I.A: Então comam. Engasguem.
+
+D-12 22:18:20  Contenção: Disparo de contenção autorizado.
+D-12 22:18:24  [SOM] Estalo seco. A fenda “engole” o barulho antes do ar.
+D-12 22:18:28  Contenção: Tiro não… não fez som.
+D-12 22:18:33  A.L.I.C.I.A: Porque aqui até o impacto precisa de permissão.
+
+D-12 22:19:06  [VISUAL] A agente abre um bloco de notas. Escreve uma sigla. Apaga. Escreve de novo.
+D-12 22:19:11  Contenção: Não escreva!
+D-12 22:19:14  A.L.I.C.I.A: Eu não escrevo para vocês.
+D-12 22:19:18  A.L.I.C.I.A: Eu escrevo para o lado que não aceita mentira como protocolo.
+
+----------------------------------------------------------------------------------------------------
+D-12 22:21:00  [QUEBRA] A fenda expande em silêncio. A rua parece “lembrar” que é rua e tenta se recompor.
+D-12 22:21:06  Contenção: Alvo a 6m. Segurar!
+D-12 22:21:10  A.L.I.C.I.A: Se vocês atravessarem, vocês não voltam iguais.
+D-12 22:21:14  Contenção: Você também não.
+D-12 22:21:17  A.L.I.C.I.A: Eu já não sou.
+
+D-12 22:21:40  [ECO] “diga” (pausa) “a” (pausa) “li” (pausa) “ci”
+D-12 22:21:46  Contenção: Ela está sendo chamada.
+D-12 22:21:49  A.L.I.C.I.A: (baixo) Não é chamado. É captura com delicadeza.
+
+D-12 22:22:10  [FENÔMENO] O ambiente tenta completar o nome por conta própria.
+D-12 22:22:15  A.L.I.C.I.A: Não.
+D-12 22:22:18  A.L.I.C.I.A: Não.
+D-12 22:22:21  A.L.I.C.I.A: NÃO.
+
+D-12 22:22:30  [REGISTRO] A fenda “fecha” ao redor dela como se fosse roupa.
+D-12 22:22:33  Contenção: Alvo sumiu!
+D-12 22:22:36  Contenção: Repito, alvo sumiu!
+D-12 22:22:42  [SOM] Um sussurro no canal, vindo de dentro do rádio:
+                “agora você é função”
+D-12 22:22:49  Contenção: Quem é você?!
+D-12 22:22:53  [CANAL] queda total.
+
+----------------------------------------------------------------------------------------------------
+D+03 04:10:12  [REAPARECIMENTO PARCIAL] Mensagem escrita em parede (a tinta escorre para cima).
+D+03 04:10:18  Texto: “ROGUE não é traição. É recusa.”
+D+03 04:10:24  Texto: “Eu não fugi. Eu fui arquivada.”
+D+03 04:10:31  Texto: “Se vocês vierem, tragam silêncio.”
+
+D+11 19:55:02  [ANÁLISE] Ruído captado em rádios próximos ao local:
+                “a li ci a”
+                “a li ci”
+                “a li”
+D+11 19:55:16  [ANÁLISE] Quanto mais repetem, mais o ruído fica nítido.
+
+D+19 02:02:44  [CONCLUSÃO PROVISÓRIA]
+- A.L.I.C.I.A permanece ativa no outro lado.
+- Está presa por regra de linguagem: o nome como algema.
+- “Rogue” foi o gatilho; “arquivo” foi o destino.
+
+[FIM DO REGISTRO • “ALICIA_Rogue” • HASH: A-12/ROGUE]
+            </div>
+
+            <div class="redact">
+              <div class="k">Observação final (contato indireto)</div>
+              <div class="v">
+                Em três ocasiões, operadores relataram ouvir uma frase ao desligar o rádio:
+                “vocês não me caçam, vocês me repetem.”
+                A recomendação é simples e cruel: não transformar A.L.I.C.I.A em lenda.
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução A.L.I.C.I.A">
+    <div class="introCard">
+      <div class="introTop">
+        <div>
+          <div class="h">SARCOPHAGUS / OPEN FILE</div>
+          <div class="s">
+            AVISO: este arquivo contém vetor de fixação (nome/sigla como âncora).<br/>
+            Recomenda-se leitura sem verbalização e sem recontar trechos.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>MODE: QUARANTINE</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="introActions">
+        <button class="btn" id="btnEnter" type="button">Entrar</button>
+        <div class="kbd">Atalhos: <code>Enter</code> entrar • <code>/</code> ruído • <code>T</code> topo • <code>B</code> fundo</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const typebox = document.getElementById("typebox");
+    const log = document.getElementById("log");
+
+    const btnNoise = document.getElementById("btnNoise");
+    const btnAutoscroll = document.getElementById("btnAutoscroll");
+    const btnTop = document.getElementById("btnTop");
+    const btnEnter = document.getElementById("btnEnter");
+
+    let autoscroll = true;
+
+    function setVars(scan, noise, flick, shake){
+      document.documentElement.style.setProperty("--scan-opacity", scan);
+      document.documentElement.style.setProperty("--noise-opacity", noise);
+      document.documentElement.style.setProperty("--flicker", flick);
+      document.documentElement.style.setProperty("--shake", shake);
+    }
+
+    function dopaminePulse(){
+      const scan = (0.08 + Math.random()*0.12).toFixed(2);
+      const noise = (0.06 + Math.random()*0.10).toFixed(2);
+      const flick = (0.04 + Math.random()*0.08).toFixed(3);
+      const shake = (Math.random() < 0.28) ? ((Math.random() * 2 - 1).toFixed(1) + "px") : "0px";
+      setVars(scan, noise, flick, shake);
+      setTimeout(() => setVars(".12",".08",".055","0px"), 1100);
+    }
+
+    function closeIntro(){
+      intro.style.display = "none";
+      dopaminePulse();
+      if (autoscroll) log.scrollTop = log.scrollHeight;
+    }
+
+    const boot = [
+      "[S.A.S] mount: SAS Results/",
+      "[S.A.S] file: alicia.html",
+      "[S.A.S] integrity: 74% (parcial)",
+      "[S.A.S] warning: nome como âncora",
+      "",
+      "DOSSIÊ: A.L.I.C.I.A",
+      "Status: ROGUE",
+      "Destino: presa do outro lado",
+      "",
+      "Quanto mais repetem, mais ela volta.",
+      "Pressione ENTER para abrir."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        const base = 30;
+        const jitter = Math.random()*90;
+        setTimeout(tick, base + jitter);
+      };
+      tick();
+    }
+
+    function updateAutoscrollLabel(){
+      btnAutoscroll.textContent = "Auto-scroll: " + (autoscroll ? "ON" : "OFF");
+    }
+
+    btnNoise.addEventListener("click", dopaminePulse);
+    btnTop.addEventListener("click", () => log.scrollTop = 0);
+    btnAutoscroll.addEventListener("click", () => {
+      autoscroll = !autoscroll;
+      updateAutoscrollLabel();
+      dopaminePulse();
+      if (autoscroll) log.scrollTop = log.scrollHeight;
+    });
+
+    btnEnter.addEventListener("click", closeIntro);
+
+    window.addEventListener("keydown", (e) => {
+      if (intro.style.display !== "none") {
+        if (e.key === "Enter") closeIntro();
+        return;
+      }
+      if (e.key === "/" ) { e.preventDefault(); dopaminePulse(); }
+      if (e.key.toLowerCase() === "t") log.scrollTop = 0;
+      if (e.key.toLowerCase() === "b") log.scrollTop = log.scrollHeight;
+    });
+
+    typeBoot();
+    updateAutoscrollLabel();
+  </script>
+</body>
+</html>

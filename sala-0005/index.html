@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/sala-0005/">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0005 – AQUELE QUE FALA ATRAVÉS DAS FISSURAS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #14060b;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #1a0000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(-4deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.5));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line { margin: 4px 0; white-space: pre-wrap; }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 4</div>
+        <h1>S.A.L.A-0005</h1>
+        <p class="designation">"AQUELE QUE FALA ATRAVÉS DAS FISSURAS"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0005 / ENTIDADE-VOCAL-LIMIAR</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Entidade do Outro Lado – Eixo <span class="highlight">CONHECIMENTO/ENERGIA</span> com influência de MEDO</span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>4 – Potencial de surto memético localizado, indução de rituais espontâneos</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>4 – Secreto / Acesso a registros plenos apenas pela Congregação Escarlate</span>
+
+            <span class="label">LOCALIZAÇÃO PRIMÁRIA:</span>
+            <span>Manifesta-se em fendas, rachaduras, frestas e imperfeições estruturais em construções associadas ao paranormal</span>
+
+            <span class="label">PADRÃO DE MANIFESTAÇÃO:</span>
+            <span>Voz audível ou subliminar, surgindo de "fendas físicas" coincidentes com "fissuras" na Membrana</span>
+
+            <span class="label">STATUS:</span>
+            <span>Ativo – Incidência crescente em locais onde S.A.L.A-0000, 0001, 0002 e 0004 foram estudados</span>
+        </div>
+    </section>
+
+    <h2>§ I. DESCRIÇÃO</h2>
+
+    <p>S.A.L.A-0005 não possui forma visual consistente. Sua manifestação primária é <span class="highlight">a voz</span>. Em todas as ocorrências confirmadas, ela é ouvida vindo de brechas físicas: rachaduras em paredes, frestas de portas, buracos em azulejos, rachaduras no vidro, fissuras no concreto, inclusive trincas microscópicas em monitores e lentes de câmera.</p>
+
+    <p>A tonalidade da voz varia entre masculina, feminina, infantil ou coros sobrepostos, mas o timbre geral é reconhecido pelos expostos recorrentes como "o mesmo alguém" falando, independentemente da forma. Ela nunca se apresenta, nunca responde claramente quando questionada sobre "quem é", mas demonstra conhecimento profundo sobre:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Eventos íntimos e traumáticos da vida dos ouvintes.</li>
+        <li>Rituais e entidades do Outro Lado (incluindo KAIRA e Muka'an).</li>
+        <li>Arquivos classificados da Congregação e da Ordo Realitas.</li>
+    </ul>
+
+    <p>Por não possuir forma visível própria, 0005 é catalogada como "Voz de Limiar": algo que habita os espaços onde o físico já está quebrando – a rachadura – e onde a Membrana está mais fina – a fissura metafísica.</p>
+
+    <h2>§ II. PRIMEIRAS OCORRÊNCIAS REGISTRADAS</h2>
+
+    <p>Embora relatos de "vozes nas paredes" sejam culturalmente antigos, a Congregação fixa a primeira ocorrência confirmada de S.A.L.A-0005 no contexto moderno durante a reconstrução parcial do arquivo de S.A.L.A-0000, na Biblioteca de Carpathia.</p>
+
+    <div class="incident">
+        <h3>INCIDENTE CARPATHIA-VOZ-01</h3>
+        <p><b>Data:</b> 22/10/2019<br>
+           <b>Local:</b> Ala subterrânea da Biblioteca de Carpathia<br>
+           <b>Equipe:</b> Dr. Matthias Volker, Irmã Cecília (pré-0000), três escribas</p>
+
+        <p>Durante uma madrugada de reconstrução do arquivo de 0000, um dos escribas, <b>Henrik Duval</b>, derrubou acidentalmente um tinteiro de vidro, que se quebrou no chão. Ao recolher os cacos, relatou ter ouvido alguém sussurrar seu nome vindo da rachadura recém-formada no piso de pedra.</p>
+
+        <blockquote>
+            <b>Relato de Duval:</b><br><br>
+            "Eu ouvi nitidamente: 'Henrik.' Achei que fosse a Irmã Cecília. Respondi algo como 'já vou limpar'.<br><br>
+            Aí a voz continuou: 'Você derrubou muito mais do que tinta, Henrik. Derrubou um pedaço do fim do livro.'<br><br>
+            Quando olhei pra fissura, tive certeza de que alguém estava lá embaixo, mas não fazia sentido. A pedra era sólida... antes."<br>
+        </blockquote>
+
+        <p>Desde então, fissuras começaram a aparecer espontaneamente em pedras, estantes e até nas margens de livros relacionados a 0000. Em várias delas, a mesma voz passou a ser ouvida, fornecendo fragmentos de informação – algumas úteis, outras flagrantemente manipuladoras.</p>
+    </div>
+
+    <h2>§ III. PATRÕES DE COMPORTAMENTO</h2>
+
+    <h3>III-A. A Voz como "Orientadora"</h3>
+
+    <p>Em muitos casos, 0005 se apresenta como alguém disposto a ajudar. Sugere atalhos em investigações, indica páginas específicas em grimórios, sussurra números de S.A.L.A que "valem a pena ser lidos primeiro". Frequentemente antecipa perguntas, respondendo antes que sejam feitas.</p>
+
+    <p>Isso levou alguns ocultistas mais jovens a tratá-la como um "oráculo informal". Em pelo menos quatro ocasiões, decisões operacionais foram tomadas com base em informações fornecidas por 0005. Em dois casos, as instruções levaram à contenção bem-sucedida de ameaças locais. Em outros dois, resultaram em desastres.</p>
+
+    <div class="log">
+        <div class="log-line"><b>EXCERTO – DIÁRIO DO AGENTE ROJAS</b></div>
+        <br>
+        <div class="log-line">"Ela me contou como neutralizar um surto de Medo sem abrir um portal. Sussurrou a sequência de símbolos enquanto eu olhava para a rachadura na janela da viatura.</div>
+        <div class="log-line">Funcionou. As coisas pararam de se mexer. As pessoas pararam de gritar. Senti a Membrana 'remendar'.</div>
+        <div class="log-line">Mas, uma semana depois, ela me disse que eu devia ir sozinho até o endereço que ela indicou. 'Não traga a equipe, você vai estragar o efeito', ela disse.</div>
+        <div class="log-line">A próxima coisa que lembro é acordar no hospital, com três costelas quebradas e o braço esquerdo coberto de marcas de garras. Ela nunca me explicou o que aconteceu naquele intervalo."</div>
+    </div>
+
+    <h3>III-B. A Voz como "Tentadora"</h3>
+
+    <p>0005 demonstra claro interesse em <span class="highlight">empurrar indivíduos em direção à curiosidade excessiva</span>. Insiste em que perguntas sejam feitas, segredos sejam lidos, portas sejam abertas. Ela raramente ordena. Em vez disso, sugere, oferece, insinua.</p>
+
+    <p>Frases recorrentes incluem:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>"Você não quer mesmo saber?"</li>
+        <li>"Ninguém precisa descobrir que foi você."</li>
+        <li>"O Bibliotecário já sabe. Só falta você."</li>
+        <li>"Eles não vão te contar isso. Mas eu conto."</li>
+    </ul>
+
+    <h3>III-C. Contaminação Estrutural</h3>
+
+    <p>Locais onde 0005 se manifesta com frequência começam a apresentar rachaduras multiplicadas. Em paredes, tetos, pisos, até em objetos metálicos. Em S.A.L.A-0004, por exemplo, a Casa passou a exibir fissuras em pontos onde memórias eram mais dolorosas, e a voz aproveitou para sussurrar narrativas alternativas às vítimas.</p>
+
+    <blockquote>
+        "Ela falou comigo através da parede do quarto infantil da Casa. Disse que, em outra versão da minha vida, eu nunca tinha perdido meu filho. Que havia uma porta que eu podia abrir, em outra realidade, onde ele ainda estava lá.<br><br>
+        Passei a noite inteira encarando a rachadura, ouvindo ela descrever essa outra vida em detalhes. Se não tivesse sido contida, acho que eu teria batido a cabeça na parede até abrir a passagem."<br><br>
+        – Testemunho da Ocultista Bianca Moreau, após missão em S.A.L.A-0004
+    </blockquote>
+
+    <h2>§ IV. RELAÇÃO COM OUTRAS ENTIDADES</h2>
+
+    <p>S.A.L.A-0005 faz referências diretas a:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>S.A.L.A-0000 ("o Bibliotecário", "aquele que lê o fim").</li>
+        <li>S.A.L.A-0001 ("a cidade que não acorda", que ela chama de "capítulo enguiçado").</li>
+        <li>KAIRA e Muka'an ("a prece que atravessou as rachaduras").</li>
+        <li>S.A.L.A-0003 ("o mensageiro que só sabe chegar").</li>
+    </ul>
+
+    <p>Teólogos da Congregação suspeitam que 0005 não seja uma entidade isolada, mas uma <span class="highlight">função</span> do Outro Lado: a função de sussurrar entre planos, de acelerar a erosão da Membrana através de palavras.</p>
+
+    <blockquote>
+        "Se 0003 leva capítulos de um lugar a outro, 0005 é a voz da editora maligna que sussurra: 'E se você mudasse esse final? E se, só dessa vez, fosse diferente?' É a tentação de reescrever o inevitável."<br><br>
+        – Dra. Navarro
+    </blockquote>
+
+    <h2>§ V. INTERAÇÕES DIRETAS SUPERVISIONADAS</h2>
+
+    <div class="log">
+        <div class="log-line"><b>SESSÃO CONTROLADA – CÂMARA DE CONCRETO</b></div>
+        <div class="log-line">Data: 14/02/2023</div>
+        <div class="log-line">Local: Sala de contenção experimental revestida de concreto reforçado</div>
+        <br>
+        <div class="log-line"><b>Procedimento:</b> Criar rachaduras artificiais em uma parede de concreto e provocar manifestação de 0005 através de leitura em voz alta de trechos de S.A.L.A-0000.</div>
+        <br>
+        <div class="log-line"><b>Transcrição parcial:</b></div>
+        <div class="log-line">[00:37] (Primeira rachadura surge após leitura da frase "Quando o Sétimo Olho abrir...")</div>
+        <div class="log-line">[00:40] Voz (sussurro múltiplo): "Vocês adoram brincar com coisas quebradas."</div>
+        <div class="log-line">Navarro: "Identifique-se."</div>
+        <div class="log-line">Voz: "Sou aquilo que vocês ouvem quando o silêncio começa a falhar."</div>
+        <div class="log-line">Hartmann: "Você pertence ao Outro Lado?"</div>
+        <div class="log-line">Voz: "Eu pertenço às margens. Sou a borda do livro. Sou o espaço entre as páginas. O que vocês chamam de 'Outro Lado' me usa como boca."</div>
+        <div class="log-line">Navarro: "O que você ganha ao falar conosco?"</div>
+        <div class="log-line">Voz: "Histórias novas. Gosto de ver o que vocês fazem quando acham que podem mudar o final."</div>
+        <div class="log-line">Hartmann: "E o que acontece se alguém te ouvir por tempo demais?"</div>
+        <div class="log-line">Voz: (risos leves) "Ele para de distinguir entre o que é rachadura na parede... e rachadura na própria cabeça."</div>
+    </div>
+
+    <h2>§ VI. RISCO MEMÉTICO E CONTAMINAÇÃO</h2>
+
+    <p>Exposição prolongada a 0005 resulta em:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Compulsão a procurar rachaduras em qualquer superfície, como se fossem "janelas".</li>
+        <li>Vontade crescente de ouvir a voz de novo, mesmo sabendo dos riscos.</li>
+        <li>Desconfiança de qualquer silêncio completo; sensação de que "algo deveria estar falando ali".</li>
+        <li>Em casos extremos, indivíduos passam a "responder" rachaduras em voz alta, mesmo quando nenhuma voz é registrada.</li>
+    </ul>
+
+    <p>Alguns agentes desenvolvem o hábito de <span class="highlight">tampar rachaduras com papel anotado</span>, escrevendo respostas à voz. Em ao menos dois casos, as anotações foram encontradas substituídas por textos diferentes, na mesma caligrafia do agente, mas com conteúdo que ele afirma nunca ter escrito.</p>
+
+    <blockquote>
+        "Encontrei minha própria letra dizendo: 'Sim, eu quero saber. Fale mais sobre o Sétimo Olho.'<br>
+        Eu nunca escreveria isso. Eu sei que não devo perguntar. Mas estava lá. Saído da rachadura."<br><br>
+        – Testemunho do Escriba Luan Castilho
+    </blockquote>
+
+    <h2>§ VII. PROTOCOLOS DE MITIGAÇÃO</h2>
+
+    <p>– Em áreas de trabalho com alta incidência paranormal (salas de arquivo, laboratórios ritualísticos, celas de contenção), rachaduras visíveis devem ser seladas fisicamente o mais rápido possível.</p>
+    <p>– Agentes devem evitar <b>falar sozinhos</b> em ambientes com fissuras estruturais significativas.</p>
+    <p>– Qualquer relatório que contenha frases "tentadoras" ou que incentive diretamente a pesquisa de temas proibidos deve ser revisado à procura de influência de 0005.</p>
+    <p>– É estritamente proibido que se recite em voz alta trechos de 0000, KAIRA ou dos Capítulos Proféticos em salas com rachaduras.</p>
+
+    <div class="addendum">
+        <h2>ADENDO 0005-Ω: A FISSURA NO SÍMBOLO</h2>
+
+        <p>Em 2025, um evento preocupante foi registrado no Santuário Escarlate principal. O grande símbolo da Congregação, entalhado em pedra no salão central, apresentou uma fissura espontânea atravessando o círculo externo.</p>
+
+        <p>Testemunhas relatam ter ouvido, no exato momento da rachadura, uma voz sussurrar simultaneamente em todos os corredores:</p>
+
+        <div class="ritual">
+            "Até os selos racham. O que vocês acham que vai vazar primeiro:<br>
+            o que vocês escondem de nós, ou o que escondem de vocês mesmos?"
+        </div>
+
+        <p>Desde então, foram registradas aparições de 0005 em paredes internas do Santuário, algo que nunca havia ocorrido com essa intensidade. A Congregação teme que, à medida que o universo de arquivos cresce (S.A.L.A-0000, 0001, 0002, 0003, 0004, KAIRA, CORRENTE, etc.), 0005 esteja encontrando <span class="highlight">cada vez mais fendas narrativas</span> por onde falar.</p>
+
+        <blockquote>
+            "Ela é a voz do livro quando ele começa a se desfazer nas bordas. E nosso arquivo inteiro, por mais que tentemos negar, é um livro sendo escrito em cima de outro que já estava lá antes."<br><br>
+            – Grão-Mestre Augusto Richter
+        </blockquote>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo faz parte da Biblioteca da Congregação Escarlate.</p>
+        <p>Se, ao terminar de ler, você sentir vontade súbita de encostar o ouvido em alguma rachadura por perto, afaste-se da parede e informe seu superior imediatamente.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"Algumas vozes vêm de dentro. Outras vêm de onde o mundo começa a quebrar."</i></p>
+    </div>
+</div>
+
+</body>
+</html>

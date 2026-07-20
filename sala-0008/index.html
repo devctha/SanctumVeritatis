@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/sala-0008/">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0008 – A MULTIDÃO QUE SÓ EXISTE QUANDO VOCÊ PISCA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #14060b;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #1a0000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(4deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.5));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line { margin: 4px 0; white-space: pre-wrap; }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 4</div>
+        <h1>S.A.L.A-0008</h1>
+        <p class="designation">"A MULTIDÃO QUE SÓ EXISTE QUANDO VOCÊ PISCA"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0008 / ENTIDADE-COLETIVA-URBANA</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Manifestação Coletiva – Eixo <span class="highlight">MEDO/CONHECIMENTO</span> com contaminação de ENERGIA</span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>4 – Risco elevado em áreas densamente povoadas / Potencial de pânico em massa</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>4 – Secreto / Compartilhado com células urbanas da Ordo</span>
+
+            <span class="label">ZONA DE MAIOR INCIDÊNCIA:</span>
+            <span>Terminais de ônibus, metrôs, estádios, shows e qualquer aglomeração humana em grande escala</span>
+
+            <span class="label">NATUREZA:</span>
+            <span>Enxame de pseudo-indivíduos humanoides que só se materializam nos intervalos em que não estão sendo observados diretamente</span>
+
+            <span class="label">STATUS:</span>
+            <span>Ativo – Casos em expansão nas últimas duas décadas</span>
+        </div>
+    </section>
+
+    <h2>§ I. DESCRIÇÃO</h2>
+
+    <p>S.A.L.A-0008 não é uma única criatura, mas uma <span class="highlight">entidade-coletivo</span> formada por dezenas a centenas de figuras humanoides anônimas, com aparência sempre levemente desfocada em registros visuais. Em gravações quadro a quadro, essas figuras aparecem em um frame e somem no seguinte, preenchendo espaços vazios em multidões sem jamais serem vistas "entrando" ou "saindo" de lugar nenhum.</p>
+
+    <p>O denominador comum é simples e perturbador: 0008 só existe nos momentos em que <b>ninguém está olhando diretamente</b>. Ela ocupa os vazios de atenção—os segundos em que se pisca, olha para o celular, vira o rosto para falar com alguém. Entre um olhar e outro, novas pessoas aparecem onde antes não havia ninguém, e quase ninguém percebe.</p>
+
+    <p>Relatórios consistentes indicam que, quanto mais densa a multidão, mais fácil para 0008 se inserir e se multiplicar, usando a própria confusão visual e o ruído sensorial como "cobertura".</p>
+
+    <h2>§ II. PRIMEIROS REGISTROS</h2>
+
+    <p>Os primeiros indícios de S.A.L.A-0008 surgiram ao cruzar imagens de câmeras de segurança de grandes eventos em Porto Alegre e São Paulo. Em múltiplos shows, jogos de futebol e protestos, análises em alta velocidade revelaram "rostos extras" surgindo do nada entre um frame e outro em pontos onde não havia ninguém milissegundos antes.</p>
+
+    <div class="incident">
+        <h3>INCIDENTE ARENA-POA-0008</h3>
+        <p><b>Data:</b> 28/05/2016<br>
+           <b>Local:</b> Estádio em Porto Alegre<br>
+           <b>Contexto:</b> Jogo lotado, 45 mil pessoas presentes</p>
+
+        <p>Agentes da Congregação, monitorando padrões de energia no local, notaram leituras inconsistentes: a "quantidade de gente" que os sensores metafísicos apontavam não batia com a capacidade do estádio. Havia, em média, <b>2.000 presenças a mais</b> do que o número oficial de ingressos.</p>
+
+        <blockquote>
+            <b>Relato do Agente de Campo Nogueira:</b><br><br>
+            "Do ponto de vista humano, não tinha nada errado. Gente pra todo lado, fila pra banheiro, grito, cerveja voando.<br><br>
+            Mas o contador de presenças do ritual de varredura não batia. Era como se sempre houvesse 'mais gente' ali do que deveria. E, quando a gente pausava a gravação, frame a frame, dava pra ver.<br><br>
+            Fileiras inteiras de rostos que surgiam e sumiam em menos de um segundo. Sempre de costas, ou com o rosto virado na hora exata em que alguém poderia reconhecê-los. Como se a multidão estivesse... cheia de gente que não tinha entrado por lugar nenhum."
+        </blockquote>
+
+        <p>Após o evento, não houve registro oficial de desaparecimentos ou mortes anormais. Porém, 43 pessoas relataram sensação intensa de "aperto" no meio da arquibancada, como se não conseguissem se mexer por alguns segundos, apesar de o espaço físico, em teoria, permitir.</p>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Existência Intermitente</h3>
+
+    <p>0008 manifesta um comportamento quase quântico: só se materializa plenamente nos espaços vazios de percepção. Quando câmeras de alta taxa de quadros cobrem 360° de um ambiente e nenhum humano está piscando ou desviando o olhar, a entidade parece incapaz de se formar.</p>
+
+    <p>Na prática, isso é impossível de sustentar por longos períodos em ambientes com humanos. Pessoas piscam, se distraem, olham para telas, conversam entre si. É nesses micro-intervalos que a Multidão encontra brechas para existir, movimentar-se, aproximar-se e—em raros casos—interagir.</p>
+
+    <h3>III-B. Pseudo-Indivíduos</h3>
+
+    <p>Cada "pessoa" que compõe 0008 não é um indivíduo completo, mas uma espécie de <span class="highlight">máscara de presença humana</span>: rosto genérico, roupas genéricas, postura genérica. Não há detalhes marcantes, cicatrizes, tatuagens ou acessórios muito distintos.</p>
+
+    <p>Quando ampliadas, faces de 0008 parecem construídas a partir de características médias de multidões reais: a média dos narizes, dos olhos, dos cortes de cabelo. Como se a própria ideia de "gente" tivesse sido triturada e recombinada em avatares descartáveis.</p>
+
+    <h3>III-C. Aproximação Progressiva</h3>
+
+    <p>Em ambientes monitorados por longos períodos, 0008 demonstra <b>comportamento de aproximação</b>: começa preenchendo espaços vazios distantes e, a cada nova "pisca coletiva", se posiciona um pouco mais perto de alvos específicos (geralmente pessoas isoladas emocionalmente, ansiosas ou sobrecarregadas).</p>
+
+    <blockquote>
+        "Revendo as imagens da estação de metrô, parecia um jogo de pega-pega em câmera lenta. Toda vez que alguém olhava pro celular, consultava o relógio ou fechava os olhos por cansaço, uma daquelas figuras genéricas aparecia dois passos mais perto.<br><br>
+        Até que, eventualmente, elas estavam a centímetros da pessoa alvo, respirando no cangote dela, e ninguém tinha percebido o momento exato em que se aproximaram."<br><br>
+        – Dra. Valera
+    </blockquote>
+
+    <h2>§ IV. EFETOS SOBRE HUMANOS</h2>
+
+    <p>Exposição prolongada a áreas com forte incidência de 0008 produz, em certos indivíduos, sintomas típicos:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Sensação persistente de estar sendo observado em lugares cheios</li>
+        <li>Fobias específicas de multidão (agorafobia abrupta)</li>
+        <li>Lapsos de memória de trechos inteiros de trajeto em transporte público</li>
+        <li>Relato de diálogos fragmentados com "pessoas que não tinham rosto direito"</li>
+    </ul>
+
+    <div class="log">
+        <div class="log-line"><b>RELATO 0008-METRÔ-SP-03</b></div>
+        <div class="log-line">Testemunha: Larissa, 26 anos</div>
+        <br>
+        <div class="log-line">"Eu pego a Linha Amarela todo dia, no mesmo horário. Sempre foi cheio, mas nada demais.<br>
+        Nos últimos meses, comecei a sentir como se o vagão estivesse MAIS cheio do que o normal. Tipo, não cabia todo mundo ali. Mas, quando eu olhava, estava 'ok', só aperto normal de metrô.<br>
+        Um dia, eu pisquei e juro que ouvi um sussurro no meu ouvido: 'Agora coube.' Quando virei, só tinha gente estranha demais, tudo com cara de ninguém, sabe? Eu não lembro do resto da viagem. Só sei que desci três estações depois da minha e nunca mais tive coragem de pegar metrô sozinha."</div>
+    </div>
+
+    <h2>§ V. TEORIAS SOBRE NATUREZA E ORIGEM</h2>
+
+    <p>O Departamento de Estudos propõe que S.A.L.A-0008 seja uma manifestação do Elemento Medo associada ao <span class="highlight">pavor moderno de perder a individualidade em meio à massa</span>. Em tempos de grandes cidades, shows, estádios e centros comerciais, 0008 seria a resposta do Outro Lado à pergunta: "E se a multidão, em si, fosse um organismo faminto?"</p>
+
+    <p>Ligação indireta com 0003 ("O Homem que Não Consegue Parar de Chegar") foi observada: em todas as filmagens conhecidas de 0003 em estações lotadas, é possível identificar, no fundo, a presença da Multidão—pseudo-indivíduos que surgem e somem com o piscar coletivo, como se 0003 e 0008 compartilhassem o mesmo "ecossistema urbano".</p>
+
+    <blockquote>
+        "0003 é o indivíduo preso no eterno ato de chegar. 0008 é o mar de rostos sem nome em que ele está condenado a se perder. Um precisa do outro para fazer sentido."<br><br>
+        – Dra. Navarro
+    </blockquote>
+
+    <h2>§ VI. INTERAÇÕES DIRETAS REGISTRADAS</h2>
+
+    <div class="log">
+        <div class="log-line"><b>CASO 0008-INTERIOR-ONIBUS-01</b></div>
+        <div class="log-line">Local: Ônibus intermunicipal noturno, interior do RS</div>
+        <br>
+        <div class="log-line">Relato do motorista:</div>
+        <div class="log-line">"Eu contei 19 passageiros subindo. Vinte e um descendo."</div>
+        <br>
+        <div class="log-line">Investigações da Congregação identificaram, nas gravações internas, pelo menos três "passageiros" que só existiam entre piscadas do motorista e momentos de oscilação de luz. Eles nunca compraram passagem, nunca foram identificados e, no entanto, ocupavam poltronas vazias em quadros específicos.</div>
+        <div class="log-line">Uma passageira real relatou ter passado meia hora conversando com 'uma moça de casaco cinza' em um trecho da viagem. Nas imagens, o banco ao lado dela aparece vazio em todos os frames em que alguém está olhando diretamente para aquele lado do corredor.</div>
+    </div>
+
+    <div class="log">
+        <div class="log-line"><b>CASO 0008-PANICO-EM-MASSA</b></div>
+        <div class="log-line">Local: Show em casa de eventos fechada, Curitiba</div>
+        <br>
+        <div class="log-line">Em 2022, um surto coletivo de pânico ocorreu quando parte do público começou a gritar que "a galera estava duplicando". Pessoas juram ter visto desconhecidos idênticos a si mesmas no meio da pista, por frações de segundo.</div>
+        <div class="log-line">Análises de vídeo confirmam: por 0,2 segundos, há dois indivíduos com a mesma roupa, altura e postura ocupando espaços incompatíveis entre si. Uma das "cópias" desaparece literalmente entre frames.</div>
+        <div class="log-line">Sugere-se que 0008 é capaz de "clonar" visualmente pessoas reais por curtos períodos, talvez como forma de se camuflar melhor na multidão.</div>
+    </div>
+
+    <h2>§ VII. PROTOCOLOS DE MITIGAÇÃO</h2>
+
+    <p>A Congregação admite que 0008 não pode ser eliminada, mas sua influência pode ser atenuada:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Operações em áreas densas devem usar câmeras de alta taxa de quadros e cobertura 360° para mapear densidade anômala de "rostos extras".</li>
+        <li>Agentes em campo devem ser treinados a fazer verificações constantes do entorno, reduzindo janelas de "piscar coletivo".</li>
+        <li>Rituais de ancoragem de identidade (usar nomes completos, fotos pessoais, símbolos únicos) ajudam a reduzir a sensação de dissolução na massa.</li>
+        <li>Indivíduos que relatarem interações prolongadas com desconhecidos "sem rosto definido" em multidões devem ser monitorados por 30 dias para sinais de despersonalização.</li>
+    </ul>
+
+    <div class="addendum">
+        <h2>ADENDO 0008-Ω: QUANDO NÃO HÁ MAIS ESPAÇO</h2>
+
+        <p>Simulações teóricas do Departamento de Energia sugerem que, em cenários de megaeventos globais (estádios, peregrinações, evacuações em massa), a capacidade de 0008 de se infiltrar pode ultrapassar, pela primeira vez, a lotação física máxima de um espaço.</p>
+
+        <p>Isso levantar a hipótese de um <span class="highlight">limiar crítico</span>: um ponto em que a Multidão ocupa tantos "intervalos de percepção" ao mesmo tempo que passa a colidir consigo mesma, gerando efeitos imprevisíveis—desde surtos psicóticos coletivos até manifestações físicas estáveis de partes de 0008.</p>
+
+        <blockquote>
+            "E se, um dia, todo mundo em um estádio piscar ao mesmo tempo?<br>
+            Por um único segundo.<br>
+            E a Multidão encontrar espaço o bastante para se materializar inteira, de uma vez só?"<br><br>
+            – Grão-Mestre Augusto Richter
+        </blockquote>
+
+        <p>Por enquanto, não há registro de 0008 existindo fora de ambientes cheios. Mas a Congregação teme que, à medida que mais pessoas se aglomerem em cidades cada vez maiores, a Multidão esteja, silenciosamente, treinando para o momento em que não vai mais precisar de multidões humanas para existir.</p>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo integra o acervo da Biblioteca da Congregação Escarlate.</p>
+        <p>Se, em um lugar lotado, você tiver certeza absoluta de que tem "gente demais" ali, mesmo sem conseguir apontar quem está sobrando, considere se afastar.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"Algumas criaturas espreitam no vazio. Outras se escondem exatamente onde todo mundo está olhando – nos intervalos em que ninguém está vendo."</i></p>
+    </div>
+</div>
+
+</body>
+</html>
