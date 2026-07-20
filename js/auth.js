@@ -1,2 +1,2 @@
-// Compatibilidade para páginas legadas: usa somente sessão demonstrativa local.
-window.SVLegacyAuth = { mode: 'public-demo', isAuthenticated() { return Boolean(window.SVAuth && window.SVAuth.session()); } };
+// Compatibilidade de sessão para páginas legadas.
+window.SVLegacyAuth = { mode: 'operational-local', isAuthenticated() { return Boolean(window.SVAuth && window.SVAuth.session()); } };

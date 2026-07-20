@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/log_conselho_setentrional/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOG CONFIDENCIAL // CÂMARA FECHADA HC-Δ</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Share+Tech+Mono&family=IBM+Plex+Mono:wght@300;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --bg-panel: #0a0a0a;
+            --bg-msg: #0f0f12;
+            --primary: #c41e1e;
+            --accent-gold: #d4af37;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a855f7;
+            --text: #e5e5e5;
+            --text-dim: #6b6b6b;
+            --border: rgba(255,255,255,0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--bg);
+        }
+
+        body {
+            background: linear-gradient(180deg, #000 0%, #0a0008 50%, #000 100%);
+            color: var(--text);
+            font-family: 'IBM Plex Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* BACKGROUND EFFECTS */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, transparent 1px, transparent 2px, rgba(255,255,255,0.015) 3px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.015) 0px, transparent 1px, transparent 2px, rgba(255,255,255,0.015) 3px);
+            background-size: 60px 60px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .scanline {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(255,255,255,0.02) 50%,
+                transparent 100%);
+            background-size: 100% 4px;
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.3;
+        }
+
+        /* CONTAINER */
+        .main-container {
+            position: relative;
+            z-index: 3;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* HEADER */
+        .header {
+            border: 1px solid var(--border);
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            border-radius: 6px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(196,30,30,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+            animation: pulseBadge 2s infinite;
+            text-shadow: 0 0 8px rgba(196,30,30,0.6);
+        }
+
+        .header-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .header-meta {
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .meta-label {
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+
+        .meta-value {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* CHAT LOG */
+        .chat-container {
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            padding: 2rem;
+            max-height: 75vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .chat-container::before {
+            content: 'CARREGANDO TRANSCRIÇÃO CRIPTOGRAFADA...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeOut 2s forwards;
+            pointer-events: none;
+        }
+
+        .message {
+            margin-bottom: 1.8rem;
+            opacity: 0;
+            animation: fadeInMsg 0.6s ease-out forwards;
+            animation-delay: calc(var(--msg-index) * 0.3s);
+        }
+
+        .msg-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .msg-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: 2px solid;
+            box-shadow: 0 0 12px;
+        }
+
+        .avatar--hartmann {
+            background: linear-gradient(135deg, #1a0000, #3d0000);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 12px rgba(196,30,30,0.5);
+        }
+
+        .avatar--wolfe {
+            background: linear-gradient(135deg, #001a3d, #003d7a);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(59,130,246,0.5);
+        }
+
+        .avatar--varela {
+            background: linear-gradient(135deg, #1a003d, #3d007a);
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+            box-shadow: 0 0 12px rgba(168,85,247,0.5);
+        }
+
+        .msg-meta {
+            flex: 1;
+        }
+
+        .msg-author {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .author--hartmann { color: var(--primary); }
+        .author--wolfe { color: var(--accent-blue); }
+        .author--varela { color: var(--accent-purple); }
+
+        .msg-timestamp {
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            letter-spacing: 0.08em;
+        }
+
+        .msg-body {
+            background: var(--bg-msg);
+            border-left: 3px solid;
+            padding: 1rem 1.2rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--text);
+            position: relative;
+        }
+
+        .msg-body--hartmann { border-color: var(--primary); }
+        .msg-body--wolfe { border-color: var(--accent-blue); }
+        .msg-body--varela { border-color: var(--accent-purple); }
+
+        .msg-body p {
+            margin-bottom: 0.8rem;
+        }
+
+        .msg-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .msg-body em {
+            color: var(--accent-gold);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        .msg-body strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .redacted-inline {
+            background: #000;
+            color: #000;
+            padding: 0 4px;
+            user-select: none;
+            cursor: help;
+            transition: 0.3s;
+        }
+
+        .redacted-inline:hover {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .quote {
+            border-left: 2px solid var(--text-dim);
+            padding-left: 0.8rem;
+            margin: 0.6rem 0;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 2.5rem;
+            padding: 1.5rem 2rem;
+            background: rgba(10,10,10,0.95);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .footer-warning {
+            margin-top: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ANIMATIONS */
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { box-shadow: 0 0 8px rgba(196,30,30,0.6); }
+            50% { box-shadow: 0 0 16px rgba(196,30,30,1); }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes fadeInMsg {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 2rem 1rem;
+            }
+            .header, .chat-container {
+                padding: 1.5rem;
+            }
+            .header-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="vignette"></div>
+    <div class="scanline"></div>
+
+    <div class="main-container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-top">
+                <span>// ORDO REALITAS :: CÂMARA FECHADA</span>
+                <span class="status-badge">ULTRA SECRETO</span>
+            </div>
+            <h1 class="header-title">LOG DE CONFERÊNCIA</h1>
+            <div class="header-subtitle">Sessão Não Publicada / Canal Criptografado HC-Δ</div>
+            <div class="header-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Protocolo:</span>
+                    <span class="meta-value">HC-Δ/973-SETENTRIONAL</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Data:</span>
+                    <span class="meta-value">09/12/2025 // 23:14 UTC</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Participantes:</span>
+                    <span class="meta-value">03 Autorizados</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Classificação:</span>
+                    <span class="meta-value" style="color:var(--primary);">CAMADA N5 / OLHOS APENAS</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- CHAT LOG -->
+        <div class="chat-container" id="chatLog">
+            <!-- As mensagens serão injetadas aqui via JS para controlar a animação -->
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            Fim de transcrição // Arquivo recuperado do Núcleo de Registros
+            <div class="footer-warning">
+                ⚠ Divulgação não autorizada deste material é crime contra a Ordem
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const messages = [
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:14:08',
+                text: `Boa noite, colegas. Agradeço a pontualidade, especialmente considerando o fuso horário de Lysandra. Vamos direto ao ponto: <strong>Setentrional</strong>.<p>Nas últimas 72 horas, recebemos <em>dezessete solicitações formais</em> do Agente Corvo requisitando reforços, extração e — pasmem — autorização para fogo de saturação ritual na ilha inteira. Dezessete. Todas marcadas como "prioridade máxima operacional".</p><p>Preciso que revisemos, aqui e agora, nossa posição oficial sobre essa operação. Porque, francamente, a insistência desse homem está se tornando um problema administrativo.</p>`
+            },
+            {
+                author: 'wolfe',
+                name: 'Conselheira Lysandra Wolfe',
+                time: '23:15:42',
+                text: `Eduard, obrigada por abrir o canal. Li todos os relatórios de Corvo esta tarde. O tom é <em>crescentemente emocional</em>, o que, por si só, já é um indicador preocupante de comprometimento psicológico.<p>Ele menciona "colapso da Membrana", "entidade de remoção cognitiva", "perda irreversível de agentes". Tudo muito dramático. Mas vejamos os números frios: <strong>São Firmo é uma ilha com população estimada em 180 civis</strong>. A equipe dele tem, no máximo, oito operadores em campo.</p><p>Considerando nosso portfólio global — Limiar Ω-08 no Ártico, Vitral Negro na Europa Oriental, Calefactor na Islândia —, estamos falando de <em>menos de 0,4% do nosso efetivo tático</em> preso numa operação que, até o momento, não produziu nenhum artefato recuperável, nenhuma inteligência estratégica relevante e nenhum avanço na nossa compreensão do Além-Véu.</p><p>A pergunta não é "podemos ajudar Setentrional?". A pergunta é: <strong>"vale a pena?"</strong></p>`
+            },
+            {
+                author: 'varela',
+                name: 'Dr. Helena Varela',
+                time: '23:17:19',
+                text: `Lysandra está correta na análise econômica. Mas há uma camada adicional que preciso colocar na mesa, e ela é… <em>delicada</em>.<p>Setentrional não é apenas uma operação que deu errado. É uma operação que <strong>não pode dar certo</strong>. E isso foi intencional desde o início.</p><p>Quando homologamos a missão, seis meses atrás, sabíamos — eu sabia, porque fiz a análise prévia do terreno paranormal — que a ilha estava <em>saturada</em>. Não é um ponto de ruptura da Membrana. É um <strong>ponto de ancoragem</strong>. A Membrana ali não está se rasgando; ela está sendo <em>segurada</em> por algo do outro lado.</p><p>Enviar uma equipe para lá não era uma operação de contenção. Era uma operação de <strong>alimentação</strong>.</p>`
+            },
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:18:51',
+                text: `Helena, seja mais clara. Você está dizendo que <em>deliberadamente</em> enviamos agentes para uma zona de sacrifício programado?`
+            },
+            {
+                author: 'varela',
+                name: 'Dr. Helena Varela',
+                time: '23:19:34',
+                text: `Exatamente. E antes que alguém me acuse de sadismo, deixe-me explicar a lógica.<p>Nos últimos dezoito meses, identificamos <em>treze regiões globais</em> onde a Membrana apresenta sinais de "ressecamento cognitivo". É uma metáfora, claro, mas o fenômeno é real: áreas onde a barreira entre nosso mundo e o Outro Lado está se tornando mais <em>fina</em> não porque está sendo rasgada, mas porque <strong>está sendo esquecida</strong>.</p><p>A Membrana, segundo nossas últimas hipóteses, é mantida tanto por leis físicas quanto por <em>consenso ontológico</em> — a crença coletiva, inconsciente, de que "este mundo é assim". Quando uma área é abandonada, quando ninguém mais olha, ninguém mais lembra, ninguém mais <em>sustenta a realidade ali</em>… a Membrana enfraquece naturalmente.</p><p>Setentrional é um desses pontos. Mas descobrimos algo fascinante: <strong>quando jogamos "combustível vivo" nessas áreas — traumas, mortes violentas, sacrifícios — a Membrana responde. Ela se reconecta. Ela se reforça.</strong></p><p>É horrível? Sim. Mas funciona. A ilha está estável há seis meses porque tem agentes morrendo lá. Se tirarmos eles agora, o colapso será inevitável — e <em>regional</em>. Todo o Atlântico Norte pode sentir o efeito cascata.</p>`
+            },
+            {
+                author: 'wolfe',
+                name: 'Conselheira Lysandra Wolfe',
+                time: '23:21:47',
+                text: `Helena, isso é… eu não sei se estou mais impressionada ou horrorizada. Você tem dados empíricos disso? Porque se tivermos, precisamos documentar formalmente. Isso muda tudo.<p>E, meu Deus, isso significa que Corvo e a equipe dele não estão <em>"lutando para sobreviver"</em>. Eles estão, sem saber, <strong>servindo de mártires biológicos</strong> para segurar a realidade no lugar.</p>`
+            },
+            {
+                author: 'varela',
+                name: 'Dr. Helena Varela',
+                time: '23:22:58',
+                text: `Precisamente. E quanto mais eles resistem, mais tempo compram. O problema é que Corvo é bom demais. Ele está mantendo a equipe viva além do esperado. A taxa de mortalidade prevista era <em>oitenta por cento em noventa dias</em>. Estamos no sexto mês e ainda temos cinco agentes operacionais.<p>Isso é… problemático. Porque a eficiência do sacrifício está em sua <em>intensidade</em>, não em sua duração. Mortes rápidas, traumáticas, carregadas de medo — isso é o que alimenta a Membrana. Agentes sobrevivendo, se adaptando, criando protocolos… isso dilui o efeito.</p><p>Francamente, <strong>Corvo está atrapalhando</strong>.</p>`
+            },
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:24:29',
+                text: `Então nossa diretiva de "não agir" não foi apenas uma questão de priorização de recursos. Foi uma ordem para <em>deixá-los morrer</em>.<p>E agora Corvo, fazendo exatamente o que treinamos ele para fazer — proteger a equipe, pedir suporte, seguir protocolo —, está tecnicamente <strong>sabotando a missão real</strong>.</p><p>Lysandra, você mencionou que o tom dele está emocional. Acho que sabemos por quê agora. Ele não entende por que foi abandonado. E nós não podemos contar a ele.</p>`
+            },
+            {
+                author: 'wolfe',
+                name: 'Conselheira Lysandra Wolfe',
+                time: '23:26:08',
+                text: `Exato. Porque se contarmos, ele tem três opções: <em>um</em>, aceitar e se tornar cúmplice consciente de um sacrifício ritualístico — algo que destruiria qualquer agente mentalmente saudável. <em>Dois</em>, tentar escapar da ilha com a equipe, o que colapsaria a operação e potencialmente a Membrana regional. Ou <em>três</em>, ele se volta contra nós.<p>E Corvo, pelos registros que li, é um <strong>operador Nível 4 com treinamento completo em disrupção de infraestrutura</strong>. Se ele decidir que somos o inimigo, vira um problema interno sério.</p><p>O que me leva à questão óbvia: <strong>o que fazemos com ele?</strong></p>`
+            },
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:27:41',
+                text: `Temos algumas opções. Primeira: <em>manter o curso</em>. Ignoramos as mensagens dele até que a situação se resolva "organicamente" — ou seja, até que todos morram e a Membrana estabilize permanentemente. Problema: como Helena disse, ele está comprando tempo demais. Pode levar mais seis meses. Não temos paciência política pra isso.<p>Segunda opção: enviamos uma <strong>Diretiva de Término Operacional</strong>. Uma ordem formal, irrevogável, de evacuação imediata. Ele obedece, retira o que resta da equipe, e nós documentamos Setentrional como "operação falha". A Membrana colapsa, sim, mas estará documentado como "evento natural imprevisível". Cobrimos com uma narrativa científica.</p><p>Terceira opção, e aqui entra o território <span class="redacted-inline">CLASSIFICADO</span>: <strong>acionamos A Companhia</strong>.</p>`
+            },
+            {
+                author: 'varela',
+                name: 'Dr. Helena Varela',
+                time: '23:29:12',
+                text: `Eduard, não. A Companhia é uma ferramenta de último caso. Eles não são… sutis. Se mandarmos eles para Setentrional, não vai ser "contenção de operação comprometida". Vai ser <em>limpeza total</em>. Corvo, a equipe, os civis restantes na ilha… tudo apagado.<p>E sim, eu sei que tecnicamente resolve o problema — entrega os corpos necessários, estabiliza a Membrana, encerra a operação. Mas as implicações éticas…</p>`
+            },
+            {
+                author: 'wolfe',
+                name: 'Conselheira Lysandra Wolfe',
+                time: '23:30:44',
+                text: `Helena, com todo respeito, <em>implicações éticas?</em> Nós já cruzamos essa linha quando homologamos essa operação sabendo que era uma armadilha. A questão não é se somos ou não monstros — claramente, já decidimos que o pragmatismo supera a moralidade neste caso.<p>A questão é: <strong>qual opção minimiza danos colaterais para a Ordem?</strong></p><p>Se evacuarmos Corvo agora e a Membrana colapsar, teremos explicações a dar para o conselho pleno. Teremos investigações. Alguém vai começar a perguntar por que enviamos gente pra lá em primeiro lugar. E se Helena escreveu isso em algum relatório técnico — e aposto que escreveu —, eventualmente alguém vai achar.</p><p>Mas se A Companhia "resolver" Setentrional, o arquivo é selado sob <span class="redacted-inline">PROTOCOLO CINZA</span>. Nenhuma investigação. Nenhuma pergunta. Só um relatório final dizendo: <em>"Operação perdida por evento paranormal Classe Omega. Todos os ativos considerados KIA. Recomenda-se não retornar à zona."</em></p><p>Limpo. Definitivo. E nós três somos os únicos que sabem a verdade.</p>`
+            },
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:32:56',
+                text: `Lysandra está sendo pragmática, como sempre. E ela não está errada. Mas há um detalhe logístico: <strong>A Companhia não trabalha de graça</strong>. Eles vão querer algo em troca — acesso a arquivos, liberdade operacional em território Ordo, ou pior, <em>um assento no nosso conselho</em>.<p>Já tivemos problemas com eles antes. Lembram do incidente Velocino no Brasil? A Companhia "ajudou" a conter, mas depois ficamos devendo favores por três anos. Não quero repetir isso.</p><p>Então, se vamos por esse caminho, precisamos negociar os termos <strong>agora</strong>. E precisamos de unanimidade aqui. Porque uma vez que eles entram, não dá pra voltar atrás.</p>`
+            },
+            {
+                author: 'varela',
+                name: 'Dr. Helena Varela',
+                time: '23:34:38',
+                text: `Estou… conflitada. Como cientista, reconheço a necessidade de controlar variáveis. Corvo é uma variável descontrolada. A equipe dele, idem. Se a hipótese da "estabilização por sacrifício" estiver correta — e meus dados sugerem fortemente que está —, então tecnicamente a opção mais <em>eficiente</em> é eliminá-los de forma controlada.<p>Mas como <em>humana</em>… droga, Eduard, esses são nossos agentes. Pessoas que confiaram na Ordem. Que acreditaram que estavam fazendo o certo. E nós… nós os usamos como <strong>combustível biológico</strong>.</p><p>Como vamos dormir à noite sabendo disso?</p>`
+            },
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:36:04',
+                text: `Helena, vou ser brutalmente honesto com você: <strong>não vamos</strong>. Não dormimos. Ou aprendemos a viver com isso, ou saímos do conselho e deixamos outra pessoa tomar essas decisões.<p>Eu passei os últimos vinte anos nesta organização. Vi coisas que fariam a maioria das pessoas perder a sanidade. E aprendi uma verdade muito simples: <em>alguém precisa fazer as escolhas impossíveis</em>. Se não formos nós, será outra pessoa — provavelmente alguém menos qualificado, menos informado, e potencialmente mais perigoso.</p><p>Então sim, Setentrional é uma tragédia. Corvo e sua equipe são vítimas. Mas se o custo de oito vidas é <strong>prevenir um colapso que poderia expor milhões de pessoas ao Outro Lado</strong>, então… essa é a matemática.</p><p>Fria. Horrível. Mas matemática.</p>`
+            },
+            {
+                author: 'wolfe',
+                name: 'Conselheira Lysandra Wolfe',
+                time: '23:38:19',
+                text: `Então estamos decidindo. A Companhia.<p>Eduard, você lidera a negociação com eles. Use seu canal direto. Diga que temos uma "operação descontrolada em território atlântico" e que precisamos de "solução discreta e terminal". Eles vão entender o que isso significa.</p><p>Helena, você prepara um relatório técnico pós-operação justificando a perda como "evento paranormal Classe Omega de origem desconhecida". Invente uma entidade, dê um codinome, faça parecer inevitável. Seu trabalho é criar a narrativa que vai pro arquivo oficial.</p><p>Eu cuido da parte política. Se alguém no conselho questionar, eu desvio. Se surgirem investigações internas, eu bloqueio. E se algum parente de agente morto vier atrás de respostas… bem, lidamos com isso quando acontecer.</p><p>Estamos de acordo?</p>`
+            },
+            {
+                author: 'varela',
+                name: 'Dr. Helena Varela',
+                time: '23:40:02',
+                text: `Eu… sim. Estou de acordo. Mas que fique registrado que <strong>eu odeio isso</strong>. E que, se algum dia a verdade vazar, eu vou assumir minha parte. Não vou deixar os mortos de Setentrional serem esquecidos como "baixas aceitáveis".<p>Eles merecem mais do que isso. Mesmo que a gente não possa dar.</p>`
+            },
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:41:27',
+                text: `Entendido, Helena. E, para registro: eu também não durmo bem com isso. Mas a Ordem é maior do que nós três. Maior do que Corvo. Maior do que Setentrional.<p>Vou contatar A Companhia nas próximas horas. Espero uma resposta em 48h. Assim que tivermos confirmação, implementamos.</p><p>Até lá, <strong>mantemos o silêncio rádio com Corvo</strong>. Nenhuma resposta às mensagens dele. Nada que possa ser rastreado ou usado contra nós depois. Ele já deve estar desesperado; mais alguns dias sem resposta e ele vai parar de pedir ajuda e focar só em sobreviver.</p><p>O que, ironicamente, facilita o trabalho da Companhia.</p>`
+            },
+            {
+                author: 'wolfe',
+                name: 'Conselheira Lysandra Wolfe',
+                time: '23:43:11',
+                text: `Perfeito. Então está decidido.<p>Ah, e uma última coisa: se, por algum milagre absurdo, Corvo ou alguém da equipe dele sobreviver e chegar ao continente, <strong>ativamos protocolo de amnésico Classe B</strong> e realocamos pra operação administrativa. Longe de campo. Longe de perguntas.</p><p>Não podemos ter sobreviventes de Setentrional contando histórias.</p>`
+            },
+            {
+                author: 'hartmann',
+                name: 'Conselheiro Eduard Hartmann',
+                time: '23:44:38',
+                text: `Concordo. Bem, colegas… acho que está encerrado. Reunião desagradável, mas necessária.<p>Lysandra, Helena: obrigado pela honestidade e pelo profissionalismo, mesmo diante de decisões… difíceis. Sei que nenhum de nós queria estar aqui. Mas estamos. E fizemos o que precisava ser feito.</p><p>Este log será criptografado e arquivado sob <span class="redacted-inline">SELO HC-Δ OLHOS APENAS</span>. Nenhuma cópia externa. Nenhuma menção em atas oficiais.</p><p>Boa noite. E que a Membrana nos perdoe.</p>`
+            },
+            {
+                author: 'wolfe',
+                name: 'Conselheira Lysandra Wolfe',
+                time: '23:45:19',
+                text: `Boa noite, Eduard. Helena.<p>E se serve de consolo… pelo menos não somos hipócritas. Sabemos exatamente o que somos.</p>`
+            },
+            {
+                author: 'varela',
+                name: 'Dr. Helena Varela',
+                time: '23:45:52',
+                text: `Boa noite.<p>Que os mortos de Setentrional descansem em paz. Mesmo que eles nunca saibam por quê.</p>`
+            }
+        ];
+
+        const chatLog = document.getElementById('chatLog');
+
+        messages.forEach((msg, index) => {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            msgDiv.style.setProperty('--msg-index', index);
+
+            const avatarInitial = msg.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+
+            msgDiv.innerHTML = `
+                <div class="msg-header">
+                    <div class="msg-avatar avatar--${msg.author}">${avatarInitial}</div>
+                    <div class="msg-meta">
+                        <div class="msg-author author--${msg.author}">${msg.name}</div>
+                        <div class="msg-timestamp">${msg.time} UTC</div>
+                    </div>
+                </div>
+                <div class="msg-body msg-body--${msg.author}">
+                    ${msg.text}
+                </div>
+            `;
+
+            chatLog.appendChild(msgDiv);
+        });
+    </script>
+</body>
+</html>

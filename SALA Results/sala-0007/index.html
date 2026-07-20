@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SALA Results/sala-0007/">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0007 – O COLECIONADOR DE ÚLTIMAS PALAVRAS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #14060b;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #1a0000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(-7deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.5));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line { margin: 4px 0; white-space: pre-wrap; }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .last-words-box {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid var(--crimson);
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95em;
+            line-height: 1.9;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 5</div>
+        <h1>S.A.L.A-0007</h1>
+        <p class="designation">"O COLECIONADOR DE ÚLTIMAS PALAVRAS"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0007 / ENTIDADE-ESCRIBA-MORTUÁRIA</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Entidade do Outro Lado – Eixo <span class="highlight">MORTE/CONHECIMENTO</span> com manifestação física parcial</span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>5 – Extremamente Alto / Presença causa morte iminente em 87% dos casos</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>5 – Ultra Secreto / Conselho Escarlate + Ordo Realitas (acesso conjunto)</span>
+
+            <span class="label">APARÊNCIA:</span>
+            <span>Figura humanoide alta e magra, coberta por túnica negra feita de páginas manuscritas, carregando um livro aberto de dimensões variáveis</span>
+
+            <span class="label">PADRÃO DE MANIFESTAÇÃO:</span>
+            <span>Aparece espontaneamente próximo a indivíduos que estão prestes a morrer, independentemente da causa</span>
+
+            <span class="label">STATUS:</span>
+            <span>ATIVO – Não pode ser contido, apenas observado e documentado</span>
+        </div>
+    </section>
+
+    <h2>§ I. DESCRIÇÃO</h2>
+
+    <p>S.A.L.A-0007 é uma entidade humanoide que se manifesta como uma figura extremamente alta (entre 2,5 e 3,2 metros), de constituição esquelética, coberta por uma túnica que, sob análise detalhada de filmagens, revela-se composta inteiramente de <span class="highlight">páginas manuscritas em dezenas de idiomas diferentes, incluindo línguas mortas e scripts não identificados</span>.</p>
+
+    <p>A entidade não possui rosto discernível. Onde deveria estar a cabeça, há apenas sombras profundas das quais ocasionalmente emanam sussurros incompreensíveis. Em suas mãos—longas, com dedos finos e articulações excessivas—carrega sempre um livro aberto. O livro muda de tamanho conforme a manifestação: às vezes cabe na palma de sua mão, outras vezes é maior que um torso humano.</p>
+
+    <p>0007 é conhecida por aparecer exclusivamente para pessoas que estão <span class="highlight">prestes a morrer</span>, geralmente entre 3 segundos e 72 horas antes do óbito. A entidade não causa a morte—ela apenas a registra. Mais especificamente, ela registra as <b>últimas palavras</b> que a pessoa dirá antes de falecer, mesmo que essas palavras ainda não tenham sido pronunciadas.</p>
+
+    <h2>§ II. HISTÓRICO E PRIMEIRA CATALOGAÇÃO</h2>
+
+    <p>Relatos de uma "figura encapuzada que visita os moribundos" existem em folclore global há séculos, frequentemente confundida com representações da Morte personificada. A Congregação Escarlate isolou S.A.L.A-0007 como entidade distinta após uma série de fotografias e gravações obtidas em hospitais e locais de desastres entre 2009 e 2013.</p>
+
+    <div class="incident">
+        <h3>INCIDENTE HOSPITAL-RJ-001</h3>
+        <p><b>Data:</b> 07/03/2013<br>
+           <b>Local:</b> Hospital <span class="redacted">███████████</span>, Rio de Janeiro<br>
+           <b>Contexto:</b> Unidade de Terapia Intensiva com 12 pacientes terminais</p>
+
+        <p>Câmeras de segurança capturaram, pela primeira vez com clareza suficiente para análise, a presença de S.A.L.A-0007 circulando entre leitos de UTI durante a madrugada. A entidade parava em frente a determinados pacientes, abria seu livro, e parecia escrever algo com um instrumento não visível nas gravações.</p>
+
+        <blockquote>
+            <b>Observações da enfermeira de plantão (depoimento posterior):</b><br><br>
+            "Eu vi aquela... coisa. Achei que estava tendo alucinação por causa do turno duplo. Era alta, muito alta, e parecia feita de papel velho. Parou na frente do leito 7, o senhor Antônio. Ficou lá uns dois minutos, só... olhando. Ou não olhando, sei lá, não tinha rosto.<br><br>
+            Então ela abriu aquele livro enorme e começou a escrever. O som da caneta no papel era o único barulho no corredor. Hipnótico. Assustador.<br><br>
+            Três horas depois, o senhor Antônio acordou, pediu água, olhou para a esposa e disse: 'Obrigado por tudo. Eu te amo.' Morreu 40 segundos depois. Essas foram as últimas palavras dele. Exatamente o que vi ela escrevendo no livro."
+        </blockquote>
+
+        <p>Nos 15 dias seguintes, todos os 12 pacientes que receberam a "visita" de 0007 faleceram. Suas últimas palavras foram documentadas pela equipe médica e, quando comparadas com as anotações da enfermeira sobre o que viu ser escrito no livro (baseadas em leitura labial da entidade "recitando" enquanto escrevia), havia correspondência perfeita em 11 dos 12 casos.</p>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Premonição de Morte</h3>
+
+    <p>A manifestação de S.A.L.A-0007 funciona como um <span class="highlight">marcador temporal absoluto de morte iminente</span>. Quando ela aparece próxima a um indivíduo, a probabilidade de morte nas próximas 72 horas é de 87%. Os 13% restantes envolvem situações em que a morte foi evitada por intervenções extremas, mas mesmo nesses casos, as vítimas relatam:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Sensação permanente de "ter sido observada" pela Morte</li>
+        <li>Sonhos recorrentes com páginas sendo escritas</li>
+        <li>Compulsão de escrever testamentos ou cartas de despedida</li>
+        <li>Reconhecimento da entidade em obras de arte antigas</li>
+    </ul>
+
+    <h3>III-B. O Livro das Últimas Palavras</h3>
+
+    <p>O livro que 0007 carrega parece conter um registro completo de últimas palavras de pessoas ao longo da história. Em raras ocasiões em que agentes conseguiram fotografar páginas abertas do livro (usando câmeras de longo alcance), foram identificados:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Últimas palavras de figuras históricas conhecidas (Júlio César, Cleópatra, etc.)</li>
+        <li>Últimas palavras de pessoas comuns, datadas de séculos atrás</li>
+        <li>Espaços em branco seguidos de nomes e datas futuras</li>
+        <li>Seções inteiras em idiomas do Outro Lado (similar aos vistos em KAIRA)</li>
+    </ul>
+
+    <div class="last-words-box">
+        <b>Excerto fotografado (traduzido do latim arcaico):</b><br><br>
+        "Marcus Aurelius Antoninus, 17 Martii, CLXXX<br>
+        'Vá com os deuses. Eu vou com a noite.'<br><br>
+        Lucia de Siracusa, V Decembris, CCCIV<br>
+        'A luz não termina aqui.'<br><br>
+        [Nome ilegível], data ilegível<br>
+        'Eu vejo ele. O Escriba. Ele está escrevendo isto agora.'"
+    </div>
+
+    <h3>III-C. Incapacidade de Alteração</h3>
+
+    <p>Tentativas de mudar o destino de indivíduos visitados por 0007 resultaram em falhas consistentes. Mesmo quando medidas extremas de proteção são implementadas (evacuação, escolta armada, contenção em bunker ritual), a morte ocorre através de meios aparentemente impossíveis ou estatisticamente improváveis.</p>
+
+    <blockquote>
+        <b>Caso Documentado – Agente Fábio Correia:</b><br><br>
+        Após avistar 0007 em sua casa, Correia foi imediatamente transferido para uma instalação subterrânea da Congregação, protegida por selos de todos os cinco Elementos. Exames médicos completos não revelaram nenhuma condição de saúde grave.<br><br>
+        48 horas depois, Correia sofreu um AVC hemorrágico fulminante durante uma rotina de exercícios supervisionados. Suas últimas palavras, registradas por câmeras, foram: "Eu não queria que terminasse assim."<br><br>
+        Revisão posterior de filmagens da casa de Correia mostrou 0007 escrevendo exatamente essas palavras três dias antes do óbito.
+    </blockquote>
+
+    <h2>§ IV. PADRÕES DE COMPORTAMENTO</h2>
+
+    <h3>IV-A. Seleção de Alvos</h3>
+
+    <p>0007 não discrimina idade, condição social, moralidade ou afiliação. Aparece para crianças, idosos, santos e criminosos igualmente. O único fator determinante é a proximidade temporal da morte. Análise estatística indica que a entidade prioriza:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Mortes "significativas" (últimas palavras eloquentes, emocionais ou proféticas)</li>
+        <li>Primeiras mortes em locais específicos (primeira morte em uma casa nova, etc.)</li>
+        <li>Mortes relacionadas ao paranormal (agentes da Congregação, Ordo, expostos ao Outro Lado)</li>
+    </ul>
+
+    <h3>IV-B. Interação Limitada</h3>
+
+    <p>0007 nunca foi observada falando diretamente com suas "vítimas". Ela simplesmente observa, escreve e desaparece. Em apenas três ocasiões documentadas, pessoas conseguiram interagir verbalmente com a entidade:</p>
+
+    <div class="log">
+        <div class="log-line"><b>INTERAÇÃO DOCUMENTADA – PADRE AUGUSTO LIMA</b></div>
+        <div class="log-line">Data: 14/08/2019</div>
+        <div class="log-line">Local: Capela da Congregação, Salvador</div>
+        <br>
+        <div class="log-line">Padre Lima, 83 anos, veterano da Congregação, acordou à noite e encontrou 0007 ao pé de sua cama.</div>
+        <br>
+        <div class="log-line">Lima: "Você veio me buscar?"</div>
+        <div class="log-line">0007: (pausa longa, então um sussurro coletivo de múltiplas vozes): "Não busco. Apenas registro."</div>
+        <div class="log-line">Lima: "Posso ver o que você escreveu sobre mim?"</div>
+        <div class="log-line">0007: (inclina o livro ligeiramente)</div>
+        <div class="log-line">Lima: (lê em silêncio, depois sorri) "Ah. Então é assim."</div>
+        <div class="log-line">Lima: "Obrigado por me mostrar. Pelo menos sei que não vou dizer nada ridículo."</div>
+        <br>
+        <div class="log-line">Padre Lima faleceu 19 horas depois, de causas naturais durante o sono. Suas últimas palavras, ditas a um noviço horas antes, foram: "A morte não é o fim da história. É só onde o Colecionador para de escrever."</div>
+    </div>
+
+    <h2>§ V. RELAÇÃO COM OUTRAS ENTIDADES E ARQUIVOS</h2>
+
+    <p>Há forte conexão teórica entre S.A.L.A-0007 e S.A.L.A-0000 (O Vigil Silencioso). Ambos parecem ser "arquivistas" de aspectos diferentes da existência: 0000 registra o fim de todas as coisas, enquanto 0007 registra especificamente <span class="highlight">o último sopro de consciência individual</span>.</p>
+
+    <p>Adicionalmente, há relatos não confirmados de que 0007 foi vista na Biblioteca de Carpathia, consultando volumes ao lado de 0000. Um escriba afirma ter ouvido as duas entidades "conversando" através de sussurros sobrepostos, mas não conseguiu compreender o idioma.</p>
+
+    <blockquote>
+        "Se 0000 é o bibliotecário que lê o final de tudo, 0007 é o escriba que anota o último suspiro antes do silêncio absoluto. Juntos, eles são a memória e o encerramento. O arquivo e o epitáfio."<br><br>
+        – Dra. Isabela Navarro
+    </blockquote>
+
+    <p>Também há evidências de que 0007 estava presente durante a morte de KAIRA. Análise das gravações finais do Projeto Quimera mostra, por uma fração de segundo, uma sombra alta segurando um livro na borda do quadro, momentos antes de KAIRA pronunciar suas últimas palavras: "Eu rogo a ti, todo poderoso Muka'an."</p>
+
+    <h2>§ VI. TENTATIVAS DE COMUNICAÇÃO E ESTUDO</h2>
+
+    <div class="log">
+        <div class="log-line"><b>EXPERIMENTO CONTROLADO – VOLUNTÁRIO TERMINAL</b></div>
+        <div class="log-line">Data: 22/11/2022</div>
+        <div class="log-line">Participante: Irmão Teodoro Santos, 71 anos, câncer terminal, 2-4 semanas de vida estimada</div>
+        <br>
+        <div class="log-line"><b>Objetivo:</b> Estabelecer protocolo de comunicação com 0007 usando um moribundo voluntário consciente e preparado.</div>
+        <br>
+        <div class="log-line"><b>Resultado:</b></div>
+        <div class="log-line">[Dia 3 após início do experimento]</div>
+        <div class="log-line">02h34 - 0007 se manifesta no quarto de Teodoro.</div>
+        <div class="log-line">Teodoro (calmo): "Irmã Navarro me disse que você viria."</div>
+        <div class="log-line">0007: (silêncio, abre o livro)</div>
+        <div class="log-line">Teodoro: "Posso fazer perguntas enquanto você escreve?"</div>
+        <div class="log-line">0007: (acena levemente com a cabeça)</div>
+        <div class="log-line">Teodoro: "Você é do Outro Lado?"</div>
+        <div class="log-line">0007: (sussurro): "Sou de onde as palavras vão quando não há mais bocas para dizê-las."</div>
+        <div class="log-line">Teodoro: "Você registra todos que morrem?"</div>
+        <div class="log-line">0007: "Apenas aqueles cujas últimas palavras precisam ser lembradas."</div>
+        <div class="log-line">Teodoro: "E quem decide isso?"</div>
+        <div class="log-line">0007: (longa pausa) "O próprio ato de falar, no fim, carrega peso. Algumas palavras dobram a realidade. Essas, eu devo guardar."</div>
+        <div class="log-line">Teodoro: "E as minhas? Valem algo?"</div>
+        <div class="log-line">0007: (mostra o livro)</div>
+        <div class="log-line">Teodoro: (lê, lágrimas nos olhos) "Sim. Sim, são perfeitas."</div>
+        <br>
+        <div class="log-line">Irmão Teodoro faleceu 11 horas depois. Suas últimas palavras, ditas à Dra. Navarro: "Diga aos outros que não tenham medo. Ela não leva nada que não seja nosso para começar."</div>
+    </div>
+
+    <h2>§ VII. PROTOCOLO DE OBSERVAÇÃO</h2>
+
+    <p>Dado que 0007 não pode ser contida nem impedida, a Congregação estabeleceu protocolos de documentação passiva:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Qualquer avistamento de 0007 deve ser fotografado/filmado à distância segura (mínimo 15 metros)</li>
+        <li>Indivíduos que veem 0007 devem ser tratados como terminais e receber cuidados paliativos imediatos</li>
+        <li>Últimas palavras devem ser documentadas com precisão absoluta para análise comparativa</li>
+        <li>É proibido tentar destruir, atacar ou impedir 0007 fisicamente</li>
+        <li>Agentes que avistam 0007 em campo devem elaborar testamentos atualizados em 24h</li>
+    </ul>
+
+    <div class="addendum">
+        <h2>ADENDO 0007-Ω: O LIVRO NUNCA FECHA</h2>
+
+        <p>Em 2025, durante análise avançada de todas as fotografias de 0007 em arquivo, pesquisadores notaram algo perturbador: <span class="highlight">o livro nunca é visto fechado</span>. Mesmo quando a entidade desaparece ou se desmaterializa, o livro permanece aberto até o último frame visível.</p>
+
+        <p>Adicionalmente, comparação de fotografias ao longo de 12 anos mostra que o livro está progressivamente mais cheio. Páginas que antes estavam em branco agora contêm texto denso. Estimativas sugerem que, ao ritmo atual, o livro estará completamente preenchido em aproximadamente 40 anos.</p>
+
+        <blockquote>
+            <b>Nota do Grão-Mestre Richter:</b><br><br>
+            "O que acontece quando o Colecionador preenche a última página? Quando não há mais espaço para registrar últimas palavras? Será que ele para de aparecer... ou será que a morte para de significar algo definitivo?<br><br>
+            Ou pior: será que ele simplesmente começa um novo volume, e esse novo volume registra não mais últimas palavras de indivíduos... mas últimas palavras de civilizações inteiras?"
+        </blockquote>
+
+        <p>Correlação com a Profecia dos Sete Capítulos de S.A.L.A-0000 sugere que o preenchimento completo do livro de 0007 pode coincidir com o Capítulo VII – o fim narrado pelo Vigil Silencioso. Se verdadeiro, isso significa que 0007 não apenas registra mortes individuais, mas está ativamente <span class="highlight">catalogando o caminho até a morte coletiva da realidade</span>.</p>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo integra o acervo da Biblioteca da Congregação Escarlate.</p>
+        <p>Se você avistar uma figura alta, vestida de páginas, segurando um livro aberto e olhando para você... considere cuidadosamente suas próximas palavras.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"Toda vida termina com uma frase. Ele se certifica de que nenhuma seja esquecida."</i></p>
+    </div>
+</div>
+
+</body>
+</html>

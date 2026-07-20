@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/breach/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORDO REALITAS // PROTOCOLO DE QUEBRA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;900&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --primary: #00ff41;
+            --primary-dim: rgba(0, 255, 65, 0.3);
+            --secondary: #003B00;
+            --alert: #ff003c;
+            --alert-dim: rgba(255, 0, 60, 0.3);
+            --grid-size: 50px;
+        }
+
+        * { box-sizing: border-box; cursor: crosshair; user-select: none; }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-color);
+            color: var(--primary);
+            font-family: 'Share Tech Mono', monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+        }
+
+        /* --- POST-PROCESSING EFFECTS --- */
+        .scanlines {
+            position: fixed; inset: 0; pointer-events: none; z-index: 900;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+        }
+        
+        .vignette {
+            position: fixed; inset: 0; pointer-events: none; z-index: 800;
+            background: radial-gradient(circle, transparent 50%, black 100%);
+        }
+
+        .crt-flicker {
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            50% { opacity: 1; }
+            100% { opacity: 0.98; }
+        }
+
+        /* --- LAYOUT --- */
+        .interface-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            width: 95vw;
+            height: 90vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- MATRIX GRID --- */
+        .matrix-panel {
+            border: 2px solid var(--primary);
+            background: rgba(0, 20, 0, 0.8);
+            box-shadow: 0 0 20px var(--primary-dim);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .matrix-header {
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid var(--primary);
+            padding-bottom: 10px; margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .grid-wrapper {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            gap: 5px;
+        }
+
+        .cell {
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid transparent;
+            font-size: 1.5rem;
+            transition: 0.1s;
+            position: relative;
+        }
+
+        .cell:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .cell.active-row { background: rgba(0, 255, 65, 0.05); border-top: 1px solid var(--primary); border-bottom: 1px solid var(--primary); }
+        .cell.active-col { background: rgba(0, 255, 65, 0.05); border-left: 1px solid var(--primary); border-right: 1px solid var(--primary); }
+        .cell.disabled { opacity: 0.3; pointer-events: none; filter: blur(1px); }
+        .cell.used { background: var(--secondary); color: #000; }
+
+        /* --- SIDEBAR --- */
+        .info-panel {
+            display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .module {
+            border: 1px solid var(--primary);
+            background: rgba(0, 10, 0, 0.9);
+            padding: 20px;
+            position: relative;
+        }
+
+        .module h3 { margin: 0 0 15px 0; font-size: 1rem; border-bottom: 1px solid var(--secondary); color: #88ff88; }
+
+        /* SEQUENCE */
+        .seq-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .seq-item { 
+            width: 40px; height: 40px; 
+            border: 1px solid var(--primary); 
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 1.2rem;
+        }
+        .seq-item.hit { background: var(--primary); color: #000; box-shadow: 0 0 10px var(--primary); }
+        .seq-item.current { border-color: #fff; animation: pulse 1s infinite; }
+
+        /* TIMER */
+        .timer-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            text-align: center;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+        .timer-critical { color: var(--alert); text-shadow: 0 0 15px var(--alert); animation: shake 0.5s infinite; }
+
+        /* LOG */
+        .log-box {
+            height: 200px;
+            font-size: 0.8rem;
+            overflow-y: hidden;
+            display: flex; flex-direction: column-reverse;
+            color: #aaa;
+        }
+        .log-entry { margin: 2px 0; }
+        .log-err { color: var(--alert); }
+        .log-succ { color: var(--primary); font-weight: bold; }
+
+        /* --- POPUPS (ERROR) --- */
+        .popup-error {
+            position: absolute;
+            background: #110000;
+            border: 2px solid var(--alert);
+            color: var(--alert);
+            padding: 15px;
+            width: 250px;
+            z-index: 1000;
+            font-family: 'Share Tech Mono';
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.8);
+            animation: popIn 0.2s;
+        }
+        .popup-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--alert); margin-bottom: 10px; padding-bottom: 5px; font-weight: bold; cursor: move;}
+        .popup-close { cursor: pointer; background: var(--alert); color: #000; padding: 0 5px; }
+        
+        /* --- FULLSCREEN OVERLAYS --- */
+        .fullscreen-overlay {
+            position: fixed; inset: 0; z-index: 2000;
+            background: #000;
+            display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .glitch-text {
+            font-size: 4rem; font-family: 'Orbitron';
+            position: relative;
+            color: white;
+        }
+        
+        /* ANIMATIONS */
+        @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+        @keyframes shake { 0% { transform: translate(1px, 1px); } 25% { transform: translate(-2px, -2px); } 50% { transform: translate(2px, 0); } 75% { transform: translate(-1px, 2px); } }
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+    </style>
+</head>
+<body class="crt-flicker">
+
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <div class="interface-container" id="ui">
+        
+        <!-- MATRIZ PRINCIPAL -->
+        <div class="matrix-panel">
+            <div class="matrix-header">
+                <span>BUFFER_MEMÓRIA: 0x973</span>
+                <span>STATUS: <span id="status-text">ATIVO</span></span>
+            </div>
+            <div class="grid-wrapper" id="grid">
+                <!-- Cells generated via JS -->
+            </div>
+            <div style="margin-top: 10px; font-size: 0.8rem; color: #555;">
+                > SELECIONE O CÓDIGO CORRETO NA LINHA/COLUNA ATIVA
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="info-panel">
+            
+            <div class="module">
+                <h3>SEQUÊNCIA DE UPLOAD</h3>
+                <div class="seq-row" id="sequence-display"></div>
+            </div>
+
+            <div class="module">
+                <h3>TEMPO RESTANTE</h3>
+                <div class="timer-display" id="timer">60.00</div>
+                <div style="width: 100%; height: 5px; background: #333; margin-top: 10px;">
+                    <div id="time-bar" style="width: 100%; height: 100%; background: var(--primary);"></div>
+                </div>
+            </div>
+
+            <div class="module" style="flex-grow: 1;">
+                <h3>LOG DE EVENTOS</h3>
+                <div class="log-box" id="log">
+                    <div class="log-entry">> Inicializando Breach Protocol v3.0...</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TELAS FINAIS -->
+    <div class="fullscreen-overlay" id="fail-screen" style="background: rgba(40,0,0,0.95);">
+        <h1 class="glitch-text" style="color: var(--alert); text-shadow: 0 0 20px red;">FALHA CRÍTICA</h1>
+        <p style="font-size: 1.5rem; color: var(--alert);">RASTREAMENTO DE IP CONCLUÍDO</p>
+        <p style="margin-top: 20px;">DESCONECTANDO EM 3...</p>
+    </div>
+
+    <div class="fullscreen-overlay" id="win-screen" style="background: rgba(0,20,0,0.95);">
+        <h1 class="glitch-text" style="color: var(--primary); text-shadow: 0 0 20px green;">ACESSO CONCEDIDO</h1>
+        <p style="font-size: 1.5rem; color: var(--primary);">TRANSFERINDO DADOS CRIPTOGRAFADOS...</p>
+        <button onclick="window.location.href='tribunal_ilusorio'" style="margin-top: 30px; padding: 15px 40px; background: transparent; border: 2px solid var(--primary); color: var(--primary); font-size: 1.2rem; cursor: pointer; font-family: 'Share Tech Mono';">ABRIR ARQUIVO</button>
+    </div>
+
+    <script>
+        // CONFIGURAÇÕES
+        const GRID_ROWS = 8;
+        const GRID_COLS = 8;
+        const HEX_POOL = ['1C', '55', 'BD', 'E9', '7A', 'FF', '99', 'A1', '00'];
+        const SEQ_LENGTH = 6;
+        const MAX_TIME = 60.00;
+
+        // ESTADO DO JOGO
+        let timeLeft = MAX_TIME;
+        let isActive = false;
+        let activeRow = 0;
+        let activeCol = null;
+        let isRowSelection = true; // True = escolhe na linha, False = escolhe na coluna
+        let sequence = [];
+        let currentStep = 0;
+        let gridCells = []; // Array 2D para referenciar células
+        let timerInterval;
+
+        // ELEMENTOS DOM
+        const gridEl = document.getElementById('grid');
+        const seqEl = document.getElementById('sequence-display');
+        const timerEl = document.getElementById('timer');
+        const timeBar = document.getElementById('time-bar');
+        const logEl = document.getElementById('log');
+        const bodyEl = document.body;
+
+        // AUDIO CONTEXT
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // --- SISTEMA DE SOM (Web Audio API) ---
+        function playSfx(type) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'hover') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                gain.gain.setValueAtTime(0.02, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.05);
+                osc.start(); osc.stop(now + 0.05);
+            } 
+            else if (type === 'click') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(); osc.stop(now + 0.1);
+            }
+            else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(); osc.stop(now + 0.3);
+            }
+            else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.linearRampToValueAtTime(880, now + 0.5);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0, now + 1);
+                osc.start(); osc.stop(now + 1);
+            }
+        }
+
+        // --- LÓGICA DO JOGO ---
+
+        function init() {
+            isActive = true;
+            generateSequence();
+            buildGrid();
+            renderSequence();
+            startTimer();
+            logEntry("SISTEMA ONLINE. INICIANDO CONTAGEM...", "succ");
+        }
+
+        function generateSequence() {
+            sequence = [];
+            // Gera uma sequência que é garantidamente possível (caminho aleatório simulado)
+            let r = 0, c = Math.floor(Math.random() * GRID_COLS);
+            let rowTurn = true;
+            
+            for(let i=0; i<SEQ_LENGTH; i++) {
+                const val = HEX_POOL[Math.floor(Math.random() * HEX_POOL.length)];
+                sequence.push(val);
+                // (Para simplificar a complexidade, usamos valores aleatórios, mas o jogo permite erro e rollback)
+            }
+        }
+
+        function buildGrid() {
+            gridEl.innerHTML = '';
+            gridCells = [];
+
+            for(let r=0; r<GRID_ROWS; r++) {
+                let rowArr = [];
+                for(let c=0; c<GRID_COLS; c++) {
+                    const cell = document.createElement('div');
+                    const val = HEX_POOL[Math.floor(Math.random() * HEX_POOL.length)];
+                    
+                    cell.className = 'cell';
+                    cell.innerText = val;
+                    cell.dataset.r = r;
+                    cell.dataset.c = c;
+                    cell.dataset.val = val;
+                    
+                    // Eventos
+                    cell.onmouseenter = () => { if(isActive) playSfx('hover'); };
+                    cell.onclick = () => handleCellClick(r, c, val, cell);
+                    
+                    gridEl.appendChild(cell);
+                    rowArr.push({ el: cell, val: val, used: false });
+                }
+                gridCells.push(rowArr);
+            }
+            highlightAvailableMoves();
+        }
+
+        function highlightAvailableMoves() {
+            // Limpa estilos antigos
+            gridCells.flat().forEach(obj => {
+                obj.el.classList.remove('active-row', 'active-col', 'disabled');
+                if(!obj.used) {
+                    // Check validity based on current turn
+                    if (isRowSelection) {
+                        if (parseInt(obj.el.dataset.r) === activeRow) obj.el.classList.add('active-row');
+                        else obj.el.classList.add('disabled');
+                    } else {
+                        if (parseInt(obj.el.dataset.c) === activeCol) obj.el.classList.add('active-col');
+                        else obj.el.classList.add('disabled');
+                    }
+                } else {
+                    obj.el.classList.add('disabled', 'used');
+                    obj.el.innerText = '[]';
+                }
+            });
+        }
+
+        function handleCellClick(r, c, val, el) {
+            if (!isActive) return;
+            const cellObj = gridCells[r][c];
+            if (cellObj.used) return;
+
+            // Valida movimento (só pode clicar na linha/coluna ativa)
+            if (isRowSelection && r !== activeRow) return;
+            if (!isRowSelection && c !== activeCol) return;
+
+            // Lógica do clique
+            playSfx('click');
+            cellObj.used = true;
+            
+            // Verifica acerto
+            if (val === sequence[currentStep]) {
+                logEntry(`BUFFER ACEITO: ${val}`, "succ");
+                currentStep++;
+                renderSequence();
+                
+                if (currentStep >= SEQ_LENGTH) {
+                    gameWin();
+                    return;
+                }
+            } else {
+                // ERRO
+                handleError(val);
+            }
+
+            // Alterna turno e define novo eixo
+            isRowSelection = !isRowSelection;
+            if (!isRowSelection) activeCol = c;
+            else activeRow = r;
+
+            highlightAvailableMoves();
+        }
+
+        function handleError(val) {
+            playSfx('error');
+            timeLeft -= 5; // Penalidade de tempo
+            logEntry(`ERRO DE PARIDADE: ${val} != ${sequence[currentStep]}`, "err");
+            
+            // Efeito visual na tela
+            bodyEl.style.animation = 'shake 0.3s';
+            setTimeout(() => bodyEl.style.animation = '', 300);
+
+            // Cria POPUP irritante
+            createErrorPopup();
+
+            // Reset progress? Opcional. Vamos manter o progresso mas punir com tempo/popups.
+            // Se quisesse hardcore: currentStep = 0; renderSequence();
+        }
+
+        function createErrorPopup() {
+            const pop = document.createElement('div');
+            pop.className = 'popup-error';
+            pop.style.top = Math.random() * 80 + 'vh';
+            pop.style.left = Math.random() * 80 + 'vw';
+            
+            pop.innerHTML = `
+                <div class="popup-header">
+                    <span>ERRO CRÍTICO 0x${Math.floor(Math.random()*999)}</span>
+                    <span class="popup-close" onclick="this.parentElement.parentElement.remove()">X</span>
+                </div>
+                <div>VIOLAÇÃO DE SEGURANÇA DETECTADA.<br>RASTREAMENTO ATIVO.</div>
+            `;
+            
+            document.body.appendChild(pop);
+            
+            // Fecha sozinho depois de um tempo
+            setTimeout(() => pop.remove(), 4000);
+        }
+
+        function renderSequence() {
+            seqEl.innerHTML = '';
+            sequence.forEach((val, idx) => {
+                const div = document.createElement('div');
+                div.className = 'seq-item';
+                div.innerText = val;
+                if (idx < currentStep) div.classList.add('hit');
+                if (idx === currentStep) div.classList.add('current');
+                seqEl.appendChild(div);
+            });
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (!isActive) return;
+                timeLeft -= 0.1;
+                
+                // Formata
+                timerEl.innerText = timeLeft.toFixed(2);
+                timeBar.style.width = (timeLeft / MAX_TIME * 100) + '%';
+
+                if (timeLeft < 10) {
+                    timerEl.classList.add('timer-critical');
+                    timeBar.style.background = 'var(--alert)';
+                }
+
+                if (timeLeft <= 0) {
+                    gameFail();
+                }
+            }, 100);
+        }
+
+        function logEntry(msg, type) {
+            const div = document.createElement('div');
+            div.className = `log-entry ${type === 'err' ? 'log-err' : 'log-succ'}`;
+            div.innerText = `> ${msg}`;
+            logEl.prepend(div);
+        }
+
+        function gameWin() {
+            isActive = false;
+            clearInterval(timerInterval);
+            playSfx('win');
+            document.getElementById('win-screen').style.display = 'flex';
+        }
+
+        function gameFail() {
+            isActive = false;
+            clearInterval(timerInterval);
+            playSfx('error');
+            document.getElementById('fail-screen').style.display = 'flex';
+            setTimeout(() => {
+                window.location.href = 'index';
+            }, 3000);
+        }
+
+        // Start
+        window.onload = () => {
+            setTimeout(init, 500); // Pequeno delay pra carregar
+        };
+
+    </script>
+</body>
+</html>

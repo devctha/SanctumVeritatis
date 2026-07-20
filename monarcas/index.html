@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/monarcas/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>MONARCAS // ERRO</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#050000;
+      --panel:#0b0000;
+      --red:#ff1a1a;
+      --red2:#8a0000;
+      --text:#f2d9d9;
+      --muted:#8d6161;
+      --line:rgba(255,26,26,.22);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background:
+        radial-gradient(circle at 30% 0%, rgba(255,26,26,.18) 0, transparent 45%),
+        radial-gradient(circle at 120% 20%, rgba(255,26,26,.10) 0, transparent 42%),
+        linear-gradient(180deg, var(--bg) 0, #000 100%);
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      overflow:hidden;
+    }
+
+    /* CRT-ish overlays */
+    .grid{
+      position:fixed; inset:0; pointer-events:none; z-index:-3;
+      background-image:
+        linear-gradient(rgba(255,26,26,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,26,26,.05) 1px, transparent 1px);
+      background-size: 56px 56px;
+      opacity:.22;
+    }
+    .scanlines{
+      position:fixed; inset:0; pointer-events:none; z-index:20;
+      background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,.45) 50%);
+      background-size:100% 2px;
+      opacity:.55;
+      mix-blend-mode: soft-light;
+    }
+    .vignette{
+      position:fixed; inset:0; pointer-events:none; z-index:19;
+      background: radial-gradient(circle at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.92) 100%);
+    }
+    .grain{
+      position:fixed; inset:0; pointer-events:none; z-index:18;
+      opacity:.10;
+      background:
+        repeating-radial-gradient(circle at 20% 30%, rgba(255,255,255,.08) 0 1px, transparent 1px 4px),
+        repeating-radial-gradient(circle at 80% 70%, rgba(255,255,255,.05) 0 1px, transparent 1px 5px);
+      mix-blend-mode: overlay;
+      animation: grain 1.6s steps(2,end) infinite;
+    }
+    @keyframes grain{
+      0%{transform:translate(0,0)}
+      25%{transform:translate(-1%,1%)}
+      50%{transform:translate(1%,-1%)}
+      75%{transform:translate(1%,1%)}
+      100%{transform:translate(0,0)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .grain{animation:none}
+      .glitch, .pulse, .sweep { animation:none !important; }
+    }
+
+    /* Main */
+    .wrap{
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding: 20px;
+      cursor:pointer;
+    }
+    .card{
+      width:min(980px, 96vw);
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(0,0,0,.76) 0, rgba(0,0,0,.45) 100%);
+      box-shadow: 0 0 60px rgba(255,26,26,.10);
+      position:relative;
+      overflow:hidden;
+      padding: 22px;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(90deg, transparent, rgba(255,26,26,.20), transparent);
+      transform: translateX(-70%);
+      animation: sweep 3.1s infinite;
+      opacity:.65;
+      pointer-events:none;
+    }
+    @keyframes sweep{
+      0%{transform:translateX(-80%)}
+      55%{transform:translateX(120%)}
+      100%{transform:translateX(120%)}
+    }
+
+    .top{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      padding-bottom: 12px;
+      border-bottom:1px solid rgba(255,26,26,.18);
+      margin-bottom: 14px;
+      font-family:"Share Tech Mono",monospace;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      color:var(--muted);
+      font-size: 12px;
+    }
+    .stamp{
+      border:2px solid var(--red);
+      color:var(--red);
+      padding: 8px 12px;
+      transform: rotate(-6deg);
+      opacity:.9;
+      background: rgba(255,26,26,.05);
+      mix-blend-mode: lighten;
+    }
+
+    .title{
+      margin-top: 14px;
+      font-family:"Share Tech Mono",monospace;
+      text-transform:uppercase;
+      letter-spacing:6px;
+      font-size: 44px;
+      line-height: 1.05;
+      color: #fff;
+      position:relative;
+      display:inline-block;
+    }
+    .title.glitch::before,
+    .title.glitch::after{
+      content: attr(data-txt);
+      position:absolute; left:0; top:0;
+      opacity:.0;
+      pointer-events:none;
+    }
+    .title.glitch::before{
+      transform: translate(2px,0);
+      color:#ff6a6a;
+      text-shadow: -1px 0 rgba(255,26,26,.55);
+    }
+    .title.glitch::after{
+      transform: translate(-2px,0);
+      color:#ffd1d1;
+      text-shadow: 1px 0 rgba(255,26,26,.35);
+    }
+    .title.glitch.on::before,
+    .title.glitch.on::after{
+      opacity:.9;
+      animation: clip 120ms infinite;
+    }
+    @keyframes clip{
+      0%{ clip-path: inset(0 0 68% 0); }
+      50%{ clip-path: inset(42% 0 0 0); }
+      100%{ clip-path: inset(10% 0 40% 0); }
+    }
+
+    .subtitle{
+      margin-top: 10px;
+      color:#e7c7c7;
+      font-size: 14px;
+      line-height: 1.85;
+      max-width: 860px;
+    }
+
+    .box{
+      margin-top: 18px;
+      border:1px dashed rgba(255,26,26,.30);
+      background: rgba(0,0,0,.55);
+      padding: 14px;
+      font-family:"Share Tech Mono",monospace;
+      font-size: 12px;
+      letter-spacing:1px;
+      color:#d7aaaa;
+      line-height: 1.7;
+    }
+
+    .cta{
+      margin-top: 16px;
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+    }
+    .btn{
+      border:1px solid rgba(255,26,26,.35);
+      background: rgba(255,26,26,.10);
+      color:#fff;
+      padding: 10px 12px;
+      font-family:"Share Tech Mono",monospace;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      cursor:pointer;
+      transition:.2s;
+    }
+    .btn:hover{
+      background: rgba(255,26,26,.18);
+      box-shadow: 0 0 18px rgba(255,26,26,.22);
+    }
+    .hint{
+      color:var(--muted);
+      font-family:"Share Tech Mono",monospace;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      font-size: 11px;
+    }
+
+    .footer{
+      margin-top: 14px;
+      border-top:1px solid rgba(255,26,26,.14);
+      padding-top: 12px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      font-family:"Share Tech Mono",monospace;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      font-size: 11px;
+      color:#6f4b4b;
+    }
+
+    .pulse{
+      display:inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 16px rgba(255,26,26,.6);
+      animation: pulse 1.6s infinite;
+      vertical-align: -1px;
+      margin-right: 8px;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity: 1; }
+      50%{ transform: scale(1.35); opacity:.75; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grid"></div>
+  <div class="grain"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <div class="wrap" id="clickArea" title="Clique para abrir o documento">
+    <section class="card" aria-label="Tela de erro MONARCAS">
+      <div class="top">
+        <div>
+          <span class="pulse"></span>
+          falha crítica // roteamento indisponível
+        </div>
+        <div class="stamp">ERRO</div>
+      </div>
+
+      <div class="title glitch" id="t" data-txt="MONARCAS">MONARCAS</div>
+
+      <p class="subtitle">
+        O índice solicitado foi deslocado do diretório principal. Um destino alternativo foi encontrado em
+        <span style="color:#ffae00; font-family:'Share Tech Mono',monospace; letter-spacing:2px;">FORMATO PDF</span>.
+        Clique para abrir o documento.
+      </p>
+
+      <div class="box" id="box">
+        > Código: MON-404-REF<br>
+        > Estado: instável<br>
+        > Fallback: DOCUMENTO_COMPILADO<br>
+        > Destino: <span style="color:#ffae00;">monarcas.pdf</span><br>
+        > Ação: clique/enter para continuar
+      </div>
+
+      <div class="cta">
+        <button class="btn" id="openBtn" type="button">abrir documento</button>
+        <div class="hint">Atalho: Enter • (Esc não responde)</div>
+      </div>
+
+      <div class="footer">
+        <div>log: parcial</div>
+        <div>integridade: 11%</div>
+        <div>modo: encaminhamento</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Troque aqui para o caminho/URL real do seu PDF
+    const PDF_URL = "projeto_ncm_topsecret";
+
+    const clickArea = document.getElementById("clickArea");
+    const openBtn = document.getElementById("openBtn");
+    const title = document.getElementById("t");
+    const box = document.getElementById("box");
+
+    function go(){
+      // Redireciona para o PDF
+      window.location.href = PDF_URL;
+    }
+
+    // Clique na tela ou no botão
+    clickArea.addEventListener("click", go);
+    openBtn.addEventListener("click", (e) => { e.stopPropagation(); go(); });
+
+    // Enter abre também
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") go();
+    });
+
+    // Glitch ocasional no título
+    setInterval(() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (Math.random() > 0.84) {
+        title.classList.add("on");
+        box.style.borderColor = "rgba(255,26,26,.55)";
+        setTimeout(() => {
+          title.classList.remove("on");
+          box.style.borderColor = "rgba(255,26,26,.30)";
+        }, 160 + Math.random() * 200);
+      }
+    }, 420);
+  </script>
+</body>
+</html>

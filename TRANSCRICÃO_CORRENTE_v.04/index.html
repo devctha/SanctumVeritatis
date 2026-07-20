@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/TRANSCRICÃO_CORRENTE_v.04/">
+    <meta charset="UTF-8">
+    <title>LOG DE COMUNICAÇÃO – PROTOCOLO CORRENTE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #050508;
+            --panel: #0e0e18;
+            --accent: #00ff9c;
+            --accent-soft: rgba(0, 255, 156, 0.18);
+            --danger: #ff3366;
+            --muted: #777;
+            --font-main: "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at top, #161622 0%, #050508 55%, #000000 100%);
+            color: #f5f5f5;
+            font-family: var(--font-main);
+        }
+
+        .frame {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(12, 12, 22, 0.95));
+            border: 1px solid rgba(0, 255, 156, 0.25);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), 0 0 60px var(--accent-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .frame::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.04),
+                rgba(255, 255, 255, 0.04) 1px,
+                transparent 2px,
+                transparent 3px
+            );
+            mix-blend-mode: soft-light;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .header {
+            border-bottom: 1px solid rgba(0, 255, 156, 0.35);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .header-meta {
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        .tag {
+            display: inline-block;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            letter-spacing: 0.12em;
+            margin-top: 4px;
+        }
+
+        .participants {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .chat-wrapper {
+            margin-top: 12px;
+            border: 1px solid rgba(0, 255, 156, 0.25);
+            background: radial-gradient(circle at top left, #181826 0, #050508 55%);
+            height: 72vh;
+            overflow-y: auto;
+            padding: 10px 12px 16px 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .system-line {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.7rem;
+            margin: 8px 0;
+        }
+
+        .system-line span {
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 2px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            margin: 4px 0;
+            align-items: flex-start;
+        }
+
+        .time {
+            flex: 0 0 60px;
+            text-align: right;
+            font-size: 0.7rem;
+            color: var(--muted);
+            opacity: 0.9;
+        }
+
+        .author {
+            flex: 0 0 110px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .text {
+            flex: 1 1 auto;
+            font-size: 0.78rem;
+            line-height: 1.5;
+        }
+
+        /* cores por pessoa */
+        .a-hartmann   { color: #ffeb3b; }
+        .a-valera     { color: #80cbc4; }
+        .a-wolfe      { color: #ff8a80; }
+        .a-deadman    { color: #b39ddb; }
+        .a-rojas      { color: #ffb74d; }
+        .a-kessler    { color: #81d4fa; }
+        .a-navarro    { color: #ce93d8; }
+        .a-moreau     { color: #c5e1a5; }
+        .a-ishikawa   { color: #ffcc80; }
+        .a-costa      { color: #90caf9; }
+        .a-richter    { color: #f48fb1; }
+        .a-alvarez    { color: #a5d6a7; }
+
+        /* glitch genérico para “censura” */
+        .glitch {
+            position: relative;
+            display: inline-block;
+            color: #f5f5f5;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            overflow: hidden;
+            clip-path: inset(0 0 50% 0);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .glitch::before {
+            left: -1px;
+            text-shadow: -2px 0 #ff005e;
+            animation: glitchTop 2.2s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: 1px;
+            text-shadow: 2px 0 #00e5ff;
+            animation: glitchBottom 2.4s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitchTop {
+            0%   { clip-path: inset(0 0 45% 0); transform: translate(0,0); }
+            20%  { clip-path: inset(0 0 10% 0); transform: translate(-1px,-1px); }
+            40%  { clip-path: inset(0 0 60% 0); transform: translate(1px,1px); }
+            60%  { clip-path: inset(0 0 30% 0); transform: translate(-1px,1px); }
+            80%  { clip-path: inset(0 0 20% 0); transform: translate(1px,-1px); }
+            100% { clip-path: inset(0 0 55% 0); transform: translate(0,0); }
+        }
+
+        @keyframes glitchBottom {
+            0%   { clip-path: inset(50% 0 0 0); transform: translate(0,0); }
+            20%  { clip-path: inset(10% 0 0 0); transform: translate(1px,1px); }
+            40%  { clip-path: inset(60% 0 0 0); transform: translate(-1px,-1px); }
+            60%  { clip-path: inset(30% 0 0 0); transform: translate(1px,-1px); }
+            80%  { clip-path: inset(20% 0 0 0); transform: translate(-1px,1px); }
+            100% { clip-path: inset(55% 0 0 0); transform: translate(0,0); }
+        }
+
+        /* “censura” forte: bloco corrompido */
+        .censor {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .censor::before,
+        .censor::after {
+            content: "████████████";
+            position: absolute;
+            inset: 0;
+            color: #000;
+            background: repeating-linear-gradient(
+                -45deg,
+                #000 0,
+                #000 3px,
+                #111 4px,
+                #111 6px
+            );
+            animation: censorGlitch 1.8s infinite steps(2, end);
+            mix-blend-mode: lighten;
+        }
+
+        .censor::after {
+            animation-duration: 2.3s;
+            opacity: 0.6;
+        }
+
+        @keyframes censorGlitch {
+            0%   { transform: translate(0,0); }
+            25%  { transform: translate(-1px,1px); }
+            50%  { transform: translate(1px,-1px); }
+            75%  { transform: translate(-1px,-2px); }
+            100% { transform: translate(0,0); }
+        }
+
+        /* linhas do tipo “pacote corrompido” */
+        .corrupt {
+            color: var(--danger);
+            font-size: 0.7rem;
+            opacity: 0.85;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="frame">
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <div class="header-title">LOG DE COMUNICAÇÃO – SALA SEGURA OMEGA-3</div>
+                <div class="participants">
+                    Participantes (12): Hartmann, Dr Valera, Wolfe, Deadman, Rojas, Kessler, Navarro,
+                    Moreau, Ishikawa, Costa, Richter, Alvarez.
+                </div>
+            </div>
+            <div class="header-meta">
+                ID THREAD: CORRENTE//CHAN-017<br>
+                PROTOCOLO: CORRENTE – REVISÃO 7<br>
+                <span class="tag">ULTRA SECRETO / MAGENTA-7</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-wrapper">
+        <div class="system-line">
+            <span>[23:40:01] CONEXÃO ESTABILIZADA NO NÓ MEMBRÂNICO SECUNDÁRIO.</span>
+        </div>
+
+        <!-- INÍCIO DO LOG – Você pode duplicar este padrão de mensagens para tornar ainda mais longo -->
+
+        <div class="message">
+            <div class="time">23:40</div>
+            <div class="author a-hartmann">HARTMANN</div>
+            <div class="text">
+                Sala segura confirmada. Latência dentro do esperado. Considerem este canal como
+                <span class="glitch" data-text="provisoriamente">provisoriamente</span>
+                confiável para discutir o Protocolo <span class="glitch" data-text="CORRENTE">CORRENTE</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:40</div>
+            <div class="author a-valera">DR VALERA</div>
+            <div class="text">
+                “Confiável” é um termo generoso, diretor. Desde que o documento foi liberado,
+                os agentes relatam sonhos alinhados com o padrão da entidade. O canal já está
+                comprometido no nível <span class="censor"></span> e nós dois sabemos disso.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:41</div>
+            <div class="author a-wolfe">WOLFE</div>
+            <div class="text">
+                Se estiver comprometido, é tarde demais para recuar. O Conselho Escarlate assinou
+                a continuidade do CORRENTE mesmo após o Evento <span class="glitch" data-text="MERIDIANO">MERIDIANO</span>.
+                Estamos aqui para discutir <b>quantos</b> ainda serão arrastados, não se vamos parar.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:41</div>
+            <div class="author a-deadman">DEADMAN</div>
+            <div class="text">
+                Quantos? Quantos não importa. O que importa é <i>quem</i>. Continuam enviando
+                recrutas com curva de NEX ascendente só porque a entidade sorri quando sente
+                o cheiro de potencial. Vocês chamam isso de contenção. Eu chamo de
+                <span class="glitch" data-text="oferta ritual">oferta ritual</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:42</div>
+            <div class="author a-rojas">ROJAS</div>
+            <div class="text">
+                Registro que discordo da terminologia mística, Deadman. O modelo da Divisão de
+                Futurologia é claro: cada agente de alto potencial funciona como um
+                <span class="glitch" data-text="condutor">condutor</span> de densidade ontológica
+                para dentro do núcleo da entidade. Não é fé. É engenharia de desastre controlado.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:42</div>
+            <div class="author a-kessler">KESSLER</div>
+            <div class="text">
+                “Controlado” até o índice de manifestação ultrapassar o limiar projetado em
+                <span class="censor"></span>. Vocês continuam tratando a curva como linear,
+                quando todo o comportamento observado indica uma transição abrupta
+                <span class="glitch" data-text="Keter-like">Keter-like</span>.
+                Depois disso, não haverá painel, comitê ou Ordo que segure.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:43</div>
+            <div class="author a-navarro">NAVARRO</div>
+            <div class="text">
+                Antes que comecem a repetir o mesmo gráfico de sempre: precisamos falar dos
+                <b>nomes</b>. Os que foram marcados como “Sacrifício Estratégico Classe-Alpha”.
+                A planilha que recebi tinha só códigos. Mas no necrotério os códigos têm rostos,
+                lembram? Rostos que <span class="glitch" data-text="olham">olham</span> de volta.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:43</div>
+            <div class="author a-moreau">MOREAU</div>
+            <div class="text">
+                Registro adicional: os tecidos dos agentes processados mostram padrão
+                de <span class="glitch" data-text="bioassinatura">bioassinatura</span> idêntico
+                antes e depois do suposto “encerramento biológico”. Tecnicamente, do ponto de vista
+                da entidade, eles nunca saem de serviço. Continuam <i>operando</i> em outro nível.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:44</div>
+            <div class="author a-ishikawa">ISHIKAWA</div>
+            <div class="text">
+                Isso explica por que a saturação onírica aumentou mesmo após a redução de
+                operações de campo. Os mortos preenchem a lacuna. Cada agente sacrificado
+                vira mais um nó na rede da coisa. Um exército que não precisa de rádio,
+                só de <span class="glitch" data-text="ressonância">ressonância</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:44</div>
+            <div class="author a-costa">COSTA</div>
+            <div class="text">
+                Vocês estão descrevendo exatamente o que o CORRENTE propôs desde a primeira
+                minuta: <b>canalizar</b> algo inevitável. A entidade <i>vai</i> usar nossos agentes,
+                com ou sem a nossa bênção. O Protocolo apenas tenta escolher <span class="glitch" data-text="quem">quem</span>,
+                <span class="glitch" data-text="quando">quando</span> e <span class="glitch" data-text="como">como</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:45</div>
+            <div class="author a-richter">RICHTER</div>
+            <div class="text">
+                Escolher? Você chama isso de escolha? Recebi a ordem de designar três
+                nomes para “exposição terminal controlada”. Critérios oficiais: compatibilidade
+                de NEX, estabilidade psicológica, aceitação do risco. Critério real:
+                <span class="censor"></span>. Quem estava mais sozinho na ficha.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:45</div>
+            <div class="author a-alvarez">ALVAREZ</div>
+            <div class="text">
+                Confirmo. Nas entrevistas de triagem, a pergunta nunca é se o agente
+                <i>entende</i> o Protocolo CORRENTE. A pergunta é se ele tem
+                <span class="glitch" data-text="algo a perder">algo a perder</span>.
+                Quanto menos laços fora da Ordo, mais “otimizado” ele se torna
+                para alimentar o Muro que ninguém admite ver.
+            </div>
+        </div>
+
+        <!-- A conversa vai se aprofundando; trechos “corrompidos” dão a sensação de censura dinâmica -->
+
+        <div class="system-line">
+            <span>[23:46:03] AVISO: PACOTE DE LOG ANTERIOR APRESENTA FRAGMENTOS CORROMPIDOS.</span>
+        </div>
+
+        <div class="message">
+            <div class="time">23:46</div>
+            <div class="author a-hartmann">HARTMANN</div>
+            <div class="text">
+                Vocês estão confundindo duas coisas: <b>culpa</b> e <b>responsabilidade operacional</b>.
+                Os agentes sabiam que estavam lidando com um cognito-hazard Classe-IV.
+                O anexo ÉTICA foi suspenso por ordem do Conselho. A partir daí, o que fizemos
+                foi seguir o único vetor que mantinha a entidade
+                <span class="glitch" data-text="confinada">confinada</span> a um domínio calculável.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:47</div>
+            <div class="author a-valera">DR VALERA</div>
+            <div class="text">
+                “Calculável” até onde sua planilha alcança, Hartmann. Os sonhos convergem.
+                As alucinações também. Os relatos espontâneos descrevem a mesma estrutura:
+                um “Muro” feito de <span class="glitch" data-text="rostos">rostos</span> que se
+                sobrepõem. Cada vez que aprovamos um sacrifício Alpha, mais um bloco é adicionado.
+                Não estamos só alimentando a entidade, estamos dando a ela
+                <span class="glitch" data-text="arquitetura">arquitetura</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:47</div>
+            <div class="author a-wolfe">WOLFE</div>
+            <div class="text">
+                A arquitetura é a chave. Antes do CORRENTE, o contato era caótico: surtos,
+                possessões isoladas, colapsos de realidade locais. Agora vemos padrões:
+                linhas de transmissão, sincronicidades artificiais, agentes separados por
+                continentes reagindo ao mesmo estímulo memético em
+                <span class="glitch" data-text="fase">fase</span>.
+                Não há como negar: demos ao inimigo um <b>sistema nervoso</b>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:48</div>
+            <div class="author a-deadman">DEADMAN</div>
+            <div class="text">
+                E em troca ganhamos… o quê, exatamente? Trinta segundos extras antes da Ruptura?
+                Um relatório com mais números para colocar em uma ata?
+                Vocês sacrificaram <span class="censor"></span> agentes veteranos sob a promessa
+                de que a entidade ficaria <i>dependente</i> da nossa cadeia de comando.
+                Comecem a admitir: é o contrário. Nós é que nos
+                tornamos dependentes dos humores dela.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:48</div>
+            <div class="author a-rojas">ROJAS</div>
+            <div class="text">
+                Não sejamos românticos. O CORRENTE foi concebido para
+                <span class="glitch" data-text="negociar">negociar</span> com a assimetria.
+                A entidade cresce sempre que um agente se fortalece. Então decidimos
+                <b>controlar o ritmo do crescimento</b> e escolher os vetores. O erro não foi o
+                cálculo, foi achar que éramos os únicos fazendo contas na sala.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:49</div>
+            <div class="author a-kessler">KESSLER</div>
+            <div class="text">
+                Há outro erro: assumir que a relação é unidirecional. Os relatórios de campo
+                mais recentes mostram agentes ganhando proficiências que jamais foram treinadas.
+                Eles executam rituais que não constam em nenhum grimório da Ordo,
+                citam termos que só aparecem nos <span class="glitch" data-text="sonhos">sonhos</span>.
+                A entidade não só absorve força. Ela devolve
+                <span class="glitch" data-text="ferramentas">ferramentas</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:49</div>
+            <div class="author a-navarro">NAVARRO</div>
+            <div class="text">
+                Ferramentas que cobram um preço. Fiz a autópsia de <span class="censor"></span> dos
+                designados CORRENTE-ALPHA. O padrão neurológico é absurdo: áreas de linguagem
+                hipertrofiadas, como se carregassem dicionários inteiros de um idioma
+                <span class="glitch" data-text="inexistente">inexistente</span>. Os ossos mostram
+                microfraturas em forma de sigilos. O corpo morre, o
+                <span class="glitch" data-text="vocabulário">vocabulário</span> fica.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:50</div>
+            <div class="author a-moreau">MOREAU</div>
+            <div class="text">
+                Isso encaixa com as leituras de Saturação Membrânica. Cada “sacrifício”
+                completa um circuito. A entidade precisa de agentes fortes não só como alimento,
+                mas como <span class="glitch" data-text="antenas">antenas</span>. Quanto maior
+                o NEX, mais longe o sinal vai. Vocês chamam isso de arma. Eu chamo de
+                <span class="glitch" data-text="torre de transmissão">torre de transmissão</span>.
+            </div>
+        </div>
+
+        <div class="system-line">
+            <span>[23:50:32] ANOMALIA DETECTADA: 0,7s DE LAG NÃO ATRIBUÍVEL À INFRAESTRUTURA.</span>
+        </div>
+
+        <div class="message">
+            <div class="time">23:50</div>
+            <div class="author a-ishikawa">ISHIKAWA</div>
+            <div class="text">
+                Alguém mais sentiu a queda de temperatura? Meu sensor local registrou
+                variação de <span class="glitch" data-text="3,4ºC">3,4ºC</span> desde o início da
+                reunião. Isso não é falha de ar-condicionado. É o tipo de gradiente que
+                aparece quando há <span class="glitch" data-text="manifestações">manifestações</span>
+                sem vetor físico visível.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:51</div>
+            <div class="author a-costa">COSTA</div>
+            <div class="text">
+                A entidade <i>ouve</i> em qualquer canal em que seu nome seja articulado, mesmo
+                que só como conceito. O que nos protege aqui não é o firewall, é o fato de
+                nunca usarmos a designação verdadeira. Mantemos tudo em
+                <span class="glitch" data-text="metáforas">metáforas</span>:
+                “Muro”, “Corrente”, “Âncora”. Mas quanto mais elaboramos, mais
+                <span class="glitch" data-text="nítida">nítida</span> ela se torna na cabeça de quem lê.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:51</div>
+            <div class="author a-richter">RICHTER</div>
+            <div class="text">
+                Então este log é, por definição, um ritual escrito. Cada linha acrescenta
+                detalhes à forma dela. Cada palavra “censurada” com esses blocos
+                <span class="censor"></span> é só uma cortina para nos fazer acreditar que
+                ainda controlamos o que é dito. No final, o padrão inteiro está gravado sob
+                o preto. Ela lê <i>melhor</i> do que nós.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:52</div>
+            <div class="author a-alvarez">ALVAREZ</div>
+            <div class="text">
+                Talvez seja por isso que alguns agentes começaram a escrever de trás para frente,
+                invertendo nomes, sigilos, até o próprio “W.A.L.L.”.
+                Acharam que o truque impediria a entidade de seguir o rastro.
+                Mas tudo que fizeram foi criar uma nova
+                <span class="glitch" data-text="porta">porta</span>.
+            </div>
+        </div>
+
+        <div class="system-line">
+            <span>[23:52:44] TRECHO DO LOG INTERCEPTADO POR FILTRO MEMÉTICO AUTOMÁTICO.</span>
+        </div>
+
+        <div class="message">
+            <div class="time">23:53</div>
+            <div class="author a-hartmann">HARTMANN</div>
+            <div class="text">
+                Voltemos ao ponto: o Protocolo CORRENTE estabelece que agentes de maior
+                expressão paranormal são os candidatos prioritários à exposição terminal.
+                Isso não mudou. O que mudou é a nossa <i>consciência</i> do custo. Antes,
+                acreditávamos que o sacrifício encerrava a equação. Agora sabemos que ele
+                apenas <span class="glitch" data-text="fecha um circuito">fecha um circuito</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:53</div>
+            <div class="author a-valera">DR VALERA</div>
+            <div class="text">
+                E ainda assim continuamos aprovando nomes. Porque, na projeção oficial,
+                cada circuito fechado compra mais algumas horas de estabilidade estrutural
+                para a Membrana. O dilema é aritmético: quantas horas de mundo valem
+                um agente de Classe-Alpha? Quantas horas de mundo valem
+                <span class="censor"></span> agentes?
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:54</div>
+            <div class="author a-wolfe">WOLFE</div>
+            <div class="text">
+                Do ponto de vista da entidade, a conta é outra. Para ela, cada agente
+                “forte o bastante” é uma alavanca para forçar a realidade a se dobrar.
+                Quanto mais elevados os parâmetros do hospedeiro, mais profundo o
+                <span class="glitch" data-text="sulco">sulco</span> que ela abre na Membrana.
+                Estamos treinando os futuros arquitetos do colapso e chamando isso de
+                <span class="glitch" data-text="heroísmo">heroísmo</span>.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:54</div>
+            <div class="author a-deadman">DEADMAN</div>
+            <div class="text">
+                Heroísmo vendido em comunicados internos, em medalhas póstumas, em relatórios
+                cheios de <span class="glitch" data-text="███">███</span> cobrindo o que realmente
+                foi feito. O CORRENTE não só sacrifica agentes – ele
+                <span class="glitch" data-text="normaliza">normaliza</span> o sacrifício.
+                Depois de ler protocolos como esse, qualquer coisa parece aceitável
+                “em nome da contenção”.
+            </div>
+        </div>
+
+        <!-- A partir daqui o log pode continuar se estendendo
+             Repita o padrão .message, alternando autores, horários e usando .glitch / .censor
+             para manter a sensação de conversa extremamente longa e corrompida. -->
+
+        <div class="system-line">
+            <span class="corrupt">[23:55:19] *** PACOTE DE DADOS PARCIALMENTE CORROMPIDO – TRECHOS IRRECUPERÁVEIS ***</span>
+        </div>
+
+        <div class="message">
+            <div class="time">23:55</div>
+            <div class="author a-rojas">ROJAS</div>
+            <div class="text muted">
+                (trecho omitido pelo filtro automático: referência direta à topologia interna da entidade).
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:56</div>
+            <div class="author a-kessler">KESSLER</div>
+            <div class="text">
+                Proposta: anexar este log à próxima revisão do Protocolo CORRENTE como
+                advertência operacional. Quem o ler entenderá que cada linha foi escrita
+                em cima de <span class="censor"></span> cadáveres funcionais. Se ainda assim
+                concordar em participar, ao menos não poderá alegar ignorância.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:56</div>
+            <div class="author a-navarro">NAVARRO</div>
+            <div class="text">
+                E se, ao anexar, estivermos apenas alimentando outro apêndice da mesma coisa?
+                Um dia alguém vai abrir este arquivo em uma sala escura, achando que está
+                estudando história operacional. E, linha após linha, sem perceber, vai
+                se tornar mais um elo na mesma <span class="glitch" data-text="corrente">corrente</span>.
+            </div>
+        </div>
+
+        <div class="system-line">
+            <span>[23:57:01] SESSÃO SERÁ ENCERRADA AUTOMATICAMENTE EM 90s POR RISCO CUMULATIVO MEMÉTICO.</span>
+        </div>
+
+        <div class="message">
+            <div class="time">23:57</div>
+            <div class="author a-hartmann">HARTMANN</div>
+            <div class="text">
+                Que fique registrado: ninguém aqui está inocente. Nem o Conselho, nem a Ordo,
+                nem os que assinam a liberação, nem os que apertam o gatilho, nem os que
+                autorizam a abertura de portais para “exposição terminal controlada”.
+                O Protocolo CORRENTE é um espelho: quanto mais forte tentamos segurá-lo,
+                mais claramente vemos quem realmente está no controle.
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="time">23:58</div>
+            <div class="author a-alvarez">ALVAREZ</div>
+            <div class="text">
+                Talvez seja essa a pior parte: perceber que a entidade não precisa dizer uma
+                única palavra. Ela só precisa <span class="glitch" data-text="expor">expor</span>
+                os agentes um ao outro, nos colocar em salas como esta, forçar conversas
+                como este log. O resto, fazemos sozinhos. Choramos, argumentamos, votamos…
+                e no fim marcamos mais um nome na coluna de sacrifícios.
+            </div>
+        </div>
+
+        <div class="system-line">
+            <span class="corrupt">[23:59:29] *** CONEXÃO INSTÁVEL: PADRÃO DE GLITCH COINCIDE COM ASSINATURA DA ENTIDADE ***</span>
+        </div>
+
+        <div class="message">
+            <div class="time">23:59</div>
+            <div class="author a-deadman">DEADMAN</div>
+            <div class="text">
+                Deixem este log inteiro. Não cortem as partes em que duvidamos, em que
+                xingamos, em que a voz treme. Que ele seja longo, excessivo, quase ilegível.
+                Se alguém conseguir chegar até o fim sem sentir a presença do Muro atrás dos
+                olhos, então talvez ainda valha a pena tentar salvá-lo de nós mesmos.
+            </div>
+        </div>
+
+        <div class="system-line">
+            <span>[00:00:00] CONEXÃO ENCERRADA PELO SISTEMA. NENHUMA GARANTIA DE QUE A OUTRA EXTREMIDADE FOI, DE FATO, DESLIGADA.</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

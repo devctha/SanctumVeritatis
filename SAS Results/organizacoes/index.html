@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/organizacoes/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • ORGANIZAÇÕES • ÍNDICE GLOBAL</title>
+
+  <style>
+    :root{
+      --bg0:#04030a;
+      --bg1:#07081b;
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted: rgba(219,234,254,.68);
+      --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.20);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .11;
+      --noise-opacity: .07;
+      --flicker: .050;
+      --shake: 0px;
+
+      --fz: 13px;
+      --fzSmall: 12px;
+      --pad: 12px;
+      --padSmall: 10px;
+      --line: 1.55;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 16% 12%, rgba(168,85,247,.12), transparent 62%),
+        radial-gradient(900px 650px at 86% 22%, rgba(56,189,248,.10), transparent 60%),
+        radial-gradient(900px 650px at 50% 92%, rgba(34,197,94,.08), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, rgba(239,68,68,.10), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(12px, 2vw, 20px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(10px, 1.6vw, 16px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.03), transparent 22%, rgba(0,255,255,.02) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.50;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.60) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-7px,5px,0); }
+      50%{ transform: translate3d(6px,-5px,0); }
+      75%{ transform: translate3d(-4px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 4.4s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      33%{ opacity: calc(var(--flicker) * 1.2); }
+      34%{ opacity: 0; }
+      58%{ opacity: calc(var(--flicker) * .8); }
+      59%{ opacity: 0; }
+      88%{ opacity: calc(var(--flicker) * 1.45); }
+      89%{ opacity: 0; }
+    }
+
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,24,.72), rgba(5,6,10,.44));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: 15px;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: var(--fzSmall);
+      color: rgba(219,234,254,.74);
+      line-height:1.35;
+      max-width: 100ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.24);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowB);
+      font-size: 12px;
+      color: rgba(219,234,254,.82);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(34,197,94,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(168,85,247,.16);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:1;
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn, .ghost, .field{
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      user-select:none;
+    }
+    .btn{
+      cursor:pointer;
+      border: 1px solid rgba(251,146,60,.22);
+      background: linear-gradient(180deg, rgba(251,146,60,.18), rgba(239,68,68,.10));
+      color: #ffe4c7;
+      box-shadow: var(--shadowO), var(--shadowR);
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .ghost{
+      cursor:pointer;
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      box-shadow: var(--shadowB);
+    }
+
+    .field{
+      border: 1px solid rgba(168,85,247,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      min-width: min(380px, 90vw);
+      text-transform:none;
+      letter-spacing: 0;
+      box-shadow: var(--shadowV);
+    }
+    .field::placeholder{ color: rgba(219,234,254,.40); }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      padding: 14px;
+      min-height:0;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+      display:grid;
+      gap: 12px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.25);
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.06);
+      overflow:hidden;
+      min-width: 0;
+    }
+
+    .cardHead{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      min-width: 0;
+    }
+    .cardHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.82);
+      min-width: 0;
+    }
+
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.28);
+      font-size: 12px;
+      color: rgba(219,234,254,.62);
+      white-space:nowrap;
+    }
+    .chip b{ color: rgba(219,234,254,.90); }
+
+    .cardBody{ padding: var(--pad); min-width:0; }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      padding: var(--padSmall);
+      box-shadow: var(--shadowV);
+      min-width:0;
+    }
+    .kv .k{
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.55);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .kv .v{
+      margin-top:6px;
+      font-size: var(--fz);
+      line-height: var(--line);
+      color: rgba(219,234,254,.82);
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+
+    .ok{ color: rgba(34,197,94,.90); text-shadow: var(--shadowG); }
+    .warn{ color: rgba(251,146,60,.90); text-shadow: var(--shadowO); }
+    .danger{ color: rgba(239,68,68,.90); text-shadow: var(--shadowR); }
+
+    /* List block */
+    .block{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      box-shadow: var(--shadowV);
+      overflow:hidden;
+    }
+    .blockTop{
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.12);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .blockTop .label{
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.62);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      min-width: 0;
+    }
+    .blockTop .count{
+      font-size: 12px;
+      color: rgba(219,234,254,.72);
+      white-space:nowrap;
+    }
+    .blockScroll{
+      max-height: 56vh;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+    }
+    table{
+      width:100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td{
+      text-align:left;
+      padding: 10px;
+      border-bottom: 1px solid rgba(56,189,248,.12);
+      vertical-align:top;
+      font-size: var(--fz);
+      line-height: 1.45;
+      color: rgba(219,234,254,.82);
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+    th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.72);
+      background: rgba(2,6,23,.60);
+      backdrop-filter: blur(6px);
+    }
+    tr:last-child td{ border-bottom:none; }
+
+    .colName{ width: 44%; }
+    .colType{ width: 22%; }
+    .colStatus{ width: 14%; }
+    .colNote{ width: auto; }
+
+    .badge{
+      display:inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.14);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.72);
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .badge.ok{ border-color: rgba(34,197,94,.25); background: rgba(34,197,94,.08); }
+    .badge.warn{ border-color: rgba(251,146,60,.25); background: rgba(251,146,60,.08); }
+
+    /* Compact mode */
+    body.compact{
+      --fz: 12px;
+      --fzSmall: 11px;
+      --pad: 10px;
+      --padSmall: 9px;
+      --line: 1.45;
+    }
+
+    /* Intro */
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+    }
+    .introCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.90), rgba(3,6,18,.64));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 48px rgba(168,85,247,.18),
+        0 0 56px rgba(56,189,248,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .introTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      font-size: 13px;
+    }
+    .introTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+      max-width: 110ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      font-size: 12px;
+      min-height: 200px;
+      max-height: min(52vh, 560px);
+      overflow:auto;
+    }
+    .introActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.62);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,.25);
+      background: rgba(251,146,60,.08);
+      color: #ffe4c7;
+    }
+  </style>
+</head>
+
+<body class="compact">
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="title">S.A.S / Índice • Organizações</div>
+          <div class="sub">
+            Catálogo de organizações paranormais ativas (mínimo: <span class="ok">149+</span>).<br/>
+            Maiores blocos: <span class="warn">Ordo Realitas</span>, <span class="warn">Sanctum Veritatis</span>, <span class="warn">Companhia 978</span>, <span class="warn">Fundação Prometheus</span>, <span class="warn">Shadow Company</span> e <span class="warn">Caçadores</span>.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>FILE: ORGS_INDEX • STATUS: LIVE</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <div class="k">INDEX / ACTIVE ENTITIES</div>
+        <div class="actions">
+          <input class="field" id="q" placeholder="Buscar (ex.: Sanctum, caça, helix, 978)..." />
+          <button class="ghost" id="btnClear" type="button">Limpar</button>
+          <button class="btn" id="btnRead" type="button">Modo: COMPACTO</button>
+        </div>
+      </div>
+
+      <div class="wrap" id="scrollArea">
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Maiores organizações</div>
+            <div class="chips">
+              <span class="chip"><b>Total</b> 6</span>
+              <span class="chip"><b>Tipo</b> blocos globais</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="grid2">
+              <div class="kv">
+                <div class="k">Blocos</div>
+                <div class="v">
+                  <span class="badge warn">Ordo Realitas</span>
+                  <span class="badge warn">Sanctum Veritatis</span>
+                  <span class="badge warn">Companhia 978</span>
+                  <span class="badge warn">Fundação Prometheus</span>
+                  <span class="badge warn">Shadow Company</span>
+                  <span class="badge warn">Caçadores</span>
+                </div>
+              </div>
+              <div class="kv">
+                <div class="k">Notas rápidas</div>
+                <div class="v">
+                  “Maiores” aqui significa: alcance, capacidade de recrutamento, infraestrutura e influência em outros grupos.
+                  Nem sempre significa “mais ética” ou “mais segura”.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Lista (149+)</div>
+            <div class="chips">
+              <span class="chip"><b>Filtro</b> texto</span>
+              <span class="chip"><b>Status</b> ativo</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="block">
+              <div class="blockTop">
+                <div class="label">Organizações ativas (rolagem interna)</div>
+                <div class="count" id="count">—</div>
+              </div>
+              <div class="blockScroll">
+                <table id="tbl">
+                  <thead>
+                    <tr>
+                      <th class="colName">Organização</th>
+                      <th class="colType">Tipo</th>
+                      <th class="colStatus">Status</th>
+                      <th class="colNote">Nota</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="kv" style="margin-top:10px">
+              <div class="k">Observação</div>
+              <div class="v">
+                Alguns nomes são “fachadas” (uma mesma entidade pode operar sob múltiplas marcas).
+                Outros são nomes antigos preservados por ritual (um nome velho pode ser uma chave).
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução Organizações">
+    <div class="introCard">
+      <div class="introTop">
+        <div>
+          <div class="h">SARCOPHAGUS / OPEN FILE</div>
+          <div class="s">
+            Índice global de organizações ativas. Digite no campo de busca para filtrar instantaneamente.<br/>
+            Atalho: <code>R</code> alterna Compacto/Legível.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>MODE: INDEX</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="introActions">
+        <button class="btn" id="btnEnter" type="button">Entrar</button>
+        <div class="kbd">Atalhos: <code>Enter</code> entrar • <code>R</code> leitura • <code>Esc</code> limpar busca</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const typebox = document.getElementById("typebox");
+    const q = document.getElementById("q");
+    const btnClear = document.getElementById("btnClear");
+    const btnEnter = document.getElementById("btnEnter");
+    const btnRead = document.getElementById("btnRead");
+    const tbody = document.querySelector("#tbl tbody");
+    const count = document.getElementById("count");
+
+    let compact = true;
+
+    // ====== DATA (149+) ======
+    // Nota: lista original para o seu universo. Pode editar/renomear.
+    const ORGS = [
+      // 6 maiores (fixas)
+      {name:"Ordo Realitas", type:"Ordem / Rede", status:"ATIVO", note:"Bloco global; doutrina e contenção."},
+      {name:"Sanctum Veritatis", type:"Ordem / Conselho", status:"ATIVO", note:"Verdade como procedimento; Oraculum + Conselho."},
+      {name:"Companhia 978", type:"Corporação", status:"ATIVO", note:"Operações e protocolos; pragmatismo extremo."},
+      {name:"Fundação Prometheus", type:"Fundação", status:"ATIVO", note:"Pesquisa, contenção e tecnologia anômala."},
+      {name:"Shadow Company", type:"Paramilitar", status:"ATIVO", note:"Recuperação de ativos, silêncio e extração."},
+      {name:"Caçadores", type:"Frente / Rede", status:"ATIVO", note:"Células de caça; variam em ética e método."},
+
+      // já citadas antes no seu universo
+      {name:"Conselho Escarlate", type:"Conselho", status:"ATIVO", note:"Política paranormal, catálogo e veto."},
+      {name:"DRACONIA", type:"Diretoria", status:"ATIVO", note:"Exploração e resposta; linguagem como risco."},
+      {name:"Esquadra 0", type:"Unidade", status:"ATIVO", note:"Negação/limpeza; documentos “somem”."},
+      {name:"Inexo 034", type:"Unidade", status:"ATIVO", note:"Operações de perímetro; logística agressiva."},
+      {name:"Setentrional Bureau", type:"Bureau", status:"ATIVO", note:"Cartografia de zonas frias e corredores."},
+      {name:"Prometheus Directorate", type:"Diretoria", status:"ATIVO", note:"Foco em contingência e firebreak."},
+      {name:"Arquivistas do Véu", type:"Arquivo", status:"ATIVO", note:"Catalogação viva; memória institucional."},
+      {name:"Departamento Mnemônico", type:"Departamento", status:"ATIVO", note:"Contenção de memória e ruído semântico."},
+      {name:"Coalizão de Selo", type:"Coalizão", status:"ATIVO", note:"Interdição, trancas e decretos."},
+      {name:"Consórcio Helix", type:"Consórcio", status:"ATIVO", note:"Biotecnologia anômala; ética negociada."},
+      {name:"Núcleo Umbra", type:"Núcleo", status:"ATIVO", note:"Operações sem assinatura; rastro minimizado."},
+      {name:"Oráculo de Níquel", type:"Observatório", status:"ATIVO", note:"Prognose e ruído; custo de acerto alto."},
+      {name:"Liga Meridian", type:"Liga", status:"ATIVO", note:"Logística; movimenta recurso antes do evento."},
+      {name:"Observatório Hécate", type:"Observatório", status:"ATIVO", note:"Céu como campo; leitura de padrões astral."},
+      {name:"Diretoria Caligo", type:"Diretoria", status:"ATIVO", note:"Interdição e negação; ‘neblina’ administrativa."},
+      {name:"Câmara de Sal", type:"Câmara", status:"ATIVO", note:"Rituais de preservação; sal como selo."},
+      {name:"Rede Cérbero", type:"Rede", status:"ATIVO", note:"Captura/interceptação; três portas."},
+      {name:"Instituto Palimpsesto", type:"Instituto", status:"ATIVO", note:"Reescrita de relatório e realidade (alto risco)."},
+      {name:"Cartório de Ossos", type:"Cartório", status:"ATIVO", note:"Burocracia de custódia; selos e registros."},
+      {name:"Bastião Noctiluca", type:"Bastião", status:"ATIVO", note:"Luz como ferramenta; protocolo de ‘lampiras’."},
+      {name:"Círculo de Contenção Áurea", type:"Círculo", status:"ATIVO", note:"Contenção por símbolo; ‘ouro frio’."},
+      {name:"Hospício de Ferro", type:"Instituição", status:"ATIVO", note:"Triagem e contenção clínica; limiar ético."},
+      {name:"Expedição Boreal", type:"Expedição", status:"ATIVO", note:"Operações no frio anômalo; rotas instáveis."},
+      {name:"Sindicância Arcana", type:"Sindicância", status:"ATIVO", note:"Corregedoria; investiga as outras organizações."},
+      {name:"Vigilância Liminal", type:"Vigilância", status:"ATIVO", note:"Guardiões de passagem; juramento acima de comando."},
+
+      // ===== 120+ organizações adicionais (originais) =====
+      {name:"Diretoria Kestrel", type:"Diretoria", status:"ATIVO", note:"Resposta rápida; controle de dano civil."},
+      {name:"Oficina Brasa", type:"Oficina", status:"ATIVO", note:"Ferramentas anômalas e reparo de relíquias."},
+      {name:"Consulado da Vela", type:"Consulado", status:"ATIVO", note:"Diplomacia entre grupos; acordos frágeis."},
+      {name:"Companhia Pálida (Civil)", type:"Empresa", status:"ATIVO", note:"Fachada logística; rotas e cobertura."},
+      {name:"Ordem do Limiar Azul", type:"Ordem", status:"ATIVO", note:"Estudos de membrana; interações do outro lado."},
+      {name:"Diretoria Arconte", type:"Diretoria", status:"ATIVO", note:"Auditorias internas e sanções."},
+      {name:"Núcleo Sismógrafo", type:"Núcleo", status:"ATIVO", note:"Detecta micro-rupturas e precursores."},
+      {name:"Liga dos Vigias", type:"Liga", status:"ATIVO", note:"Observação comunitária; alertas locais."},
+      {name:"Câmara do Vidro Negro", type:"Câmara", status:"ATIVO", note:"Análise de reflexos, sombras e duplicações."},
+      {name:"Ofício do Selo Branco", type:"Ofício", status:"ATIVO", note:"Selagem e tranca ritual."},
+      {name:"Instituto Arcádia", type:"Instituto", status:"ATIVO", note:"Pesquisa e educação clandestina."},
+      {name:"Rede Asfódelos", type:"Rede", status:"ATIVO", note:"Resgate de civis e desaparecidos."},
+      {name:"Companhia Rookline", type:"Companhia", status:"ATIVO", note:"Extração; ‘entra e sai sem fazer história’."},
+      {name:"Diretoria Lâmina", type:"Diretoria", status:"ATIVO", note:"Operações de corte de membrana (alto risco)."},
+      {name:"Bastião de Cobre", type:"Bastião", status:"ATIVO", note:"Abrigo e custódia; refúgio de testemunhas."},
+      {name:"Instituto Mnemosyne", type:"Instituto", status:"ATIVO", note:"Tratamento e mitigação de dano memético."},
+      {name:"Agência Boreal-7", type:"Agência", status:"ATIVO", note:"Operações em regiões remotas; suporte aéreo."},
+      {name:"Coalizão do Giz", type:"Coalizão", status:"ATIVO", note:"Protocolos de marcação e perímetro."},
+      {name:"Núcleo Lantern", type:"Núcleo", status:"ATIVO", note:"Iluminação tática e rastreio de eco."},
+      {name:"Ordem do Rosário Cinza", type:"Ordem", status:"ATIVO", note:"Liturgia de contenção; votos e selos."},
+      {name:"Câmara de Cera", type:"Câmara", status:"ATIVO", note:"Lacres, contratos e ‘juramentos físicos’."},
+      {name:"Consórcio Vant", type:"Consórcio", status:"ATIVO", note:"Contratos; compra e venda de ‘serviço’."},
+      {name:"Frente Cão Preto", type:"Frente", status:"ATIVO", note:"Caça independente; reputação instável."},
+      {name:"Departamento de Ruído", type:"Departamento", status:"ATIVO", note:"Interferência, rádio e linguagens hostis."},
+      {name:"Observatório Meridian-Delta", type:"Observatório", status:"ATIVO", note:"Monitoramento de zonas costeiras."},
+      {name:"Diretoria Íris", type:"Diretoria", status:"ATIVO", note:"Contra-inteligência; infiltração de infiltrações."},
+      {name:"Arquivos Falcão", type:"Arquivo", status:"ATIVO", note:"Cópias redundantes; preservação de evidência."},
+      {name:"Ordem da Tranca Fria", type:"Ordem", status:"ATIVO", note:"Interdição e isolamento prolongado."},
+      {name:"Companhia Nadir", type:"Companhia", status:"ATIVO", note:"Operações subterrâneas e túneis antigos."},
+      {name:"Núcleo Marrow", type:"Núcleo", status:"ATIVO", note:"Investigação anatômica anômala."},
+      {name:"Instituto de Cartografia Cega", type:"Instituto", status:"ATIVO", note:"Mapas que não podem ser vistos diretamente."},
+      {name:"Câmara do Norte Invertido", type:"Câmara", status:"ATIVO", note:"Bússolas e direções ‘vivas’."},
+      {name:"Agência Prisma", type:"Agência", status:"ATIVO", note:"Contenção por espectro/luz; análise óptica."},
+      {name:"Ordem do Eco Curto", type:"Ordem", status:"ATIVO", note:"Protocolos de fala mínima; silêncio tático."},
+      {name:"Liga do Chumbo", type:"Liga", status:"ATIVO", note:"Blindagem e transporte de relíquias."},
+      {name:"Coalizão da Ponte", type:"Coalizão", status:"ATIVO", note:"Travessias controladas; escoltas."},
+      {name:"Diretoria Rastro", type:"Diretoria", status:"ATIVO", note:"Forense paranormal; rastros não-humanos."},
+      {name:"Instituto Sépia", type:"Instituto", status:"ATIVO", note:"Fotografia/registro; imagens como prova."},
+      {name:"Núcleo Paladino", type:"Núcleo", status:"ATIVO", note:"Defesa de civis; resposta a cultos."},
+      {name:"Companhia Arpão", type:"Companhia", status:"ATIVO", note:"Operações aquáticas; contenção costeira."},
+      {name:"Bastião de Vidro", type:"Bastião", status:"ATIVO", note:"Quarentena e isolamento anômalo."},
+      {name:"Oficina Quent", type:"Oficina", status:"ATIVO", note:"Reparo de equipamentos sob ruído."},
+      {name:"Agência Cifrador", type:"Agência", status:"ATIVO", note:"Criptografia e contra-memética escrita."},
+      {name:"Ordem do Luto Branco", type:"Ordem", status:"ATIVO", note:"Ritos de encerramento; ‘fim seguro’."},
+      {name:"Rede de Abrigos N-13", type:"Rede", status:"ATIVO", note:"Abrigos discretos; evacuação."},
+      {name:"Diretoria Quorum", type:"Diretoria", status:"ATIVO", note:"Governança e arbitragem entre células."},
+      {name:"Instituto Carmina", type:"Instituto", status:"ATIVO", note:"Voz/canto; risco memético musical."},
+      {name:"Câmara do Relógio Mudo", type:"Câmara", status:"ATIVO", note:"Temporalidade e “atrasos”."},
+      {name:"Frente de Caça R-9", type:"Frente", status:"ATIVO", note:"Caçadores regionais; disciplina variável."},
+      {name:"Coalizão da Asa", type:"Coalizão", status:"ATIVO", note:"Transporte aéreo e extração."},
+      {name:"Diretoria Pêndulo", type:"Diretoria", status:"ATIVO", note:"Análise de recorrência; padrões cíclicos."},
+      {name:"Núcleo Sutura", type:"Núcleo", status:"ATIVO", note:"Remendo de membrana; ‘costura’ ritual."},
+      {name:"Instituto Célere", type:"Instituto", status:"ATIVO", note:"Resposta rápida; triagem de evento."},
+      {name:"Agência Runa", type:"Agência", status:"ATIVO", note:"Linguagem simbólica; selos e inscrições."},
+      {name:"Ordem do Fio de Seda", type:"Ordem", status:"ATIVO", note:"Infiltração e ligação de redes."},
+      {name:"Companhia Silt", type:"Companhia", status:"ATIVO", note:"Escavação; solo como arquivo."},
+      {name:"Bastião Salmoura", type:"Bastião", status:"ATIVO", note:"Armazenamento; conservação."},
+      {name:"Rede Vesper", type:"Rede", status:"ATIVO", note:"Operações noturnas; cobertura social."},
+      {name:"Diretoria Hemisfério", type:"Diretoria", status:"ATIVO", note:"Coordenação continental; logística."},
+      {name:"Instituto Ícaro", type:"Instituto", status:"ATIVO", note:"Risco alto; experimentação controlada."},
+      {name:"Câmara de Prata Fosca", type:"Câmara", status:"ATIVO", note:"Reflexos, espelhos, duplicação."},
+      {name:"Agência Tálamo", type:"Agência", status:"ATIVO", note:"Sono, sonho, invasão onírica."},
+      {name:"Ordem do Casulo", type:"Ordem", status:"ATIVO", note:"Quarentena; transformação contida."},
+      {name:"Coalizão do Horizonte", type:"Coalizão", status:"ATIVO", note:"Monitoramento de fronteira e litoral."},
+      {name:"Núcleo Ferrugem", type:"Núcleo", status:"ATIVO", note:"Infra antiga; túneis e máquinas."},
+      {name:"Companhia Kline", type:"Companhia", status:"ATIVO", note:"Transporte e custódia; burocracia limpa."},
+      {name:"Diretoria Aranha", type:"Diretoria", status:"ATIVO", note:"Rede de informantes; fios invisíveis."},
+      {name:"Instituto Eclíptico", type:"Instituto", status:"ATIVO", note:"Eventos de sombra; eclipses e cortes."},
+      {name:"Câmara do Sussurro", type:"Câmara", status:"ATIVO", note:"Linguagem hostil; salas seguras."},
+      {name:"Agência Sentinel", type:"Agência", status:"ATIVO", note:"Vigília; alarmes e observação."},
+      {name:"Ordem do Ferro Manso", type:"Ordem", status:"ATIVO", note:"Disciplina; contenção por hábito."},
+      {name:"Rede Oração Curta", type:"Rede", status:"ATIVO", note:"Células religiosas; interdição."},
+      {name:"Frente Cinza", type:"Frente", status:"ATIVO", note:"Resposta a desastre; contenção ampla."},
+      {name:"Diretoria Orbe", type:"Diretoria", status:"ATIVO", note:"Análise e governança de relíquias."},
+      {name:"Instituto Pétreo", type:"Instituto", status:"ATIVO", note:"Geomancia e estruturas."},
+      {name:"Agência Vetor", type:"Agência", status:"ATIVO", note:"Contágio e transmissão anômala."},
+      {name:"Ordem da Porta Nula", type:"Ordem", status:"ATIVO", note:"Portas falsas; cancelamento de passagem."},
+      {name:"Companhia Chassis", type:"Companhia", status:"ATIVO", note:"Equipamentos; blindagem e transporte."},
+      {name:"Rede Palheta", type:"Rede", status:"ATIVO", note:"Artes e propaganda; memética social."},
+      {name:"Câmara do Ponto Cego", type:"Câmara", status:"ATIVO", note:"Camuflagem; invisibilidade operacional."},
+      {name:"Instituto Maré", type:"Instituto", status:"ATIVO", note:"Fenômenos costeiros e ilhas."},
+      {name:"Agência Lumen", type:"Agência", status:"ATIVO", note:"Luz, espectro, rastreio."},
+      {name:"Ordem do Voto", type:"Ordem", status:"ATIVO", note:"Juramentos; contratos e punições."},
+      {name:"Diretoria Bramble", type:"Diretoria", status:"ATIVO", note:"Zonas verdes; flora anômala."},
+      {name:"Rede Papiro", type:"Rede", status:"ATIVO", note:"Arquivos móveis; cópias humanas."},
+      {name:"Câmara do Nexo Alto", type:"Câmara", status:"ATIVO", note:"Triagem de itens/locais com alto NEX."},
+      {name:"Instituto Dorsal", type:"Instituto", status:"ATIVO", note:"Estruturas vivas; ‘espinha’ de locais."},
+      {name:"Agência Harrow", type:"Agência", status:"ATIVO", note:"Interrogatório; verdade e contraverdade."},
+      {name:"Ordem da Cinza Viva", type:"Ordem", status:"ATIVO", note:"Fogo sem chama; limpeza ritual."},
+      {name:"Companhia Galope", type:"Companhia", status:"ATIVO", note:"Mobilidade; deslocamento rápido."},
+      {name:"Rede Candeeiro", type:"Rede", status:"ATIVO", note:"Apoio urbano; pontos de luz."},
+      {name:"Câmara de Silício", type:"Câmara", status:"ATIVO", note:"Tecnologia anômala; hardware hostil."},
+      {name:"Instituto Quórum", type:"Instituto", status:"ATIVO", note:"Regras e governança; ‘voto’ como selo."},
+      {name:"Agência Bússola", type:"Agência", status:"ATIVO", note:"Navegação em áreas distorcidas."},
+      {name:"Ordem do Selo Raso", type:"Ordem", status:"ATIVO", note:"Selos temporários e contenção rápida."},
+      {name:"Diretoria Ressonância", type:"Diretoria", status:"ATIVO", note:"NEX e vibração; leitura de campo."},
+      {name:"Rede Dobra", type:"Rede", status:"ATIVO", note:"Rotas alternativas; ‘atalhos’."},
+      {name:"Câmara do Latido", type:"Câmara", status:"ATIVO", note:"Caça e rastreio; perfis agressivos."},
+      {name:"Instituto Válvula", type:"Instituto", status:"ATIVO", note:"Pressão de realidade; contenção de pico."},
+      {name:"Agência Sable", type:"Agência", status:"ATIVO", note:"Intermediação; rotas e favores."},
+      {name:"Ordem do Espelho Opaco", type:"Ordem", status:"ATIVO", note:"Anti-reflexo; contra-duplicação."},
+      {name:"Diretoria Consenso", type:"Diretoria", status:"ATIVO", note:"Padronização de relatórios e linguagem."},
+      {name:"Rede Tríade", type:"Rede", status:"ATIVO", note:"Operações em três células; redundância."},
+      {name:"Câmara do Lacre", type:"Câmara", status:"ATIVO", note:"Cera, selo, contrato físico."},
+      {name:"Instituto Nimbo", type:"Instituto", status:"ATIVO", note:"Neblina; baixa visibilidade e ruído."},
+      {name:"Agência Harpia", type:"Agência", status:"ATIVO", note:"Extração rápida; recuperação."},
+      {name:"Ordem do Relatório", type:"Ordem", status:"ATIVO", note:"Doutrina documental; ‘papel’ como arma."},
+      {name:"Diretoria Umbel", type:"Diretoria", status:"ATIVO", note:"Conexões subterrâneas; ‘umbigo’ de cidade."},
+      {name:"Rede de Caça S-11", type:"Rede", status:"ATIVO", note:"Caçadores; padronização parcial."},
+      {name:"Câmara do Juramento", type:"Câmara", status:"ATIVO", note:"Testemunho; verdade forçada."},
+      {name:"Instituto de Ruptura Controlada", type:"Instituto", status:"ATIVO", note:"Teste de membrana com limites."},
+      {name:"Agência Vértice", type:"Agência", status:"ATIVO", note:"Pontos de convergência; eventos recorrentes."},
+
+      // fechando com mais nomes (para garantir 149+)
+      {name:"Diretoria Aegis", type:"Diretoria", status:"ATIVO", note:"Proteção e escolta de ativos."},
+      {name:"Rede Pórtico", type:"Rede", status:"ATIVO", note:"Portas e travessias; rotas seguras."},
+      {name:"Câmara do Silêncio", type:"Câmara", status:"ATIVO", note:"Protocolos de fala mínima; quarentena memética."},
+      {name:"Instituto Prisma Negro", type:"Instituto", status:"ATIVO", note:"Fenômenos de luz negativa."},
+      {name:"Agência Curvatura", type:"Agência", status:"ATIVO", note:"Distorção espacial; áreas dobradas."},
+      {name:"Ordem do Nó", type:"Ordem", status:"ATIVO", note:"Rituais de amarração; vínculos."},
+      {name:"Companhia Estribo", type:"Companhia", status:"ATIVO", note:"Apoio tático; deslocamento."},
+      {name:"Rede Dossel", type:"Rede", status:"ATIVO", note:"Cobertura social; camadas de fachada."},
+      {name:"Câmara do Sinal", type:"Câmara", status:"ATIVO", note:"Rádio e comunicação em ruído."},
+      {name:"Instituto Palco", type:"Instituto", status:"ATIVO", note:"Memética social; eventos públicos."},
+      {name:"Agência Fenda", type:"Agência", status:"ATIVO", note:"Resposta a ruptura; triagem rápida."},
+      {name:"Ordem do Olho Baixo", type:"Ordem", status:"ATIVO", note:"Vigilância discreta; observar sem tocar."}
+    ];
+
+    function render(list){
+      tbody.innerHTML = list.map(o => `
+        <tr>
+          <td>${o.name}</td>
+          <td>${o.type}</td>
+          <td><span class="badge ok">ATIVO</span></td>
+          <td>${o.note}</td>
+        </tr>
+      `).join("");
+      count.textContent = `${list.length} exibidas • ${ORGS.length} no índice`;
+    }
+
+    function filterNow(){
+      const term = q.value.trim().toLowerCase();
+      if (!term){ render(ORGS); return; }
+      const out = ORGS.filter(o =>
+        (o.name + " " + o.type + " " + o.note).toLowerCase().includes(term)
+      );
+      render(out);
+    }
+
+    function updateReadMode(){
+      document.body.classList.toggle("compact", compact);
+      btnRead.textContent = "Modo: " + (compact ? "COMPACTO" : "LEGÍVEL");
+    }
+
+    function closeIntro(){
+      intro.style.display = "none";
+      q.focus();
+    }
+
+    const boot = [
+      "[S.A.S] file: organizacoes.html",
+      "[S.A.S] type: index (active orgs)",
+      "",
+      "ORGANIZAÇÕES ATIVAS: 149+",
+      "Maiores: Ordo Realitas • Sanctum Veritatis • Companhia 978 • Fundação Prometheus • Shadow Company • Caçadores",
+      "",
+      "Digite para filtrar."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        setTimeout(tick, 25 + Math.random()*80);
+      };
+      tick();
+    }
+
+    // events
+    q.addEventListener("input", filterNow);
+    btnClear.addEventListener("click", () => { q.value=""; filterNow(); q.focus(); });
+    btnRead.addEventListener("click", () => { compact = !compact; updateReadMode(); });
+
+    window.addEventListener("keydown", (e) => {
+      if (intro.style.display !== "none") {
+        if (e.key === "Enter") closeIntro();
+        return;
+      }
+      if (e.key === "Escape") { q.value=""; filterNow(); q.blur(); }
+      if (e.key.toLowerCase() === "r") { compact = !compact; updateReadMode(); }
+      if (e.key === "/" ) { e.preventDefault(); q.focus(); }
+    });
+
+    btnEnter.addEventListener("click", closeIntro);
+
+    // init
+    typeBoot();
+    render(ORGS);
+    updateReadMode();
+  </script>
+</body>
+</html>

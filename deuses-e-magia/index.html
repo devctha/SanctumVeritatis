@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/deuses-e-magia/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deuses & Magia — A Queda de Valyria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{--gold:#c9a84c;--gold-lt:#e8d5a3;--gold-dk:#8a6e2f;--crimson:#8b0000;--ember:#ff4500;--bg:#080808;--bg2:#0e0a07;--bg3:#100808;--text:#d4c5a9;--text-lt:#f0e8d8;--border:rgba(201,168,76,.22);--blue:#7ea2d1;--red:#b45149;--green:#6ba06b}
+    html{scroll-behavior:smooth}
+    body{font-family:"EB Garamond",serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0805}::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px}
+    #ember-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px;background:linear-gradient(to bottom,rgba(8,8,8,.98),rgba(8,8,8,0));backdrop-filter:blur(4px);border-bottom:1px solid var(--border);transition:background .3s}
+    nav.scrolled{background:rgba(8,5,3,.97)}
+    .nav-logo,.nav-back,.nav-links a,.toc a,.eyebrow,.section-eyebrow,.card-tag,.footer-link,.mini-label,.ritual-step,.toc-title,.key-label{font-family:"Cinzel",serif}
+    .nav-logo{font-size:.82rem;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;text-decoration:none}
+    .nav-back{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.5rem;transition:color .2s}
+    .nav-back:hover,.nav-links a:hover,.toc a:hover,.footer-link:hover{color:var(--gold)}
+    .nav-back svg{width:14px;height:14px}.nav-links{display:flex;gap:1.5rem;list-style:none}.nav-links a{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-decoration:none;transition:color .2s}
+    @media(max-width:980px){.nav-links{display:none}}
+    #hero{position:relative;min-height:72vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 5rem;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 120% 60% at 50% 110%,rgba(139,0,0,.44) 0%,transparent 70%),radial-gradient(ellipse 85% 45% at 50% 100%,rgba(255,69,0,.16) 0%,transparent 65%),url("https://images2.alphacoders.com/132/1329016.jpg") center/cover no-repeat;filter:brightness(.28) saturate(1.08)}
+    .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,8,.28) 0%,rgba(8,8,8,0) 30%,rgba(8,8,8,.82) 82%,rgba(8,8,8,1) 100%)}
+    .hero-inner{position:relative;z-index:2;max-width:980px}.eyebrow{font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;opacity:0;animation:fadeUp 1s .25s forwards}
+    .hero-title{font-family:"Cinzel Decorative",serif;font-size:clamp(2.1rem,6vw,4.8rem);line-height:1.07;color:#fff;text-shadow:0 0 70px rgba(201,168,76,.45),0 5px 20px rgba(0,0,0,.8);opacity:0;animation:fadeUp 1s .5s forwards}
+    .hero-title span{display:block;background:linear-gradient(135deg,var(--gold-lt) 0%,var(--gold) 52%,#a07a20 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-divider{width:180px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:1.8rem auto;opacity:0;animation:fadeUp 1s .8s forwards}
+    .hero-desc{font-size:clamp(1rem,2vw,1.16rem);line-height:1.9;color:var(--text-lt);max-width:780px;margin:0 auto;font-style:italic;opacity:0;animation:fadeUp 1s 1.05s forwards}
+    .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.2rem;opacity:0;animation:fadeUp 1s 1.25s forwards}
+    .btn-primary,.btn-secondary{font-family:"Cinzel",serif;font-size:.73rem;letter-spacing:.2em;text-transform:uppercase;padding:.9rem 2.1rem;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0 100%);transition:.2s;font-weight:700}
+    .btn-primary{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:#0a0805}.btn-secondary{border:1px solid var(--gold-dk);color:var(--gold);background:transparent}.btn-primary:hover,.btn-secondary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+    .stripe{background:linear-gradient(90deg,transparent,rgba(201,168,76,.08),transparent);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.58rem 0;overflow:hidden;position:relative;z-index:1}.stripe-inner{font-family:"Cinzel",serif;font-size:.6rem;letter-spacing:.35em;color:rgba(201,168,76,.45);text-transform:uppercase;white-space:nowrap;display:inline-block;animation:marquee 34s linear infinite}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 255px;gap:2.5rem;max-width:1360px;margin:0 auto;padding:0 2rem 6rem;position:relative;z-index:1}@media(max-width:1080px){.layout{grid-template-columns:1fr}.toc-wrap{display:none}} main{min-width:0}.toc-wrap{position:relative}.toc{position:sticky;top:86px;background:rgba(10,7,5,.82);border:1px solid var(--border);padding:1.45rem}.toc-title{font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);padding-bottom:.8rem;border-bottom:1px solid var(--border);margin-bottom:1rem}.toc ul{list-style:none;display:flex;flex-direction:column;gap:.65rem}.toc a{font-size:.64rem;letter-spacing:.1em;color:rgba(212,197,169,.66);text-decoration:none;line-height:1.45;display:flex;gap:.5rem}.toc-num{color:var(--gold-dk);font-size:.58rem;flex-shrink:0;margin-top:.1rem}
+    section{padding-top:4.8rem}.section-header{margin-bottom:2rem}.section-eyebrow{font-size:.64rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}.section-title{font-family:"Cinzel Decorative",serif;font-size:clamp(1.55rem,3.4vw,2.7rem);line-height:1.15;color:var(--gold-lt)}.section-line{width:100%;height:1px;margin-top:1rem;background:linear-gradient(to right,var(--gold-dk),transparent)}.lead{font-size:1.06rem;line-height:1.92;color:var(--text);max-width:960px}.lead strong,.card p strong,.table td strong,.callout strong,.ritual-box strong,.faq-a strong{color:var(--gold-lt);font-weight:600}
+    .cards-2,.cards-3,.cards-4{display:grid;gap:1.2rem;margin-top:1.75rem}.cards-2{grid-template-columns:repeat(2,1fr)}.cards-3{grid-template-columns:repeat(3,1fr)}.cards-4{grid-template-columns:repeat(4,1fr)}@media(max-width:980px){.cards-4{grid-template-columns:repeat(2,1fr)}.cards-3{grid-template-columns:1fr 1fr}.cards-2{grid-template-columns:1fr}}@media(max-width:720px){.cards-2,.cards-3,.cards-4{grid-template-columns:1fr}}
+    .card{border:1px solid var(--border);background:rgba(10,7,5,.76);padding:1.45rem;transition:transform .25s,border-color .25s,background .25s}.card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.42);background:rgba(201,168,76,.06)}.card-tag{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}.card h3{font-family:"Cinzel",serif;font-size:1rem;line-height:1.35;color:var(--gold-lt);margin-bottom:.75rem}.card p{font-size:.97rem;line-height:1.75;color:var(--text)}
+    .callout{border-left:3px solid;padding:1.15rem 1.35rem;margin-top:1.35rem;font-size:1rem;line-height:1.75}.callout.warning{border-color:var(--gold);background:rgba(201,168,76,.06)}.callout.info{border-color:#7090c8;background:rgba(110,140,190,.06)}.callout.danger{border-color:#b14a42;background:rgba(139,0,0,.08)}.callout-label{display:block;font-family:"Cinzel",serif;font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;margin-bottom:.45rem}.warning .callout-label{color:var(--gold)} .info .callout-label{color:#8ab0e0} .danger .callout-label{color:#cf7468}
+    .table{margin-top:1rem;border:1px solid var(--border);overflow:auto}.table table{width:100%;border-collapse:collapse;min-width:760px}.table th{font-family:"Cinzel",serif;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);background:rgba(201,168,76,.06);padding:.9rem 1rem;text-align:left;border-bottom:1px solid var(--gold-dk)}.table td{padding:.9rem 1rem;font-size:.94rem;line-height:1.6;color:var(--text);border-bottom:1px solid rgba(201,168,76,.08);vertical-align:top}.table tr:hover td{background:rgba(201,168,76,.04)}
+    .rituals{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.7rem}@media(max-width:980px){.rituals{grid-template-columns:1fr}}.ritual-box{border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1.2rem}.ritual-step{font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}.ritual-box h4{font-family:"Cinzel",serif;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.45rem}.ritual-box p{font-size:.96rem;line-height:1.68;color:var(--text)}
+    .myth-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:1.2rem;margin-top:1.7rem}@media(max-width:980px){.myth-grid{grid-template-columns:1fr}}.myth-panel{border:1px solid var(--border);background:rgba(10,7,5,.8);padding:1.35rem}.myth-panel h3{font-family:"Cinzel",serif;font-size:1rem;line-height:1.3;color:var(--gold-lt);margin-bottom:.75rem}.myth-panel p{font-size:1rem;line-height:1.82;color:var(--text);margin-bottom:.9rem}.key-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}@media(max-width:640px){.key-grid{grid-template-columns:1fr}}.key{border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1rem}.key-label{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.35rem}.key p{font-size:.95rem;line-height:1.6;color:var(--text)}
+    .faq-list{display:flex;flex-direction:column;gap:.7rem;margin-top:1.8rem}.faq-item{border:1px solid var(--border);background:rgba(201,168,76,.03);overflow:hidden}.faq-q{width:100%;background:none;border:none;text-align:left;padding:1.1rem 1.3rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;cursor:pointer;color:var(--gold-lt);font-family:"Cinzel",serif;font-size:.82rem;letter-spacing:.08em}.faq-icon{width:18px;height:18px;border:1px solid var(--gold-dk);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.9rem;transition:.3s;flex-shrink:0}.faq-item.open .faq-icon{transform:rotate(45deg);background:rgba(201,168,76,.15)}.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}.faq-item.open .faq-a{max-height:320px}.faq-a p{border-top:1px solid var(--border);padding:1rem 1.3rem 1.25rem;font-size:.98rem;line-height:1.78;color:var(--text)}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+    footer{background:#050303;border-top:1px solid var(--border);padding:2.4rem 2rem;text-align:center;position:relative;z-index:1}.footer-logo{font-family:"Cinzel Decorative",serif;font-size:.92rem;color:var(--gold);letter-spacing:.12em;margin-bottom:.65rem}footer p{font-size:.77rem;line-height:1.72;color:rgba(212,197,169,.4)}.footer-link{color:rgba(201,168,76,.48);text-decoration:none}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}@keyframes marquee{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+  </style>
+</head>
+<body>
+<canvas id="ember-canvas"></canvas>
+<nav id="navbar">
+  <a href="index" class="nav-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Voltar ao Início</a>
+  <a href="#hero" class="nav-logo">Deuses & Magia</a>
+  <ul class="nav-links">
+    <li><a href="#panteoes">Panteões</a></li>
+    <li><a href="#magia">Magia</a></li>
+    <li><a href="#cultos">Cultos</a></li>
+    <li><a href="#deus-dragao">Deus Dragão</a></li>
+    <li><a href="#rituais">Rituais</a></li>
+  </ul>
+</nav>
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">A Queda de Valyria — Fé, Profecia e Fogo</p>
+    <h1 class="hero-title">Deuses, magia e <span>o Deus Dragão</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">Um guia para jogadores novos entenderem quais deuses existem no mundo, como a magia deve funcionar na mesa, quais cultos cabem na campanha e como o Deus Dragão se torna a força religiosa central da sua Valyria.</p>
+    <div class="hero-actions">
+      <a href="#panteoes" class="btn-primary">Ler o Guia</a>
+      <a href="ficha" class="btn-secondary">Voltar à Ficha</a>
+    </div>
+  </div>
+</section>
+<div class="stripe"><span class="stripe-inner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fé dos Sete &nbsp;&#x2014;&nbsp; Deuses Antigos &nbsp;&#x2014;&nbsp; Senhor da Luz &nbsp;&#x2014;&nbsp; Deus Afogado &nbsp;&#x2014;&nbsp; Muitos-Rostos &nbsp;&#x2014;&nbsp; Quatorze Chamas &nbsp;&#x2014;&nbsp; Sonhos de fogo &nbsp;&#x2014;&nbsp; magia de sangue &nbsp;&#x2014;&nbsp; velas de vidro &nbsp;&#x2014;&nbsp; Deus Dragão &nbsp;&#x2014;&nbsp; sangue e chama &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div class="layout">
+  <main>
+    <section id="panteoes" class="reveal">
+      <div class="section-header"><p class="section-eyebrow">Panorama</p><h2 class="section-title">Os deuses do mundo</h2><div class="section-line"></div></div>
+      <p class="lead">No mundo de <em>As Crônicas de Gelo e Fogo</em>, religião não é só cor de cenário: ela organiza costumes, juramentos, legitimidade e até a maneira como as pessoas interpretam o sobrenatural. Para a sua mesa, isso é essencial, porque a fé de um personagem diz <strong>como ele entende o fogo, a morte, o sangue, os dragões e o destino</strong>.</p>
+      <div class="cards-3">
+        <div class="card"><div class="card-tag">Westeros do Sul</div><h3>Fé dos Sete</h3><p>A Fé dos Sete é a religião dominante do sul de Westeros e organiza boa parte da moral, da cavalaria, do casamento, da legitimidade nobre e da vida devocional dos reinos meridionais.</p></div>
+        <div class="card"><div class="card-tag">Norte</div><h3>Deuses Antigos</h3><p>Os deuses antigos são entidades sem nome ligadas a riachos, florestas e pedra, e seu culto segue forte no Norte, entre cranogmanos e para lá da Muralha.</p></div>
+        <div class="card"><div class="card-tag">Ilhas</div><h3>Deus Afogado</h3><p>O Deus Afogado é cultuado pelos ironborn e está ligado ao mar, à dureza, ao saque e à identidade marítima das Ilhas de Ferro.</p></div>
+      </div>
+      <div class="cards-3">
+        <div class="card"><div class="card-tag">Fogo</div><h3>R'hllor</h3><p>O Senhor da Luz é uma fé fortemente associada a fogo, visões, sacrifício e conflito cósmico entre luz e trevas, sendo uma das religiões mais claramente conectadas a fenômenos mágicos.</p></div>
+        <div class="card"><div class="card-tag">Morte</div><h3>Muitos-Rostos</h3><p>Em Essos, o Deus de Muitas Faces oferece uma leitura da morte como uma única divindade vista por povos diferentes sob nomes diferentes.</p></div>
+        <div class="card"><div class="card-tag">Valyria</div><h3>Quatorze Chamas</h3><p>Para Valyria, o elemento religioso mais útil em campanha é a ligação entre os valirianos, os dragões e as Quatorze Chamas, a cadeia vulcânica da península onde os dragões foram descobertos.</p></div>
+      </div>
+      <div class="callout warning"><span class="callout-label">Uso em mesa</span>Seu personagem não precisa ser devoto fanático, mas precisa saber <strong>de onde vem sua reverência</strong>: do fogo, da tradição da casa, da terra, do mar, do dever cavaleiresco ou da morte.</div>
+    </section>
+
+    <section id="magia" class="reveal">
+      <div class="section-header"><p class="section-eyebrow">Magia</p><h2 class="section-title">Como usar magia na campanha</h2><div class="section-line"></div></div>
+      <p class="lead">A magia em ASOIAF não funciona como um catálogo aberto de feitiços lançados a todo momento. Ela aparece mais como <strong>força rara, perigosa, custosa e simbólica</strong>, ligada a sangue, fogo, sonhos, velas de vidro, profecia e sacrifício. Na sua campanha, o ideal é tratar magia como algo ritual, narrativo e cheio de preço, não como solução fácil para qualquer problema.</p>
+      <div class="table">
+        <table>
+          <thead><tr><th>Forma de magia</th><th>Como aparece no cânone</th><th>Como adaptar para a mesa</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sonhos proféticos</strong></td><td>Sonhos de fogo e visões proféticas aparecem ligados a linhagens valirianas e ao fogo.</td><td>Use como presságios fragmentados, nunca como respostas completas.</td></tr>
+            <tr><td><strong>Magia de sangue</strong></td><td>Sangue e sacrifício aparecem repetidamente ligados a efeitos sobrenaturais poderosos.</td><td>Todo ritual sério deve cobrar dor, perda, memória, ferida, morte ou corrupção.</td></tr>
+            <tr><td><strong>Velas de vidro</strong></td><td>As velas de vidro valirianas são associadas a visões à distância, sonhos enviados e comunicação por grandes distâncias.</td><td>Ótimas para intriga, oráculos, contato entre casas e cenas de terror ritual.</td></tr>
+            <tr><td><strong>Fogo ritual</strong></td><td>A tradição do fogo aparece ligada a R'hllor, aos dragões e à herança valiriana.</td><td>Use brasas, chama viva, ossos, sangue, cinzas e nomes antigos como foco cerimonial.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rituals">
+        <div class="ritual-box"><div class="ritual-step">Regra 1</div><h4>Magia deve custar</h4><p>Todo efeito importante precisa vir com preço. O custo pode ser físico, social, espiritual ou político. Se não dói, não parece ASOIAF.</p></div>
+        <div class="ritual-box"><div class="ritual-step">Regra 2</div><h4>Magia deve ser incerta</h4><p>Mesmo quando funciona, ela deve deixar dúvida, medo ou consequência. O ritual pode dar certo e ainda assim piorar outra parte da história.</p></div>
+        <div class="ritual-box"><div class="ritual-step">Regra 3</div><h4>Magia deve mudar a cena</h4><p>Não use magia para pequenos truques constantes. Use para eventos que alteram destino, reputação, sangue, juramento, fogo, sonho ou morte.</p></div>
+      </div>
+      <div class="callout info"><span class="callout-label">Boa prática</span>Para esta campanha, a melhor magia é a que parece <strong>profecia, ritual ou herança</strong>, não a que parece feitiço de fantasia alta.</div>
+    </section>
+
+    <section id="cultos" class="reveal">
+      <div class="section-header"><p class="section-eyebrow">Escolha de Fé</p><h2 class="section-title">Quais deuses os personagens podem cultuar</h2><div class="section-line"></div></div>
+      <p class="lead">Como a campanha cruza Valyria, Essos e Westeros, você pode permitir diferentes tradições religiosas de acordo com a origem do personagem, o lugar onde a casa está instalada e o tom desejado para a mesa. Abaixo está uma divisão prática para evitar confusão.</p>
+      <div class="cards-2">
+        <div class="card"><div class="card-tag">Sempre válidos</div><h3>Cultos mais fáceis de encaixar</h3><p>Fé dos Sete, deuses antigos, R'hllor, Deus Afogado, Deus de Muitas Faces e cultos valirianos de fogo são opções fáceis de justificar no mundo conhecido, desde que a origem do personagem faça sentido.</p></div>
+        <div class="card"><div class="card-tag">Para esta campanha</div><h3>Deus Dragão como culto central</h3><p>O Deus Dragão funciona como a grande releitura religiosa da mesa para casas valyrianas, profetas das cinzas, guardiões do sangue, sacerdotes do fogo e herdeiros que entendem os dragões como parte da criação divina.</p></div>
+      </div>
+      <div class="table">
+        <table>
+          <thead><tr><th>Culto</th><th>Quem costuma seguir</th><th>Tom ideal na mesa</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Fé dos Sete</strong></td><td>Cavaleiros, casas sulistas, personagens educados em Westeros.</td><td>Honra, culpa, votos, legitimidade, pecado e ordem social.</td></tr>
+            <tr><td><strong>Deuses Antigos</strong></td><td>Nortenhos, patrulheiros, casas de fronteira, gente ligada à terra.</td><td>Silêncio, ancestralidade, presságio, bosque, memória e juramento.</td></tr>
+            <tr><td><strong>R'hllor</strong></td><td>Profetas do fogo, estrangeiros de Essos, místicos e fanáticos.</td><td>Chama, visão, sacrifício, guerra santa e destino.</td></tr>
+            <tr><td><strong>Deus Afogado</strong></td><td>Marinheiros duros, reavers, exilados das Ilhas, capitães cruéis.</td><td>Mar, prova, renascimento violento e identidade guerreira.</td></tr>
+            <tr><td><strong>Muitos-Rostos</strong></td><td>Assassinos, filósofos da morte, iniciados secretos.</td><td>Mistério, máscara, fatalismo e serviço silencioso.</td></tr>
+            <tr><td><strong>Deus Dragão</strong></td><td>Valyrianos, dragonseeds, sacerdotes do fogo, herdeiros do pacto e casas desta campanha.</td><td>Sangue, chama, criação, queda, soberba, expiação e renascimento.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout danger"><span class="callout-label">Importante</span>O Deus Dragão não precisa apagar as outras religiões. Ele funciona melhor quando entra como <strong>centro espiritual valyriano</strong> da campanha, convivendo com outras crenças e gerando conflito entre tradição, conversão e pragmatismo.</div>
+    </section>
+
+    <section id="deus-dragao" class="reveal">
+      <div class="section-header"><p class="section-eyebrow">Crença da Mesa</p><h2 class="section-title">O Deus Dragão</h2><div class="section-line"></div></div>
+      <p class="lead">Na cosmologia desta mesa, o <strong>Deus Dragão</strong> é a força primordial da criação valyriana: não apenas pai dos dragões, mas origem do fogo vital, do destino ardente e do vínculo entre carne, sangue e chama. Ele não é um simples deus animal, e sim uma presença cósmica antiga, cuja essência une criação e destruição no mesmo sopro.</p>
+      <div class="myth-grid">
+        <div class="myth-panel">
+          <h3>A Forja do Fogo e da Carne</h3>
+          <p>Antes dos impérios e das cidades, existia apenas o fogo primordial, a terra em brasa e os céus marcados por fumaça e luz. Nesse estado primevo, o Deus Dragão pairava como uma entidade de chama viva, respirando o fogo das estrelas e espalhando as centelhas da criação.</p>
+          <p>Segundo a tradição da campanha, dele vieram não só os primeiros dragões, mas também a possibilidade do próprio mundo ser moldado por calor, violência, renovação e vontade. O fogo, então, não é mero elemento: é alma, motor, herança e julgamento.</p>
+          <h3>O Pacto Sagrado</h3>
+          <p>Os ancestrais valyrianos não dominaram o fogo por técnica apenas; eles firmaram um pacto de sangue diante das montanhas ardentes. Ao oferecerem o próprio sangue à forja sagrada, despertaram em si o chamado do dragão e se tornaram portadores de um vínculo que não era só político, mas espiritual.</p>
+          <p>Por isso, nesta mesa, o “sangue de dragão” não precisa ser lido apenas como traço genealógico. Ele pode ser entendido como marca religiosa, herança mística e responsabilidade terrível diante do Deus que criou tanto a chama quanto a ruína.</p>
+        </div>
+        <div class="myth-panel">
+          <h3>Doutrina do culto</h3>
+          <div class="key-grid">
+            <div class="key"><div class="key-label">Domínio</div><p>Fogo, criação, destruição, destino, sangue, vulcões, aço e dragões.</p></div>
+            <div class="key"><div class="key-label">Virtude</div><p>Coragem diante da chama, reverência à herança e disciplina diante do poder.</p></div>
+            <div class="key"><div class="key-label">Pecado</div><p>Arrogância, profanação do pacto, uso vazio do fogo e esquecimento das origens.</p></div>
+            <div class="key"><div class="key-label">Símbolos</div><p>Asas em brasa, espiral de fogo, vulcão, ovo rachado, sangue sobre pedra negra.</p></div>
+            <div class="key"><div class="key-label">Promessa</div><p>O fogo eleva quem o honra e devora quem o possui sem reverência.</p></div>
+            <div class="key"><div class="key-label">Medo sagrado</div><p>O Doom como punição, correção ou reequilíbrio da criação deformada pela soberba.</p></div>
+          </div>
+          <div class="callout warning"><span class="callout-label">Leitura central</span>O Deus Dragão não exige bondade; ele exige <strong>reconhecimento do preço do poder</strong>. Seus fiéis podem ser nobres, terríveis, ascéticos, fanáticos ou redentores.</div>
+        </div>
+      </div>
+      <div class="cards-3">
+        <div class="card"><div class="card-tag">Criação</div><h3>Dragões como extensão divina</h3><p>Os dragões são vistos como fragmentos imperfeitos da chama primordial. Magníficos, mortais e sagrados, eles não são só montarias: são testemunhas vivas do pacto.</p></div>
+        <div class="card"><div class="card-tag">Queda</div><h3>O Doom como juízo</h3><p>Nesta leitura, a queda de Valyria pode ser tratada como punição, correção cósmica ou reação do fogo contra o orgulho de seus próprios filhos.</p></div>
+        <div class="card"><div class="card-tag">Profecia</div><h3>Renovação pelas cinzas</h3><p>A profecia das chamas anuncia que os verdadeiros fiéis podem reencontrar o pacto, não para repetir o império antigo, mas para decidir se o fogo servirá à restauração ou a uma nova ruína.</p></div>
+      </div>
+    </section>
+
+    <section id="rituais" class="reveal">
+      <div class="section-header"><p class="section-eyebrow">Rituais</p><h2 class="section-title">Como praticar a magia do Deus Dragão</h2><div class="section-line"></div></div>
+      <p class="lead">Se a campanha vai permitir magia ligada ao Deus Dragão, o melhor caminho é definir um sistema ritual claro. Abaixo está um modelo simples para a mesa: <strong>todo rito tem foco, preço, intenção e consequência</strong>. Isso mantém a magia dramática, rara e perigosa.</p>
+      <div class="rituals">
+        <div class="ritual-box"><div class="ritual-step">Passo 1</div><h4>Escolher o foco</h4><p>O foco é o meio pelo qual o rito se ancora: chama, sangue, aço valyriano, ovo, cinzas de ancestral, pedra negra, vela de vidro ou nome verdadeiro.</p></div>
+        <div class="ritual-box"><div class="ritual-step">Passo 2</div><h4>Declarar a intenção</h4><p>Revelar um sonho, buscar um presságio, selar um juramento, fortalecer vínculo com dragão, amaldiçoar traição, proteger um herdeiro ou pedir visão do futuro.</p></div>
+        <div class="ritual-box"><div class="ritual-step">Passo 3</div><h4>Pagar o preço</h4><p>O custo pode ser sangue, exaustão, cicatriz, perda de memória, insanidade breve, reputação, sacrifício de um animal, destruição de uma relíquia ou morte.</p></div>
+      </div>
+      <div class="cards-4">
+        <div class="card"><div class="card-tag">Rito</div><h3>Sonho de Chama</h3><p>Usado para receber visões. Costuma trazer imagens simbólicas, nunca respostas literais. Excelente para herdeiros e sonhadores do sangue.</p></div>
+        <div class="card"><div class="card-tag">Rito</div><h3>Vigília das Cinzas</h3><p>Ritual funerário ou de consulta a ancestrais, em que nomes são entregues à chama para obter confirmação, culpa ou presságio.</p></div>
+        <div class="card"><div class="card-tag">Rito</div><h3>Juramento de Sangue</h3><p>Une duas pessoas, uma linhagem ou um guardião a uma missão sagrada. Quanto mais forte o juramento, maior o preço em caso de traição.</p></div>
+        <div class="card"><div class="card-tag">Rito</div><h3>Despertar do Fogo</h3><p>Voltado a ovos, brasas sagradas, armas antigas ou velas de vidro. Não precisa sempre “funcionar”; às vezes apenas reage.</p></div>
+      </div>
+      <div class="callout info"><span class="callout-label">Limite saudável</span>Mesmo com o Deus Dragão como centro da mesa, a magia deve continuar excepcional. O culto pode estar em toda parte, mas <strong>milagre verdadeiro</strong> deve continuar raro.</div>
+    </section>
+
+    <section id="faq" class="reveal">
+      <div class="section-header"><p class="section-eyebrow">Dúvidas Frequentes</p><h2 class="section-title">Perguntas comuns</h2><div class="section-line"></div></div>
+      <div class="faq-list">
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Todo personagem valyriano precisa seguir o Deus Dragão?</span><div class="faq-icon">+</div></button><div class="faq-a"><p>Não. Alguns podem ter perdido a fé, seguido os Sete, adotado R'hllor, conservar um culto doméstico enfraquecido ou tratar o Deus Dragão como mito ancestral. O conflito entre crenças enriquece a campanha.</p></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Magia do Deus Dragão substitui outras formas de magia?</span><div class="faq-icon">+</div></button><div class="faq-a"><p>Não. Ela funciona como a linguagem ritual principal da campanha valyriana, mas pode coexistir com fogo vermelho, sonhos proféticos, velas de vidro, presságios dos deuses antigos ou práticas mais sombrias de sangue.</p></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>O Doom foi castigo literal do Deus Dragão?</span><div class="faq-icon">+</div></button><div class="faq-a"><p>Na mesa, isso pode permanecer como verdade de fé, profecia ou interpretação histórica. Deixar essa resposta parcialmente aberta costuma tornar a campanha mais forte.</p></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Quem usa magia precisa ser sacerdote?</span><div class="faq-icon">+</div></button><div class="faq-a"><p>Não. Sonhadores, herdeiros, guardiões de ovos, anciãos, ferreiros rituais e dragonseeds podem tocar o sagrado sem ocupar cargo religioso formal.</p></div></div>
+      </div>
+    </section>
+  </main>
+  <aside class="toc-wrap">
+    <div class="toc">
+      <div class="toc-title">Nesta Página</div>
+      <ul>
+        <li><a href="#panteoes"><span class="toc-num">01</span> Deuses do mundo</a></li>
+        <li><a href="#magia"><span class="toc-num">02</span> Como usar magia</a></li>
+        <li><a href="#cultos"><span class="toc-num">03</span> Cultos possíveis</a></li>
+        <li><a href="#deus-dragao"><span class="toc-num">04</span> Deus Dragão</a></li>
+        <li><a href="#rituais"><span class="toc-num">05</span> Rituais e regras</a></li>
+        <li><a href="#faq"><span class="toc-num">06</span> FAQ</a></li>
+      </ul>
+    </div>
+  </aside>
+</div>
+<footer>
+  <div class="footer-logo">Deuses & Magia</div>
+  <p>Material de apoio para a campanha <em>A Queda de Valyria</em>.<br>Página criada para organizar fé, rituais, magia e o culto do Deus Dragão dentro da ambientação da mesa.<br><br><a class="footer-link" href="index">Início</a> &nbsp;|&nbsp; <a class="footer-link" href="guia-universo">Guia do Universo</a> &nbsp;|&nbsp; <a class="footer-link" href="ficha">Ficha</a></p>
+</footer>
+<script>
+  const canvas=document.getElementById('ember-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,embers=[];function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}resize();window.addEventListener('resize',resize);
+  function createEmber(){return{x:Math.random()*W,y:H+10,r:Math.random()*2.1+.5,vx:(Math.random()-.5)*.6,vy:-(Math.random()*1.05+.35),alpha:Math.random()*.45+.22,life:0,maxLife:Math.random()*320+150}}
+  for(let i=0;i<52;i++){const e=createEmber();e.y=Math.random()*H;e.life=Math.random()*e.maxLife;embers.push(e)}
+  function anim(){ctx.clearRect(0,0,W,H);embers.forEach((e,i)=>{e.life++;e.x+=e.vx+Math.sin(e.life*.03)*.35;e.y+=e.vy;const p=e.life/e.maxLife;const a=e.alpha*(1-Math.pow(p,2));ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,${55+Math.floor(p*75)},0,${a})`;ctx.fill();if(e.life>=e.maxLife||e.y<-20)embers[i]=createEmber()});requestAnimationFrame(anim)}anim();
+  const navbar=document.getElementById('navbar');window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>40));
+  const reveals=document.querySelectorAll('.reveal');const obs=new IntersectionObserver((entries)=>{entries.forEach((entry,idx)=>{if(entry.isIntersecting){setTimeout(()=>entry.target.classList.add('visible'),idx*55);obs.unobserve(entry.target)}})},{threshold:.06});reveals.forEach(el=>obs.observe(el));
+  function toggleFaq(btn){const item=btn.closest('.faq-item');const open=item.classList.contains('open');document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));if(!open)item.classList.add('open')}
+  const sections=document.querySelectorAll('main section[id]');const tocLinks=document.querySelectorAll('.toc a');
+  function setActive(){let current='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-130)current=s.id});tocLinks.forEach(a=>a.style.color=a.getAttribute('href')==='#'+current?'var(--gold)':'')}
+  window.addEventListener('scroll',setActive);setActive();
+</script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/setentrional/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100b">
+  <meta name="description" content="Terminal confidencial da Sanctum Veritatis — Operação Setentrional.">
+  <title>SV-04 // Operação Setentrional</title>
+  <link rel="preload" href="images/Farol.png" as="image">
+  <link rel="stylesheet" href="css/setentrional-terminal.css">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body class="session-locked">
+  <a class="skip-link" href="#main-workspace">Ir para o conteúdo operacional</a>
+
+  <div class="screen-effects" aria-hidden="true">
+    <div class="screen-glow"></div>
+    <div class="screen-lines"></div>
+    <div class="screen-noise"></div>
+    <div class="screen-vignette"></div>
+  </div>
+
+  <section class="boot-gate" id="boot-gate" aria-labelledby="boot-title">
+    <div class="terminal-casing boot-casing">
+      <div class="casing-labels" aria-hidden="true">
+        <span>SV INDUSTRIAL SYSTEMS // UNIDADE 04</span>
+        <span>115V · 60HZ · NÃO DESCONECTAR</span>
+      </div>
+
+      <div class="boot-screen">
+        <header class="boot-header">
+          <div class="boot-monogram" aria-hidden="true"><span>SV</span><i></i></div>
+          <div>
+            <p>SANCTUM VERITATIS</p>
+            <h1 id="boot-title">INTERFACE DE ACESSO RESTRITO</h1>
+          </div>
+          <span class="boot-station">ESTAÇÃO<br>SV-04</span>
+        </header>
+
+        <div class="boot-output" id="boot-output" aria-live="polite" aria-label="Inicialização do sistema"></div>
+
+        <form class="operation-auth" id="operation-auth" autocomplete="off" hidden>
+          <p class="auth-label">IDENTIFICAÇÃO NECESSÁRIA.</p>
+          <label for="operation-name">Insira o nome da operação</label>
+          <div class="auth-prompt">
+            <span aria-hidden="true">C:\SV\OPERAÇÕES&gt;</span>
+            <input id="operation-name" name="operation" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" aria-describedby="auth-feedback" required>
+            <span class="block-cursor" aria-hidden="true"></span>
+          </div>
+          <div class="auth-actions">
+            <button class="key-button primary" type="submit">EXECUTAR CONSULTA</button>
+            <span id="attempt-counter">TENTATIVAS REGISTRADAS: 00</span>
+          </div>
+          <div class="auth-feedback" id="auth-feedback" role="status" aria-live="assertive">AGUARDANDO IDENTIFICADOR.</div>
+        </form>
+
+        <div class="access-sequence" id="access-sequence" hidden aria-live="polite">
+          <p id="access-message">VALIDANDO ASSINATURA...</p>
+          <div class="access-bar" role="progressbar" aria-label="Abertura do diretório" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <small id="access-detail">0% // SINCRONIZANDO ÍNDICE</small>
+        </div>
+
+        <footer class="boot-footer">
+          <span>CONEXÃO MONITORADA // REGISTRO SV-AUDIT ATIVO</span>
+          <span>“VERITAS SUB VIGILIA”</span>
+        </footer>
+      </div>
+    </div>
+  </section>
+
+  <div class="system-shell" id="system-shell" inert hidden>
+    <header class="system-header">
+      <button class="mobile-menu" id="mobile-menu" type="button" aria-expanded="false" aria-controls="directory-panel" aria-label="Abrir diretório de módulos"><span></span><span></span><span></span></button>
+
+      <button class="sanctum-identity" id="sanctum-mark" type="button" aria-label="Sanctum Veritatis — retornar à visão geral">
+        <span class="sv-seal" aria-hidden="true"><b>SV</b><i></i></span>
+        <span><strong>SANCTUM VERITATIS</strong><small>ARQUIVO OPERACIONAL INTERNO</small></span>
+      </button>
+
+      <div class="header-readouts" aria-label="Dados da sessão">
+        <div><span>ESTAÇÃO</span><strong>SV-04 / COSTA</strong></div>
+        <div><span>USUÁRIO</span><strong>AGENTE EXTERNO</strong></div>
+        <div><span>ACESSO</span><strong>GRAU V</strong></div>
+        <div><span>CONEXÃO</span><strong class="online"><i></i> SEGURA</strong></div>
+      </div>
+
+      <div class="header-controls">
+        <div class="clock-readout"><span id="system-date">--.--.----</span><strong id="system-clock">--:--:--</strong></div>
+        <button class="icon-control" id="sound-toggle" type="button" aria-pressed="false" title="Ativar som"><span aria-hidden="true">◖))</span><b>SOM OFF</b></button>
+        <button class="icon-control" id="motion-toggle" type="button" aria-pressed="false" title="Reduzir animações"><span aria-hidden="true">≈</span><b>EFEITOS</b></button>
+        <button class="logout-control" id="logout-button" type="button">ENCERRAR</button>
+      </div>
+    </header>
+
+    <button class="mobile-scrim" id="mobile-scrim" type="button" aria-label="Fechar diretório" hidden></button>
+
+    <div class="system-grid">
+      <aside class="directory-panel" id="directory-panel" aria-label="Diretório interno">
+        <div class="directory-heading">
+          <p>DIRETÓRIO RAIZ</p>
+          <span>C:\SV\OPS\SR-07\</span>
+        </div>
+
+        <nav class="directory-nav" aria-label="Módulos da Operação Setentrional">
+          <p class="directory-group">[ OPERAÇÃO ]</p>
+          <button class="active" type="button" data-view-target="overview"><kbd>01</kbd><span>VISÃO GERAL</span></button>
+          <button type="button" data-view-target="files"><kbd>02</kbd><span>ARQUIVOS DA OPERAÇÃO</span><i id="file-count-nav">12</i></button>
+          <button type="button" data-view-target="timeline"><kbd>03</kbd><span>LINHA DO TEMPO</span></button>
+          <button type="button" data-view-target="lighthouse"><kbd>04</kbd><span>REGISTROS DO FAROL</span></button>
+          <button type="button" data-view-target="people"><kbd>05</kbd><span>PESSOAS DE INTERESSE</span></button>
+          <button type="button" data-view-target="entities"><kbd>06</kbd><span>ENTIDADES</span></button>
+          <button type="button" data-view-target="transmissions"><kbd>07</kbd><span>TRANSMISSÕES</span><i class="pulse-count">3</i></button>
+          <button type="button" data-view-target="map"><kbd>08</kbd><span>MAPA DE SÃO FIRMO</span></button>
+          <button type="button" data-view-target="protocols"><kbd>09</kbd><span>PROTOCOLOS</span></button>
+
+          <p class="directory-group">[ SISTEMA ]</p>
+          <button type="button" data-view-target="corrupted"><kbd>10</kbd><span>ARQUIVOS CORROMPIDOS</span><i>!</i></button>
+          <button class="restricted-link" type="button" data-view-target="restricted"><kbd>11</kbd><span>DIRETÓRIO RESTRITO</span><i>⌁</i></button>
+          <button type="button" data-view-target="recruitment"><kbd>12</kbd><span>RECRUTAMENTO</span></button>
+          <button type="button" data-view-target="about"><kbd>13</kbd><span>SOBRE A SANCTUM</span></button>
+          <button type="button" data-view-target="external"><kbd>14</kbd><span>CONEXÃO EXTERNA</span></button>
+        </nav>
+
+        <button class="membrane-monitor" id="membrane-monitor" type="button" aria-label="Membrana em ruptura, oitenta e sete por cento">
+          <span><b>MEMBRANA</b><i>LEITURA AO VIVO</i></span>
+          <strong><span id="membrane-value">87.3</span>%</strong>
+          <span class="membrane-track"><i></i></span>
+          <small>CONDIÇÃO: <em>RUPTURA</em></small>
+        </button>
+
+        <div class="side-footer">
+          <span class="status-lamp"></span>
+          <p><b>CANAL 09 ATIVO</b><small>Pacotes perdidos: 13.7%</small></p>
+        </div>
+      </aside>
+
+      <main class="main-workspace" id="main-workspace" tabindex="-1">
+        <section class="system-view active" id="view-overview" data-view="overview" aria-labelledby="overview-title">
+          <header class="view-header">
+            <div><p>SR-07 / OPERAÇÃO ATIVA / VISÃO GERAL</p><h1 id="overview-title">SETENTRIONAL</h1></div>
+            <div class="classification-stamp">RESTRITO<br><span>GRAU V</span></div>
+          </header>
+
+          <div class="overview-layout">
+            <article class="operation-brief">
+              <div class="paper-label"><span>RESUMO DE MOBILIZAÇÃO</span><time datetime="2026-07-15">ATUALIZAÇÃO 15.07.2026</time></div>
+              <p class="lead">São Firmo é uma ilha do Atlântico ausente de cartas marítimas recentes. O último mapa verificável foi recolhido em <button class="inline-clue" type="button" data-open-document="SF-1891-01">1891</button>; todas as cópias posteriores apresentam alterações incompatíveis entre si.</p>
+              <p>O farol permaneceu oficialmente desativado desde o Incidente de 1995. Ainda assim, transmissões são detectadas todas as noites entre 02:13 e 03:07. Moradores constam simultaneamente como vivos, mortos e nunca registrados.</p>
+              <p>Documentos civis foram apagados ou reescritos. A Membrana está em ruptura. A equipe enviada em 2011 deixou de responder após informar que o farol possuía <button class="redaction" type="button" aria-label="Trecho censurado; tentar revelar">████████████</button>.</p>
+              <p>A Sanctum Veritatis iniciou uma nova mobilização. Objetivo: localizar sobreviventes, recuperar os registros de 1995 e impedir que o sinal encontre a costa.</p>
+
+              <blockquote>“O Norte Verdadeiro aponta para o abismo.”</blockquote>
+
+              <div class="mission-objectives" aria-label="Objetivos da missão">
+                <div><b>01</b><span>Reconhecer São Firmo</span><strong>PENDENTE</strong></div>
+                <div><b>02</b><span>Localizar a equipe anterior</span><strong>SEM CONTATO</strong></div>
+                <div><b>03</b><span>Conter o sinal do farol</span><strong class="critical">CRÍTICO</strong></div>
+              </div>
+            </article>
+
+            <aside class="evidence-column">
+              <figure class="evidence-photo">
+                <div class="photo-frame"><img src="images/Farol.png" alt="Ilustração de arquivo mostrando o farol de São Firmo cercado por névoa e símbolos anômalos"></div>
+                <figcaption><span>ANEXO SF-F/13</span><span>ORIGEM DESCONHECIDA</span></figcaption>
+              </figure>
+
+              <div class="telemetry-sheet">
+                <div class="sheet-title">ESTADO OPERACIONAL</div>
+                <dl>
+                  <div><dt>Classificação</dt><dd>Restrita</dd></div>
+                  <div><dt>Estado</dt><dd class="signal-text">Ativa</dd></div>
+                  <div><dt>Local</dt><dd>São Firmo</dd></div>
+                  <div><dt>Evento-base</dt><dd>Incidente do Farol, 1995</dd></div>
+                  <div><dt>Membrana</dt><dd class="critical">Em ruptura</dd></div>
+                  <div><dt>Atividade</dt><dd><span class="activity-bars" aria-label="Atividade paranormal elevada"><i></i><i></i><i></i><i></i><i></i></span></dd></div>
+                </dl>
+              </div>
+            </aside>
+          </div>
+
+          <div class="live-log" aria-label="Registro em tempo real"><span>LIVE</span><p id="live-log-text">[02:13:07] Sinal luminoso detectado além do horizonte.</p></div>
+        </section>
+
+        <section class="system-view" id="view-files" data-view="files" aria-labelledby="files-title" hidden>
+          <header class="view-header"><div><p>SR-07 / ÍNDICE DOCUMENTAL</p><h2 id="files-title">ARQUIVOS DA OPERAÇÃO</h2></div><span class="record-code">INTEGRIDADE GERAL: 61%</span></header>
+          <div class="file-browser">
+            <div class="file-tools">
+              <label for="document-search">PESQUISAR NO ÍNDICE</label>
+              <div><span>&gt;</span><input id="document-search" type="search" autocomplete="off" placeholder="código, título ou assunto"><button type="button" id="clear-document-search">LIMPAR</button></div>
+              <p><span id="visible-document-count">12</span> REGISTROS DISPONÍVEIS // ALGUNS ARQUIVOS EXIGEM PROGRESSO DE INVESTIGAÇÃO</p>
+            </div>
+            <div class="document-table" role="region" aria-label="Lista de documentos" tabindex="0">
+              <div class="document-row document-head" aria-hidden="true"><span>CÓDIGO</span><span>DOCUMENTO</span><span>DATA</span><span>INT.</span><span>ESTADO</span></div>
+              <div id="document-list"></div>
+              <p class="empty-result" id="empty-document-result" hidden>NENHUM REGISTRO CORRESPONDE À CONSULTA.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-timeline" data-view="timeline" aria-labelledby="timeline-title" hidden>
+          <header class="view-header"><div><p>SR-07 / RECONSTRUÇÃO HISTÓRICA</p><h2 id="timeline-title">LINHA DO TEMPO</h2></div><span class="record-code">3 DATAS EM CONFLITO</span></header>
+          <div class="timeline-console">
+            <div class="timeline-scale" aria-hidden="true"><span>18??</span><span>1891</span><span>1937</span><span>1995</span><span>2011</span><span>2026</span></div>
+            <ol class="timeline-list" id="timeline-list"></ol>
+            <aside class="timeline-detail" id="timeline-detail" aria-live="polite"><p>SELECIONE UM MARCO PARA CONSULTAR A RECONSTRUÇÃO.</p></aside>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-lighthouse" data-view="lighthouse" aria-labelledby="lighthouse-title" hidden>
+          <header class="view-header"><div><p>SR-07 / SUBSISTEMA ÓPTICO</p><h2 id="lighthouse-title">REGISTROS DO FAROL</h2></div><span class="record-code critical">SINAL ATIVO</span></header>
+          <div class="lighthouse-console">
+            <article class="beam-monitor">
+              <div class="monitor-label"><span>TELEMETRIA DO FEIXE</span><span id="beam-channel">CANAL L-01</span></div>
+              <div class="beam-scope" aria-label="Visualização abstrata da rotação do farol"><div class="lighthouse-tower"><i></i><b></b></div><span class="beam"></span><span class="scope-ring"></span></div>
+              <div class="beam-controls" role="group" aria-label="Frequências do farol">
+                <button type="button" class="active" data-beam="visual">ÓPTICO</button>
+                <button type="button" data-beam="radio">RÁDIO</button>
+                <button type="button" data-beam="cognitive">COGNITIVO</button>
+                <button type="button" data-beam="null">SEM REGISTRO</button>
+              </div>
+            </article>
+            <article class="lighthouse-ledger">
+              <div class="paper-label"><span>LIVRO DO FAROLEIRO</span><span>RECUPERAÇÃO PARCIAL</span></div>
+              <div id="beam-reading">
+                <p><time>02:13:00</time> — Lâmpada principal energizada sem fonte elétrica.</p>
+                <p><time>02:13:13</time> — Feixe completa uma rotação para dentro da estrutura.</p>
+                <p><time>02:14:02</time> — Operador esquece o próprio nome durante 17 segundos.</p>
+                <p><time>02:██:██</time> — <button class="redaction" type="button" aria-label="Trecho censurado; tentar revelar">████████████████████</button></p>
+              </div>
+              <button class="key-button" type="button" data-open-document="SF-LUZ-95">ABRIR RELATÓRIO DO FAROL</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-people" data-view="people" aria-labelledby="people-title" hidden>
+          <header class="view-header"><div><p>SR-07 / INDEXAÇÃO BIOMÉTRICA</p><h2 id="people-title">PESSOAS DE INTERESSE</h2></div><span class="record-code">5 REGISTROS // 2 CONFLITANTES</span></header>
+          <div class="people-index" id="people-index"></div>
+          <article class="person-detail" id="person-detail" aria-live="polite"><p>SELECIONE UM REGISTRO BIOMÉTRICO.</p></article>
+        </section>
+
+        <section class="system-view" id="view-entities" data-view="entities" aria-labelledby="entities-title" hidden>
+          <header class="view-header"><div><p>SR-07 / TAXONOMIA DO OUTRO LADO</p><h2 id="entities-title">ENTIDADES</h2></div><span class="record-code critical">OBSERVAÇÃO LIMITADA</span></header>
+          <div class="entity-archive">
+            <div class="entity-selector" role="tablist" aria-label="Entidades catalogadas">
+              <button type="button" class="active" role="tab" aria-selected="true" data-entity="luminaria">E-01 // A LUMINÁRIA</button>
+              <button type="button" role="tab" aria-selected="false" data-entity="afogados">E-02 // OS SEM-ROSTO</button>
+              <button type="button" role="tab" aria-selected="false" data-entity="cartografo">E-03 // O CARTÓGRAFO</button>
+              <button type="button" role="tab" aria-selected="false" data-entity="unknown">E-██ // █████████</button>
+            </div>
+            <article class="entity-record" id="entity-record"></article>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-transmissions" data-view="transmissions" aria-labelledby="transmissions-title" hidden>
+          <header class="view-header"><div><p>SR-07 / INTERCEPTAÇÃO DE SINAIS</p><h2 id="transmissions-title">TRANSMISSÕES</h2></div><span class="record-code signal-text">ESCUTA ATIVA</span></header>
+          <div class="radio-rack">
+            <div class="radio-hardware">
+              <div class="frequency-display"><span>FREQ.</span><strong id="radio-frequency">09.131</strong><small>MHz // AM</small></div>
+              <div class="waveform" id="radio-waveform" aria-hidden="true"></div>
+              <div class="radio-dials" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="radio-buttons">
+                <button class="key-button primary" id="decode-transmission" type="button">DECODIFICAR SINAL</button>
+                <button class="key-button" id="scan-transmissions" type="button">VARRER FREQUÊNCIAS</button>
+              </div>
+            </div>
+            <article class="transcript-paper">
+              <div class="paper-label"><span>TRANSCRIÇÃO AUTOMÁTICA</span><span id="transmission-integrity">INTEGRIDADE 00%</span></div>
+              <div class="transcript-output" id="transcript-output" aria-live="polite">[CANAL PRONTO. AGUARDANDO DECODIFICAÇÃO.]</div>
+            </article>
+            <aside class="signal-list" aria-label="Sinais interceptados">
+              <button type="button" class="active" data-frequency="09.131"><span>09.131</span><b>GUARDA COSTEIRA</b><i>41%</i></button>
+              <button type="button" data-frequency="02.013"><span>02.013</span><b>FAROL / PULSO</b><i>17%</i></button>
+              <button type="button" data-frequency="19.950"><span>19.950</span><b>ARQUIVO 1995</b><i>08%</i></button>
+              <button type="button" class="hidden-signal" data-frequency="43.172"><span>43.172</span><b>SEM ORIGEM</b><i>??</i></button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-map" data-view="map" aria-labelledby="map-title" hidden>
+          <header class="view-header"><div><p>SR-07 / CARTOGRAFIA INSTÁVEL</p><h2 id="map-title">MAPA DE SÃO FIRMO</h2></div><button class="coordinate-code" id="coordinate-code" type="button">42°13′ / 23°43′</button></header>
+          <div class="map-console">
+            <div class="map-viewer-shell">
+              <div class="map-toolbar">
+                <span>ARQUIVO CARTOGRÁFICO SF-077-A // ESCALA 1:25.000</span>
+                <div role="group" aria-label="Controles de ampliação do mapa">
+                  <button id="map-zoom-out" type="button" aria-label="Diminuir mapa">−</button>
+                  <output id="map-zoom-readout" aria-live="polite">100%</output>
+                  <button id="map-zoom-in" type="button" aria-label="Ampliar mapa">+</button>
+                  <button id="map-zoom-reset" type="button">CENTRALIZAR</button>
+                </div>
+              </div>
+
+              <div class="island-map" id="map-viewport" tabindex="0" aria-label="Mapa interativo da Ilha de São Firmo. Use os controles para ampliar e arraste para navegar.">
+                <div class="map-image-layer" id="map-layer">
+                  <img src="images/setentrional/mapa-sao-firmo.png" alt="Mapa antigo da Ilha de São Firmo com estradas, edificações, relevo, zonas anômalas e pontos de interesse" draggable="false">
+
+                  <button class="map-marker active" style="--x:67.6%;--y:11.5%" type="button" data-map-point="lighthouse"><i></i><span>Farol de São Firmo</span></button>
+                  <button class="map-marker" style="--x:34%;--y:34.5%" type="button" data-map-point="radio"><i></i><span>Estação de Rádio</span></button>
+                  <button class="map-marker" style="--x:50.5%;--y:34.5%" type="button" data-map-point="forest"><i></i><span>Bosque da Névoa</span></button>
+                  <button class="map-marker" style="--x:27.7%;--y:49.5%" type="button" data-map-point="village"><i></i><span>Vila de São Firmo</span></button>
+                  <button class="map-marker" style="--x:26.8%;--y:58%" type="button" data-map-point="port"><i></i><span>Porto Velho</span></button>
+                  <button class="map-marker" style="--x:45.3%;--y:54.5%" type="button" data-map-point="church"><i></i><span>Igreja Abandonada</span></button>
+                  <button class="map-marker" style="--x:62.8%;--y:52.6%" type="button" data-map-point="watchhouse"><i></i><span>Casa do Vigia</span></button>
+                  <button class="map-marker" style="--x:74.2%;--y:37.2%" type="button" data-map-point="cliffs"><i></i><span>Penhascos do Leste</span></button>
+                  <button class="map-marker" style="--x:76.8%;--y:63.6%" type="button" data-map-point="fort"><i></i><span>Ruínas do Forte</span></button>
+                  <button class="map-marker" style="--x:35.8%;--y:69.5%" type="button" data-map-point="trail"><i></i><span>Trilha dos Pescadores</span></button>
+                  <button class="map-marker" style="--x:55.6%;--y:63.2%" type="button" data-map-point="swamp"><i></i><span>Pântano da Membrana</span></button>
+                  <button class="map-marker" style="--x:57.5%;--y:81.5%" type="button" data-map-point="caves"><i></i><span>Grutas de Maré Baixa</span></button>
+
+                  <button class="map-zone zone-alpha" style="--x:52.4%;--y:62.4%" type="button" data-map-point="alpha" aria-label="Consultar Zona Alfa — A Membrana"><span>Α</span></button>
+                  <button class="map-zone zone-beta" style="--x:47.4%;--y:34.5%" type="button" data-map-point="beta" aria-label="Consultar Zona Beta — O Silêncio"><span>Β</span></button>
+                </div>
+              </div>
+
+              <p class="map-help">ARRASTE PARA NAVEGAR // CLIQUE NOS MARCADORES PARA CONSULTAR // SETAS MOVEM O MAPA // + E − ALTERAM A ESCALA</p>
+            </div>
+            <article class="map-intelligence" id="map-intelligence" aria-live="polite"></article>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-protocols" data-view="protocols" aria-labelledby="protocols-title" hidden>
+          <header class="view-header"><div><p>SR-07 / DIRETRIZES DE CAMPO</p><h2 id="protocols-title">PROTOCOLOS</h2></div><span class="record-code">LEITURA OBRIGATÓRIA</span></header>
+          <div class="protocol-ledger" id="protocol-ledger">
+            <label><input type="checkbox"><span><b>01</b><strong>NÃO SIGA A LUZ</strong><small>Nenhuma fonte luminosa dentro da neblina é considerada confiável.</small></span><em>SV-LUZ</em></label>
+            <label><input type="checkbox"><span><b>02</b><strong>NÃO RESPONDA ÀS VOZES</strong><small>A anomalia replica intimidade antes de replicar som.</small></span><em>SV-ECO</em></label>
+            <label><input type="checkbox"><span><b>03</b><strong>MANTENHA DUPLA OBSERVAÇÃO</strong><small>Memórias divergentes devem ser registradas por dois agentes.</small></span><em>SV-MEM</em></label>
+            <label><input type="checkbox"><span><b>04</b><strong>NÃO CONTE OS DEGRAUS</strong><small>A contagem altera a topologia interior da torre.</small></span><em>SV-ESC</em></label>
+            <label><input type="checkbox"><span><b>05</b><strong>ABANDONE O PRÓPRIO NOME</strong><small>Se o farol chamar corretamente, use apenas o código de campo.</small></span><em>SV-ID</em></label>
+            <label><input type="checkbox"><span><b>06</b><strong>INTERROMPA A MISSÃO</strong><small>Sangramento, amnésia ou compulsão cartográfica exigem retirada imediata.</small></span><em>SV-RET</em></label>
+          </div>
+          <div class="protocol-confirmation"><span id="protocol-progress">00 / 06 PROTOCOLOS LIDOS</span><button class="key-button primary" id="confirm-protocols" type="button" disabled>CONFIRMAR CIÊNCIA</button></div>
+        </section>
+
+        <section class="system-view" id="view-corrupted" data-view="corrupted" aria-labelledby="corrupted-title" hidden>
+          <header class="view-header"><div><p>SR-07 / RECUPERAÇÃO FORENSE</p><h2 id="corrupted-title">ARQUIVOS CORROMPIDOS</h2></div><span class="record-code critical">SETOR INSTÁVEL</span></header>
+          <div class="corruption-console">
+            <div class="hex-dump" id="hex-dump" aria-label="Dados corrompidos"></div>
+            <article class="recovery-panel">
+              <p class="terminal-kicker">RECUPERADOR MAGNÉTICO // FITA 04</p>
+              <h3>SETORES RECUPERÁVEIS: <span id="sector-count">03</span></h3>
+              <p>Selecione fragmentos no despejo hexadecimal. Alguns blocos não pertencem ao arquivo original.</p>
+              <div class="recovered-message" id="recovered-message">_ _ _ _ _ / _ / _ _ _ _ _</div>
+              <button class="key-button" id="recover-sector" type="button">TENTAR RECONSTRUÇÃO</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-restricted" data-view="restricted" aria-labelledby="restricted-title" hidden>
+          <header class="view-header"><div><p>SR-07 / ÍNDICE NÃO CATALOGADO</p><h2 id="restricted-title">DIRETÓRIO RESTRITO</h2></div><span class="record-code">ACESSO FRAGMENTÁRIO</span></header>
+          <div class="restricted-vault">
+            <div class="vault-door" aria-hidden="true"><span>SV</span><i></i><b></b></div>
+            <article>
+              <p>Este diretório não responde a menus. Sete rotas foram preservadas em setores antigos do sistema.</p>
+              <p>As iniciais constam em um registro do Núcleo de Integridade:</p>
+              <blockquote><span class="secret-letter">L</span>imiar. <span class="secret-letter">Q</span>uestionário. <span class="secret-letter">O</span>rdem. <span class="secret-letter">C</span>ustódia. <span class="secret-letter">V</span>idro. <span class="secret-letter">B</span>elladonna. <span class="secret-letter">S</span>ombra.</blockquote>
+              <p class="dim">O diretório observa o teclado, mas não enquanto você escreve.</p>
+              <div class="vault-index" id="vault-index">
+                <span>LTR-12 // ADORMECIDO</span><span>QST-09 // ADORMECIDO</span><span>ORD-00 // ADORMECIDO</span><span>CST-04 // ADORMECIDO</span><span>VDR-06 // ADORMECIDO</span><span>BLD-02 // ADORMECIDO</span><span>SHD-19 // ADORMECIDO</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-recruitment" data-view="recruitment" aria-labelledby="recruitment-title" hidden>
+          <header class="view-header"><div><p>SV / MOBILIZAÇÃO DE PESSOAL</p><h2 id="recruitment-title">RECRUTAMENTO</h2></div><span class="record-code signal-text">CANAL DISPONÍVEL</span></header>
+          <div class="recruitment-terminal">
+            <article class="recruitment-copy">
+              <p class="terminal-kicker">CONVOCAÇÃO EXTRAORDINÁRIA // SR-07</p>
+              <h3>São Firmo ainda está transmitindo.</h3>
+              <p>A Sanctum Veritatis procura agentes capazes de investigar o que foi apagado, proteger quem ainda se lembra e permanecer em silêncio quando o farol disser seus nomes.</p>
+              <ul><li>Investigação e interpretação narrativa</li><li>Operações de campo em equipe</li><li>Contato com fenômenos paranormais</li><li>Compromisso com protocolos da mesa</li></ul>
+              <a class="external-channel" href="https://discord.gg/9y2JqUSKGT" target="_blank" rel="noopener noreferrer"><span><small>CONEXÃO EXTERNA // NÃO SEGURA</small><strong>SOLICITAR INGRESSO</strong></span><b>↗</b></a>
+              <p class="security-warning">AVISO: comunicações externas não são consideradas seguras. Não compartilhe material classificado fora dos canais designados.</p>
+            </article>
+            <aside class="candidate-slip">
+              <div class="paper-label"><span>FORMULÁRIO SV-RH/19</span><span>TRIAGEM INICIAL</span></div>
+              <dl><div><dt>Operação</dt><dd>Setentrional</dd></div><div><dt>Local</dt><dd>São Firmo</dd></div><div><dt>Risco</dt><dd class="critical">Elevado</dd></div><div><dt>Vagas</dt><dd>Consultar canal</dd></div><div><dt>Estado</dt><dd class="signal-text">Recebendo perfis</dd></div></dl>
+              <div class="fan-notice"><strong>PROJETO DE FÃS</strong>Campanha independente, sem vínculo com Rafael Lange (Cellbit), Jambô Editora ou a marca Ordem Paranormal.</div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-about" data-view="about" aria-labelledby="about-title" hidden>
+          <header class="view-header"><div><p>SV / REGISTRO INSTITUCIONAL</p><h2 id="about-title">SOBRE A SANCTUM</h2></div><span class="record-code">FUNDAÇÃO: [CONFLITANTE]</span></header>
+          <div class="institution-record">
+            <article>
+              <p class="terminal-kicker">SANCTUM VERITATIS // A VERDADE SOB VIGÍLIA</p>
+              <h3>Guardamos aquilo que a realidade tenta esquecer.</h3>
+              <p>A Sanctum Veritatis é uma organização de investigação, custódia e contenção paranormal. Seus primeiros registros antecedem sua fundação oficial em quarenta e três anos. Nenhum documento concorda sobre quem a criou.</p>
+              <p>Seus agentes operam em células compartimentadas. Cada arquivo é uma contenção; cada testemunho, um risco. A organização não promete salvar o mundo. Promete impedir que o Outro Lado aprenda a pronunciá-lo.</p>
+              <div class="doctrine-lines"><span>OBSERVAR SEM SER VISTO.</span><span>REGISTRAR SEM SER LEMBRADO.</span><span>CONTER SEM SER NOMEADO.</span></div>
+            </article>
+            <aside class="archive-seal" aria-label="Monograma textual da Sanctum Veritatis"><span>SV</span><p>SANCTUM<br>VERITATIS</p><small>VERITAS SUB VIGILIA</small></aside>
+          </div>
+        </section>
+
+        <section class="system-view" id="view-external" data-view="external" aria-labelledby="external-title" hidden>
+          <header class="view-header"><div><p>SV / GATEWAY DE REDE</p><h2 id="external-title">CONEXÃO EXTERNA</h2></div><span class="record-code critical">CRIPTOGRAFIA NÃO GARANTIDA</span></header>
+          <div class="external-gateway">
+            <div class="gateway-diagram" aria-hidden="true"><span>SV-04</span><i></i><b>REDE EXTERNA</b></div>
+            <article>
+              <h3>Saída do ambiente compartimentado</h3>
+              <p>Os destinos abaixo pertencem a redes externas ou arquivos públicos da organização. A sessão operacional permanecerá registrada.</p>
+              <a href="https://discord.gg/9y2JqUSKGT" target="_blank" rel="noopener noreferrer"><span>EXT-01</span><strong>CANAL DE RECRUTAMENTO // DISCORD</strong><i>↗</i></a>
+              <a href="faq"><span>EXT-02</span><strong>PERGUNTAS FREQUENTES</strong><i>→</i></a>
+              <a href="Setentrional_Index"><span>EXT-03</span><strong>ABERTURA DA OPERAÇÃO</strong><i>→</i></a>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="command-console">
+      <div class="system-message"><span class="status-lamp"></span><p id="system-message" aria-live="polite">SISTEMA PRONTO // AGUARDANDO COMANDO</p></div>
+      <form id="command-form" autocomplete="off">
+        <label for="command-input">Terminal de comandos</label><span aria-hidden="true">SV:\SR-07&gt;</span><input id="command-input" type="text" spellcheck="false" placeholder="digite help"><button type="submit">EXEC</button>
+      </form>
+      <div class="footer-signal"><span id="footer-packet">PKT 0913</span><i></i><b>CANAL 09</b></div>
+    </footer>
+  </div>
+
+  <dialog class="document-modal" id="document-modal" aria-labelledby="document-title">
+    <div class="modal-frame">
+      <header><div><span id="document-code">SV-000</span><strong id="document-title">DOCUMENTO</strong></div><button id="close-document" type="button" aria-label="Fechar documento">FECHAR [ESC]</button></header>
+      <div class="document-meta" id="document-meta"></div>
+      <article class="document-content" id="document-content"></article>
+      <footer><span id="document-integrity">INTEGRIDADE --%</span><span>SANCTUM VERITATIS // CÓPIA CONTROLADA</span></footer>
+    </div>
+  </dialog>
+
+  <div class="notification-stack" id="notification-stack" aria-live="polite" aria-atomic="false"></div>
+  <div class="redirect-overlay" id="redirect-overlay" hidden aria-live="assertive"><span>DIRETÓRIO OCULTO LOCALIZADO</span><strong id="redirect-code">SV://████</strong><i></i></div>
+  <div class="entity-flash" id="entity-flash" hidden aria-hidden="true"><span></span><i></i></div>
+
+  <noscript><div class="noscript-message"><strong>INTERFACE INDISPONÍVEL.</strong> Este terminal utiliza JavaScript para autenticação e navegação. Ative-o para acessar a Operação Setentrional.</div></noscript>
+  <script src="js/setentrional-terminal.js" defer></script>
+</body>
+</html>

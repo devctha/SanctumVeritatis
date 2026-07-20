@@ -1,0 +1,1770 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/beyond_the_wall/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BEYOND THE WALL // RELAY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#020503;
+      --panel:#030a05;
+      --ink:#b7ffbf;
+      --ink2:#7bff8b;
+      --muted:#66a76f;
+      --dim:#2b5f35;
+      --warn:#ffe083;
+      --bad:#ff6d86;
+      --line:rgba(183,255,191,.22);
+      --line2:rgba(183,255,191,.10);
+      --glow:rgba(123,255,139,.35);
+      --glow2:rgba(183,255,191,.20);
+      --shadow:rgba(0,0,0,.75);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background:
+        radial-gradient(circle at 15% 0%, rgba(123,255,139,.12) 0, transparent 45%),
+        radial-gradient(circle at 110% 15%, rgba(183,255,191,.08) 0, transparent 42%),
+        linear-gradient(180deg, #010302 0, #000 100%);
+      color:var(--ink);
+      font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      overflow:hidden;
+      user-select:none;
+    }
+
+    /* CRT layers */
+    .crt{
+      position:fixed; inset:0;
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+      background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.15));
+      isolation:isolate;
+    }
+
+    .grid{
+      position:fixed; inset:0; pointer-events:none; z-index:1;
+      background-image:
+        linear-gradient(rgba(183,255,191,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(183,255,191,.05) 1px, transparent 1px);
+      background-size: 56px 56px;
+      opacity:.16;
+      mix-blend-mode: screen;
+    }
+    .scan{
+      position:fixed; inset:0; pointer-events:none; z-index:2;
+      background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,.45) 50%);
+      background-size:100% 2px;
+      opacity:.55;
+      mix-blend-mode: soft-light;
+    }
+    .vignette{
+      position:fixed; inset:0; pointer-events:none; z-index:3;
+      background: radial-gradient(circle at center, rgba(0,0,0,0) 58%, rgba(0,0,0,.92) 100%);
+    }
+    .grain{
+      position:fixed; inset:0; pointer-events:none; z-index:4;
+      opacity:.08;
+      background:
+        repeating-radial-gradient(circle at 20% 30%, rgba(255,255,255,.08) 0 1px, transparent 1px 4px),
+        repeating-radial-gradient(circle at 80% 70%, rgba(255,255,255,.05) 0 1px, transparent 1px 5px);
+      mix-blend-mode: overlay;
+      animation: grain 1.6s steps(2,end) infinite;
+    }
+    @keyframes grain{
+      0%{transform:translate(0,0)}
+      25%{transform:translate(-1%,1%)}
+      50%{transform:translate(1%,-1%)}
+      75%{transform:translate(1%,1%)}
+      100%{transform:translate(0,0)}
+    }
+
+    /* Flicker */
+    .flicker{
+      animation: flicker 6.5s infinite;
+    }
+    @keyframes flicker{
+      0%, 100% { filter:none; opacity:1; }
+      27% { filter:none; }
+      28% { opacity:.92; filter:contrast(1.08) brightness(1.05); }
+      29% { opacity:1; }
+      67% { filter:none; }
+      68% { opacity:.95; filter:saturate(1.12) contrast(1.10); }
+      69% { opacity:1; filter:none; }
+    }
+
+    /* Top bar */
+    .topbar{
+      z-index:10;
+      padding: 14px 16px 10px;
+      border-bottom:1px solid var(--line2);
+      background: linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.35));
+      backdrop-filter: blur(10px);
+    }
+    .top-inner{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .mark{
+      width:34px;height:34px;border-radius:10px;
+      border:1px solid rgba(183,255,191,.35);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.22) 0, transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(123,255,139,.35) 0, transparent 55%),
+        linear-gradient(135deg, rgba(183,255,191,.12), rgba(0,0,0,.55));
+      box-shadow: 0 0 28px rgba(123,255,139,.16);
+      position:relative;
+      overflow:hidden;
+    }
+    .mark::after{
+      content:"BTW";
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      font-weight:700;
+      letter-spacing:2px;
+      font-size:11px;
+      color:#081a0c;
+      text-shadow:none;
+    }
+    .brand h1{
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family:"Share Tech Mono", monospace;
+      margin-bottom: 2px;
+    }
+    .brand .sub{
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .status{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      font-size:11px;
+      letter-spacing:1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 6px 10px;
+      border:1px solid var(--line2);
+      background: rgba(0,0,0,.35);
+      border-radius: 999px;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;
+      background: radial-gradient(circle, #d1ffd7 0, #39ff57 45%, #0a6e1a 100%);
+      box-shadow: 0 0 16px rgba(57,255,87,.55);
+    }
+    .dot.warn{
+      background: radial-gradient(circle, #fff6cc 0, #ffd35b 45%, #6a4a0a 100%);
+      box-shadow: 0 0 16px rgba(255,211,91,.35);
+    }
+    .dot.bad{
+      background: radial-gradient(circle, #ffd0d8 0, #ff5a76 45%, #6a0a1a 100%);
+      box-shadow: 0 0 16px rgba(255,90,118,.30);
+    }
+
+    /* Main split */
+    .main{
+      z-index:10;
+      padding: 14px 16px;
+      overflow:hidden;
+    }
+    .main-inner{
+      max-width: 1200px;
+      margin: 0 auto;
+      height: calc(100vh - 64px - 78px);
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap: 14px;
+      min-height: 0;
+    }
+    @media (max-width: 980px){
+      .main-inner{ grid-template-columns: 1fr; height: calc(100vh - 64px - 78px); }
+      .side{ display:none; }
+    }
+
+    .panel{
+      border:1px solid var(--line2);
+      background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25));
+      box-shadow: 0 0 50px rgba(0,0,0,.55);
+      border-radius: 16px;
+      overflow:hidden;
+      position:relative;
+    }
+    .panel::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: linear-gradient(90deg, transparent, rgba(183,255,191,.10), transparent);
+      transform: translateX(-70%);
+      opacity:0;
+      transition:.4s;
+      pointer-events:none;
+    }
+    .panel:hover::before{ opacity:.9; transform: translateX(120%); }
+
+    .panel-h{
+      padding: 12px 12px 10px;
+      border-bottom:1px solid rgba(183,255,191,.12);
+      background: rgba(0,0,0,.45);
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .panel-h .t{
+      font-family:"Share Tech Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+      color: var(--ink);
+    }
+    .panel-h .mini{
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+
+    /* Side / dossier */
+    .side{
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+    .side .panel-body{
+      padding: 12px;
+      overflow:auto;
+      min-height:0;
+    }
+
+    .kv{
+      display:flex; justify-content:space-between; gap:10px;
+      padding: 8px 0;
+      border-bottom:1px dashed rgba(183,255,191,.14);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .kv:last-child{ border-bottom:none; }
+    .kv b{ color: var(--ink); font-weight:700; }
+    .hr{
+      height:1px;
+      background: rgba(183,255,191,.12);
+      margin: 12px 0;
+    }
+    .note{
+      color: rgba(183,255,191,.92);
+      font-size: 12px;
+      line-height: 1.7;
+      user-select:text;
+    }
+    .note .dim{ color: var(--muted); }
+    .mono{ font-family:"Share Tech Mono", monospace; letter-spacing:1px; text-transform:uppercase; }
+
+    /* Chat */
+    .chat{
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+    .log{
+      padding: 12px;
+      overflow:auto;
+      min-height:0;
+      background:
+        radial-gradient(circle at 30% 0%, rgba(123,255,139,.08) 0, transparent 45%),
+        rgba(0,0,0,.22);
+    }
+
+    .line{
+      margin-bottom: 10px;
+      line-height: 1.55;
+      font-size: 13px;
+      color: rgba(183,255,191,.92);
+      user-select:text;
+      word-break: break-word;
+    }
+    .line .ts{
+      color: rgba(102,167,111,.95);
+      margin-right: 8px;
+    }
+    .line .who{
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      margin-right: 8px;
+      font-family:"Share Tech Mono", monospace;
+    }
+    .line.you .who{ color: #d1ffe0; }
+    .line.nitho .who{ color: #7bff8b; text-shadow: 0 0 12px rgba(123,255,139,.25); }
+    .line.sys .who{ color: #c8ffd0; }
+    .line.warn{ color: #ffe7a6; }
+    .line.bad{ color: #ff9aac; }
+
+    .cursor{
+      display:inline-block;
+      width: 9px;
+      background: rgba(183,255,191,.85);
+      margin-left: 6px;
+      animation: blink 1.05s steps(2,end) infinite;
+      height: 14px;
+      vertical-align: -2px;
+      box-shadow: 0 0 18px rgba(183,255,191,.25);
+    }
+    @keyframes blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+    /* Choices footer */
+    .choices{
+      border-top: 1px solid rgba(183,255,191,.12);
+      background: rgba(0,0,0,.55);
+      padding: 10px 12px 12px;
+    }
+    .choice-head{
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+      margin-bottom: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 11px;
+    }
+    .choice-grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+    @media (max-width: 540px){
+      .choice-grid{ grid-template-columns: 1fr; }
+    }
+
+    .opt{
+      border:1px solid rgba(183,255,191,.18);
+      background: rgba(0,0,0,.35);
+      border-radius: 14px;
+      padding: 10px 10px;
+      cursor:pointer;
+      transition:.15s;
+      position:relative;
+      overflow:hidden;
+    }
+    .opt:hover{
+      border-color: rgba(183,255,191,.35);
+      background: rgba(0,0,0,.48);
+      box-shadow: 0 0 22px rgba(123,255,139,.10);
+    }
+    .opt.sel{
+      border-color: rgba(123,255,139,.55);
+      box-shadow: 0 0 26px rgba(123,255,139,.16);
+    }
+
+    .opt .k{
+      font-family:"Share Tech Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 11px;
+      color: rgba(183,255,191,.88);
+      margin-bottom: 6px;
+      display:flex; justify-content:space-between; gap:10px;
+    }
+    .opt .k span:last-child{ color: rgba(102,167,111,.95); letter-spacing:1px; }
+    .opt .q{
+      color: rgba(183,255,191,.92);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .kbd{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(183,255,191,.18);
+      background: rgba(0,0,0,.35);
+      font-size: 11px;
+      color: rgba(183,255,191,.86);
+      font-family:"Share Tech Mono", monospace;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+
+    /* Bottom bar */
+    .bottombar{
+      z-index:10;
+      padding: 10px 16px 14px;
+      border-top:1px solid rgba(183,255,191,.12);
+      background: linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.65));
+      backdrop-filter: blur(10px);
+    }
+    .bottom-inner{
+      max-width: 1200px;
+      margin: 0 auto;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .toggles{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .btn{
+      border:1px solid rgba(183,255,191,.18);
+      background: rgba(0,0,0,.35);
+      color: rgba(183,255,191,.92);
+      padding: 7px 10px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-family:"Share Tech Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 11px;
+      transition:.15s;
+    }
+    .btn:hover{ border-color: rgba(183,255,191,.35); background: rgba(0,0,0,.50); }
+    .btn.danger{ border-color: rgba(255,109,134,.35); color:#ffb8c5; }
+    .btn.warn{ border-color: rgba(255,224,131,.32); color:#ffe7a6; }
+
+    /* Boot overlay */
+    .boot{
+      position:fixed; inset:0; z-index:50;
+      display:grid; place-items:center;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(123,255,139,.08) 0, transparent 45%),
+        linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.96));
+      padding: 18px;
+    }
+    .boot-card{
+      width:min(980px, 96vw);
+      border:1px solid rgba(183,255,191,.22);
+      border-radius: 18px;
+      background: rgba(0,0,0,.55);
+      box-shadow: 0 0 70px rgba(0,0,0,.75);
+      overflow:hidden;
+    }
+    .boot-head{
+      padding: 12px 14px;
+      border-bottom:1px solid rgba(183,255,191,.12);
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+      background: rgba(0,0,0,.55);
+    }
+    .boot-head .t{
+      font-family:"Share Tech Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      font-size: 12px;
+      color: rgba(183,255,191,.92);
+    }
+    .boot-body{
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(183,255,191,.90);
+    }
+    .boot-lines{
+      margin-top: 10px;
+      border:1px solid rgba(183,255,191,.12);
+      background: rgba(0,0,0,.55);
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 170px;
+      max-height: 260px;
+      overflow:auto;
+      user-select:text;
+    }
+    .boot-line{ margin-bottom: 6px; color: rgba(183,255,191,.88); }
+    .boot-line.dim{ color: rgba(102,167,111,.95); }
+    .boot-line.bad{ color: #ff9aac; }
+    .boot-cta{
+      margin-top: 12px;
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+    }
+    .boot-cta .hint{
+      color: var(--muted);
+      text-transform:uppercase;
+      letter-spacing:2px;
+      font-family:"Share Tech Mono", monospace;
+      font-size: 11px;
+    }
+
+    /* End overlay */
+    .end{
+      position:fixed; inset:0; z-index:60;
+      display:none; place-items:center;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+    }
+    .end.show{ display:grid; }
+    .end-card{
+      width:min(980px, 96vw);
+      border:1px solid rgba(183,255,191,.22);
+      border-radius: 18px;
+      background: rgba(0,0,0,.70);
+      box-shadow: 0 0 80px rgba(0,0,0,.85);
+      overflow:hidden;
+    }
+    .end-head{
+      padding: 12px 14px;
+      border-bottom:1px solid rgba(183,255,191,.12);
+      display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+      background: rgba(0,0,0,.55);
+    }
+    .end-head .t{
+      font-family:"Share Tech Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      font-size: 12px;
+      color: rgba(183,255,191,.92);
+    }
+    .end-body{
+      padding: 14px;
+      color: rgba(183,255,191,.92);
+      font-size: 13px;
+      line-height: 1.75;
+      user-select:text;
+    }
+    .end-code{
+      margin-top: 10px;
+      border: 1px dashed rgba(183,255,191,.25);
+      background: rgba(0,0,0,.55);
+      border-radius: 14px;
+      padding: 12px;
+      font-family:"Share Tech Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      color: #d1ffe0;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .grain{animation:none}
+      .flicker{animation:none}
+      .cursor{animation:none}
+      .panel::before{transition:none}
+      .opt{transition:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grid"></div>
+  <div class="scan"></div>
+  <div class="vignette"></div>
+  <div class="grain"></div>
+
+  <!-- BOOT -->
+  <section class="boot" id="boot">
+    <div class="boot-card">
+      <div class="boot-head">
+        <div class="t">beyond the wall // relay terminal</div>
+        <div class="t" id="bootClock">--:--:--</div>
+      </div>
+      <div class="boot-body">
+        <div class="mono" style="color:rgba(183,255,191,.92);">sequência de ativação</div>
+        <div class="boot-lines" id="bootLines" aria-label="Log de inicialização"></div>
+        <div class="boot-cta">
+          <button class="btn" id="bootEnter">iniciar sessão</button>
+          <div class="hint">Clique ou pressione qualquer tecla para habilitar áudio e abrir o canal.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENDING -->
+  <section class="end" id="end">
+    <div class="end-card">
+      <div class="end-head">
+        <div class="t" id="endTitle">fim</div>
+        <button class="btn warn" id="endClose">voltar ao início</button>
+      </div>
+      <div class="end-body">
+        <div id="endText"></div>
+        <div class="end-code" id="endCode"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMINAL -->
+  <div class="crt flicker" id="app" aria-label="Terminal Beyond the Wall" style="opacity:0;pointer-events:none;">
+    <header class="topbar">
+      <div class="top-inner">
+        <div class="brand">
+          <div class="mark"></div>
+          <div>
+            <h1>Beyond the Wall</h1>
+            <div class="sub">DRACONIA relay · canal degradado · eco ativo</div>
+          </div>
+        </div>
+
+        <div class="status">
+          <span class="chip"><span class="dot" id="dotLink"></span>link: <span id="stLink" style="color:var(--ink);">estabelecido</span></span>
+          <span class="chip"><span class="dot warn" id="dotNoise"></span>ruído: <span id="stNoise" style="color:var(--warn);">alto</span></span>
+          <span class="chip"><span class="dot bad" id="dotTrace"></span>rastreamento: <span id="stTrace" style="color:#ffb8c5;">possível</span></span>
+          <span class="chip">relógio: <span id="clock" style="color:var(--ink);">--:--:--</span></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="main-inner">
+        <!-- DOSSIER -->
+        <aside class="panel side">
+          <div class="panel-h">
+            <div class="t">dossiê do canal</div>
+            <div class="mini">
+              <span class="kbd">↑</span><span class="kbd">↓</span><span>selecionar</span>
+              <span class="kbd">enter</span><span>enviar</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="kv"><span>nó</span><b>BTW-RELAY/Δ</b></div>
+            <div class="kv"><span>protocolo</span><b>ECO // ASYNCH</b></div>
+            <div class="kv"><span>operador remoto</span><b>NITHO//LOTUS</b></div>
+            <div class="kv"><span>afiliação</span><b>DRACONIA</b></div>
+            <div class="kv"><span>tema recorrente</span><b>PROJETO 23</b></div>
+            <div class="kv"><span>palavras-chave</span><b>membrana · gota · lm</b></div>
+            <div class="hr"></div>
+            <div class="note">
+              <span class="mono" style="color:rgba(183,255,191,.92);">nota operacional:</span><br>
+              <span class="dim">Este terminal não envia texto livre.</span> Escolhas são pré‑definidas para reduzir padrões e evitar indexação.<br><br>
+              Progresso de sessão:<br>
+              - Confiança: <span id="vTrust" style="color:var(--ink);">0</span><br>
+              - Suspeita: <span id="vSusp" style="color:#ffb8c5;">0</span><br>
+              - Fragmentos: <span id="vKeys" style="color:var(--warn);">0/3</span><br>
+              - Estado: <span id="vState" style="color:var(--ink);">BOOT</span>
+            </div>
+            <div class="hr"></div>
+            <div class="note dim">
+              <span class="mono">alerta:</span> perguntas diretas sobre invasão e acelerador são registradas pelo eco — respostas podem mudar com base em <span style="color:#e5ffe9;">tom</span> e <span style="color:#e5ffe9;">sequência</span>.
+            </div>
+          </div>
+        </aside>
+
+        <!-- CHAT -->
+        <section class="panel chat">
+          <div class="panel-h">
+            <div class="t">terminal / chat</div>
+            <div class="mini">
+              <span>canal: <span style="color:var(--ink);">limiar</span></span>
+              <span>latência: <span id="lat" style="color:var(--warn);">variável</span></span>
+              <span>modo: <span id="mode" style="color:var(--ink);">escolhas</span></span>
+            </div>
+          </div>
+
+          <div class="log" id="log" aria-label="Log do chat"></div>
+
+          <div class="choices">
+            <div class="choice-head">
+              <div>opções disponíveis <span id="optCount">0</span></div>
+              <div>
+                <span class="kbd">1-9</span> atalhos
+                <span style="margin:0 8px;opacity:.55;">|</span>
+                <span class="kbd">m</span> mute
+                <span class="kbd">r</span> reiniciar
+              </div>
+            </div>
+            <div class="choice-grid" id="choices"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="bottombar">
+      <div class="bottom-inner">
+        <div>BTW-RELAY/Δ · “não existe parede — só distância”</div>
+        <div class="toggles">
+          <button class="btn" id="btnSound">som: on</button>
+          <button class="btn" id="btnFx">fx: on</button>
+          <button class="btn danger" id="btnPanic">panic</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /***********************************************************************
+     *  BEYOND THE WALL — single-file interactive terminal
+     *  - predefined player choices
+     *  - branching narrative with 20+ endings
+     *  - WebAudio hum + key ticks (unlocked on user gesture)
+     ***********************************************************************/
+
+    // ---------- Utilities
+    const $ = (q, el=document) => el.querySelector(q);
+    const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
+    const sleep = (ms)=>new Promise(r=>setTimeout(r, ms));
+    const nowTS = ()=>new Date().toLocaleTimeString("pt-BR",{hour12:false});
+
+    // ---------- Elements
+    const boot = $("#boot");
+    const bootLines = $("#bootLines");
+    const bootEnter = $("#bootEnter");
+    const bootClock = $("#bootClock");
+    const app = $("#app");
+
+    const log = $("#log");
+    const choicesEl = $("#choices");
+    const optCount = $("#optCount");
+
+    const vTrust = $("#vTrust");
+    const vSusp = $("#vSusp");
+    const vKeys = $("#vKeys");
+    const vState = $("#vState");
+
+    const clock = $("#clock");
+    const lat = $("#lat");
+    const mode = $("#mode");
+
+    const btnSound = $("#btnSound");
+    const btnFx = $("#btnFx");
+    const btnPanic = $("#btnPanic");
+
+    const end = $("#end");
+    const endTitle = $("#endTitle");
+    const endText = $("#endText");
+    const endCode = $("#endCode");
+    const endClose = $("#endClose");
+
+    // ---------- Runtime state
+    const state = {
+      node: "start",
+      trust: 0,
+      susp: 0,
+      keys: 0,
+      flags: {
+        greeted:false,
+        askedWho:false,
+        askedDraconia:false,
+        askedProject:false,
+        askedPentagon:false,
+        askedAccelerator:false,
+        askedMembrane:false,
+        askedGota:false,
+        askedLM:false,
+        namedAgents: new Set(),
+        offeredHelp:false,
+        threatened:false,
+        compassionate:false,
+        pragmatic:false,
+        skeptical:false,
+        usedCodePhrase:false,
+        gotKeyA:false,
+        gotKeyB:false,
+        gotKeyC:false,
+        readNamesOrder:false,
+        askedNithoRole:false,
+        askedFailures:false,
+        askedWhatHappenedToKim:false,
+        askedWhatHappenedToNick:false,
+        askedWhatHappenedToGenesis:false,
+        askedWhatHappenedToHaozang:false,
+        askedWhatHappenedToZCNO:false,
+        askedWhatHappenedToMaarcus:false,
+      },
+      fx: true,
+      sound: true,
+      audioReady:false,
+      ended:false,
+      selectedIndex: 0,
+      lockInput:false
+    };
+
+    function syncSide(){
+      vTrust.textContent = state.trust;
+      vSusp.textContent = state.susp;
+      vKeys.textContent = `${state.keys}/3`;
+      vState.textContent = state.node.toUpperCase();
+    }
+
+    // ---------- WebAudio (hum + tick)
+    let audioCtx = null;
+    let masterGain = null;
+    let humGain = null;
+    let humOsc = null;
+    let humNoiseBuf = null;
+
+    function ensureAudio(){
+      if (state.audioReady) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = state.sound ? 0.55 : 0.0;
+      masterGain.connect(audioCtx.destination);
+
+      // HUM tone
+      humOsc = audioCtx.createOscillator();
+      humOsc.type = "sine";
+      humOsc.frequency.value = 57; // low hum
+      humGain = audioCtx.createGain();
+      humGain.gain.value = 0.045;
+
+      // LFO for wobble
+      const lfo = audioCtx.createOscillator();
+      lfo.type = "sine";
+      lfo.frequency.value = 0.18;
+      const lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = 0.03;
+      lfo.connect(lfoGain);
+      lfoGain.connect(humGain.gain);
+
+      // Noise buffer for hiss
+      humNoiseBuf = createNoiseBuffer(1.6);
+      const hiss = audioCtx.createBufferSource();
+      hiss.buffer = humNoiseBuf;
+      hiss.loop = true;
+      const hissGain = audioCtx.createGain();
+      hissGain.gain.value = 0.012;
+
+      // A tiny lowpass to soften
+      const lp = audioCtx.createBiquadFilter();
+      lp.type = "lowpass";
+      lp.frequency.value = 1200;
+
+      humOsc.connect(humGain);
+      humGain.connect(lp);
+      hiss.connect(hissGain);
+      hissGain.connect(lp);
+      lp.connect(masterGain);
+
+      humOsc.start();
+      lfo.start();
+      hiss.start();
+
+      state.audioReady = true;
+    }
+
+    function createNoiseBuffer(seconds){
+      const sr = (audioCtx || new (window.AudioContext || window.webkitAudioContext)()).sampleRate;
+      const length = Math.floor(sr * seconds);
+      const buffer = (audioCtx || new (window.AudioContext || window.webkitAudioContext)()).createBuffer(1, length, sr);
+      const data = buffer.getChannelData(0);
+      for (let i=0;i<length;i++){
+        // gentle hiss (not too loud)
+        data[i] = (Math.random()*2-1) * 0.20;
+      }
+      return buffer;
+    }
+
+    function tick(intensity=1){
+      if (!state.sound || !state.audioReady) return;
+      // short click using noise burst + envelope
+      const src = audioCtx.createBufferSource();
+      src.buffer = createNoiseBuffer(0.06);
+      const g = audioCtx.createGain();
+      const t = audioCtx.currentTime;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.06*intensity, t+0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.055);
+      src.connect(g);
+      g.connect(masterGain);
+      src.start();
+      src.stop(t+0.06);
+    }
+
+    function setSound(on){
+      state.sound = on;
+      btnSound.textContent = `som: ${on ? "on" : "off"}`;
+      if (state.audioReady){
+        masterGain.gain.value = on ? 0.55 : 0.0;
+      }
+    }
+
+    // ---------- Boot sequence
+    const BOOT_SEQ = [
+      ["dim", "[BTW] iniciando watchdog de sessão..."],
+      ["dim", "[BTW] calibrando fósforo verde..."],
+      ["dim", "[BTW] abrindo canal DRACONIA/Δ..."],
+      ["dim", "[BTW] carregando filtros anti-indexação..."],
+      ["dim", "[BTW] sincronizando relógio local..."],
+      ["bad", "[BTW] aviso: eco detectado (padrões antigos)."],
+      ["dim", "[BTW] preparando interface de escolhas..."],
+      ["dim", "[BTW] aguardando gesto do operador para habilitar áudio..."]
+    ];
+
+    async function runBoot(){
+      bootLines.innerHTML = "";
+      for (const [cls, text] of BOOT_SEQ){
+        const div = document.createElement("div");
+        div.className = `boot-line ${cls||""}`.trim();
+        div.textContent = text;
+        bootLines.appendChild(div);
+        bootLines.scrollTop = bootLines.scrollHeight;
+        await sleep(240);
+      }
+    }
+
+    function showApp(){
+      boot.style.opacity = "0";
+      boot.style.pointerEvents = "none";
+      setTimeout(()=>boot.remove(), 360);
+      app.style.opacity = "1";
+      app.style.pointerEvents = "auto";
+    }
+
+    // ---------- Log + typing
+    function pushLine({who="SYS", text="", kind="sys"}){
+      const div = document.createElement("div");
+      div.className = `line ${kind}`.trim();
+      const ts = document.createElement("span");
+      ts.className = "ts";
+      ts.textContent = `[${nowTS()}]`;
+      const w = document.createElement("span");
+      w.className = "who";
+      w.textContent = who;
+      const msg = document.createElement("span");
+      msg.className = "msg";
+      msg.textContent = " " + text;
+
+      div.appendChild(ts);
+      div.appendChild(w);
+      div.appendChild(msg);
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+
+      if (state.fx) tick(0.55);
+      return div;
+    }
+
+    async function typeNitho(text, {speed=14, jitter=180} = {}){
+      const div = document.createElement("div");
+      div.className = "line nitho";
+      div.innerHTML = `<span class="ts">[${nowTS()}]</span><span class="who">NITHO//LOTUS</span><span class="msg"></span><span class="cursor"></span>`;
+      const msg = div.querySelector(".msg");
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+
+      for (let i=0;i<text.length;i++){
+        msg.textContent = " " + text.slice(0, i+1);
+        if (state.fx && i % 2 === 0) tick(0.42);
+        if (Math.random() > 0.985 && state.fx){
+          // tiny latency spike
+          lat.textContent = "pico";
+          await sleep(220);
+          lat.textContent = "variável";
+        }
+        await sleep(speed + Math.random()*jitter/10);
+      }
+
+      const cur = div.querySelector(".cursor");
+      if (cur) cur.remove();
+      log.scrollTop = log.scrollHeight;
+      return div;
+    }
+
+    function sysNoiseLine(){
+      const snippets = [
+        "eco::desvio/limiar=0.23",
+        "ruído::harmônico=instável",
+        "cache::memória = fragmentada",
+        "retorno::cifra = parcial",
+        "watchdog::batimento ok",
+        "rastro::sombra detectada",
+        "membrana::tensão subindo",
+        "Δ::pacote perdido, reenvio"
+      ];
+      const s = snippets[Math.floor(Math.random()*snippets.length)];
+      pushLine({who:"BTW", text:s, kind:"sys"});
+    }
+
+    // ---------- Dialogue model
+    function addKey(which){
+      if (which==="A" && !state.flags.gotKeyA){ state.flags.gotKeyA=true; state.keys++; }
+      if (which==="B" && !state.flags.gotKeyB){ state.flags.gotKeyB=true; state.keys++; }
+      if (which==="C" && !state.flags.gotKeyC){ state.flags.gotKeyC=true; state.keys++; }
+      syncSide();
+    }
+
+    function nudge({trust=0, susp=0}){
+      state.trust = Math.max(0, Math.min(9, state.trust + trust));
+      state.susp  = Math.max(0, Math.min(9, state.susp + susp));
+      syncSide();
+    }
+
+    // Options generator: more than 5 options always where possible
+    function getOptions(node){
+      const opts = [];
+
+      const base = [
+        {id:"who", title:"Identidade", q:"Quem está no outro lado do canal?", hint:"perfil"},
+        {id:"draconia", title:"DRACONIA", q:"O que é DRACONIA — e por que seu nome está aqui?", hint:"origem"},
+        {id:"project", title:"Projeto 23", q:"Projeto 23: diga o que foi. Sem metáforas.", hint:"núcleo"},
+        {id:"membrane", title:"Membrana", q:"Explique ‘Membrana’ do seu jeito. O que perfuraram?", hint:"teoria"},
+        {id:"gota", title:"Gota", q:"Falam de Gota. É arma? remédio? chave?", hint:"vetor"},
+        {id:"lm", title:"LM", q:"LM: protocolo, substância ou mentira?", hint:"memória"},
+        {id:"agents", title:"Agentes", q:"Liste os seis agentes do Projeto 23.", hint:"nomes"},
+        {id:"nitho", title:"Operador", q:"Você era o operador de campo. O que isso significa?", hint:"papel"},
+        {id:"pentagon", title:"Pentágono", q:"‘Invasão no Pentágono’ — o que realmente aconteceu?", hint:"incidente"},
+        {id:"accelerator", title:"Acelerador", q:"Acelerador de partículas para perfurar a Membrana... por quê?", hint:"máquina"},
+        {id:"fail", title:"Falhas", q:"Qual foi a pior falha do Projeto 23?", hint:"queda"},
+        {id:"help", title:"Acordo", q:"Eu posso ajudar. O que você quer em troca?", hint:"troca"},
+        {id:"threat", title:"Pressão", q:"Se você mentir, eu encerro o canal agora.", hint:"risco"},
+        {id:"silence", title:"Silêncio", q:"...", hint:"esperar"},
+      ];
+
+      const deep = [
+        {id:"code", title:"Frase", q:"‘Além do muro, a flor não morre’. Reconhece?", hint:"cifra"},
+        {id:"kim", title:"Kim", q:"O que aconteceu com Kim?", hint:"agente"},
+        {id:"nick", title:"Nick Martin", q:"O que aconteceu com Nick Martin?", hint:"agente"},
+        {id:"maar", title:"Maarcus", q:"O que aconteceu com Maarcus?", hint:"agente"},
+        {id:"zcno", title:"ZCNO", q:"ZCNO: isso é pessoa ou codinome?", hint:"agente"},
+        {id:"genesis", title:"Genesis", q:"Genesis: por que esse nome aparece em todos os ecos?", hint:"agente"},
+        {id:"haoz", title:"Haozang", q:"Haozang: por que o eco falha quando digo esse nome?", hint:"agente"},
+        {id:"unlock", title:"Destravamento", q:"Tenho fragmentos. O que abre quando completo os três?", hint:"chave"}
+      ];
+
+      if (node === "start"){
+        return [
+          {id:"hello", title:"Conectar", q:"NITHO//LOTUS, você me ouve?", hint:"início"},
+          {id:"cold", title:"Acesso", q:"Relé Beyond the Wall: requisitando handshake.", hint:"início"},
+          {id:"lost", title:"Perdido", q:"Não sei como cheguei aqui. Eu só… acordei com o terminal ligado.", hint:"início"},
+          {id:"observe", title:"Observar", q:"Ficar em silêncio e apenas monitorar o canal.", hint:"início"},
+          {id:"panic", title:"Pânico", q:"Desligar tudo. Isso é uma armadilha.", hint:"início"},
+          {id:"sound", title:"Som", q:"Ativar/Desativar som do terminal.", hint:"config"}
+        ];
+      }
+
+      // default menu: always more than 5
+      base.forEach(o => opts.push(o));
+
+      // unlock deeper menu when trust or keys allow
+      if (state.trust >= 2 || state.keys >= 1) deep.forEach(o => opts.push(o));
+
+      // once ended, show only restart
+      if (state.ended){
+        return [{id:"restart", title:"Reiniciar", q:"Reiniciar sessão e limpar eco.", hint:"reset"}];
+      }
+
+      // prune a little based on flags so it feels reactive (still plenty)
+      if (state.flags.threatened){
+        // keep it but add "apology"
+        opts.unshift({id:"apology", title:"Recuar", q:"Ok. Sem ameaças. Eu só quero entender.", hint:"tom"});
+      }
+
+      // keep at least 8 options for richness
+      return opts.slice(0, 12);
+    }
+
+    function renderOptions(){
+      const opts = getOptions(state.node);
+      optCount.textContent = opts.length;
+
+      state.selectedIndex = Math.min(state.selectedIndex, Math.max(0, opts.length-1));
+
+      choicesEl.innerHTML = opts.map((o, idx) => `
+        <div class="opt ${idx===state.selectedIndex ? "sel":""}" data-idx="${idx}" data-id="${o.id}">
+          <div class="k"><span>${o.title}</span><span>${idx<9 ? ("tecla "+(idx+1)) : o.hint}</span></div>
+          <div class="q">${o.q}</div>
+        </div>
+      `).join("");
+
+      $$(".opt", choicesEl).forEach(card=>{
+        card.addEventListener("click", async ()=>{
+          if (state.lockInput) return;
+          state.selectedIndex = Number(card.dataset.idx);
+          renderOptions();
+          await choose(state.selectedIndex);
+        });
+      });
+    }
+
+    function selectedOption(){
+      const opts = getOptions(state.node);
+      return opts[state.selectedIndex];
+    }
+
+    // ---------- NITHO response engine
+    function randomBetween(a,b){ return a + Math.random()*(b-a); }
+
+    function setLatencyStyle(){
+      const v = Math.random();
+      if (v < 0.7) lat.textContent = "variável";
+      else if (v < 0.9) lat.textContent = "alta";
+      else lat.textContent = "pico";
+    }
+
+    async function respond(optionId){
+      // occasional system noise
+      if (state.fx && Math.random() > 0.72) sysNoiseLine();
+
+      // Interpret choice: adjust flags, trust/susp, keys
+      const say = async (t, cfg={})=>{
+        setLatencyStyle();
+        await sleep(250 + Math.random()*400);
+        await typeNitho(t, cfg);
+      };
+
+      // Guard: if ended, ignore
+      if (state.ended) return;
+
+      // Core behaviors
+      if (optionId === "sound"){
+        setSound(!state.sound);
+        pushLine({who:"SYS", text:`Áudio ${state.sound ? "ativado" : "desativado"}.`, kind:"sys"});
+        return;
+      }
+
+      if (optionId === "panic"){
+        // immediate ending
+        triggerEnding("E01", "CORTINA PRETA", "Você desligou o relé antes do eco completar o ciclo. O canal fechou como uma pálpebra — e algo do outro lado pareceu notar o gesto.", "END:E01 // BLACKOUT");
+        return;
+      }
+
+      // Start node
+      if (state.node === "start"){
+        if (optionId === "hello"){
+          state.flags.greeted = true;
+          nudge({trust:1, susp:0});
+          state.node = "hub";
+          syncSide();
+          pushLine({who:"YOU", text:"NITHO//LOTUS, você me ouve?", kind:"you"});
+          await say("Ouço. Mas o canal não é seu. Você só encontrou a porta.", {speed:12});
+          await say("Se quer respostas, escolhe as perguntas certas. Se quer paz, fecha os olhos.", {speed:12});
+          if (state.fx) await sleep(180);
+          renderOptions();
+          return;
+        }
+        if (optionId === "cold"){
+          nudge({trust:0, susp:1});
+          state.node = "hub";
+          syncSide();
+          pushLine({who:"YOU", text:"Relé Beyond the Wall: requisitando handshake.", kind:"you"});
+          await say("Handshakes são para quem acredita em protocolo. Eu acredito em ruído.", {speed:12});
+          await say("Você quer falar com um fantasma ou com um operador? Decide pelo tom.", {speed:12});
+          renderOptions();
+          return;
+        }
+        if (optionId === "lost"){
+          state.flags.compassionate = true;
+          nudge({trust:1, susp:0});
+          state.node = "hub";
+          syncSide();
+          pushLine({who:"YOU", text:"Não sei como cheguei aqui. Eu só… acordei com o terminal ligado.", kind:"you"});
+          await say("Então você também ouviu o zumbido antes do zumbido existir.", {speed:12});
+          await say("Não se culpe. O relé escolhe quem consegue suportar a estática.", {speed:12});
+          renderOptions();
+          return;
+        }
+        if (optionId === "observe"){
+          nudge({trust:0, susp:0});
+          state.node = "hub";
+          syncSide();
+          pushLine({who:"YOU", text:"Ficar em silêncio e apenas monitorar o canal.", kind:"you"});
+          await say("Silêncio é uma pergunta. E perguntas chamam coisas.", {speed:12});
+          await say("Se você não fala, o eco fala por você.", {speed:12});
+          renderOptions();
+          return;
+        }
+        if (optionId === "panic"){
+          pushLine({who:"YOU", text:"Desligar tudo. Isso é uma armadilha.", kind:"you"});
+          await say("Tarde demais. Você já olhou.", {speed:12});
+          triggerEnding("E02", "ARMADILHA DE ECO", "O relé desliga, mas o zumbido permanece na cabeça como um segundo coração. Você passou a existir no registro.", "END:E02 // ECHO-SNARE");
+          return;
+        }
+        return;
+      }
+
+      if (optionId === "restart"){
+        restartSession();
+        return;
+      }
+
+      if (optionId === "silence"){
+        pushLine({who:"YOU", text:"...", kind:"you"});
+        await say("Você acha que silêncio é invisibilidade. Não é.", {speed:12});
+        await say("Se quiser me testar, use nomes. Se quiser me perder, use ameaça.", {speed:12});
+        return;
+      }
+
+      if (optionId === "apology"){
+        pushLine({who:"YOU", text:"Ok. Sem ameaças. Eu só quero entender.", kind:"you"});
+        state.flags.threatened = false;
+        nudge({trust:1, susp:-1});
+        await say("Bom. A Membrana odeia mãos trêmulas.", {speed:12});
+        await say("Pergunta de novo, mas com intenção limpa.", {speed:12});
+        return;
+      }
+
+      if (optionId === "threat"){
+        pushLine({who:"YOU", text:"Se você mentir, eu encerro o canal agora.", kind:"you"});
+        state.flags.threatened = true;
+        nudge({trust:-1, susp:2});
+        await say("Ameaça é língua de quem nunca escutou o outro lado responder.", {speed:12});
+        await say("Encerra. Eu já fui encerrado antes. Só sobra o que não morre.", {speed:12});
+        if (state.susp >= 6){
+          triggerEnding("E03", "QUARENTENA", "O canal entra em contenção automática. A tela apaga em blocos. Você sente que foi avaliado — e reprovado.", "END:E03 // QUARANTINE");
+        }
+        return;
+      }
+
+      if (optionId === "help"){
+        pushLine({who:"YOU", text:"Eu posso ajudar. O que você quer em troca?", kind:"you"});
+        state.flags.offeredHelp = true;
+        nudge({trust:1, susp:0});
+        await say("Ajuda é um termo bonito. Eu chamo de troca.", {speed:12});
+        await say("Três fragmentos. Três decisões. O resto é teatro.", {speed:12});
+        await say("Você quer o Projeto 23? Então aguenta o peso de saber.", {speed:12});
+        if (!state.flags.gotKeyA){
+          await say("Primeiro fragmento: pergunte por que a Bio Gênese queria ‘Gota’ e ‘LM’ no mesmo corredor.", {speed:12});
+        }
+        return;
+      }
+
+      if (optionId === "who"){
+        pushLine({who:"YOU", text:"Quem está no outro lado do canal?", kind:"you"});
+        state.flags.askedWho = true;
+        nudge({trust:1, susp:0});
+        await say("Um nome que sobrou depois que o resto virou etiqueta.", {speed:12});
+        await say("Me chamavam de operador de campo. DRACONIA me chamava de útil. O Projeto 23 me chamou de culpado.", {speed:12});
+        await say("NITHO//LOTUS. O resto é ruído tentando parecer história.", {speed:12});
+        return;
+      }
+
+      if (optionId === "draconia"){
+        pushLine({who:"YOU", text:"O que é DRACONIA — e por que seu nome está aqui?", kind:"you"});
+        state.flags.askedDraconia = true;
+        nudge({trust:1, susp:0});
+        await say("DRACONIA é um jeito de dizer ‘não confie em governos, corporações ou santos’.", {speed:12});
+        await say("A gente fazia o que ninguém assinava. Cortava caminho onde o caminho era proibido.", {speed:12});
+        await say("E o Projeto 23… foi uma vez em que o caminho cortou a gente de volta.", {speed:12});
+        return;
+      }
+
+      if (optionId === "project"){
+        pushLine({who:"YOU", text:"Projeto 23: diga o que foi. Sem metáforas.", kind:"you"});
+        state.flags.askedProject = true;
+        nudge({trust:0, susp:1});
+        await say("Sem metáforas? Então escuta cru.", {speed:12});
+        await say("Projeto 23 tentou perfurar a Membrana usando um acelerador de partículas instalado onde ninguém deveria instalar nada.", {speed:12});
+        await say("A justificativa era ‘explorar’. O real era ‘controlar’. O resultado foi ‘vazar’.", {speed:12});
+        if (state.flags.askedPentagon || state.flags.askedAccelerator){
+          await say("Você já suspeitava. Agora você sabe.", {speed:12});
+        }
+        return;
+      }
+
+      if (optionId === "membrane"){
+        pushLine({who:"YOU", text:"Explique ‘Membrana’ do seu jeito. O que perfuraram?", kind:"you"});
+        state.flags.askedMembrane = true;
+        nudge({trust:1, susp:0});
+        await say("A Membrana é o ‘não’.", {speed:12});
+        await say("É o tecido que diz: ‘vivo aqui, morto ali, sonho acolá’.", {speed:12});
+        await say("Quando você perfura, as categorias misturam. E o que mistura… aprende seu endereço.", {speed:12});
+        return;
+      }
+
+      if (optionId === "gota"){
+        pushLine({who:"YOU", text:"Falam de Gota. É arma? remédio? chave?", kind:"you"});
+        state.flags.askedGota = true;
+        nudge({trust:1, susp:0});
+        await say("Gota é uma chave que finge ser remédio.", {speed:12});
+        await say("Ela não abre uma porta. Ela convence você a acreditar que a porta sempre esteve aberta.", {speed:12});
+        await say("Bio Gênese queria Gota para produzir incursões previsíveis. Previsível o suficiente pra virar produto.", {speed:12});
+        if (!state.flags.gotKeyA){
+          addKey("A");
+          await say("Fragmento A obtido. Não comemore: isso só significa que você está dentro da conversa.", {speed:12});
+        }
+        return;
+      }
+
+      if (optionId === "lm"){
+        pushLine({who:"YOU", text:"LM: protocolo, substância ou mentira?", kind:"you"});
+        state.flags.askedLM = true;
+        nudge({trust:1, susp:0});
+        await say("LM é um molde para a lembrança.", {speed:12});
+        await say("Quem usa LM aprende a esquecer do jeito certo. Esquecer sem perder função.", {speed:12});
+        await say("E se você aprende a esquecer… alguém aprende a escrever no espaço que sobrou.", {speed:12});
+        if (!state.flags.gotKeyB && (state.flags.askedGota || state.trust >= 3)){
+          addKey("B");
+          await say("Fragmento B obtido. Agora você tem dois pedaços da fechadura.", {speed:12});
+        }
+        return;
+      }
+
+      if (optionId === "agents"){
+        pushLine({who:"YOU", text:"Liste os seis agentes do Projeto 23.", kind:"you"});
+        nudge({trust:0, susp:1});
+        await say("Seis nomes. Seis sombras.", {speed:12});
+        await say("Nick Martin. Maarcus. ZCNO. Genesis. Haozang. Kim.", {speed:12});
+        await say("Eu era o operador de campo. Eu abria o caminho e fingia que o chão era seguro.", {speed:12});
+        state.flags.readNamesOrder = true;
+        return;
+      }
+
+      if (optionId === "nitho"){
+        pushLine({who:"YOU", text:"Você era o operador de campo. O que isso significa?", kind:"you"});
+        state.flags.askedNithoRole = true;
+        nudge({trust:1, susp:0});
+        await say("Operador de campo é o que carrega o erro até o lugar onde ninguém mais quer carregar.", {speed:12});
+        await say("Eu validava rotas, cortava comunicações, escolhia portas. E eu dizia ‘vai dar certo’ quando era mentira.", {speed:12});
+        await say("Quando o acelerador acordou, eu fui o primeiro a ouvir o Outro Lado repetir meu nome.", {speed:12});
+        return;
+      }
+
+      if (optionId === "pentagon"){
+        pushLine({who:"YOU", text:"‘Invasão no Pentágono’ — o que realmente aconteceu?", kind:"you"});
+        state.flags.askedPentagon = true;
+        nudge({trust:0, susp:2});
+        await say("Primeiro: não foi invasão do jeito que você imagina.", {speed:12});
+        await say("Foi uma infiltração por dentro. Crachá certo, corredor certo, silêncio certo.", {speed:12});
+        await say("A Bio Gênese precisava de energia, blindagem e sigilo. O Pentágono tinha tudo isso.", {speed:12});
+        if (state.susp >= 7){
+          triggerEnding("E04", "PORTAS FECHADAS", "Perguntas diretas demais, cedo demais. O eco detecta padrão e lacra o canal.", "END:E04 // DOORS-SHUT");
+        }
+        return;
+      }
+
+      if (optionId === "accelerator"){
+        pushLine({who:"YOU", text:"Acelerador de partículas para perfurar a Membrana... por quê?", kind:"you"});
+        state.flags.askedAccelerator = true;
+        nudge({trust:0, susp:2});
+        await say("Porque ‘abrir’ não basta. Eles queriam furar do tamanho certo.", {speed:12});
+        await say("Um furo grande demais derrama. Pequeno demais… concentra.", {speed:12});
+        await say("E concentração é como você aponta uma coisa para alguém.", {speed:12});
+        if (!state.flags.gotKeyC && state.flags.askedProject && state.flags.askedMembrane){
+          addKey("C");
+          await say("Fragmento C obtido. Três pedaços. Agora o relé pode te mostrar o fim que você merece.", {speed:12});
+        }
+        return;
+      }
+
+      if (optionId === "fail"){
+        pushLine({who:"YOU", text:"Qual foi a pior falha do Projeto 23?", kind:"you"});
+        state.flags.askedFailures = true;
+        nudge({trust:1, susp:0});
+        await say("A pior falha não foi técnica.", {speed:12});
+        await say("Foi humana: alguém acreditou que o Outro Lado era um lugar, não uma resposta.", {speed:12});
+        await say("Quando o acelerador tocou a Membrana, a Membrana tocou de volta. E escolheu quem lembrar.", {speed:12});
+        return;
+      }
+
+      if (optionId === "code"){
+        pushLine({who:"YOU", text:"‘Além do muro, a flor não morre’. Reconhece?", kind:"you"});
+        state.flags.usedCodePhrase = true;
+        nudge({trust:2, susp:-1});
+        await say("Você sabe a frase.", {speed:12});
+        await say("Então você não é só curioso. Você é vetor ou sobrevivente.", {speed:12});
+        await say("Ok. Vou falar mais perto do osso. Mas se você for eco… eu te queimo por dentro.", {speed:12});
+        return;
+      }
+
+      if (optionId === "zcno"){
+        pushLine({who:"YOU", text:"ZCNO: isso é pessoa ou codinome?", kind:"you"});
+        state.flags.askedWhatHappenedToZCNO = true;
+        nudge({trust:1, susp:0});
+        await say("ZCNO era pessoa antes de virar sigla.", {speed:12});
+        await say("Ele falava pouco. Observava demais. E quando a Membrana cedeu, foi o primeiro a ‘entender’ sem palavras.", {speed:12});
+        await say("Depois disso, todo rádio perto dele começou a repetir números como se fossem preces.", {speed:12});
+        return;
+      }
+
+      if (optionId === "genesis"){
+        pushLine({who:"YOU", text:"Genesis: por que esse nome aparece em todos os ecos?", kind:"you"});
+        state.flags.askedWhatHappenedToGenesis = true;
+        nudge({trust:1, susp:0});
+        await say("Porque Genesis era o ponto de ancoragem.", {speed:12});
+        await say("Quando o resto oscilava, Genesis estabilizava. Bio Gênese adorava isso.", {speed:12});
+        await say("No final, a ancoragem virou corrente. E corrente puxa os dois lados.", {speed:12});
+        return;
+      }
+
+      if (optionId === "haoz"){
+        pushLine({who:"YOU", text:"Haozang: por que o eco falha quando digo esse nome?", kind:"you"});
+        state.flags.askedWhatHappenedToHaozang = true;
+        nudge({trust:1, susp:0});
+        await say("Porque Haozang aprendeu a esconder o próprio rastro.", {speed:12});
+        await say("Ele via padrões no ruído. E ruído é onde o relé vive.", {speed:12});
+        await say("Se Haozang ainda existe, ele existe entre teclas — no intervalo em que você acha que nada aconteceu.", {speed:12});
+        return;
+      }
+
+      if (optionId === "kim"){
+        pushLine({who:"YOU", text:"O que aconteceu com Kim?", kind:"you"});
+        state.flags.askedWhatHappenedToKim = true;
+        nudge({trust:1, susp:0});
+        await say("Kim era pequena demais para carregar aquilo.", {speed:12});
+        await say("Mas era grande demais por dentro. A Gota reagia como se reconhecesse uma casa.", {speed:12});
+        await say("No dia final, Kim não entrou no corredor. O corredor entrou nela.", {speed:12});
+        return;
+      }
+
+      if (optionId === "nick"){
+        pushLine({who:"YOU", text:"O que aconteceu com Nick Martin?", kind:"you"});
+        state.flags.askedWhatHappenedToNick = true;
+        nudge({trust:1, susp:0});
+        await say("Nick era força bruta com um código moral torto.", {speed:12});
+        await say("Quando a invasão começou por dentro, ele percebeu tarde. Tentou virar a arma contra o dono.", {speed:12});
+        await say("No relatório, ele morreu. No eco, ele ainda corre.", {speed:12});
+        return;
+      }
+
+      if (optionId === "maar"){
+        pushLine({who:"YOU", text:"O que aconteceu com Maarcus?", kind:"you"});
+        state.flags.askedWhatHappenedToMaarcus = true;
+        nudge({trust:1, susp:0});
+        await say("Maarcus era o tipo de pessoa que faz o certo e paga com o próprio sangue.", {speed:12});
+        await say("Ele segurou uma porta que não era porta. Segurou por tempo suficiente.", {speed:12});
+        await say("Quando soltou, a Membrana já sabia o formato do nosso medo.", {speed:12});
+        return;
+      }
+
+      if (optionId === "unlock"){
+        pushLine({who:"YOU", text:"Tenho fragmentos. O que abre quando completo os três?", kind:"you"});
+        if (state.keys < 3){
+          await say("Ainda não. Três pedaços ou nada.", {speed:12});
+          await say("A Membrana não negocia com incompletos.", {speed:12});
+          return;
+        }
+        await say("Abre uma lembrança que não foi escrita por humanos.", {speed:12});
+        await say("E abre também vinte e poucos finais possíveis para você… dependendo do que você fez até aqui.", {speed:12});
+        await say("Escolha um: verdade limpa, verdade suja, ou verdade útil.", {speed:12});
+        state.node = "finalgate";
+        syncSide();
+        renderOptions();
+        return;
+      }
+
+      if (state.node === "finalgate"){
+        if (optionId === "project"){
+          pushLine({who:"YOU", text:"Projeto 23: diga o que foi. Sem metáforas.", kind:"you"});
+          await say("Tudo bem.", {speed:12});
+          await say("O acelerador foi construído para criar uma perfuração estável. Uma ‘agulha’ no tecido do mundo.", {speed:12});
+          await say("A Bio Gênese queria abrir uma via comercial. DRACONIA queria mapear a ameaça. Outros queriam culto.", {speed:12});
+          await say("No ponto de ignição, a perfuração respondeu com coordenadas… e com nomes.", {speed:12});
+          await say("E aí começou a invasão real: não por pessoas, mas por intenção.", {speed:12});
+          return;
+        }
+
+        if (optionId === "help"){
+          pushLine({who:"YOU", text:"Eu posso ajudar. O que você quer em troca?", kind:"you"});
+          await say("Eu quero que você carregue um pedaço do erro.", {speed:12});
+          await say("Porque eu não aguento mais carregar sozinho.", {speed:12});
+          if (state.flags.compassionate && state.trust >= 4 && state.susp <= 3){
+            triggerEnding("E05", "PACTO VERDE", "NITHO//LOTUS confia em você o suficiente para deixar um mapa incompleto. Você sai com um endereço e um aviso: ‘não leve santos’.", "END:E05 // GREEN-PACT");
+          } else {
+            triggerEnding("E06", "TROCA FRIA", "Você recebe coordenadas quebradas e uma instrução de descarte. A ajuda veio… mas veio sem coração.", "END:E06 // COLD-TRADE");
+          }
+          return;
+        }
+
+        if (optionId === "threat"){
+          pushLine({who:"YOU", text:"Se você mentir, eu encerro o canal agora.", kind:"you"});
+          triggerEnding("E07", "PUNIÇÃO DE ECO", "O canal registra sua agressividade como assinatura. A resposta vem em silêncio, mas o silêncio continua te seguindo.", "END:E07 // ECHO-PUNISH");
+          return;
+        }
+
+        if (optionId === "silence"){
+          pushLine({who:"YOU", text:"...", kind:"you"});
+          if (state.trust >= 6 && state.susp <= 2){
+            triggerEnding("E08", "SUSSURRO", "Sem palavras, NITHO//LOTUS envia um pacote de memórias. Você entende sem entender — e isso muda você.", "END:E08 // WHISPER-PACKET");
+          } else {
+            triggerEnding("E09", "DESCONEXÃO", "O silêncio não foi aceito como respeito. Foi aceito como falha. O canal fecha sem despedida.", "END:E09 // DROP");
+          }
+          return;
+        }
+
+        if (optionId === "code"){
+          pushLine({who:"YOU", text:"‘Além do muro, a flor não morre’. Reconhece?", kind:"you"});
+          if (state.flags.usedCodePhrase && state.trust >= 5 && state.susp <= 3){
+            triggerEnding("E10", "FLOR IMUNE", "A cifra abre uma última camada: um relatório de campo assinado por DRACONIA. Você sai com a verdade que ninguém quer publicar.", "END:E10 // IMMORTAL-FLOR");
+          } else {
+            triggerEnding("E11", "FRASE VAZIA", "A cifra dita fora de tempo vira ruído. O canal te devolve apenas estática — e uma risada distante.", "END:E11 // EMPTY-PHRASE");
+          }
+          return;
+        }
+
+        if (optionId === "accelerator"){
+          pushLine({who:"YOU", text:"Acelerador de partículas para perfurar a Membrana... por quê?", kind:"you"});
+          if (state.flags.askedPentagon && state.flags.askedProject && state.flags.askedMembrane){
+            triggerEnding("E12", "AGULHA DO MUNDO", "Você recebe a ‘linha de montagem’ do acelerador em forma de diagrama textual. Não é instrução — é confissão.", "END:E12 // WORLD-NEEDLE");
+          } else {
+            triggerEnding("E13", "MEIA-VERDADE", "NITHO//LOTUS te entrega um resumo incompleto. O resto fica trancado na sequência que você não fez.", "END:E13 // HALF-TRUTH");
+          }
+          return;
+        }
+
+        if (optionId === "lm"){
+          pushLine({who:"YOU", text:"LM: protocolo, substância ou mentira?", kind:"you"});
+          if (state.flags.askedGota && state.flags.askedLM && state.trust >= 4){
+            triggerEnding("E14", "MOLDURA", "Você entende LM como moldura: o quadro que permite olhar o horror sem desabar. O custo é uma ausência que você só nota depois.", "END:E14 // FRAME");
+          } else {
+            triggerEnding("E15", "CICATRIZ", "Você sai com a palavra LM na cabeça e uma sensação de que algo foi arrancado da sua memória recente.", "END:E15 // SCAR");
+          }
+          return;
+        }
+
+        if (optionId === "gota"){
+          pushLine({who:"YOU", text:"Falam de Gota. É arma? remédio? chave?", kind:"you"});
+          if (state.flags.askedGota && state.trust >= 4 && state.susp <= 3){
+            triggerEnding("E16", "CHAVE LIMPA", "NITHO//LOTUS revela que ‘Gota’ era a desculpa perfeita: medicação, experimento e senha ao mesmo tempo.", "END:E16 // CLEAN-KEY");
+          } else {
+            triggerEnding("E17", "VENENO", "A palavra ‘Gota’ atrai ruído. Você sente o canal respirar. Você fecha o terminal, mas ele fica aberto em você.", "END:E17 // POISON");
+          }
+          return;
+        }
+
+        if (optionId === "agents"){
+          pushLine({who:"YOU", text:"Liste os seis agentes do Projeto 23.", kind:"you"});
+          if (state.flags.readNamesOrder && state.trust >= 3){
+            triggerEnding("E18", "SEIS NOMES", "NITHO//LOTUS entrega seis linhas curtas, uma para cada agente. Curto demais para ser consolo. Longo demais para ser mentira.", "END:E18 // SIX");
+          } else {
+            triggerEnding("E19", "LISTA VAZIA", "A lista retorna como ecos repetidos e incompreensíveis. Algo não quer que você fixe nomes.", "END:E19 // NAME-STATIC");
+          }
+          return;
+        }
+
+        if (optionId === "pentagon"){
+          pushLine({who:"YOU", text:"‘Invasão no Pentágono’ — o que realmente aconteceu?", kind:"you"});
+          if (state.susp <= 4 && state.trust >= 3){
+            triggerEnding("E20", "CORREDOR INTERNO", "Você recebe o relato: crachá, elevador, ala técnica, e um ‘não deveria existir’ no meio do prédio. A invasão foi logística.", "END:E20 // INNER-HALL");
+          } else {
+            triggerEnding("E21", "ALARME", "O eco detecta foco proibido. O canal fecha em modo alarme, como se alguém tivesse puxado uma sirene de dentro da tela.", "END:E21 // ALARM");
+          }
+          return;
+        }
+
+        triggerEnding("E22", "FINAL INDEFINIDO", "Você alcançou a grade final, mas escolheu uma rota que não fecha com nenhuma narrativa estável. O relé te devolve ao escuro.", "END:E22 // UNSTABLE");
+        return;
+      }
+
+      if (optionId === "observe"){
+        pushLine({who:"YOU", text:"Ficar em silêncio e apenas monitorar o canal.", kind:"you"});
+        await say("Monitorar é uma forma de caçar.", {speed:12});
+        await say("Se você caça, o Outro Lado caça de volta.", {speed:12});
+        return;
+      }
+
+      if (optionId === "sound"){
+        setSound(!state.sound);
+        pushLine({who:"SYS", text:`Áudio ${state.sound ? "ativado" : "desativado"}.`, kind:"sys"});
+        return;
+      }
+
+      if (optionId === "panic"){
+        triggerEnding("E23", "FUGA", "Você tenta correr pelo desligamento. O canal deixa você ir… mas marca o caminho.", "END:E23 // RUN");
+        return;
+      }
+
+      if (optionId === "project" && state.keys >= 3){
+        await say("Você já tem as chaves. Destrave o portão.", {speed:12});
+        return;
+      }
+
+      await say("Pergunta registrada. Resposta recusada por ruído ou ordem incorreta.", {speed:12});
+    }
+
+    // ---------- Choose pipeline
+    async function choose(index){
+      const opts = getOptions(state.node);
+      const opt = opts[index];
+      if (!opt) return;
+      state.lockInput = true;
+
+      $$(".opt", choicesEl).forEach(el=>el.classList.remove("sel"));
+      const sel = $(`.opt[data-idx="${index}"]`, choicesEl);
+      if (sel) sel.classList.add("sel");
+
+      pushLine({who:"YOU", text:opt.q, kind:"you"});
+      if (state.fx) tick(0.9);
+
+      await respond(opt.id);
+
+      if (!state.ended){
+        renderOptions();
+      }
+      state.lockInput = false;
+    }
+
+    // ---------- Endings
+    function triggerEnding(code, title, text, hash){
+      state.ended = true;
+      syncSide();
+      endTitle.textContent = `fim // ${title}`;
+      endText.textContent = text;
+      endCode.textContent = `${hash} · TRUST=${state.trust} · SUSP=${state.susp} · KEYS=${state.keys}`;
+      end.classList.add("show");
+      mode.textContent = "encerrado";
+      renderOptions();
+    }
+
+    function closeEnding(){
+      end.classList.remove("show");
+    }
+
+    // ---------- Restart
+    function restartSession(){
+      state.node = "hub";
+      state.trust = 0;
+      state.susp = 0;
+      state.keys = 0;
+      state.ended = false;
+      state.lockInput = false;
+      state.selectedIndex = 0;
+      state.flags = {
+        greeted:false,
+        askedWho:false,
+        askedDraconia:false,
+        askedProject:false,
+        askedPentagon:false,
+        askedAccelerator:false,
+        askedMembrane:false,
+        askedGota:false,
+        askedLM:false,
+        namedAgents: new Set(),
+        offeredHelp:false,
+        threatened:false,
+        compassionate:false,
+        pragmatic:false,
+        skeptical:false,
+        usedCodePhrase:false,
+        gotKeyA:false,
+        gotKeyB:false,
+        gotKeyC:false,
+        readNamesOrder:false,
+        askedNithoRole:false,
+        askedFailures:false,
+        askedWhatHappenedToKim:false,
+        askedWhatHappenedToNick:false,
+        askedWhatHappenedToGenesis:false,
+        askedWhatHappenedToHaozang:false,
+        askedWhatHappenedToZCNO:false,
+        askedWhatHappenedToMaarcus:false,
+      };
+      log.innerHTML = "";
+      closeEnding();
+      mode.textContent = "escolhas";
+      syncSide();
+
+      pushLine({who:"BTW", text:"Canal reiniciado. Eco anterior descartado.", kind:"sys"});
+      typeNitho("Você voltou. Isso diz mais sobre você do que sobre o relé.", {speed:12});
+      renderOptions();
+    }
+
+    // ---------- Keyboard controls
+    function moveSel(delta){
+      const opts = getOptions(state.node);
+      const n = opts.length;
+      if (!n) return;
+      state.selectedIndex = (state.selectedIndex + delta + n) % n;
+      renderOptions();
+      if (state.fx) tick(0.45);
+      const el = $(`.opt[data-idx="${state.selectedIndex}"]`, choicesEl);
+      if (el) el.scrollIntoView({block:"nearest"});
+    }
+
+    window.addEventListener("keydown", async (e)=>{
+      if (!app || app.style.pointerEvents === "none") return;
+      if (state.lockInput) return;
+
+      if (e.key === "ArrowUp"){ e.preventDefault(); moveSel(-1); return; }
+      if (e.key === "ArrowDown"){ e.preventDefault(); moveSel(1); return; }
+      if (e.key === "Enter"){ e.preventDefault(); await choose(state.selectedIndex); return; }
+
+      if (e.key.toLowerCase() === "m"){
+        e.preventDefault();
+        setSound(!state.sound);
+        pushLine({who:"SYS", text:`Áudio ${state.sound ? "ativado" : "desativado"}.`, kind:"sys"});
+        return;
+      }
+
+      if (e.key.toLowerCase() === "r"){
+        e.preventDefault();
+        restartSession();
+        return;
+      }
+
+      const digit = Number(e.key);
+      if (!Number.isNaN(digit) && digit >= 1 && digit <= 9){
+        const idx = digit - 1;
+        const opts = getOptions(state.node);
+        if (idx < opts.length){
+          e.preventDefault();
+          state.selectedIndex = idx;
+          renderOptions();
+          await choose(idx);
+        }
+      }
+    });
+
+    // ---------- UI buttons
+    btnSound.addEventListener("click", ()=>{
+      setSound(!state.sound);
+      pushLine({who:"SYS", text:`Áudio ${state.sound ? "ativado" : "desativado"}.`, kind:"sys"});
+    });
+
+    btnFx.addEventListener("click", ()=>{
+      state.fx = !state.fx;
+      btnFx.textContent = `fx: ${state.fx ? "on" : "off"}`;
+      pushLine({who:"SYS", text:`Efeitos ${state.fx ? "ativados" : "desativados"}.`, kind:"sys"});
+    });
+
+    btnPanic.addEventListener("click", ()=>{
+      triggerEnding("E24", "PANIC", "Você acionou o protocolo PANIC. O relé apaga, mas o ruído fica. Algo do outro lado parece ter aprendido seu ritmo.", "END:E24 // PANIC");
+    });
+
+    endClose.addEventListener("click", ()=>{
+      closeEnding();
+      restartSession();
+    });
+
+    // ---------- Clocks
+    setInterval(()=>clock.textContent = nowTS(), 250);
+    setInterval(()=>bootClock.textContent = nowTS(), 250);
+
+    // ---------- Noise status wobble
+    setInterval(()=>{
+      if (Math.random() > 0.75){
+        $("#dotNoise").classList.toggle("warn");
+      }
+      if (Math.random() > 0.86){
+        $("#dotTrace").classList.toggle("bad");
+      }
+    }, 520);
+
+    // ---------- Boot entry & initial chat
+    async function enterFromBoot(){
+      ensureAudio();
+      showApp();
+      syncSide();
+      state.node = "hub";
+      syncSide();
+
+      pushLine({who:"BTW", text:"Link estabelecido. Terminal em modo escolhas.", kind:"sys"});
+      await typeNitho("Você está do lado de cá do muro. Não porque foi convidado. Porque a parede falhou em algum lugar.", {speed:12});
+      await typeNitho("Pergunte. Mas lembre: algumas respostas têm dentes.", {speed:12});
+      renderOptions();
+    }
+
+    function bootGesture(){
+      ensureAudio();
+    }
+
+    bootEnter.addEventListener("click", async ()=>{
+      bootGesture();
+      await enterFromBoot();
+    });
+
+    window.addEventListener("keydown", async ()=>{
+      if (!boot || !boot.parentNode) return;
+      bootGesture();
+    }, {once:true});
+
+    window.addEventListener("click", ()=>{
+      if (!boot || !boot.parentNode) return;
+      bootGesture();
+    }, {once:true});
+
+    // ---------- Init
+    (async function(){
+      await runBoot();
+      renderOptions();
+    })();
+  </script>
+</body>
+</html>

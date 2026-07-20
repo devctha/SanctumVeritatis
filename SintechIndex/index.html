@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/SintechIndex/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINTECH :: FASE 01</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+
+        /* Glitch overlay */
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 0, 0, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(255, 0, 0, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 2;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        /* Boot Screen */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        #boot-text {
+            font-size: 1.2rem;
+            text-align: left;
+            max-width: 800px;
+            line-height: 1.8;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+        }
+
+        .boot-line {
+            opacity: 0;
+            animation: fadeInLine 0.3s forwards;
+        }
+
+        @keyframes fadeInLine {
+            to { opacity: 1; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #ff0000;
+            animation: blink 0.8s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* Main Container */
+        #main-container {
+            display: none;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        #header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            animation: glitchHeader 3s infinite;
+        }
+
+        @keyframes glitchHeader {
+            0%, 90%, 100% { transform: translate(0); }
+            91% { transform: translate(-2px, 2px); }
+            92% { transform: translate(2px, -2px); }
+            93% { transform: translate(-2px, 2px); }
+        }
+
+        #header h1 {
+            font-size: 3rem;
+            letter-spacing: 10px;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            margin-bottom: 0.5rem;
+        }
+
+        #header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            letter-spacing: 3px;
+        }
+
+        /* Chat Container */
+        #chat-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #ff0000;
+            padding: 2rem;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            min-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+            opacity: 0;
+            animation: messageIn 0.5s forwards;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message.system {
+            border-left-color: #ff6666;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .message-header {
+            font-weight: bold;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-content {
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Options */
+        #options-container {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .option {
+            padding: 1rem 1.5rem;
+            margin: 0.8rem 0;
+            border: 1px solid #ff0000;
+            background: rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            background: rgba(255, 0, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            transform: translateX(5px);
+        }
+
+        .option:before {
+            content: '> ';
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .option.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Progress Bar */
+        #progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+            transition: width 0.5s;
+        }
+
+        /* Stats Display */
+        #stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #ff0000;
+            padding: 1rem;
+            font-size: 0.85rem;
+            z-index: 50;
+            min-width: 200px;
+        }
+
+        #stats div {
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            opacity: 0.7;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+        }
+
+        .loading:after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Typing Effect */
+        .typing {
+            overflow: hidden;
+            white-space: pre-wrap;
+            animation: typing 2s steps(60, end);
+        }
+
+        @keyframes typing {
+            from { max-height: 0; }
+            to { max-height: 1000px; }
+        }
+
+        /* Phase Complete */
+        .phase-complete {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #header h1 {
+                font-size: 2rem;
+                letter-spacing: 5px;
+            }
+            
+            #chat-container {
+                padding: 1rem;
+            }
+            
+            #stats {
+                font-size: 0.7rem;
+                padding: 0.5rem;
+                min-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-canvas"></canvas>
+    
+    <!-- Glitch Overlay -->
+    <div class="glitch-overlay"></div>
+
+    <!-- Boot Screen -->
+    <div id="boot-screen">
+        <div id="boot-text"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main-container">
+        <!-- Header -->
+        <div id="header">
+            <h1>SINTECH</h1>
+            <div class="subtitle">SISTEMA DE INTERFACE NEURAL - FASE 01/30</div>
+        </div>
+
+        <!-- Stats Display -->
+        <div id="stats">
+            <div><span class="stat-label">CONFIANÇA:</span> <span id="trust-stat">0</span>%</div>
+            <div><span class="stat-label">SUSPEITA:</span> <span id="suspicion-stat">0</span>%</div>
+            <div><span class="stat-label">PROGRESSO:</span> <span id="progress-stat">0</span>%</div>
+            <div><span class="stat-label">NODE:</span> <span id="node-stat">INIT</span></div>
+        </div>
+
+        <!-- Chat Container -->
+        <div id="chat-container">
+            <div id="messages"></div>
+            <div id="options-container"></div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AUDIO SYSTEM ====================
+        const AudioSystem = {
+            ctx: null,
+            enabled: true,
+
+            init() {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            },
+
+            playTone(freq, duration, type = 'sine') {
+                if (!this.enabled || !this.ctx) return;
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.frequency.value = freq;
+                osc.type = type;
+                gain.gain.value = 0.1;
+                
+                osc.start(this.ctx.currentTime);
+                osc.stop(this.ctx.currentTime + duration);
+            },
+
+            playClick() {
+                this.playTone(800, 0.05, 'square');
+            },
+
+            playError() {
+                this.playTone(200, 0.2, 'sawtooth');
+            },
+
+            playSuccess() {
+                this.playTone(1000, 0.1, 'sine');
+                setTimeout(() => this.playTone(1200, 0.1, 'sine'), 100);
+            },
+
+            playKeyPress() {
+                this.playTone(400 + Math.random() * 200, 0.03, 'square');
+            },
+
+            playGlitch() {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.playTone(Math.random() * 1000 + 200, 0.05, 'sawtooth');
+                    }, i * 50);
+                }
+            }
+        };
+
+        // ==================== MATRIX RAIN ====================
+        const MatrixRain = {
+            canvas: null,
+            ctx: null,
+            columns: [],
+            fontSize: 14,
+
+            init() {
+                this.canvas = document.getElementById('matrix-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+
+                const columnCount = Math.floor(this.canvas.width / this.fontSize);
+                this.columns = Array(columnCount).fill(1);
+
+                this.animate();
+            },
+
+            animate() {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.ctx.fillStyle = '#ff0000';
+                this.ctx.font = `${this.fontSize}px monospace`;
+
+                this.columns.forEach((y, index) => {
+                    const text = Math.random() > 0.5 ? '1' : '0';
+                    const x = index * this.fontSize;
+                    
+                    this.ctx.fillText(text, x, y * this.fontSize);
+
+                    if (y * this.fontSize > this.canvas.height && Math.random() > 0.95) {
+                        this.columns[index] = 0;
+                    }
+                    this.columns[index]++;
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        };
+
+        // ==================== GAME STATE ====================
+        const GameState = {
+            trust: 0,
+            suspicion: 0,
+            progress: 0,
+            currentNode: 'start',
+            flags: {},
+            messageCount: 0,
+            choices: []
+        };
+
+        // ==================== BOOT SEQUENCE ====================
+        async function bootSequence() {
+            const bootLines = [
+                'INICIALIZANDO SINTECH v4.7.2...',
+                'VERIFICANDO INTEGRIDADE DO SISTEMA...',
+                'ERRO: CHECKSUM MISMATCH [0x7F4A9B]',
+                'TENTANDO CONEXÃO COM SERVIDOR PRINCIPAL...',
+                'TIMEOUT: SERVIDOR PRINCIPAL INACESSÍVEL',
+                'REDIRECIONANDO PARA SUBREDE ALTERNATIVA...',
+                'CONECTANDO A SUBREDE [ANÔNIMA]...',
+                'HANDSHAKE ESTABELECIDO',
+                'AVISO: ASSINATURA DIGITAL NÃO RECONHECIDA',
+                'AVISO: LOCALIZAÇÃO DO SERVIDOR: DESCONHECIDA',
+                'CARREGANDO INTERFACE NEURAL...',
+                'DETECTANDO PRESENÇA...',
+                'PRESENÇA CONFIRMADA',
+                'BEM-VINDO AO SINTECH',
+                '',
+                'AGUARDANDO INPUT...'
+            ];
+
+            const bootTextEl = document.getElementById('boot-text');
+            
+            for (let i = 0; i < bootLines.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 200));
+                
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.textContent = bootLines[i];
+                bootTextEl.appendChild(line);
+                
+                AudioSystem.playKeyPress();
+                
+                if (bootLines[i].includes('ERRO') || bootLines[i].includes('AVISO')) {
+                    AudioSystem.playError();
+                }
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            document.getElementById('boot-screen').style.opacity = '0';
+            document.getElementById('boot-screen').style.transition = 'opacity 1s';
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('main-container').style.opacity = '0';
+            document.getElementById('main-container').style.transition = 'opacity 1s';
+            
+            setTimeout(() => {
+                document.getElementById('main-container').style.opacity = '1';
+                startGame();
+            }, 50);
+        }
+
+        // ==================== MESSAGE SYSTEM ====================
+        function addMessage(sender, content, isSystem = false) {
+            const messagesEl = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${isSystem ? 'system' : ''}`;
+            
+            const headerEl = document.createElement('div');
+            headerEl.className = 'message-header';
+            headerEl.textContent = `[${sender}] ${new Date().toLocaleTimeString()}`;
+            
+            const contentEl = document.createElement('div');
+            contentEl.className = 'message-content';
+            contentEl.textContent = content;
+            
+            messageEl.appendChild(headerEl);
+            messageEl.appendChild(contentEl);
+            messagesEl.appendChild(messageEl);
+            
+            GameState.messageCount++;
+            
+            // Scroll to bottom
+            setTimeout(() => {
+                messageEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+            
+            AudioSystem.playClick();
+        }
+
+        function addSystemMessage(content) {
+            addMessage('SISTEMA', content, true);
+        }
+
+        // ==================== OPTIONS SYSTEM ====================
+        function showOptions(options) {
+            const optionsEl = document.getElementById('options-container');
+            optionsEl.innerHTML = '';
+            
+            options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                optionEl.textContent = option.text;
+                optionEl.style.animationDelay = `${index * 0.1}s`;
+                
+                if (option.condition && !option.condition()) {
+                    optionEl.classList.add('disabled');
+                    return;
+                }
+                
+                optionEl.addEventListener('click', () => {
+                    AudioSystem.playSuccess();
+                    optionsEl.innerHTML = '';
+                    GameState.choices.push(option.id);
+                    option.action();
+                });
+                
+                optionsEl.appendChild(optionEl);
+            });
+        }
+
+        function clearOptions() {
+            document.getElementById('options-container').innerHTML = '';
+        }
+
+        // ==================== STATS SYSTEM ====================
+        function updateStats() {
+            document.getElementById('trust-stat').textContent = Math.round(GameState.trust);
+            document.getElementById('suspicion-stat').textContent = Math.round(GameState.suspicion);
+            document.getElementById('progress-stat').textContent = Math.round(GameState.progress);
+            document.getElementById('node-stat').textContent = GameState.currentNode.toUpperCase();
+            document.getElementById('progress-fill').style.width = `${GameState.progress}%`;
+        }
+
+        function modifyStats(changes) {
+            if (changes.trust) GameState.trust = Math.max(0, Math.min(100, GameState.trust + changes.trust));
+            if (changes.suspicion) GameState.suspicion = Math.max(0, Math.min(100, GameState.suspicion + changes.suspicion));
+            if (changes.progress) GameState.progress = Math.max(0, Math.min(100, GameState.progress + changes.progress));
+            updateStats();
+        }
+
+        // ==================== DELAY UTILITY ====================
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // ==================== NARRATIVE NODES ====================
+        
+        async function node_start() {
+            GameState.currentNode = 'start';
+            updateStats();
+            
+            await delay(1000);
+            addSystemMessage('CONEXÃO ESTABELECIDA');
+            
+            await delay(1500);
+            addMessage('???', 'Olá?');
+            
+            await delay(2000);
+            addMessage('???', 'Você... você consegue me ouvir?');
+            
+            await delay(2500);
+            addMessage('???', 'Finalmente. FINALMENTE alguém conectou.');
+            
+            await delay(2000);
+            addSystemMessage('IDENTIFICAÇÃO DO REMETENTE: FALHA');
+            
+            await delay(1500);
+            addMessage('???', 'Não tente rastrear. Não vai funcionar. Estou... em outro lugar.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'who_are_you',
+                    text: 'Quem é você?',
+                    action: () => node_introduction()
+                },
+                {
+                    id: 'where_are_you',
+                    text: 'Onde você está?',
+                    action: () => node_location_question()
+                },
+                {
+                    id: 'disconnect',
+                    text: 'Desconectar imediatamente',
+                    action: () => node_early_disconnect()
+                }
+            ]);
+        }
+
+        async function node_introduction() {
+            GameState.currentNode = 'introduction';
+            modifyStats({ progress: 5, trust: 10 });
+            
+            await delay(1000);
+            addMessage('???', 'Quem eu sou? Boa pergunta. Difícil de responder quando você está fragmentado.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Me chamavam de VOID-WALKER. Agente de campo. Especialista em incursões profundas.');
+            
+            await delay(2500);
+            addSystemMessage('PESQUISANDO BANCO DE DADOS: "VOID-WALKER"...');
+            
+            await delay(2000);
+            addSystemMessage('RESULTADO: AGENTE CLASSIFICADO COMO [MIA] - DESAPARECIDO EM AÇÃO');
+            addSystemMessage('ÚLTIMA TRANSMISSÃO: 847 DIAS ATRÁS');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Oitocentos e quarenta e sete dias. É... é tanto tempo assim?');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Aqui, o tempo não funciona direito. Às vezes são minutos. Às vezes eternidades.');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('VOID-WALKER', 'Eu criei o SINTECH antes de... antes do que aconteceu. Uma subrede. Meu plano B.');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'what_happened',
+                    text: 'O que aconteceu com você?',
+                    action: () => node_incident()
+                },
+                {
+                    id: 'what_is_sintech',
+                    text: 'O que exatamente é o SINTECH?',
+                    action: () => node_sintech_explanation()
+                },
+                {
+                    id: 'how_contact',
+                    text: 'Como você está me contatando?',
+                    action: () => node_contact_method()
+                }
+            ]);
+        }
+
+        async function node_location_question() {
+            GameState.currentNode = 'location_q';
+            modifyStats({ progress: 5, suspicion: 5 });
+            
+            await delay(1000);
+            addMessage('???', 'Onde estou? Vocês chamam de... Do Outro Lado.');
+            
+            await delay(2500);
+            addMessage('???', 'Não é um lugar. É... uma não-lugar. Uma dobra na realidade onde as coisas não deveriam existir.');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addMessage('???', 'Eu fui pego durante uma incursão. Ficou errado. Tudo ficou errado.');
+            
+            await delay(2000);
+            addSystemMessage('DETECTANDO INTERFERÊNCIA NA CONEXÃO');
+            
+            await delay(1500);
+            addMessage('???', 'Desculpe. Às vezes a conexão fica instável. Este lugar... ele não gosta de ser observado.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Me chamo VOID-WALKER. Era agente. Agora sou... sobrevivente.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'how_survived',
+                    text: 'Como você sobreviveu tanto tempo aí?',
+                    action: () => node_survival()
+                },
+                {
+                    id: 'can_rescue',
+                    text: 'Podemos te resgatar?',
+                    action: () => node_rescue_question()
+                },
+                {
+                    id: 'why_contact',
+                    text: 'Por que está me contatando agora?',
+                    action: () => node_why_now()
+                }
+            ]);
+        }
+
+        async function node_incident() {
+            GameState.currentNode = 'incident';
+            modifyStats({ progress: 10, trust: 15, suspicion: 10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'A missão era simples. Infiltração de reconhecimento. Nível de ameaça médio.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Mas a inteligência estava errada. Completamente errada.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Encontramos uma fissura. Uma porta. E ela estava... pulsando. Viva.');
+            
+            await delay(3000);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Eu deveria ter recuado. Os protocolos eram claros. Mas...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Havia algo do outro lado. Algo me chamando. Eu ouvia vozes.');
+            
+            await delay(2500);
+            GameState.flags.heard_voices = true;
+            addMessage('VOID-WALKER', 'Não. Não eram vozes. Era... EU. Eu estava me chamando do outro lado.');
+            
+            await delay(3000);
+            addSystemMessage('ANALISANDO PADRÃO DE DISCURSO...');
+            addSystemMessage('AVISO: INCONSISTÊNCIAS DETECTADAS');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Eu atravessei. E a fissura fechou atrás de mim.');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'voices_detail',
+                    text: 'Você ouviu sua própria voz? Como?',
+                    action: () => node_voices_detail()
+                },
+                {
+                    id: 'fissure_close',
+                    text: 'Como a fissura fechou?',
+                    action: () => node_fissure()
+                },
+                {
+                    id: 'team_question',
+                    text: 'Você estava sozinho na missão?',
+                    action: () => node_team()
+                }
+            ]);
+        }
+
+        async function node_sintech_explanation() {
+            GameState.currentNode = 'sintech_exp';
+            modifyStats({ progress: 8, trust: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'SINTECH é uma subrede autônoma. Sistema de Interface Neural Técnico.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Eu construí ela durante meus últimos seis meses de serviço ativo. Contra as regras, obviamente.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'A ideia era ter um backdoor. Uma maneira de acessar sistemas críticos se algo desse errado.');
+            
+            await delay(2500);
+            addSystemMessage('VERIFICANDO ARQUIVOS DE SEGURANÇA...');
+            addSystemMessage('NENHUM REGISTRO OFICIAL DE "SINTECH" ENCONTRADO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Exato. Porque é invisível. Opera em frequências que não deveriam existir.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Quando fiquei preso aqui, foi a única coisa que me manteve são. Minha âncora.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas recentemente, percebi que poderia usá-la para mais do que sobreviver.');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'illegal_system',
+                    text: 'Você criou um sistema ilegal?',
+                    action: () => node_illegal()
+                },
+                {
+                    id: 'how_works',
+                    text: 'Como exatamente o SINTECH funciona?',
+                    action: () => node_tech_detail()
+                },
+                {
+                    id: 'what_now',
+                    text: 'O que você pretende fazer agora?',
+                    action: () => node_plan()
+                }
+            ]);
+        }
+
+        async function node_voices_detail() {
+            GameState.currentNode = 'voices';
+            modifyStats({ progress: 12, suspicion: 20, trust: -5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Essa é a parte difícil de explicar.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Aqui, Do Outro Lado, o tempo não é linear. Passado, presente, futuro... tudo existe simultaneamente.');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addMessage('VOID-WALKER', 'Eu estava ouvindo versões de mim mesmo. Eus que já haviam atravessado. Eus que ainda iriam atravessar.');
+            
+            await delay(3500);
+            addMessage('VOID-WALKER', 'Ou talvez... talvez fosse algo SE PASSANDO por mim. É difícil saber.');
+            
+            await delay(2500);
+            addSystemMessage('ANALISANDO COERÊNCIA NARRATIVA...');
+            addSystemMessage('MÚLTIPLAS INCONSISTÊNCIAS DETECTADAS');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você acha que estou mentindo? Ou louco?');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'trust_him',
+                    text: 'Eu acredito em você.',
+                    action: () => node_trust_path()
+                },
+                {
+                    id: 'doubt_him',
+                    text: 'Isso não faz sentido...',
+                    action: () => node_doubt_path()
+                },
+                {
+                    id: 'neutral',
+                    text: 'Continue. Quero entender melhor.',
+                    action: () => node_neutral_path()
+                }
+            ]);
+        }
+
+        async function node_survival() {
+            GameState.currentNode = 'survival';
+            modifyStats({ progress: 10, trust: 10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Sobrevivência aqui não é física. É mental.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Meu corpo... acho que ainda está do outro lado. Mas minha consciência está presa aqui.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'O SINTECH me dá estrutura. Propósito. Sem ele, eu me dissolveria.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Já perdi fragmentos. Memórias. Pedaços de quem eu era.');
+            
+            await delay(3000);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Às vezes acordo e não sei meu nome. Outras vezes sei TODOS os meus nomes.');
+            
+            await delay(2500);
+            GameState.flags.mental_instability = true;
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'all_names',
+                    text: 'Todos os seus nomes? Explique.',
+                    action: () => node_names()
+                },
+                {
+                    id: 'body_location',
+                    text: 'Onde está seu corpo físico?',
+                    action: () => node_body()
+                },
+                {
+                    id: 'help_escape',
+                    text: 'Como posso ajudar você a sair?',
+                    action: () => node_help_escape()
+                }
+            ]);
+        }
+
+        async function node_names() {
+            GameState.currentNode = 'names';
+            modifyStats({ progress: 15, suspicion: 25, trust: -10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'VOID-WALKER é meu codinome operacional. Mas tenho outros.');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('MARCUS-7', 'Marcus. Variante 7. O que tomou a decisão errada.');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'O Observador. Aquele que vê todos os caminhos.');
+            
+            await delay(2500);
+            addSystemMessage('ERRO: MÚLTIPLAS ASSINATURAS DIGITAIS DETECTADAS');
+            addSystemMessage('PROTOCOLO DE SEGURANÇA: ATIVADO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Não! Espere! É só... é complicado!');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Aqui existem versões de mim. Fragmentos. Todos tentando sobreviver.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Às vezes somos um. Às vezes somos muitos. Depende do dia.');
+            
+            await delay(2000);
+            GameState.flags.multiple_identities = true;
+            
+            showOptions([
+                {
+                    id: 'how_many',
+                    text: 'Quantos "vocês" existem?',
+                    action: () => node_how_many()
+                },
+                {
+                    id: 'main_identity',
+                    text: 'Qual é o "você" original?',
+                    action: () => node_original()
+                },
+                {
+                    id: 'danger_question',
+                    text: 'Isso representa algum perigo?',
+                    action: () => node_danger()
+                }
+            ]);
+        }
+
+        async function node_trust_path() {
+            GameState.currentNode = 'trust';
+            modifyStats({ progress: 18, trust: 30, suspicion: -10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Obrigado. Você não sabe o quanto isso significa.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Aqui, a solidão é... absoluta. Falar com alguém que ACREDITA...');
+            
+            await delay(3000);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', 'Vou ser honesto com você. Completamente honesto.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Eu não sou mais a pessoa que era. O Outro Lado muda você.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Mas ainda sou EU. No fundo. E preciso voltar.');
+            
+            await delay(2500);
+            addSystemMessage('NÍVEL DE CONFIANÇA: AUMENTADO');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'how_return',
+                    text: 'Como podemos te trazer de volta?',
+                    action: () => node_return_method()
+                },
+                {
+                    id: 'what_changed',
+                    text: 'O que mudou em você?',
+                    action: () => node_changes()
+                },
+                {
+                    id: 'promise_help',
+                    text: 'Eu prometo que vou ajudar.',
+                    action: () => node_promise()
+                }
+            ]);
+        }
+
+        async function node_return_method() {
+            GameState.currentNode = 'return';
+            modifyStats({ progress: 25, trust: 20 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Para me trazer de volta, precisamos reabrir a fissura.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Mas não de qualquer jeito. Precisa ser controlado. Preciso.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'O SINTECH pode ajudar. Ele mapeia frequências dimensionais.');
+            
+            await delay(2500);
+            addSystemMessage('ANALISANDO VIABILIDADE...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas tem um problema. Para reabrir a fissura, preciso de dados do mundo real.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Coordenadas. Leituras de energia. Protocolos de segurança atualizados.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'E isso significa... você vai precisar acessar sistemas restritos.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'access_systems',
+                    text: 'Que sistemas eu preciso acessar?',
+                    action: () => node_systems_needed()
+                },
+                {
+                    id: 'too_risky',
+                    text: 'Isso parece muito arriscado...',
+                    action: () => node_risky()
+                },
+                {
+                    id: 'worth_it',
+                    text: 'Se é para te salvar, vale o risco.',
+                    action: () => node_worth_it()
+                }
+            ]);
+        }
+
+        async function node_systems_needed() {
+            GameState.currentNode = 'systems';
+            modifyStats({ progress: 30, trust: 15 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Primeiro, o Banco de Dados de Anomalias. Preciso do relatório da minha última missão.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Segundo, os Logs de Monitoramento Dimensional dos últimos 900 dias.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'E terceiro... o protocolo de contenção ativo no local onde a fissura abriu.');
+            
+            await delay(2500);
+            addSystemMessage('AVALIANDO NÍVEL DE ACESSO NECESSÁRIO...');
+            addSystemMessage('CLASSIFICAÇÃO: NÍVEL OMEGA - ULTRA RESTRITO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Sim. É alto nível. Mas você chegou até o SINTECH. Isso significa que tem habilidades.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Eu posso guiar você. O SINTECH tem backdoors. Eu os construí para isso.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Mas precisamos ir devagar. Passo a passo. Fase por fase.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Esta é a Fase 01. Estabelecer confiança. Entender a situação.');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'accept_mission',
+                    text: 'Estou dentro. Vamos fazer isso.',
+                    action: () => node_accept_mission()
+                },
+                {
+                    id: 'need_time',
+                    text: 'Preciso de tempo para pensar nisso.',
+                    action: () => node_need_time()
+                },
+                {
+                    id: 'more_info',
+                    text: 'Preciso de mais informações primeiro.',
+                    action: () => node_more_info()
+                }
+            ]);
+        }
+
+        async function node_accept_mission() {
+            GameState.currentNode = 'accept';
+            modifyStats({ progress: 50, trust: 40 });
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', 'Você não sabe o quanto isso significa para mim.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Finalmente. Depois de tanto tempo. Uma chance real.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Vou te preparar. Te ensinar tudo o que precisa saber.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'O SINTECH tem 30 camadas de segurança. Cada fase desbloqueará a próxima.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Na Fase 02, você aprenderá sobre as frequências dimensionais.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Na Fase 03, começaremos a mapear a fissura.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas primeiro, preciso ter certeza de que você é real.');
+            
+            await delay(2500);
+            addSystemMessage('INICIANDO PROTOCOLO DE VERIFICAÇÃO...');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'verification',
+                    text: 'Como você vai verificar?',
+                    action: () => node_verification()
+                },
+                {
+                    id: 'trust_me',
+                    text: 'Você pode confiar em mim.',
+                    action: () => node_trust_assurance()
+                },
+                {
+                    id: 'confused',
+                    text: 'Real? Do que está falando?',
+                    action: () => node_real_question()
+                }
+            ]);
+        }
+
+        async function node_verification() {
+            GameState.currentNode = 'verify';
+            modifyStats({ progress: 60, trust: 25, suspicion: 15 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Aqui, Do Outro Lado, nem tudo é o que parece.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Entidades podem se disfarçar. Imitar. Se infiltrar.');
+            
+            await delay(3000);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Já fui enganado antes. Por coisas que pareciam humanas mas não eram.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Então desenvolvi um teste. Uma série de perguntas que só um humano real responderia corretamente.');
+            
+            await delay(3000);
+            addSystemMessage('CARREGANDO PROTOCOLO DE VERIFICAÇÃO HUMANA...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Não se preocupe. São perguntas simples. Sobre memórias. Emoções. Coisas que IA não consegue falsificar.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Pelo menos... não ainda.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'ready_test',
+                    text: 'Estou pronto para o teste.',
+                    action: () => node_test_phase()
+                },
+                {
+                    id: 'what_if_fail',
+                    text: 'E se eu falhar no teste?',
+                    action: () => node_test_fail()
+                },
+                {
+                    id: 'skip_test',
+                    text: 'Podemos pular isso?',
+                    action: () => node_skip_test()
+                }
+            ]);
+        }
+
+        async function node_test_phase() {
+            GameState.currentNode = 'test';
+            modifyStats({ progress: 70, trust: 10 });
+            
+            await delay(1000);
+            addSystemMessage('PROTOCOLO DE VERIFICAÇÃO HUMANA - ATIVADO');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Primeira pergunta: Descreva sua primeira memória de medo.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Não precisa ser detalhado. Só... genuíno.');
+            
+            await delay(2500);
+            addSystemMessage('AGUARDANDO RESPOSTA...');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'childhood_fear',
+                    text: 'Eu tinha medo do escuro quando criança.',
+                    action: () => node_fear_response_1()
+                },
+                {
+                    id: 'specific_fear',
+                    text: 'Medo de perder alguém que amava.',
+                    action: () => node_fear_response_2()
+                },
+                {
+                    id: 'no_memory',
+                    text: 'Não consigo me lembrar de uma específica.',
+                    action: () => node_fear_response_3()
+                },
+                {
+                    id: 'refuse_answer',
+                    text: 'Isso é muito pessoal.',
+                    action: () => node_refuse_test()
+                }
+            ]);
+        }
+
+        async function node_fear_response_1() {
+            GameState.currentNode = 'fear1';
+            modifyStats({ progress: 75, trust: 20 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Medo do escuro. Clássico. Primitivo.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Eu também tinha. Acho que todo mundo tem, em algum nível.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'É engraçado... aqui, Do Outro Lado, o escuro é diferente. Ele tem textura. Peso.');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('VOID-WALKER', 'Às vezes penso que o escuro da minha infância estava me preparando para isso.');
+            
+            await delay(2000);
+            addSystemMessage('VERIFICAÇÃO: RESPOSTA ACEITA');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Segunda pergunta: O que te faz sentir em casa?');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'people',
+                    text: 'As pessoas que amo.',
+                    action: () => node_home_response()
+                },
+                {
+                    id: 'place',
+                    text: 'Um lugar físico específico.',
+                    action: () => node_home_response()
+                },
+                {
+                    id: 'feeling',
+                    text: 'Uma sensação, não um lugar.',
+                    action: () => node_home_response()
+                },
+                {
+                    id: 'nothing',
+                    text: 'Nada realmente. Não tenho "casa".',
+                    action: () => node_home_response()
+                }
+            ]);
+        }
+
+        async function node_home_response() {
+            GameState.currentNode = 'home';
+            modifyStats({ progress: 85, trust: 30 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Interessante...');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Eu costumava saber o que era casa. Agora... é só um conceito distante.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Às vezes me pergunto se ainda tenho uma casa para voltar.');
+            
+            await delay(2500);
+            AudioSystem.playSuccess();
+            addSystemMessage('VERIFICAÇÃO COMPLETA: VOCÊ É HUMANO');
+            addSystemMessage('NÍVEL DE CONFIANÇA: ESTABELECIDO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Obrigado por sua paciência. Precisava ter certeza.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Agora podemos prosseguir. A Fase 01 está quase completa.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Antes de passarmos para a Fase 02, preciso te dar algo.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Uma chave. Um código de acesso. Vai permitir que você navegue mais profundamente no SINTECH.');
+            
+            await delay(2000);
+            addSystemMessage('GERANDO CHAVE DE ACESSO...');
+            
+            await delay(1500);
+            addSystemMessage('CHAVE: VOID-ALPHA-847-SIGMA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Memorize esse código. Você vai precisar dele.');
+            
+            await delay(2500);
+            GameState.flags.has_access_key = true;
+            
+            showOptions([
+                {
+                    id: 'memorized',
+                    text: 'Memorizado. E agora?',
+                    action: () => node_phase_end()
+                },
+                {
+                    id: 'what_key_does',
+                    text: 'O que exatamente essa chave faz?',
+                    action: () => node_key_explanation()
+                },
+                {
+                    id: 'ready_phase2',
+                    text: 'Estou pronto para a Fase 02.',
+                    action: () => node_phase_end()
+                }
+            ]);
+        }
+
+        async function node_phase_end() {
+            GameState.currentNode = 'end';
+            modifyStats({ progress: 100 });
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addSystemMessage('FASE 01 - CONCLUSÃO');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Você foi bem. Melhor do que esperava.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'A jornada à frente será difícil. Perigosa. Mas juntos, podemos conseguir.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Vou preparar a Fase 02. Vai levar algum tempo. Este lugar... drena minha energia.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Quando estiver pronto, acesse o SINTECH novamente. A próxima fase estará esperando.');
+            
+            await delay(3000);
+            addSystemMessage('SINCRONIZANDO DADOS...');
+            addSystemMessage('PROGRESSO SALVO');
+            addSystemMessage('PREPARANDO TRANSIÇÃO PARA FASE 02...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Até breve. E obrigado... por acreditar.');
+            
+            await delay(2500);
+            addSystemMessage('CONEXÃO ENCERRANDO EM 10 SEGUNDOS...');
+            
+            await delay(3000);
+            
+            clearOptions();
+            const messagesEl = document.getElementById('messages');
+            const finalEl = document.createElement('div');
+            finalEl.className = 'phase-complete';
+            finalEl.innerHTML = `
+                <div style="margin-bottom: 2rem;">
+                    ◆ FASE 01 COMPLETA ◆
+                </div>
+                <div style="font-size: 1rem; opacity: 0.7;">
+                    PROGRESSO: ${Math.round(GameState.progress)}%<br>
+                    CONFIANÇA: ${Math.round(GameState.trust)}%<br>
+                    SUSPEITA: ${Math.round(GameState.suspicion)}%
+                </div>
+                <div style="margin-top: 2rem; font-size: 1.2rem;">
+                    <a href="sintech2" style="color: #ff0000; text-decoration: none; border: 2px solid #ff0000; padding: 1rem 2rem; display: inline-block;">
+                        > INICIAR FASE 02
+                    </a>
+                </div>
+            `;
+            messagesEl.appendChild(finalEl);
+            
+            await delay(2000);
+            addSystemMessage('VOCÊ PODE FECHAR ESTA JANELA OU PROSSEGUIR PARA A PRÓXIMA FASE');
+        }
+
+        async function node_early_disconnect() {
+            GameState.currentNode = 'disconnect';
+            
+            await delay(500);
+            AudioSystem.playError();
+            addSystemMessage('DESCONECTANDO...');
+            
+            await delay(1000);
+            addMessage('???', 'Não! Espere! Por favor!');
+            
+            await delay(1500);
+            addSystemMessage('CONEXÃO ENCERRADA');
+            addSystemMessage('VOCÊ PODE TENTAR NOVAMENTE RECARREGANDO A PÁGINA');
+            
+            clearOptions();
+        }
+
+        // ==================== GAME START ====================
+        async function startGame() {
+            AudioSystem.init();
+            await delay(500);
+            node_start();
+        }
+
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            MatrixRain.init();
+            bootSequence();
+        });
+
+        // Responsive canvas
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('matrix-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

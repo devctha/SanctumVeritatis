@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><base href="../"><link rel="canonical" href="https://sanctumveritatis.com/backstory/">
+    <meta charset="UTF-8">
+    <title>SANCTUM VERITATIS // CRIAÇÃO DE HISTÓRICO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SCRIPT DE EXPORTAÇÃO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #020203;
+            --bg-panel: #0b0b0d;
+            --marble: #18171a;
+            --text: #e7e4dc;
+            --muted: #9a9388;
+            --gold: #d8b46a;
+            --gold-soft: rgba(216,180,106,0.18);
+            --crimson: #7a0b24;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #141217 0%, #050509 40%, #000 90%);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .serif { font-family: 'Cinzel', serif; }
+        .mono { font-family: 'Share Tech Mono', monospace; }
+        .italic { font-family: 'Playfair Display', serif; font-style: italic; }
+
+        /* TEXTURAS ANIMADAS */
+        .bg-noise {
+            position: fixed; inset: 0; pointer-events: none; z-index: 1;
+            opacity: 0.09;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            animation: noiseShift 8s linear infinite;
+        }
+        @keyframes noiseShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(5%, 5%); }
+        }
+
+        .vignette {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background: radial-gradient(circle at center, transparent 40%, #000 90%);
+        }
+
+        /* PARTÍCULAS FLUTUANTES */
+        .particles {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: rgba(216,180,106,0.3);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) translateX(30px) rotate(360deg); opacity: 0; }
+        }
+
+        /* HEADER COM ANIMAÇÃO */
+        header {
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(to bottom, rgba(5,5,8,0.96), rgba(5,5,8,0.8));
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(20px);
+            opacity: 0;
+            animation: slideDown 0.8s ease-out 0.3s forwards;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-100%); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo { 
+            letter-spacing: 3px; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .logo-seal {
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            background: radial-gradient(circle, #2a2220 0%, #090709 60%);
+            display: flex; align-items: center; justify-content: center;
+            animation: rotateSeal 20s linear infinite;
+        }
+        @keyframes rotateSeal {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .logo-seal span {
+            font-size: 1.1rem;
+            color: var(--gold);
+        }
+        .logo span { color: var(--gold); }
+
+        .back-link {
+            color: var(--muted); text-decoration: none; font-size: 0.85rem;
+            transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .back-link:hover { color: var(--gold); }
+
+        /* LAYOUT PRINCIPAL */
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 3rem 2rem;
+            display: grid; grid-template-columns: 1fr 1.6fr; gap: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* COLUNA DA ESQUERDA: PERGUNTAS */
+        .guide-panel {
+            position: sticky; top: 120px; align-self: start;
+            background: linear-gradient(135deg, rgba(15,13,18,0.6), rgba(8,7,10,0.8));
+            border: 1px solid var(--border);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        }
+        
+        .guide-title {
+            font-size: 1.6rem; color: var(--gold); text-transform: uppercase;
+            margin-bottom: 1rem; padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            text-shadow: 0 0 20px rgba(216,180,106,0.3);
+        }
+        
+        .guide-intro {
+            font-size: 0.88rem; color: var(--muted); margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .question-block {
+            margin-bottom: 2rem;
+            padding: 1.2rem;
+            background: rgba(0,0,0,0.3);
+            border-left: 2px solid transparent;
+            transition: 0.4s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .question-block::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--gold-soft);
+            transform: translateX(-100%);
+            transition: 0.4s;
+            z-index: -1;
+        }
+        .question-block:hover::before,
+        .question-block.active::before {
+            transform: translateX(0);
+        }
+        .question-block:hover, 
+        .question-block.active { 
+            border-left-color: var(--gold);
+            box-shadow: 0 5px 20px rgba(216,180,106,0.15);
+        }
+        
+        .q-label {
+            font-size: 0.7rem; color: var(--gold);
+            text-transform: uppercase; margin-bottom: 0.5rem; display: block;
+            letter-spacing: 2px;
+        }
+        .q-text { 
+            font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem;
+            color: #fff;
+        }
+        .q-hint { 
+            font-size: 0.82rem; color: var(--muted); line-height: 1.6;
+        }
+
+        /* COLUNA DA DIREITA: EDITOR */
+        .editor-panel {
+            background: linear-gradient(135deg, rgba(15,13,18,0.98), rgba(8,7,10,0.98));
+            border: 1px solid var(--border);
+            padding: 2.5rem; 
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+        
+        /* ORNAMENTOS DE CANTO */
+        .editor-panel::before, .editor-panel::after {
+            content: '';
+            position: absolute; width: 25px; height: 25px;
+            border: 1px solid var(--gold);
+            opacity: 0.7;
+            animation: cornerPulse 3s ease-in-out infinite;
+        }
+        @keyframes cornerPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+        .editor-panel::before { 
+            top: -1px; left: -1px; 
+            border-right: none; border-bottom: none; 
+        }
+        .editor-panel::after { 
+            bottom: -1px; right: -1px; 
+            border-left: none; border-top: none; 
+        }
+
+        .editor-title {
+            font-size: 1.8rem; margin-bottom: 2rem; color: #fff;
+            text-transform: uppercase;
+        }
+
+        .input-group { 
+            margin-bottom: 1.8rem;
+            animation: fadeIn 0.6s ease-out backwards;
+        }
+        .input-group:nth-child(1) { animation-delay: 1s; }
+        .input-group:nth-child(2) { animation-delay: 1.2s; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group label {
+            display: block; font-size: 0.8rem;
+            color: var(--muted); margin-bottom: 0.7rem;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        
+        .input-group input, 
+        .input-group textarea {
+            width: 100%; 
+            background: rgba(0,0,0,0.6); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: #eee;
+            padding: 1.2rem; 
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.95rem;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        .input-group input:focus, 
+        .input-group textarea:focus {
+            border-color: var(--gold); 
+            outline: none;
+            box-shadow: 0 0 20px rgba(216,180,106,0.2);
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .input-group textarea { 
+            min-height: 420px; 
+            resize: vertical; 
+            line-height: 1.8;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* CONTADOR DE CARACTERES */
+        .char-count {
+            font-size: 0.75rem; 
+            color: #555; 
+            text-align: right; 
+            margin-top: 0.3rem;
+            transition: 0.3s;
+        }
+        .char-count.warning { color: var(--gold); }
+
+        .btn-action {
+            width: 100%; padding: 1.3rem; 
+            background: transparent; 
+            border: 1px solid var(--gold);
+            color: var(--gold); 
+            font-size: 0.85rem;
+            text-transform: uppercase; 
+            cursor: pointer; 
+            transition: 0.3s;
+            margin-top: 1.5rem;
+            letter-spacing: 3px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-action::before {
+            content: ''; position: absolute; inset: 0;
+            background: var(--gold);
+            transform: translateX(-100%);
+            transition: 0.4s;
+            z-index: -1;
+        }
+        .btn-action:hover::before {
+            transform: translateX(0);
+        }
+        .btn-action:hover { 
+            color: #000;
+            box-shadow: 0 0 40px rgba(216,180,106,0.5);
+        }
+        .btn-action:active {
+            transform: scale(0.98);
+        }
+
+        .btn-hint {
+            font-size: 0.75rem; color: #555; text-align: center; 
+            margin-top: 0.7rem; line-height: 1.5;
+        }
+
+        /* ÁREA DE RENDERIZAÇÃO */
+        #render-area {
+            position: absolute; left: -9999px; top: 0; width: 900px;
+            background: linear-gradient(135deg, #0d0c0f 0%, #050406 100%);
+            padding: 5rem; color: #e0e0e0;
+            border: 2px solid var(--gold); 
+            font-family: 'Inter', sans-serif;
+        }
+        .doc-header {
+            border-bottom: 2px solid var(--gold); 
+            padding-bottom: 2rem; margin-bottom: 3rem;
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
+        .doc-title { 
+            font-family: 'Cinzel', serif; 
+            font-size: 2.5rem; 
+            color: var(--gold);
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+        .doc-subtitle {
+            font-size: 1rem; 
+            color: #888; 
+            text-transform: uppercase; 
+            margin-top: 0.5rem;
+            letter-spacing: 2px;
+        }
+        .doc-meta { 
+            font-family: 'Share Tech Mono', monospace; 
+            font-size: 0.75rem; 
+            color: #666; 
+            text-align: right;
+            line-height: 1.8;
+        }
+        
+        .doc-body { 
+            white-space: pre-wrap; 
+            font-size: 1.05rem; 
+            color: #ccc; 
+            line-height: 1.9; 
+            text-align: justify;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .doc-footer {
+            margin-top: 5rem; 
+            padding-top: 1.5rem; 
+            border-top: 1px solid #333;
+            font-family: 'Share Tech Mono', monospace; 
+            font-size: 0.7rem; 
+            color: #444; 
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 1000px) {
+            .container { grid-template-columns: 1fr; }
+            .guide-panel { position: static; margin-bottom: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-noise"></div>
+    <div class="vignette"></div>
+
+    <!-- PARTÍCULAS FLUTUANTES -->
+    <div class="particles" id="particles"></div>
+
+    <header>
+        <div class="logo mono">
+            <div class="logo-seal"><span>SV</span></div>
+            <div>SANCTUM VERITATIS <span>//</span> ARQUIVO PESSOAL</div>
+        </div>
+        <a href="setentrional" class="back-link mono">
+            <i class="fas fa-arrow-left"></i> Retornar
+        </a>
+    </header>
+
+    <div class="container">
+        
+        <!-- GUIA DE PERGUNTAS -->
+        <aside class="guide-panel">
+            <h2 class="guide-title serif">Diretrizes de Escrita</h2>
+            <p class="guide-intro">
+                Use estas perguntas como bússola narrativa. Você não precisa responder todas, 
+                mas elas ajudam a dar profundidade e peso emocional ao seu agente.
+            </p>
+
+            <div class="question-block active">
+                <span class="q-label mono">01. ORIGEM</span>
+                <div class="q-text">Quem você era antes da Ordem?</div>
+                <div class="q-hint">
+                    Qual era sua profissão? Onde você morava? Você tinha uma vida normal ou já vivia à margem?
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label mono">02. O TRAUMA</span>
+                <div class="q-text">Qual foi seu primeiro contato com o Paranormal?</div>
+                <div class="q-hint">
+                    Você perdeu alguém? Viu algo que não devia? Sobreviveu a um ataque? 
+                    Esse é o motivo de você ter sido recrutado.
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label mono">03. MEDO E FRAQUEZA</span>
+                <div class="q-text">O que te apavora de verdade?</div>
+                <div class="q-hint">
+                    Não apenas monstros. É a solidão? O fracasso? A perda de controle? 
+                    Como isso afeta suas decisões?
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="q-label mono">04. OBJETIVO</span>
+                <div class="q-text">Por que você continua lutando?</div>
+                <div class="q-hint">
+                    Vingança? Proteção? Curiosidade mórbida? Ou você simplesmente não tem mais para onde ir?
+                </div>
+            </div>
+        </aside>
+
+        <!-- ÁREA DE ESCRITA -->
+        <main class="editor-panel">
+            <h2 class="editor-title serif">Registro de Agente</h2>
+            
+            <div class="input-group">
+                <label class="mono">Nome do Agente</label>
+                <input type="text" id="char-name" placeholder="Ex: Arthur Cervero">
+            </div>
+
+            <div class="input-group">
+                <label class="mono">Arquivo de Background</label>
+                <textarea id="char-story" placeholder="Comece a escrever sua história aqui... Use os tópicos ao lado como guia."></textarea>
+                <div class="char-count mono" id="charCount">0 caracteres</div>
+            </div>
+
+            <button class="btn-action mono" onclick="gerarDossie()">
+                <i class="fas fa-file-export"></i> Processar e Baixar Dossiê
+            </button>
+            <p class="btn-hint">O arquivo será salvo como PNG de alta resolução para uso na mesa.</p>
+        </main>
+    </div>
+
+    <!-- MODELO OCULTO PARA GERAR A IMAGEM -->
+    <div id="render-area">
+        <div class="doc-header">
+            <div>
+                <div class="doc-title" id="render-name">NOME DO AGENTE</div>
+                <div class="doc-subtitle">Perfil Psicológico & Histórico</div>
+            </div>
+            <div class="doc-meta">
+                SANCTUM VERITATIS<br>
+                OPERAÇÃO SETENTRIONAL<br>
+                DOSSIÊ CONFIDENCIAL<br>
+                NÍVEL: VELUM
+            </div>
+        </div>
+        
+        <div class="doc-body" id="render-text">
+            [O texto do jogador aparecerá aqui...]
+        </div>
+
+        <div class="doc-footer">
+            DOCUMENTO GERADO VIA SANCTUM VERITATIS // USO EXCLUSIVO PARA OPERAÇÕES AUTORIZADAS
+        </div>
+    </div>
+
+    <script>
+        // PARTÍCULAS FLUTUANTES
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // INTERATIVIDADE DAS PERGUNTAS
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.addEventListener('click', () => {
+                document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+                block.classList.add('active');
+            });
+        });
+
+        // CONTADOR DE CARACTERES
+        const textarea = document.getElementById('char-story');
+        const charCount = document.getElementById('charCount');
+        textarea.addEventListener('input', () => {
+            const count = textarea.value.length;
+            charCount.textContent = `${count} caracteres`;
+            if (count > 1500) {
+                charCount.classList.add('warning');
+            } else {
+                charCount.classList.remove('warning');
+            }
+        });
+
+        // GERAR DOSSIÊ
+        function gerarDossie() {
+            const nome = document.getElementById('char-name').value || 'AGENTE DESCONHECIDO';
+            const historia = document.getElementById('char-story').value || 'Nenhum registro encontrado nos arquivos.';
+
+            // Preencher a área oculta
+            document.getElementById('render-name').textContent = nome;
+            document.getElementById('render-text').textContent = historia;
+
+            const renderArea = document.getElementById('render-area');
+
+            // Gerar imagem
+            html2canvas(renderArea, {
+                backgroundColor: '#050406',
+                scale: 2 // Alta resolução
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Dossie_${nome.replace(/\s/g, '_')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+
+</body>
+</html>
