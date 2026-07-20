@@ -1,0 +1,1 @@
+(function(){function add(profile,type,before,after,note){profile.history.unshift({at:new Date().toISOString(),user:profile.id,type,before,after,note:note||''});profile.history=profile.history.slice(0,300)}window.SVHistory={add}})();

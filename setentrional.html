@@ -1,2320 +1,438 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-BR" class="no-js">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Setentrional | Sanctum Veritatis</title>
-
-  <style>
-    :root {
-      --bg: #040506;
-      --bg2: #090b0d;
-      --black: #020203;
-      --paper: #e8e1cd;
-      --paper2: #bcb29a;
-      --muted: #898174;
-      --gold: #b79b5b;
-      --gold2: #e2c978;
-      --blood: #8b1010;
-      --blood2: #c82020;
-      --green: #6affbc;
-      --blue: #87b7ff;
-      --line: rgba(232, 225, 205, 0.14);
-      --goldLine: rgba(183, 155, 91, 0.28);
-      --dangerLine: rgba(255, 55, 55, 0.32);
-      --glass: rgba(7, 8, 9, 0.78);
-      --fontTitle: Georgia, "Times New Roman", serif;
-      --fontUi: Inter, Arial, Helvetica, sans-serif;
-      --fontMono: "Courier New", Courier, monospace;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      background: var(--bg);
-    }
-
-    body {
-      min-height: 100vh;
-      overflow-x: hidden;
-      color: var(--paper);
-      font-family: var(--fontUi);
-      background:
-        radial-gradient(circle at 50% -10%, rgba(183, 155, 91, 0.16), transparent 35%),
-        radial-gradient(circle at 18% 30%, rgba(139, 16, 16, 0.23), transparent 28%),
-        radial-gradient(circle at 82% 60%, rgba(20, 45, 55, 0.15), transparent 32%),
-        linear-gradient(180deg, #050607 0%, #080607 50%, #020203 100%);
-      letter-spacing: 0.02em;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      pointer-events: none;
-      background:
-        linear-gradient(rgba(255, 255, 255, 0.025) 50%, rgba(0, 0, 0, 0.055) 50%),
-        linear-gradient(90deg, rgba(255, 0, 0, 0.018), rgba(0, 255, 255, 0.014));
-      background-size: 100% 4px, 7px 100%;
-      mix-blend-mode: screen;
-      opacity: 0.42;
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 51;
-      pointer-events: none;
-      background: radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.78) 100%);
-    }
-
-    ::selection {
-      background: var(--blood);
-      color: white;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .noise {
-      position: fixed;
-      inset: 0;
-      z-index: 45;
-      pointer-events: none;
-      opacity: 0.08;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 260 260' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='0.75'/%3E%3C/svg%3E");
-      animation: noiseMove 1.2s steps(2) infinite;
-    }
-
-    @keyframes noiseMove {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(-1%, 1%); }
-      50% { transform: translate(1%, -1%); }
-      75% { transform: translate(-1%, -1%); }
-      100% { transform: translate(0, 0); }
-    }
-
-    .fog {
-      position: fixed;
-      inset: -25%;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.24;
-      filter: blur(24px);
-      background:
-        radial-gradient(circle at 20% 40%, rgba(220, 220, 220, 0.12), transparent 24%),
-        radial-gradient(circle at 65% 55%, rgba(220, 220, 220, 0.09), transparent 26%),
-        radial-gradient(circle at 42% 75%, rgba(220, 220, 220, 0.08), transparent 32%);
-      animation: fogDrift 25s ease-in-out infinite alternate;
-    }
-
-    @keyframes fogDrift {
-      from { transform: translate3d(-2%, -1%, 0) scale(1); }
-      to { transform: translate3d(3%, 2%, 0) scale(1.08); }
-    }
-
-    #sigilCanvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      opacity: 0.34;
-    }
-
-    .cursor-light {
-      position: fixed;
-      width: 430px;
-      height: 430px;
-      z-index: 2;
-      pointer-events: none;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(183, 155, 91, 0.11), transparent 64%);
-      mix-blend-mode: screen;
-      opacity: 0.7;
-    }
-
-    .shell {
-      position: relative;
-      z-index: 5;
-      width: min(1460px, calc(100% - 34px));
-      margin: 0 auto;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(4, 5, 6, 0.92), rgba(4, 5, 6, 0.54));
-      backdrop-filter: blur(18px);
-    }
-
-    .nav {
-      width: min(1460px, calc(100% - 34px));
-      min-height: 82px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      min-width: 270px;
-    }
-
-    .brand-mark {
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--goldLine);
-      transform: rotate(45deg);
-      background: rgba(183, 155, 91, 0.035);
-      box-shadow: 0 0 34px rgba(183, 155, 91, 0.08);
-      position: relative;
-    }
-
-    .brand-mark::before,
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      inset: 7px;
-      border: 1px solid rgba(183, 155, 91, 0.17);
-    }
-
-    .brand-mark span {
-      transform: rotate(-45deg);
-      font-family: var(--fontTitle);
-      color: var(--gold);
-      font-size: 18px;
-    }
-
-    .brand-text small {
-      display: block;
-      font-family: var(--fontMono);
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-    }
-
-    .brand-text strong {
-      display: block;
-      margin-top: 3px;
-      font-family: var(--fontTitle);
-      font-size: 18px;
-      color: var(--paper);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      padding: 10px 12px;
-      border: 1px solid transparent;
-      font-size: 11px;
-      color: rgba(232, 225, 205, 0.72);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      transition: 0.25s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--paper);
-      border-color: rgba(183, 155, 91, 0.25);
-      background: rgba(183, 155, 91, 0.055);
-    }
-
-    .nav-status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--fontMono);
-      font-size: 11px;
-      color: var(--blood2);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      white-space: nowrap;
-    }
-
-    .pulse-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--blood2);
-      box-shadow: 0 0 16px var(--blood2);
-      animation: pulse 1.4s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.95; }
-      50% { transform: scale(1.7); opacity: 0.35; }
-    }
-
-    .hero {
-      min-height: calc(100vh - 82px);
-      display: grid;
-      grid-template-columns: 1.08fr 0.92fr;
-      gap: 54px;
-      align-items: center;
-      padding: 76px 0 90px;
-      position: relative;
-    }
-
-    .classification {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 27px;
-      padding: 9px 12px;
-      border: 1px solid rgba(255, 55, 55, 0.25);
-      background: rgba(139, 16, 16, 0.11);
-      color: rgba(255, 225, 225, 0.9);
-      font-family: var(--fontMono);
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      box-shadow: 0 0 30px rgba(139, 16, 16, 0.13);
-    }
-
-    .classification b {
-      color: white;
-    }
-
-    h1 {
-      font-family: var(--fontTitle);
-      font-size: clamp(4.6rem, 11vw, 12.4rem);
-      line-height: 0.82;
-      letter-spacing: -0.058em;
-      color: var(--paper);
-      text-transform: uppercase;
-      text-shadow:
-        0 0 26px rgba(183, 155, 91, 0.17),
-        2px 0 rgba(255, 0, 0, 0.22),
-        -2px 0 rgba(0, 255, 255, 0.13);
-    }
-
-    .glitch {
-      position: relative;
-      display: inline-block;
-    }
-
-    .glitch::before,
-    .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      overflow: hidden;
-      pointer-events: none;
-      opacity: 0.72;
-    }
-
-    .glitch::before {
-      color: rgba(255, 40, 40, 0.65);
-      clip-path: inset(8% 0 65% 0);
-      transform: translate(-3px, -2px);
-      animation: glitchTop 3s infinite linear alternate-reverse;
-    }
-
-    .glitch::after {
-      color: rgba(80, 200, 255, 0.45);
-      clip-path: inset(62% 0 8% 0);
-      transform: translate(3px, 2px);
-      animation: glitchBottom 2.3s infinite linear alternate-reverse;
-    }
-
-    @keyframes glitchTop {
-      0%, 88%, 100% { clip-path: inset(8% 0 65% 0); transform: translate(-3px, -2px); }
-      90% { clip-path: inset(20% 0 48% 0); transform: translate(4px, 0); }
-      92% { clip-path: inset(2% 0 72% 0); transform: translate(-6px, 1px); }
-      94% { clip-path: inset(34% 0 40% 0); transform: translate(3px, -3px); }
-    }
-
-    @keyframes glitchBottom {
-      0%, 84%, 100% { clip-path: inset(62% 0 8% 0); transform: translate(3px, 2px); }
-      86% { clip-path: inset(54% 0 22% 0); transform: translate(-5px, 0); }
-      88% { clip-path: inset(70% 0 4% 0); transform: translate(7px, 3px); }
-      90% { clip-path: inset(45% 0 35% 0); transform: translate(-2px, -2px); }
-    }
-
-    .motto {
-      margin-top: 28px;
-      max-width: 750px;
-      font-family: var(--fontTitle);
-      font-size: clamp(1.35rem, 2vw, 2.2rem);
-      line-height: 1.25;
-      color: rgba(232, 225, 205, 0.94);
-    }
-
-    .motto span {
-      color: var(--gold2);
-      text-shadow: 0 0 22px rgba(183, 155, 91, 0.18);
-    }
-
-    .hero-description {
-      max-width: 760px;
-      margin-top: 25px;
-      color: rgba(232, 225, 205, 0.69);
-      font-size: 1.02rem;
-      line-height: 1.86;
-    }
-
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 34px;
-    }
-
-    .btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 49px;
-      gap: 10px;
-      padding: 0 19px;
-      border: 1px solid rgba(183, 155, 91, 0.32);
-      background: rgba(183, 155, 91, 0.065);
-      color: var(--paper);
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.17em;
-      cursor: pointer;
-      overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-    }
-
-    .btn::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      transform: translateX(-115%);
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
-      transition: transform 0.65s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      border-color: rgba(183, 155, 91, 0.72);
-      background: rgba(183, 155, 91, 0.12);
-    }
-
-    .btn:hover::before {
-      transform: translateX(115%);
-    }
-
-    .btn-danger {
-      border-color: rgba(255, 55, 55, 0.38);
-      background: rgba(139, 16, 16, 0.18);
-    }
-
-    .btn-danger:hover {
-      border-color: rgba(255, 55, 55, 0.76);
-      background: rgba(139, 16, 16, 0.28);
-    }
-
-    .hero-side {
-      min-height: 710px;
-      display: grid;
-      place-items: center;
-      position: relative;
-    }
-
-    .op-card {
-      position: absolute;
-      top: 10px;
-      right: 0;
-      width: min(360px, 92vw);
-      padding: 18px;
-      border: 1px solid rgba(183, 155, 91, 0.2);
-      background: rgba(4, 4, 4, 0.58);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 0 42px rgba(139, 16, 16, 0.13);
-      z-index: 2;
-    }
-
-    .op-card-top {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .op-card img {
-      max-width: 82px;
-      max-height: 82px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 14px rgba(183, 155, 91, 0.16));
-    }
-
-    .op-fallback {
-      display: none;
-      width: 82px;
-      height: 82px;
-      border: 1px solid rgba(183, 155, 91, 0.25);
-      place-items: center;
-      font-family: var(--fontTitle);
-      color: var(--gold);
-      font-size: 28px;
-      background: rgba(183, 155, 91, 0.04);
-    }
-
-    .op-card small {
-      display: block;
-      font-family: var(--fontMono);
-      color: var(--gold);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      margin-bottom: 5px;
-    }
-
-    .op-card strong {
-      display: block;
-      font-family: var(--fontTitle);
-      font-size: 1.45rem;
-      color: var(--paper);
-      line-height: 1.1;
-    }
-
-    .op-card p {
-      margin-top: 13px;
-      color: rgba(232, 225, 205, 0.62);
-      font-size: 0.87rem;
-      line-height: 1.65;
-    }
-
-    .compass {
-      width: min(94vw, 610px);
-      aspect-ratio: 1;
-      position: relative;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      filter: drop-shadow(0 0 50px rgba(183, 155, 91, 0.12));
-    }
-
-    .compass::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border: 1px solid rgba(183, 155, 91, 0.18);
-      border-radius: 50%;
-      animation: rotateSlow 42s linear infinite;
-    }
-
-    .compass::after {
-      content: "";
-      position: absolute;
-      inset: 10%;
-      border: 1px dashed rgba(183, 155, 91, 0.24);
-      border-radius: 50%;
-      animation: rotateReverse 62s linear infinite;
-    }
-
-    @keyframes rotateSlow {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes rotateReverse {
-      to { transform: rotate(-360deg); }
-    }
-
-    .compass-ring {
-      position: absolute;
-      inset: 18%;
-      border: 1px solid rgba(183, 155, 91, 0.2);
-      border-radius: 50%;
-    }
-
-    .compass-ring::before,
-    .compass-ring::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: -22%;
-      width: 1px;
-      height: 144%;
-      background: linear-gradient(transparent, rgba(183, 155, 91, 0.38), transparent);
-      transform-origin: center;
-    }
-
-    .compass-ring::after {
-      transform: rotate(90deg);
-    }
-
-    .needle {
-      position: absolute;
-      width: 35%;
-      height: 35%;
-      clip-path: polygon(50% 0, 61% 48%, 50% 100%, 39% 48%);
-      background: linear-gradient(180deg, rgba(200, 32, 32, 0.96) 0 48%, rgba(183, 155, 91, 0.72) 48% 100%);
-      filter: drop-shadow(0 0 24px rgba(200, 32, 32, 0.35));
-      animation: needle 7s ease-in-out infinite;
-    }
-
-    @keyframes needle {
-      0%, 100% { transform: rotate(-3deg); }
-      40% { transform: rotate(13deg); }
-      70% { transform: rotate(-18deg); }
-    }
-
-    .compass-center {
-      position: relative;
-      width: 164px;
-      height: 164px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      border: 1px solid rgba(183, 155, 91, 0.34);
-      background:
-        radial-gradient(circle, rgba(183, 155, 91, 0.1), rgba(0, 0, 0, 0.48) 60%),
-        rgba(0, 0, 0, 0.4);
-      box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.5), 0 0 50px rgba(139, 16, 16, 0.2);
-      text-align: center;
-      padding: 16px;
-    }
-
-    .compass-center strong {
-      display: block;
-      font-family: var(--fontTitle);
-      font-size: 44px;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .compass-center small {
-      display: block;
-      margin-top: 7px;
-      font-family: var(--fontMono);
-      font-size: 10px;
-      color: rgba(232, 225, 205, 0.66);
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .coord {
-      position: absolute;
-      font-family: var(--fontMono);
-      font-size: 11px;
-      color: rgba(232, 225, 205, 0.52);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-    }
-
-    .coord.n { top: 2%; left: 50%; transform: translateX(-50%); color: var(--blood2); }
-    .coord.s { bottom: 2%; left: 50%; transform: translateX(-50%); }
-    .coord.e { right: 0; top: 50%; transform: translateY(-50%); }
-    .coord.w { left: 0; top: 50%; transform: translateY(-50%); }
-
-    .floating-file {
-      position: absolute;
-      right: 2%;
-      bottom: 7%;
-      width: min(370px, 86vw);
-      padding: 18px;
-      border: 1px solid rgba(183, 155, 91, 0.16);
-      background: rgba(5, 5, 5, 0.66);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 0 45px rgba(139, 16, 16, 0.18);
-      transform: rotate(-2deg);
-      z-index: 2;
-    }
-
-    .floating-file::before {
-      content: "SANCTUM VERITATIS";
-      position: absolute;
-      top: -11px;
-      left: 18px;
-      padding: 4px 8px;
-      border: 1px solid rgba(183, 155, 91, 0.18);
-      background: #0b0908;
-      color: var(--gold);
-      font-family: var(--fontMono);
-      font-size: 9px;
-      letter-spacing: 0.18em;
-    }
-
-    .floating-file p {
-      color: rgba(232, 225, 205, 0.72);
-      font-family: var(--fontMono);
-      font-size: 12px;
-      line-height: 1.7;
-    }
-
-    .redacted {
-      display: inline-block;
-      min-width: 72px;
-      height: 0.9em;
-      background: rgba(232, 225, 205, 0.78);
-      vertical-align: -0.08em;
-      box-shadow: 0 0 10px rgba(232, 225, 205, 0.12);
-    }
-
-    section {
-      position: relative;
-      padding: 96px 0;
-    }
-
-    .section-kicker {
-      margin-bottom: 14px;
-      font-family: var(--fontMono);
-      color: var(--gold);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.28em;
-    }
-
-    .section-title {
-      max-width: 1020px;
-      font-family: var(--fontTitle);
-      font-size: clamp(2.4rem, 5vw, 5.7rem);
-      line-height: 0.96;
-      color: var(--paper);
-      text-transform: uppercase;
-      letter-spacing: -0.035em;
-    }
-
-    .section-text {
-      max-width: 880px;
-      margin-top: 22px;
-      color: rgba(232, 225, 205, 0.66);
-      font-size: 1rem;
-      line-height: 1.85;
-    }
-
-    .incident-grid {
-      display: grid;
-      grid-template-columns: 1fr 0.82fr;
-      gap: 28px;
-      margin-top: 40px;
-      align-items: stretch;
-    }
-
-    .dossier {
-      position: relative;
-      overflow: hidden;
-      padding: clamp(22px, 4vw, 44px);
-      border: 1px solid rgba(183, 155, 91, 0.18);
-      background:
-        linear-gradient(135deg, rgba(183, 155, 91, 0.06), transparent 38%),
-        rgba(5, 6, 7, 0.74);
-      box-shadow: 0 0 45px rgba(139, 16, 16, 0.18);
-    }
-
-    .dossier::before {
-      content: "";
-      position: absolute;
-      inset: 14px;
-      border: 1px solid rgba(183, 155, 91, 0.07);
-      pointer-events: none;
-    }
-
-    .dossier-stamp {
-      position: absolute;
-      right: 26px;
-      top: 25px;
-      padding: 8px 12px;
-      border: 2px solid rgba(255, 55, 55, 0.35);
-      color: rgba(255, 55, 55, 0.58);
-      font-family: var(--fontMono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      transform: rotate(8deg);
-    }
-
-    .dossier h3 {
-      max-width: 760px;
-      margin-bottom: 20px;
-      font-family: var(--fontTitle);
-      font-size: clamp(2rem, 3.4vw, 4.2rem);
-      color: var(--paper);
-    }
-
-    .dossier p {
-      max-width: 920px;
-      margin-bottom: 18px;
-      color: rgba(232, 225, 205, 0.72);
-      line-height: 1.95;
-    }
-
-    .dossier strong {
-      color: var(--paper);
-    }
-
-    .threat-box {
-      display: grid;
-      gap: 12px;
-      margin-top: 28px;
-      padding: 20px;
-      border: 1px solid var(--dangerLine);
-      background: rgba(139, 16, 16, 0.12);
-      font-family: var(--fontMono);
-      box-shadow: inset 0 0 28px rgba(139, 16, 16, 0.12);
-    }
-
-    .threat-line {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      color: rgba(232, 225, 205, 0.74);
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .threat-line:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .threat-line b {
-      color: var(--blood2);
-      text-align: right;
-    }
-
-    .membrane {
-      position: relative;
-      min-height: 100%;
-      overflow: hidden;
-      padding: 28px;
-      border: 1px solid rgba(183, 155, 91, 0.16);
-      background: rgba(5, 6, 7, 0.72);
-    }
-
-    .membrane::after {
-      content: "";
-      position: absolute;
-      inset: -70px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255, 55, 55, 0.13), transparent 31%),
-        conic-gradient(from 20deg, transparent, rgba(183, 155, 91, 0.08), transparent, rgba(139, 16, 16, 0.12), transparent);
-      opacity: 0.6;
-      animation: rotateSlow 22s linear infinite;
-    }
-
-    .membrane-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    .membrane h3 {
-      margin-bottom: 14px;
-      font-family: var(--fontTitle);
-      font-size: 2rem;
-      color: var(--paper);
-    }
-
-    .meter {
-      height: 16px;
-      margin-top: 22px;
-      padding: 3px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 55, 55, 0.3);
-      background: rgba(0, 0, 0, 0.44);
-    }
-
-    .meter-fill {
-      height: 100%;
-      width: 82%;
-      background: linear-gradient(90deg, rgba(183, 155, 91, 0.72), rgba(200, 32, 32, 0.95));
-      box-shadow: 0 0 18px rgba(200, 32, 32, 0.35);
-      animation: meterPulse 2.6s ease-in-out infinite;
-    }
-
-    @keyframes meterPulse {
-      0%, 100% { width: 78%; filter: brightness(0.85); }
-      50% { width: 88%; filter: brightness(1.2); }
-    }
-
-    .readout {
-      margin-top: 16px;
-      font-family: var(--fontMono);
-      color: rgba(232, 225, 205, 0.66);
-      font-size: 12px;
-      line-height: 1.7;
-    }
-
-    .readout b {
-      color: var(--blood2);
-    }
-
-    .scanner-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 24px;
-    }
-
-    .mini-btn {
-      padding: 10px 12px;
-      border: 1px solid rgba(183, 155, 91, 0.22);
-      background: rgba(0, 0, 0, 0.3);
-      color: rgba(232, 225, 205, 0.78);
-      font-family: var(--fontMono);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-      transition: 0.25s ease;
-    }
-
-    .mini-btn:hover {
-      border-color: rgba(183, 155, 91, 0.55);
-      color: var(--paper);
-      background: rgba(183, 155, 91, 0.07);
-    }
-
-    .map-grid {
-      display: grid;
-      grid-template-columns: 0.8fr 1.2fr;
-      gap: 28px;
-      margin-top: 40px;
-    }
-
-    .island-map,
-    .intel-tabs {
-      border: 1px solid rgba(183, 155, 91, 0.17);
-      background: rgba(5, 6, 7, 0.72);
-      padding: 26px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .island-map h3,
-    .intel-tabs h3 {
-      font-family: var(--fontTitle);
-      font-size: 2rem;
-      color: var(--paper);
-      margin-bottom: 16px;
-    }
-
-    .map-svg {
-      width: 100%;
-      min-height: 340px;
-      border: 1px solid rgba(232, 225, 205, 0.08);
-      background:
-        radial-gradient(circle at 50% 50%, rgba(183, 155, 91, 0.07), transparent 35%),
-        rgba(0, 0, 0, 0.28);
-    }
-
-    .map-pulse {
-      animation: mapPulse 1.8s infinite;
-    }
-
-    @keyframes mapPulse {
-      0%, 100% { opacity: 0.25; r: 6; }
-      50% { opacity: 0.85; r: 13; }
-    }
-
-    .tab-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .tab-btn {
-      padding: 11px 12px;
-      border: 1px solid rgba(183, 155, 91, 0.2);
-      background: rgba(0, 0, 0, 0.26);
-      color: rgba(232, 225, 205, 0.62);
-      font-family: var(--fontMono);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      color: var(--paper);
-      border-color: rgba(255, 55, 55, 0.4);
-      background: rgba(139, 16, 16, 0.16);
-    }
-
-    .tab-content {
-      min-height: 260px;
-      padding: 24px;
-      border: 1px solid rgba(232, 225, 205, 0.08);
-      background: rgba(0, 0, 0, 0.28);
-    }
-
-    .tab-content h4 {
-      margin-bottom: 12px;
-      font-family: var(--fontTitle);
-      font-size: 2rem;
-      color: var(--gold2);
-    }
-
-    .tab-content p {
-      color: rgba(232, 225, 205, 0.68);
-      line-height: 1.85;
-      margin-bottom: 14px;
-    }
-
-    .tab-content ul {
-      display: grid;
-      gap: 10px;
-      margin-top: 15px;
-      padding-left: 20px;
-      color: rgba(232, 225, 205, 0.66);
-      line-height: 1.65;
-    }
-
-    .radio {
-      position: relative;
-      overflow: hidden;
-      margin-top: 40px;
-      padding: clamp(20px, 4vw, 34px);
-      border: 1px solid rgba(106, 255, 188, 0.18);
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
-        rgba(4, 4, 4, 0.82);
-      box-shadow: 0 0 40px rgba(106, 255, 188, 0.06);
-    }
-
-    .radio::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(106, 255, 188, 0.04), transparent);
-      transform: translateX(-100%);
-      animation: signalSweep 5s infinite;
-    }
-
-    @keyframes signalSweep {
-      0% { transform: translateX(-120%); }
-      45%, 100% { transform: translateX(120%); }
-    }
-
-    .radio-label {
-      margin-bottom: 18px;
-      color: var(--green);
-      font-family: var(--fontMono);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 12px;
-    }
-
-    .radio-text {
-      min-height: 150px;
-      color: rgba(225, 255, 239, 0.88);
-      font-family: var(--fontMono);
-      font-size: clamp(1rem, 1.7vw, 1.45rem);
-      line-height: 1.72;
-      text-shadow: 0 0 10px rgba(106, 255, 188, 0.12);
-    }
-
-    .radio-source {
-      margin-top: 20px;
-      color: rgba(232, 225, 205, 0.54);
-      font-family: var(--fontMono);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-    }
-
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-      margin-top: 42px;
-    }
-
-    .role-card {
-      position: relative;
-      min-height: 430px;
-      overflow: hidden;
-      padding: 30px;
-      border: 1px solid rgba(183, 155, 91, 0.16);
-      background:
-        linear-gradient(160deg, rgba(183, 155, 91, 0.09), transparent 42%),
-        rgba(7, 8, 9, 0.76);
-      transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease;
-    }
-
-    .role-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(183, 155, 91, 0.42);
-      background:
-        linear-gradient(160deg, rgba(183, 155, 91, 0.13), transparent 42%),
-        rgba(9, 10, 11, 0.82);
-    }
-
-    .role-card::before {
-      content: attr(data-index);
-      position: absolute;
-      right: 22px;
-      top: 18px;
-      font-family: var(--fontTitle);
-      font-size: 7rem;
-      color: rgba(232, 225, 205, 0.035);
-      line-height: 1;
-    }
-
-    .role-icon {
-      width: 82px;
-      height: 82px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 26px;
-      border: 1px solid rgba(183, 155, 91, 0.24);
-      background: rgba(183, 155, 91, 0.035);
-    }
-
-    .role-icon svg {
-      width: 44px;
-      height: 44px;
-      stroke: var(--gold);
-      opacity: 0.9;
-    }
-
-    .role-type {
-      margin-bottom: 12px;
-      font-family: var(--fontMono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      color: var(--blood2);
-    }
-
-    .role-card h3 {
-      margin-bottom: 16px;
-      font-family: var(--fontTitle);
-      font-size: 2.4rem;
-      color: var(--paper);
-    }
-
-    .role-card p {
-      margin-bottom: 24px;
-      color: rgba(232, 225, 205, 0.66);
-      line-height: 1.8;
-    }
-
-    .role-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: auto;
-    }
-
-    .role-tags span {
-      padding: 8px 9px;
-      border: 1px solid rgba(183, 155, 91, 0.18);
-      background: rgba(0, 0, 0, 0.2);
-      color: rgba(232, 225, 205, 0.65);
-      font-family: var(--fontMono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .protocols {
-      display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
-      gap: 28px;
-      margin-top: 42px;
-    }
-
-    .protocol-panel {
-      min-height: 370px;
-      padding: 28px;
-      border: 1px solid rgba(183, 155, 91, 0.16);
-      background: rgba(5, 6, 7, 0.78);
-    }
-
-    .protocol-panel h3 {
-      margin-bottom: 18px;
-      font-family: var(--fontTitle);
-      font-size: 2rem;
-      color: var(--paper);
-    }
-
-    .protocol-list {
-      display: grid;
-      gap: 14px;
-      list-style: none;
-    }
-
-    .protocol-list li {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 12px;
-      align-items: start;
-      color: rgba(232, 225, 205, 0.68);
-      line-height: 1.6;
-    }
-
-    .protocol-list li span {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(183, 155, 91, 0.22);
-      color: var(--gold);
-      font-family: var(--fontMono);
-      font-size: 11px;
-    }
-
-    .terminal {
-      position: relative;
-      min-height: 370px;
-      overflow: hidden;
-      padding: 24px;
-      border: 1px solid rgba(106, 255, 188, 0.18);
-      background: #030504;
-      color: rgba(183, 255, 218, 0.78);
-      font-family: var(--fontMono);
-    }
-
-    .terminal::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(rgba(106, 255, 188, 0.035) 50%, rgba(0, 0, 0, 0.03) 50%);
-      background-size: 100% 5px;
-      pointer-events: none;
-      opacity: 0.8;
-    }
-
-    .terminal-line {
-      position: relative;
-      z-index: 1;
-      margin-bottom: 12px;
-      line-height: 1.6;
-      font-size: 13px;
-    }
-
-    .terminal-line b {
-      color: var(--green);
-      font-weight: 700;
-    }
-
-    .terminal-line.danger {
-      color: rgba(255, 112, 112, 0.88);
-    }
-
-    .access-panel {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 28px;
-      align-items: center;
-      overflow: hidden;
-      margin-top: 44px;
-      padding: clamp(26px, 5vw, 52px);
-      border: 1px solid rgba(183, 155, 91, 0.18);
-      background:
-        radial-gradient(circle at 20% 20%, rgba(183, 155, 91, 0.08), transparent 30%),
-        linear-gradient(135deg, rgba(139, 16, 16, 0.12), transparent 55%),
-        rgba(5, 6, 7, 0.8);
-    }
-
-    .access-panel::after {
-      content: "NORTE NORTE NORTE NORTE NORTE";
-      position: absolute;
-      right: -40px;
-      bottom: -8px;
-      font-family: var(--fontTitle);
-      font-size: 6rem;
-      color: rgba(232, 225, 205, 0.028);
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    .access-panel h3 {
-      margin-bottom: 12px;
-      font-family: var(--fontTitle);
-      font-size: clamp(2.1rem, 4vw, 4.6rem);
-      color: var(--paper);
-      line-height: 1;
-    }
-
-    .access-panel p {
-      max-width: 780px;
-      color: rgba(232, 225, 205, 0.66);
-      line-height: 1.8;
-    }
-
-    .discord-card {
-      width: min(100%, 390px);
-      padding: 18px;
-      border: 1px solid rgba(183, 155, 91, 0.18);
-      background: rgba(0, 0, 0, 0.32);
-      font-family: var(--fontMono);
-    }
-
-    .discord-card div {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 11px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      color: rgba(232, 225, 205, 0.62);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .discord-card div:last-child {
-      border-bottom: 0;
-    }
-
-    .discord-card b {
-      color: var(--paper);
-      text-align: right;
-    }
-
-    footer {
-      position: relative;
-      z-index: 5;
-      padding: 34px 0;
-      border-top: 1px solid var(--line);
-      color: rgba(232, 225, 205, 0.44);
-      font-family: var(--fontMono);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .footer-inner {
-      width: min(1460px, calc(100% - 34px));
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 80;
-      display: none;
-      place-items: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.78);
-      backdrop-filter: blur(12px);
-    }
-
-    .modal.open {
-      display: grid;
-    }
-
-    .modal-box {
-      position: relative;
-      width: min(780px, 100%);
-      padding: clamp(24px, 5vw, 46px);
-      border: 1px solid rgba(183, 155, 91, 0.22);
-      background:
-        linear-gradient(135deg, rgba(183, 155, 91, 0.07), transparent 40%),
-        #070707;
-      box-shadow: 0 0 80px rgba(139, 16, 16, 0.18);
-    }
-
-    .modal-box h3 {
-      margin-bottom: 18px;
-      font-family: var(--fontTitle);
-      font-size: clamp(2rem, 4vw, 4rem);
-      color: var(--paper);
-    }
-
-    .modal-box p {
-      margin-bottom: 18px;
-      color: rgba(232, 225, 205, 0.68);
-      line-height: 1.85;
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 42px;
-      height: 42px;
-      border: 1px solid rgba(183, 155, 91, 0.22);
-      background: rgba(0, 0, 0, 0.4);
-      color: var(--paper);
-      cursor: pointer;
-      font-size: 20px;
-    }
-
-    @media (max-width: 1100px) {
-      .hero,
-      .incident-grid,
-      .map-grid,
-      .protocols,
-      .access-panel {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-side {
-        min-height: 600px;
-      }
-
-      .team-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .role-card {
-        min-height: auto;
-      }
-
-      .nav-status {
-        display: none;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .nav {
-        height: auto;
-        padding: 16px 0;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .nav-links {
-        justify-content: flex-start;
-      }
-
-      .nav-links a {
-        padding-left: 0;
-        padding-right: 10px;
-      }
-
-      .hero {
-        padding-top: 46px;
-      }
-
-      .classification {
-        font-size: 10px;
-        letter-spacing: 0.1em;
-      }
-
-      h1 {
-        font-size: clamp(4rem, 18vw, 6rem);
-      }
-
-      .op-card {
-        position: relative;
-        top: auto;
-        right: auto;
-        margin-bottom: 24px;
-      }
-
-      .floating-file {
-        position: relative;
-        right: auto;
-        bottom: auto;
-        margin-top: 24px;
-        transform: rotate(0);
-      }
-
-      .compass {
-        width: min(100%, 440px);
-      }
-
-      .coord {
-        font-size: 9px;
-      }
-
-      .dossier-stamp {
-        position: static;
-        display: inline-block;
-        margin-bottom: 20px;
-        transform: rotate(0);
-      }
-
-      section {
-        padding: 72px 0;
-      }
-
-      .access-panel::after {
-        display: none;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        scroll-behavior: auto !important;
-        transition: none !important;
-      }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100b">
+  <meta name="description" content="Terminal confidencial da Sanctum Veritatis — Operação Setentrional.">
+  <title>SV-04 // Operação Setentrional</title>
+  <link rel="preload" href="images/Farol.png" as="image">
+  <link rel="stylesheet" href="css/setentrional-terminal.css">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
 </head>
-
-<body>
-  <canvas id="sigilCanvas"></canvas>
-  <div class="noise"></div>
-  <div class="fog"></div>
-  <div class="cursor-light" id="cursorLight"></div>
-
-  <header>
-    <nav class="nav">
-      <a href="#inicio" class="brand" aria-label="Sanctum Veritatis">
-        <div class="brand-mark">
-          <span>SV</span>
-        </div>
-
-        <div class="brand-text">
-          <small>Arquivo Restrito</small>
-          <strong>Sanctum Veritatis</strong>
-        </div>
-      </a>
-
-      <div class="nav-links" aria-label="Navegação principal">
-        <a href="#incidente">Incidente</a>
-        <a href="#ilha">São Firmo</a>
-        <a href="#transmissao">Transmissão</a>
-        <a href="#equipe">Equipe</a>
-        <a href="#protocolos">Protocolos</a>
-        <a href="faq.html">FAQ</a>
-        <a href="https://discord.gg/ZQqTjkUfv9" target="_blank" rel="noopener noreferrer">Discord</a>
-      </div>
-
-      <div class="nav-status">
-        <span class="pulse-dot"></span>
-        Membrana instável
-      </div>
-    </nav>
-  </header>
-
-  <main class="shell">
-    <section class="hero" id="inicio">
-      <div class="hero-copy reveal">
-        <div class="classification">
-          <span>Operação</span>
-          <b>Setentrional</b>
-          <span>// Sigilo Grau V</span>
-        </div>
-
-        <h1 class="glitch" data-text="Setentrional">Setentrional</h1>
-
-        <p class="motto">
-          “O <span>Norte Verdadeiro</span> aponta para o abismo.”
-        </p>
-
-        <p class="hero-description">
-          Este dossiê foi aberto após o retorno de um sinal costeiro impossível vindo de São Firmo.
-          A ilha não consta em mapas oficiais, registros náuticos ou relatórios civis recentes.
-          O farol, desativado desde 1995, voltou a emitir luz, mas a luz não atravessa a neblina.
-          Ela parece atravessar quem olha.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn btn-danger" href="#incidente">Abrir dossiê</a>
-          <a class="btn" href="#equipe">Selecionar função</a>
-          <a class="btn" href="faq.html">Ler FAQ</a>
-          <a class="btn" href="https://discord.gg/ZQqTjkUfv9" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
-          <button class="btn" id="secretButton" type="button">Desbloquear fragmento</button>
-        </div>
-      </div>
-
-      <aside class="hero-side reveal" aria-label="Selo operacional">
-        <article class="op-card">
-          <div class="op-card-top">
-            <img
-              src="ordem-paranormal-logo.png"
-              alt="Logo de Ordem Paranormal"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
-            />
-            <div class="op-fallback">OP</div>
-
-            <div>
-              <small>Inspirado em</small>
-              <strong>Ordem Paranormal</strong>
-            </div>
-          </div>
-
-          <p>
-            Campanha original de RPG baseada na atmosfera de investigação, ocultismo,
-            contenção e ruptura da realidade.
-          </p>
-        </article>
-
-        <div class="compass">
-          <span class="coord n">Norte Verdadeiro</span>
-          <span class="coord s">Sul Morto</span>
-          <span class="coord e">Limiar</span>
-          <span class="coord w">Retorno</span>
-
-          <div class="compass-ring"></div>
-          <div class="needle"></div>
-
-          <div class="compass-center">
-            <div>
-              <strong>☉</strong>
-              <small>Não siga a luz</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="floating-file">
-          <p>
-            Referência: <span class="redacted"></span><br />
-            Origem: Farol de São Firmo<br />
-            Status: sinal ativo<br />
-            Observação: o rádio repete nomes de pessoas que ainda não chegaram à ilha.
-          </p>
-        </div>
-      </aside>
-    </section>
-
-    <section id="incidente">
-      <div class="reveal">
-        <div class="section-kicker">Relatório Inicial</div>
-        <h2 class="section-title">O Incidente em São Firmo</h2>
-        <p class="section-text">
-          A primeira regra de São Firmo é simples: nenhum mapa admite sua existência.
-          A segunda regra foi escrita depois do desaparecimento da Guarda Costeira:
-          se o farol acender, não responda ao sinal.
-        </p>
-      </div>
-
-      <div class="incident-grid">
-        <article class="dossier reveal">
-          <div class="dossier-stamp">Ameaça Alta</div>
-
-          <h3>Dossiê de Contenção // Ilha de São Firmo</h3>
-
-          <p>
-            Uma ilha que não consta nos mapas oficiais. Um farol desativado em <strong>1995</strong>
-            voltou a emitir um sinal impossível. O vilarejo de pescadores local silenciou completamente.
-          </p>
-
-          <p>
-            A Membrana está em processo de <strong>Ruptura</strong>. Elementos de
-            <strong>Sangue</strong> e <strong>Conhecimento</strong> foram detectados em alta concentração.
-            O padrão de emissão luminosa do farol não corresponde a nenhum código marítimo conhecido.
-          </p>
-
-          <p>
-            Os registros apontam para deslocamento de memória coletiva, alteração de bússolas,
-            ecos de rádio sem fonte física, rituais submersos e atividade anômala concentrada no rochedo norte.
-          </p>
-
-          <div class="threat-box">
-            <div class="threat-line">
-              <span>&gt; AMEAÇA</span>
-              <b>ALTA</b>
-            </div>
-            <div class="threat-line">
-              <span>&gt; POPULAÇÃO</span>
-              <b>DESCONHECIDA</b>
-            </div>
-            <div class="threat-line">
-              <span>&gt; OBJETIVO</span>
-              <b>CONTENÇÃO IMEDIATA</b>
-            </div>
-            <div class="threat-line">
-              <span>&gt; CONTATO CIVIL</span>
-              <b>INTERROMPIDO</b>
-            </div>
-          </div>
-        </article>
-
-        <aside class="membrane reveal">
-          <div class="membrane-content">
-            <h3>Leitura da Membrana</h3>
-
-            <p class="section-text">
-              O campo paranormal ao redor da ilha está oscilando acima do limite aceitável.
-              A região norte apresenta deformação cognitiva progressiva.
-            </p>
-
-            <div class="meter" aria-label="Nível de ruptura da membrana">
-              <div class="meter-fill"></div>
-            </div>
-
-            <div class="readout">
-              RUPTURA ESTIMADA: <b id="ruptureValue">82%</b><br />
-              ELEMENTO PRIMÁRIO: <b id="primaryElement">SANGUE</b><br />
-              ELEMENTO SECUNDÁRIO: <b id="secondaryElement">CONHECIMENTO</b><br />
-              ANOMALIA: <b id="anomalyName">FAROL INTERIOR</b><br />
-              RECOMENDAÇÃO: <b id="recommendation">NÃO OBSERVAR POR MAIS DE 13 SEGUNDOS</b>
-            </div>
-
-            <div class="scanner-controls">
-              <button class="mini-btn" type="button" data-scan="coast">Scan Costa</button>
-              <button class="mini-btn" type="button" data-scan="village">Scan Vilarejo</button>
-              <button class="mini-btn" type="button" data-scan="lighthouse">Scan Farol</button>
-              <button class="mini-btn" type="button" data-scan="deep">Scan Profundo</button>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section id="ilha">
-      <div class="reveal">
-        <div class="section-kicker">Cartografia Incompleta</div>
-        <h2 class="section-title">São Firmo não deveria existir</h2>
-        <p class="section-text">
-          O território reage à observação. Fotografias mudam de posição.
-          Rotas marítimas se reorganizam sozinhas. O farol sempre aparece ao norte,
-          mesmo quando o norte muda de lugar.
-        </p>
-      </div>
-
-      <div class="map-grid">
-        <article class="island-map reveal">
-          <h3>Mapa operacional</h3>
-
-          <svg class="map-svg" viewBox="0 0 520 360" role="img" aria-label="Mapa estilizado da ilha de São Firmo">
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-
-            <path
-              d="M248 34 C334 39 407 92 430 166 C459 260 381 321 282 327 C190 332 102 282 89 204 C78 138 144 43 248 34Z"
-              fill="rgba(183,155,91,0.08)"
-              stroke="rgba(183,155,91,0.42)"
-              stroke-width="2"
-            />
-
-            <path
-              d="M222 84 C250 98 261 126 251 153 C242 179 206 186 184 166 C159 143 167 102 192 88 C201 83 211 81 222 84Z"
-              fill="rgba(139,16,16,0.16)"
-              stroke="rgba(255,55,55,0.28)"
-            />
-
-            <path
-              d="M307 196 C341 206 365 231 361 258 C356 291 310 302 281 282 C250 261 257 216 287 200 C293 197 300 195 307 196Z"
-              fill="rgba(106,255,188,0.05)"
-              stroke="rgba(106,255,188,0.2)"
-            />
-
-            <line x1="260" y1="28" x2="260" y2="333" stroke="rgba(232,225,205,0.11)" stroke-dasharray="8 8"/>
-            <line x1="88" y1="185" x2="432" y2="185" stroke="rgba(232,225,205,0.11)" stroke-dasharray="8 8"/>
-
-            <circle cx="260" cy="62" r="6" fill="#c82020" filter="url(#glow)"/>
-            <circle class="map-pulse" cx="260" cy="62" r="8" fill="none" stroke="#c82020" stroke-width="2"/>
-
-            <circle cx="179" cy="171" r="5" fill="#b79b5b" filter="url(#glow)"/>
-            <circle class="map-pulse" cx="179" cy="171" r="8" fill="none" stroke="#b79b5b" stroke-width="2"/>
-
-            <circle cx="330" cy="249" r="5" fill="#6affbc" filter="url(#glow)"/>
-            <circle class="map-pulse" cx="330" cy="249" r="8" fill="none" stroke="#6affbc" stroke-width="2"/>
-
-            <text x="274" y="66" fill="rgba(232,225,205,0.7)" font-size="12" font-family="Courier New">FAROL</text>
-            <text x="193" y="176" fill="rgba(232,225,205,0.7)" font-size="12" font-family="Courier New">VILAREJO</text>
-            <text x="344" y="254" fill="rgba(232,225,205,0.7)" font-size="12" font-family="Courier New">DOCA</text>
-            <text x="22" y="335" fill="rgba(232,225,205,0.35)" font-size="11" font-family="Courier New">coordenadas inconsistentes</text>
-          </svg>
-        </article>
-
-        <article class="intel-tabs reveal">
-          <h3>Fragmentos de Inteligência</h3>
-
-          <div class="tab-buttons">
-            <button class="tab-btn active" type="button" data-tab="farol">Farol</button>
-            <button class="tab-btn" type="button" data-tab="vilarejo">Vilarejo</button>
-            <button class="tab-btn" type="button" data-tab="neblina">Neblina</button>
-            <button class="tab-btn" type="button" data-tab="culto">Símbolos</button>
-          </div>
-
-          <div class="tab-content" id="tabContent"></div>
-        </article>
-      </div>
-    </section>
-
-    <section id="transmissao">
-      <div class="reveal">
-        <div class="section-kicker">Arquivo Sonoro</div>
-        <h2 class="section-title">Transcrição de Rádio</h2>
-        <p class="section-text">
-          O áudio abaixo foi captado no último contato confirmado da Guarda Costeira.
-          O ruído de fundo contém três camadas de voz, mas apenas uma delas estava viva no momento da transmissão.
-        </p>
-      </div>
-
-      <article class="radio reveal">
-        <div class="radio-label">[TRANSCRIÇÃO DE RÁDIO // ÚLTIMO CONTATO]</div>
-        <p class="radio-text" id="radioText"></p>
-        <div class="radio-source">
-          Último contato da Guarda Costeira. Canal 09. Origem aproximada: costa noroeste de São Firmo.
-        </div>
-      </article>
-    </section>
-
-    <section id="equipe">
-      <div class="reveal">
-        <div class="section-kicker">Equipe de Contenção</div>
-        <h2 class="section-title">Escolha sua posição antes que a ilha escolha por você</h2>
-        <p class="section-text">
-          Cada agente enviado a São Firmo precisa cumprir uma função clara.
-          Lá dentro, improviso é só outro nome para funeral.
-        </p>
-      </div>
-
-      <div class="team-grid">
-        <article class="role-card reveal" data-index="01">
-          <div class="role-icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none">
-              <path d="M12 52L52 12" stroke-width="2"/>
-              <path d="M45 9L55 19" stroke-width="2"/>
-              <path d="M9 45L19 55" stroke-width="2"/>
-              <path d="M22 42L42 22" stroke-width="2"/>
-            </svg>
-          </div>
-
-          <div class="role-type">Combatente // Ofensiva</div>
-          <h3>Combatente</h3>
-          <p>
-            A linha de frente contra o impossível. Força bruta para quebrar a realidade
-            quando a realidade decide morder primeiro.
-          </p>
-
-          <div class="role-tags">
-            <span>Pressão</span>
-            <span>Proteção</span>
-            <span>Confronto</span>
-            <span>Sobrevivência</span>
-          </div>
-        </article>
-
-        <article class="role-card reveal" data-index="02">
-          <div class="role-icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none">
-              <path d="M14 18H50" stroke-width="2"/>
-              <path d="M18 18V52H46V18" stroke-width="2"/>
-              <path d="M22 12H42V18H22V12Z" stroke-width="2"/>
-              <path d="M24 29H40" stroke-width="2"/>
-              <path d="M24 38H36" stroke-width="2"/>
-            </svg>
-          </div>
-
-          <div class="role-type">Especialista // Técnico</div>
-          <h3>Especialista</h3>
-          <p>
-            O conhecimento é a única arma que não falha. Versatilidade, perícia e frieza
-            para transformar pistas em rotas de fuga.
-          </p>
-
-          <div class="role-tags">
-            <span>Investigação</span>
-            <span>Estratégia</span>
-            <span>Ferramentas</span>
-            <span>Precisão</span>
-          </div>
-        </article>
-
-        <article class="role-card reveal" data-index="03">
-          <div class="role-icon" aria-hidden="true">
-            <svg viewBox="0 0 64 64" fill="none">
-              <path d="M32 8L40 25L58 28L45 41L48 59L32 50L16 59L19 41L6 28L24 25L32 8Z" stroke-width="2"/>
-              <path d="M32 23V41" stroke-width="2"/>
-              <path d="M23 32H41" stroke-width="2"/>
-            </svg>
-          </div>
-
-          <div class="role-type">Ocultista // Paranormal</div>
-          <h3>Ocultista</h3>
-          <p>
-            Combata o Outro Lado com o próprio Outro Lado. Poder suficiente para abrir portas
-            e risco suficiente para não saber o que volta junto.
-          </p>
-
-          <div class="role-tags">
-            <span>Rituais</span>
-            <span>Risco</span>
-            <span>Controle</span>
-            <span>Abismo</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="protocolos">
-      <div class="reveal">
-        <div class="section-kicker">Ordem Interna</div>
-        <h2 class="section-title">Protocolos de entrada em zona de ruptura</h2>
-        <p class="section-text">
-          O Sanctum Veritatis não promete retorno. Promete propósito.
-          Antes do desembarque, memorize os protocolos. Depois do desembarque, eles talvez memorizem você.
-        </p>
-      </div>
-
-      <div class="protocols">
-        <article class="protocol-panel reveal">
-          <h3>Diretrizes de Campo</h3>
-
-          <ul class="protocol-list">
-            <li>
-              <span>01</span>
-              <p>Não siga luzes isoladas dentro da neblina. Nenhuma fonte luminosa em São Firmo é considerada confiável.</p>
-            </li>
-            <li>
-              <span>02</span>
-              <p>Não responda vozes familiares pelo rádio. A anomalia replica intimidade antes de replicar som.</p>
-            </li>
-            <li>
-              <span>03</span>
-              <p>Qualquer agente que afirmar conhecer o caminho até o farol deve ser observado por outro membro da equipe.</p>
-            </li>
-            <li>
-              <span>04</span>
-              <p>Em caso de sangramento nasal, perda de memória ou compulsão por símbolos náuticos, interrompa a missão secundária.</p>
-            </li>
-          </ul>
-        </article>
-
-        <article class="terminal reveal" aria-label="Terminal interno">
-          <div id="terminalFeed"></div>
-        </article>
-      </div>
-    </section>
-
-    <section id="acesso">
-      <div class="access-panel reveal">
-        <div>
-          <div class="section-kicker">Servidor Discord</div>
-          <h3>Entrada autorizada apenas para agentes convocados</h3>
-          <p>
-            Use esta página como porta de entrada da campanha, hub de informações e vitrine do clima de Setentrional.
-            O restante do dossiê deve permanecer compartimentado por cargos, canais e permissões.
-          </p>
-
-          <div class="hero-actions">
-            <a class="btn btn-danger" href="https://discord.gg/ZQqTjkUfv9" target="_blank" rel="noopener noreferrer">Entrar no Discord</a>
-            <a class="btn" href="faq.html">Consultar FAQ</a>
-          </div>
-        </div>
-
-        <div class="discord-card">
-          <div>
-            <span>Campanha</span>
-            <b>Setentrional</b>
-          </div>
-          <div>
-            <span>Sociedade</span>
-            <b>Sanctum Veritatis</b>
-          </div>
-          <div>
-            <span>Local</span>
-            <b>São Firmo</b>
-          </div>
-          <div>
-            <span>Estado</span>
-            <b>Ruptura</b>
-          </div>
-          <div>
-            <span>Prioridade</span>
-            <b>Contenção</b>
-          </div>
-          <div>
-            <span>Acesso</span>
-            <b>Discord</b>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <span>Sanctum Veritatis // Setentrional</span>
-      <span>“O Norte Verdadeiro aponta para o abismo.”</span>
-    </div>
-  </footer>
-
-  <div class="modal" id="secretModal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="close-modal" id="closeModal" type="button" aria-label="Fechar">×</button>
-
-      <div class="section-kicker">Fragmento Recuperado</div>
-
-      <h3 id="modalTitle">O farol não está chamando barcos.</h3>
-
-      <p>
-        Ele está chamando lembranças. Cada pulso luminoso corresponde a uma memória removida dos habitantes de São Firmo.
-        Quando a luz gira, alguém na ilha esquece o próprio nome.
-      </p>
-
-      <p>
-        O último operador da Guarda Costeira repetiu a mesma frase dezessete vezes antes do silêncio:
-        “Tem alguém dentro da lâmpada.”
-      </p>
-
-      <button class="btn btn-danger" id="closeModalAlt" type="button">Arquivar fragmento</button>
-    </div>
+<body class="session-locked">
+  <a class="skip-link" href="#main-workspace">Ir para o conteúdo operacional</a>
+
+  <div class="screen-effects" aria-hidden="true">
+    <div class="screen-glow"></div>
+    <div class="screen-lines"></div>
+    <div class="screen-noise"></div>
+    <div class="screen-vignette"></div>
   </div>
 
-  <script>
-    const canvas = document.getElementById("sigilCanvas");
-    const ctx = canvas.getContext("2d");
-    const cursorLight = document.getElementById("cursorLight");
-    const radioText = document.getElementById("radioText");
-    const ruptureValue = document.getElementById("ruptureValue");
-    const primaryElement = document.getElementById("primaryElement");
-    const secondaryElement = document.getElementById("secondaryElement");
-    const anomalyName = document.getElementById("anomalyName");
-    const recommendation = document.getElementById("recommendation");
-    const secretButton = document.getElementById("secretButton");
-    const secretModal = document.getElementById("secretModal");
-    const closeModal = document.getElementById("closeModal");
-    const closeModalAlt = document.getElementById("closeModalAlt");
-    const tabContent = document.getElementById("tabContent");
-    const terminalFeed = document.getElementById("terminalFeed");
+  <section class="boot-gate" id="boot-gate" aria-labelledby="boot-title">
+    <div class="terminal-casing boot-casing">
+      <div class="casing-labels" aria-hidden="true">
+        <span>SV INDUSTRIAL SYSTEMS // UNIDADE 04</span>
+        <span>115V · 60HZ · NÃO DESCONECTAR</span>
+      </div>
 
-    let width;
-    let height;
-    let particles = [];
-    let radioStarted = false;
-    let terminalIndex = 0;
+      <div class="boot-screen">
+        <header class="boot-header">
+          <div class="boot-monogram" aria-hidden="true"><span>SV</span><i></i></div>
+          <div>
+            <p>SANCTUM VERITATIS</p>
+            <h1 id="boot-title">INTERFACE DE ACESSO RESTRITO</h1>
+          </div>
+          <span class="boot-station">ESTAÇÃO<br>SV-04</span>
+        </header>
 
-    const radioMessage =
-      '"...a neblina tem cheiro de ferro. Eles não estão mortos, eles estão... esperando. O farol não ilumina pra fora, ele ilumina pra dentro. Câmbio? Tem alguém aí?"';
+        <div class="boot-output" id="boot-output" aria-live="polite" aria-label="Inicialização do sistema"></div>
 
-    const tabData = {
-      farol: {
-        title: "Farol de São Firmo",
-        text: [
-          "Desativado em 1995 após uma falha elétrica oficialmente registrada como acidente estrutural.",
-          "O feixe luminoso não se projeta para o mar. A luz curva para dentro da torre, como se o próprio farol fosse uma garganta."
-        ],
-        list: [
-          "Sinal ativo entre 02:13 e 03:07.",
-          "Som de sino sem fonte física.",
-          "Escadas internas registram mais degraus na subida do que na descida."
-        ]
-      },
-      vilarejo: {
-        title: "Vilarejo Silenciado",
-        text: [
-          "O assentamento pesqueiro não respondeu aos últimos chamados de rádio.",
-          "Nas fotografias aéreas, as casas aparecem com portas abertas, redes estendidas e mesas postas."
-        ],
-        list: [
-          "Nenhum corpo confirmado.",
-          "Nenhum animal visível.",
-          "Todas as janelas parecem voltadas para o farol."
-        ]
-      },
-      neblina: {
-        title: "Neblina Ferruginosa",
-        text: [
-          "A névoa tem cheiro metálico e interfere com bússolas, câmeras, microfones e memória recente.",
-          "Agentes relatam a sensação de serem observados por alguém que está lembrando deles errado."
-        ],
-        list: [
-          "Visibilidade reduzida para 4 metros.",
-          "Eco de vozes familiares.",
-          "Amostras condensam em líquido avermelhado após 13 minutos."
-        ]
-      },
-      culto: {
-        title: "Símbolos Náuticos",
-        text: [
-          "Marcas foram encontradas em pedras, portas e ossadas de peixes na região norte.",
-          "Os símbolos não parecem invocar algo. Parecem indicar direção."
-        ],
-        list: [
-          "Espirais cortadas por linhas verticais.",
-          "Desenhos de olhos dentro de lâmpadas.",
-          "Frase recorrente: o norte está faminto."
-        ]
-      }
-    };
+        <form class="operation-auth" id="operation-auth" autocomplete="off" hidden>
+          <p class="auth-label">IDENTIFICAÇÃO NECESSÁRIA.</p>
+          <label for="operation-name">Insira o nome da operação</label>
+          <div class="auth-prompt">
+            <span aria-hidden="true">C:\SV\OPERAÇÕES&gt;</span>
+            <input id="operation-name" name="operation" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" aria-describedby="auth-feedback" required>
+            <span class="block-cursor" aria-hidden="true"></span>
+          </div>
+          <div class="auth-actions">
+            <button class="key-button primary" type="submit">EXECUTAR CONSULTA</button>
+            <span id="attempt-counter">TENTATIVAS REGISTRADAS: 00</span>
+          </div>
+          <div class="auth-feedback" id="auth-feedback" role="status" aria-live="assertive">AGUARDANDO IDENTIFICADOR.</div>
+        </form>
 
-    const scanData = {
-      coast: {
-        rupture: "79%",
-        primary: "SANGUE",
-        secondary: "MEDO",
-        anomaly: "MARÉ REVERSA",
-        rec: "EVITAR CONTATO COM ÁGUA ESTAGNADA"
-      },
-      village: {
-        rupture: "84%",
-        primary: "CONHECIMENTO",
-        secondary: "SANGUE",
-        anomaly: "MEMÓRIA COLETIVA REMOVIDA",
-        rec: "NÃO ENTRAR EM CASAS COM LUZ ACESA"
-      },
-      lighthouse: {
-        rupture: "91%",
-        primary: "CONHECIMENTO",
-        secondary: "SANGUE",
-        anomaly: "FAROL INTERIOR",
-        rec: "NÃO OBSERVAR POR MAIS DE 13 SEGUNDOS"
-      },
-      deep: {
-        rupture: "??%",
-        primary: "INCONCLUSIVO",
-        secondary: "INCONCLUSIVO",
-        anomaly: "RESPOSTA VIVA",
-        rec: "ENCERRAR LEITURA IMEDIATAMENTE"
-      }
-    };
+        <div class="access-sequence" id="access-sequence" hidden aria-live="polite">
+          <p id="access-message">VALIDANDO ASSINATURA...</p>
+          <div class="access-bar" role="progressbar" aria-label="Abertura do diretório" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <small id="access-detail">0% // SINCRONIZANDO ÍNDICE</small>
+        </div>
 
-    const terminalLines = [
-      '<div class="terminal-line"><b>SYSTEM:</b> conexão criptografada estabelecida.</div>',
-      '<div class="terminal-line"><b>ARQUIVO:</b> SETENTRIONAL_SF-1995 aberto.</div>',
-      '<div class="terminal-line"><b>LEITURA:</b> farol ativo, fonte luminosa incompatível.</div>',
-      '<div class="terminal-line danger"><b>ALERTA:</b> registros civis removidos de bases públicas.</div>',
-      '<div class="terminal-line"><b>SCAN:</b> concentração elevada de Sangue no perímetro costeiro.</div>',
-      '<div class="terminal-line"><b>SCAN:</b> concentração elevada de Conhecimento na torre do farol.</div>',
-      '<div class="terminal-line danger"><b>ERRO:</b> coordenadas retornam para o mesmo ponto.</div>',
-      '<div class="terminal-line"><b>NOTA:</b> o norte da bússola não aponta para cima.</div>',
-      '<div class="terminal-line"><b>NOTA:</b> o norte aponta para dentro.</div>',
-      '<div class="terminal-line danger"><b>STATUS:</b> contenção imediata autorizada.</div>'
-    ];
+        <footer class="boot-footer">
+          <span>CONEXÃO MONITORADA // REGISTRO SV-AUDIT ATIVO</span>
+          <span>“VERITAS SUB VIGILIA”</span>
+        </footer>
+      </div>
+    </div>
+  </section>
 
-    function resizeCanvas() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+  <div class="system-shell" id="system-shell" inert hidden>
+    <header class="system-header">
+      <button class="mobile-menu" id="mobile-menu" type="button" aria-expanded="false" aria-controls="directory-panel" aria-label="Abrir diretório de módulos"><span></span><span></span><span></span></button>
 
-      const amount = Math.min(130, Math.floor((width * height) / 14000));
+      <button class="sanctum-identity" id="sanctum-mark" type="button" aria-label="Sanctum Veritatis — retornar à visão geral">
+        <span class="sv-seal" aria-hidden="true"><b>SV</b><i></i></span>
+        <span><strong>SANCTUM VERITATIS</strong><small>ARQUIVO OPERACIONAL INTERNO</small></span>
+      </button>
 
-      particles = Array.from({ length: amount }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 1.7 + 0.25,
-        vx: (Math.random() - 0.5) * 0.18,
-        vy: (Math.random() - 0.5) * 0.18,
-        a: Math.random() * 0.45 + 0.08
-      }));
-    }
+      <div class="header-readouts" aria-label="Dados da sessão">
+        <div><span>ESTAÇÃO</span><strong>SV-04 / COSTA</strong></div>
+        <div><span>USUÁRIO</span><strong>AGENTE EXTERNO</strong></div>
+        <div><span>ACESSO</span><strong>GRAU V</strong></div>
+        <div><span>CONEXÃO</span><strong class="online"><i></i> SEGURA</strong></div>
+      </div>
 
-    function drawSigils() {
-      ctx.clearRect(0, 0, width, height);
+      <div class="header-controls">
+        <div class="clock-readout"><span id="system-date">--.--.----</span><strong id="system-clock">--:--:--</strong></div>
+        <button class="icon-control" id="sound-toggle" type="button" aria-pressed="false" title="Ativar som"><span aria-hidden="true">◖))</span><b>SOM OFF</b></button>
+        <button class="icon-control" id="motion-toggle" type="button" aria-pressed="false" title="Reduzir animações"><span aria-hidden="true">≈</span><b>EFEITOS</b></button>
+        <button class="logout-control" id="logout-button" type="button">ENCERRAR</button>
+      </div>
+    </header>
 
-      particles.forEach((p, i) => {
-        p.x += p.vx;
-        p.y += p.vy;
+    <button class="mobile-scrim" id="mobile-scrim" type="button" aria-label="Fechar diretório" hidden></button>
 
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
+    <div class="system-grid">
+      <aside class="directory-panel" id="directory-panel" aria-label="Diretório interno">
+        <div class="directory-heading">
+          <p>DIRETÓRIO RAIZ</p>
+          <span>C:\SV\OPS\SR-07\</span>
+        </div>
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(183, 155, 91, ${p.a})`;
-        ctx.fill();
+        <nav class="directory-nav" aria-label="Módulos da Operação Setentrional">
+          <p class="directory-group">[ OPERAÇÃO ]</p>
+          <button class="active" type="button" data-view-target="overview"><kbd>01</kbd><span>VISÃO GERAL</span></button>
+          <button type="button" data-view-target="files"><kbd>02</kbd><span>ARQUIVOS DA OPERAÇÃO</span><i id="file-count-nav">12</i></button>
+          <button type="button" data-view-target="timeline"><kbd>03</kbd><span>LINHA DO TEMPO</span></button>
+          <button type="button" data-view-target="lighthouse"><kbd>04</kbd><span>REGISTROS DO FAROL</span></button>
+          <button type="button" data-view-target="people"><kbd>05</kbd><span>PESSOAS DE INTERESSE</span></button>
+          <button type="button" data-view-target="entities"><kbd>06</kbd><span>ENTIDADES</span></button>
+          <button type="button" data-view-target="transmissions"><kbd>07</kbd><span>TRANSMISSÕES</span><i class="pulse-count">3</i></button>
+          <button type="button" data-view-target="map"><kbd>08</kbd><span>MAPA DE SÃO FIRMO</span></button>
+          <button type="button" data-view-target="protocols"><kbd>09</kbd><span>PROTOCOLOS</span></button>
 
-        for (let j = i + 1; j < particles.length; j++) {
-          const q = particles[j];
-          const dx = p.x - q.x;
-          const dy = p.y - q.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          <p class="directory-group">[ SISTEMA ]</p>
+          <button type="button" data-view-target="corrupted"><kbd>10</kbd><span>ARQUIVOS CORROMPIDOS</span><i>!</i></button>
+          <button class="restricted-link" type="button" data-view-target="restricted"><kbd>11</kbd><span>DIRETÓRIO RESTRITO</span><i>⌁</i></button>
+          <button type="button" data-view-target="recruitment"><kbd>12</kbd><span>RECRUTAMENTO</span></button>
+          <button type="button" data-view-target="about"><kbd>13</kbd><span>SOBRE A SANCTUM</span></button>
+          <button type="button" data-view-target="external"><kbd>14</kbd><span>CONEXÃO EXTERNA</span></button>
+        </nav>
 
-          if (dist < 115) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(q.x, q.y);
-            ctx.strokeStyle = `rgba(183, 155, 91, ${0.055 * (1 - dist / 115)})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      });
+        <button class="membrane-monitor" id="membrane-monitor" type="button" aria-label="Membrana em ruptura, oitenta e sete por cento">
+          <span><b>MEMBRANA</b><i>LEITURA AO VIVO</i></span>
+          <strong><span id="membrane-value">87.3</span>%</strong>
+          <span class="membrane-track"><i></i></span>
+          <small>CONDIÇÃO: <em>RUPTURA</em></small>
+        </button>
 
-      requestAnimationFrame(drawSigils);
-    }
+        <div class="side-footer">
+          <span class="status-lamp"></span>
+          <p><b>CANAL 09 ATIVO</b><small>Pacotes perdidos: 13.7%</small></p>
+        </div>
+      </aside>
 
-    function typeRadio() {
-      if (radioStarted) return;
+      <main class="main-workspace" id="main-workspace" tabindex="-1">
+        <section class="system-view active" id="view-overview" data-view="overview" aria-labelledby="overview-title">
+          <header class="view-header">
+            <div><p>SR-07 / OPERAÇÃO ATIVA / VISÃO GERAL</p><h1 id="overview-title">SETENTRIONAL</h1></div>
+            <div class="classification-stamp">RESTRITO<br><span>GRAU V</span></div>
+          </header>
 
-      radioStarted = true;
-      let index = 0;
-      radioText.textContent = "";
+          <div class="overview-layout">
+            <article class="operation-brief">
+              <div class="paper-label"><span>RESUMO DE MOBILIZAÇÃO</span><time datetime="2026-07-15">ATUALIZAÇÃO 15.07.2026</time></div>
+              <p class="lead">São Firmo é uma ilha do Atlântico ausente de cartas marítimas recentes. O último mapa verificável foi recolhido em <button class="inline-clue" type="button" data-open-document="SF-1891-01">1891</button>; todas as cópias posteriores apresentam alterações incompatíveis entre si.</p>
+              <p>O farol permaneceu oficialmente desativado desde o Incidente de 1995. Ainda assim, transmissões são detectadas todas as noites entre 02:13 e 03:07. Moradores constam simultaneamente como vivos, mortos e nunca registrados.</p>
+              <p>Documentos civis foram apagados ou reescritos. A Membrana está em ruptura. A equipe enviada em 2011 deixou de responder após informar que o farol possuía <button class="redaction" type="button" aria-label="Trecho censurado; tentar revelar">████████████</button>.</p>
+              <p>A Sanctum Veritatis iniciou uma nova mobilização. Objetivo: localizar sobreviventes, recuperar os registros de 1995 e impedir que o sinal encontre a costa.</p>
 
-      function tick() {
-        if (index <= radioMessage.length) {
-          radioText.textContent = radioMessage.slice(0, index) + (index % 2 === 0 ? "▌" : "");
-          index++;
+              <blockquote>“O Norte Verdadeiro aponta para o abismo.”</blockquote>
 
-          const current = radioMessage[index - 1];
-          const delay = current === "." || current === "?" ? 150 : Math.random() * 34 + 24;
+              <div class="mission-objectives" aria-label="Objetivos da missão">
+                <div><b>01</b><span>Reconhecer São Firmo</span><strong>PENDENTE</strong></div>
+                <div><b>02</b><span>Localizar a equipe anterior</span><strong>SEM CONTATO</strong></div>
+                <div><b>03</b><span>Conter o sinal do farol</span><strong class="critical">CRÍTICO</strong></div>
+              </div>
+            </article>
 
-          setTimeout(tick, delay);
-        } else {
-          radioText.textContent = radioMessage;
-        }
-      }
+            <aside class="evidence-column">
+              <figure class="evidence-photo">
+                <div class="photo-frame"><img src="images/Farol.png" alt="Ilustração de arquivo mostrando o farol de São Firmo cercado por névoa e símbolos anômalos"></div>
+                <figcaption><span>ANEXO SF-F/13</span><span>ORIGEM DESCONHECIDA</span></figcaption>
+              </figure>
 
-      tick();
-    }
+              <div class="telemetry-sheet">
+                <div class="sheet-title">ESTADO OPERACIONAL</div>
+                <dl>
+                  <div><dt>Classificação</dt><dd>Restrita</dd></div>
+                  <div><dt>Estado</dt><dd class="signal-text">Ativa</dd></div>
+                  <div><dt>Local</dt><dd>São Firmo</dd></div>
+                  <div><dt>Evento-base</dt><dd>Incidente do Farol, 1995</dd></div>
+                  <div><dt>Membrana</dt><dd class="critical">Em ruptura</dd></div>
+                  <div><dt>Atividade</dt><dd><span class="activity-bars" aria-label="Atividade paranormal elevada"><i></i><i></i><i></i><i></i><i></i></span></dd></div>
+                </dl>
+              </div>
+            </aside>
+          </div>
 
-    function setupReveals() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+          <div class="live-log" aria-label="Registro em tempo real"><span>LIVE</span><p id="live-log-text">[02:13:07] Sinal luminoso detectado além do horizonte.</p></div>
+        </section>
 
-            if (entry.target.classList.contains("radio")) {
-              typeRadio();
-            }
+        <section class="system-view" id="view-files" data-view="files" aria-labelledby="files-title" hidden>
+          <header class="view-header"><div><p>SR-07 / ÍNDICE DOCUMENTAL</p><h2 id="files-title">ARQUIVOS DA OPERAÇÃO</h2></div><span class="record-code">INTEGRIDADE GERAL: 61%</span></header>
+          <div class="file-browser">
+            <div class="file-tools">
+              <label for="document-search">PESQUISAR NO ÍNDICE</label>
+              <div><span>&gt;</span><input id="document-search" type="search" autocomplete="off" placeholder="código, título ou assunto"><button type="button" id="clear-document-search">LIMPAR</button></div>
+              <p><span id="visible-document-count">12</span> REGISTROS DISPONÍVEIS // ALGUNS ARQUIVOS EXIGEM PROGRESSO DE INVESTIGAÇÃO</p>
+            </div>
+            <div class="document-table" role="region" aria-label="Lista de documentos" tabindex="0">
+              <div class="document-row document-head" aria-hidden="true"><span>CÓDIGO</span><span>DOCUMENTO</span><span>DATA</span><span>INT.</span><span>ESTADO</span></div>
+              <div id="document-list"></div>
+              <p class="empty-result" id="empty-document-result" hidden>NENHUM REGISTRO CORRESPONDE À CONSULTA.</p>
+            </div>
+          </div>
+        </section>
 
-            if (entry.target.classList.contains("terminal")) {
-              startTerminal();
-            }
-          }
-        });
-      }, { threshold: 0.14 });
+        <section class="system-view" id="view-timeline" data-view="timeline" aria-labelledby="timeline-title" hidden>
+          <header class="view-header"><div><p>SR-07 / RECONSTRUÇÃO HISTÓRICA</p><h2 id="timeline-title">LINHA DO TEMPO</h2></div><span class="record-code">3 DATAS EM CONFLITO</span></header>
+          <div class="timeline-console">
+            <div class="timeline-scale" aria-hidden="true"><span>18??</span><span>1891</span><span>1937</span><span>1995</span><span>2011</span><span>2026</span></div>
+            <ol class="timeline-list" id="timeline-list"></ol>
+            <aside class="timeline-detail" id="timeline-detail" aria-live="polite"><p>SELECIONE UM MARCO PARA CONSULTAR A RECONSTRUÇÃO.</p></aside>
+          </div>
+        </section>
 
-      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-    }
+        <section class="system-view" id="view-lighthouse" data-view="lighthouse" aria-labelledby="lighthouse-title" hidden>
+          <header class="view-header"><div><p>SR-07 / SUBSISTEMA ÓPTICO</p><h2 id="lighthouse-title">REGISTROS DO FAROL</h2></div><span class="record-code critical">SINAL ATIVO</span></header>
+          <div class="lighthouse-console">
+            <article class="beam-monitor">
+              <div class="monitor-label"><span>TELEMETRIA DO FEIXE</span><span id="beam-channel">CANAL L-01</span></div>
+              <div class="beam-scope" aria-label="Visualização abstrata da rotação do farol"><div class="lighthouse-tower"><i></i><b></b></div><span class="beam"></span><span class="scope-ring"></span></div>
+              <div class="beam-controls" role="group" aria-label="Frequências do farol">
+                <button type="button" class="active" data-beam="visual">ÓPTICO</button>
+                <button type="button" data-beam="radio">RÁDIO</button>
+                <button type="button" data-beam="cognitive">COGNITIVO</button>
+                <button type="button" data-beam="null">SEM REGISTRO</button>
+              </div>
+            </article>
+            <article class="lighthouse-ledger">
+              <div class="paper-label"><span>LIVRO DO FAROLEIRO</span><span>RECUPERAÇÃO PARCIAL</span></div>
+              <div id="beam-reading">
+                <p><time>02:13:00</time> — Lâmpada principal energizada sem fonte elétrica.</p>
+                <p><time>02:13:13</time> — Feixe completa uma rotação para dentro da estrutura.</p>
+                <p><time>02:14:02</time> — Operador esquece o próprio nome durante 17 segundos.</p>
+                <p><time>02:██:██</time> — <button class="redaction" type="button" aria-label="Trecho censurado; tentar revelar">████████████████████</button></p>
+              </div>
+              <button class="key-button" type="button" data-open-document="SF-LUZ-95">ABRIR RELATÓRIO DO FAROL</button>
+            </article>
+          </div>
+        </section>
 
-    function randomRupture() {
-      const base = 82;
-      const variance = Math.floor(Math.random() * 7) - 3;
-      ruptureValue.textContent = `${base + variance}%`;
-    }
+        <section class="system-view" id="view-people" data-view="people" aria-labelledby="people-title" hidden>
+          <header class="view-header"><div><p>SR-07 / INDEXAÇÃO BIOMÉTRICA</p><h2 id="people-title">PESSOAS DE INTERESSE</h2></div><span class="record-code">5 REGISTROS // 2 CONFLITANTES</span></header>
+          <div class="people-index" id="people-index"></div>
+          <article class="person-detail" id="person-detail" aria-live="polite"><p>SELECIONE UM REGISTRO BIOMÉTRICO.</p></article>
+        </section>
 
-    function setScan(type) {
-      const data = scanData[type];
+        <section class="system-view" id="view-entities" data-view="entities" aria-labelledby="entities-title" hidden>
+          <header class="view-header"><div><p>SR-07 / TAXONOMIA DO OUTRO LADO</p><h2 id="entities-title">ENTIDADES</h2></div><span class="record-code critical">OBSERVAÇÃO LIMITADA</span></header>
+          <div class="entity-archive">
+            <div class="entity-selector" role="tablist" aria-label="Entidades catalogadas">
+              <button type="button" class="active" role="tab" aria-selected="true" data-entity="luminaria">E-01 // A LUMINÁRIA</button>
+              <button type="button" role="tab" aria-selected="false" data-entity="afogados">E-02 // OS SEM-ROSTO</button>
+              <button type="button" role="tab" aria-selected="false" data-entity="cartografo">E-03 // O CARTÓGRAFO</button>
+              <button type="button" role="tab" aria-selected="false" data-entity="unknown">E-██ // █████████</button>
+            </div>
+            <article class="entity-record" id="entity-record"></article>
+          </div>
+        </section>
 
-      if (!data) return;
+        <section class="system-view" id="view-transmissions" data-view="transmissions" aria-labelledby="transmissions-title" hidden>
+          <header class="view-header"><div><p>SR-07 / INTERCEPTAÇÃO DE SINAIS</p><h2 id="transmissions-title">TRANSMISSÕES</h2></div><span class="record-code signal-text">ESCUTA ATIVA</span></header>
+          <div class="radio-rack">
+            <div class="radio-hardware">
+              <div class="frequency-display"><span>FREQ.</span><strong id="radio-frequency">09.131</strong><small>MHz // AM</small></div>
+              <div class="waveform" id="radio-waveform" aria-hidden="true"></div>
+              <div class="radio-dials" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="radio-buttons">
+                <button class="key-button primary" id="decode-transmission" type="button">DECODIFICAR SINAL</button>
+                <button class="key-button" id="scan-transmissions" type="button">VARRER FREQUÊNCIAS</button>
+              </div>
+            </div>
+            <article class="transcript-paper">
+              <div class="paper-label"><span>TRANSCRIÇÃO AUTOMÁTICA</span><span id="transmission-integrity">INTEGRIDADE 00%</span></div>
+              <div class="transcript-output" id="transcript-output" aria-live="polite">[CANAL PRONTO. AGUARDANDO DECODIFICAÇÃO.]</div>
+            </article>
+            <aside class="signal-list" aria-label="Sinais interceptados">
+              <button type="button" class="active" data-frequency="09.131"><span>09.131</span><b>GUARDA COSTEIRA</b><i>41%</i></button>
+              <button type="button" data-frequency="02.013"><span>02.013</span><b>FAROL / PULSO</b><i>17%</i></button>
+              <button type="button" data-frequency="19.950"><span>19.950</span><b>ARQUIVO 1995</b><i>08%</i></button>
+              <button type="button" class="hidden-signal" data-frequency="43.172"><span>43.172</span><b>SEM ORIGEM</b><i>??</i></button>
+            </aside>
+          </div>
+        </section>
 
-      ruptureValue.textContent = data.rupture;
-      primaryElement.textContent = data.primary;
-      secondaryElement.textContent = data.secondary;
-      anomalyName.textContent = data.anomaly;
-      recommendation.textContent = data.rec;
-    }
+        <section class="system-view" id="view-map" data-view="map" aria-labelledby="map-title" hidden>
+          <header class="view-header"><div><p>SR-07 / CARTOGRAFIA INSTÁVEL</p><h2 id="map-title">MAPA DE SÃO FIRMO</h2></div><button class="coordinate-code" id="coordinate-code" type="button">42°13′ / 23°43′</button></header>
+          <div class="map-console">
+            <div class="map-viewer-shell">
+              <div class="map-toolbar">
+                <span>ARQUIVO CARTOGRÁFICO SF-077-A // ESCALA 1:25.000</span>
+                <div role="group" aria-label="Controles de ampliação do mapa">
+                  <button id="map-zoom-out" type="button" aria-label="Diminuir mapa">−</button>
+                  <output id="map-zoom-readout" aria-live="polite">100%</output>
+                  <button id="map-zoom-in" type="button" aria-label="Ampliar mapa">+</button>
+                  <button id="map-zoom-reset" type="button">CENTRALIZAR</button>
+                </div>
+              </div>
 
-    function renderTab(type) {
-      const data = tabData[type];
+              <div class="island-map" id="map-viewport" tabindex="0" aria-label="Mapa interativo da Ilha de São Firmo. Use os controles para ampliar e arraste para navegar.">
+                <div class="map-image-layer" id="map-layer">
+                  <img src="images/setentrional/mapa-sao-firmo.png" alt="Mapa antigo da Ilha de São Firmo com estradas, edificações, relevo, zonas anômalas e pontos de interesse" draggable="false">
 
-      if (!data) return;
+                  <button class="map-marker active" style="--x:67.6%;--y:11.5%" type="button" data-map-point="lighthouse"><i></i><span>Farol de São Firmo</span></button>
+                  <button class="map-marker" style="--x:34%;--y:34.5%" type="button" data-map-point="radio"><i></i><span>Estação de Rádio</span></button>
+                  <button class="map-marker" style="--x:50.5%;--y:34.5%" type="button" data-map-point="forest"><i></i><span>Bosque da Névoa</span></button>
+                  <button class="map-marker" style="--x:27.7%;--y:49.5%" type="button" data-map-point="village"><i></i><span>Vila de São Firmo</span></button>
+                  <button class="map-marker" style="--x:26.8%;--y:58%" type="button" data-map-point="port"><i></i><span>Porto Velho</span></button>
+                  <button class="map-marker" style="--x:45.3%;--y:54.5%" type="button" data-map-point="church"><i></i><span>Igreja Abandonada</span></button>
+                  <button class="map-marker" style="--x:62.8%;--y:52.6%" type="button" data-map-point="watchhouse"><i></i><span>Casa do Vigia</span></button>
+                  <button class="map-marker" style="--x:74.2%;--y:37.2%" type="button" data-map-point="cliffs"><i></i><span>Penhascos do Leste</span></button>
+                  <button class="map-marker" style="--x:76.8%;--y:63.6%" type="button" data-map-point="fort"><i></i><span>Ruínas do Forte</span></button>
+                  <button class="map-marker" style="--x:35.8%;--y:69.5%" type="button" data-map-point="trail"><i></i><span>Trilha dos Pescadores</span></button>
+                  <button class="map-marker" style="--x:55.6%;--y:63.2%" type="button" data-map-point="swamp"><i></i><span>Pântano da Membrana</span></button>
+                  <button class="map-marker" style="--x:57.5%;--y:81.5%" type="button" data-map-point="caves"><i></i><span>Grutas de Maré Baixa</span></button>
 
-      tabContent.innerHTML = `
-        <h4>${data.title}</h4>
-        ${data.text.map((item) => `<p>${item}</p>`).join("")}
-        <ul>
-          ${data.list.map((item) => `<li>${item}</li>`).join("")}
-        </ul>
-      `;
-    }
+                  <button class="map-zone zone-alpha" style="--x:52.4%;--y:62.4%" type="button" data-map-point="alpha" aria-label="Consultar Zona Alfa — A Membrana"><span>Α</span></button>
+                  <button class="map-zone zone-beta" style="--x:47.4%;--y:34.5%" type="button" data-map-point="beta" aria-label="Consultar Zona Beta — O Silêncio"><span>Β</span></button>
+                </div>
+              </div>
 
-    function setupTabs() {
-      document.querySelectorAll(".tab-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          document.querySelectorAll(".tab-btn").forEach((item) => item.classList.remove("active"));
-          button.classList.add("active");
-          renderTab(button.dataset.tab);
-        });
-      });
+              <p class="map-help">ARRASTE PARA NAVEGAR // CLIQUE NOS MARCADORES PARA CONSULTAR // SETAS MOVEM O MAPA // + E − ALTERAM A ESCALA</p>
+            </div>
+            <article class="map-intelligence" id="map-intelligence" aria-live="polite"></article>
+          </div>
+        </section>
 
-      renderTab("farol");
-    }
+        <section class="system-view" id="view-protocols" data-view="protocols" aria-labelledby="protocols-title" hidden>
+          <header class="view-header"><div><p>SR-07 / DIRETRIZES DE CAMPO</p><h2 id="protocols-title">PROTOCOLOS</h2></div><span class="record-code">LEITURA OBRIGATÓRIA</span></header>
+          <div class="protocol-ledger" id="protocol-ledger">
+            <label><input type="checkbox"><span><b>01</b><strong>NÃO SIGA A LUZ</strong><small>Nenhuma fonte luminosa dentro da neblina é considerada confiável.</small></span><em>SV-LUZ</em></label>
+            <label><input type="checkbox"><span><b>02</b><strong>NÃO RESPONDA ÀS VOZES</strong><small>A anomalia replica intimidade antes de replicar som.</small></span><em>SV-ECO</em></label>
+            <label><input type="checkbox"><span><b>03</b><strong>MANTENHA DUPLA OBSERVAÇÃO</strong><small>Memórias divergentes devem ser registradas por dois agentes.</small></span><em>SV-MEM</em></label>
+            <label><input type="checkbox"><span><b>04</b><strong>NÃO CONTE OS DEGRAUS</strong><small>A contagem altera a topologia interior da torre.</small></span><em>SV-ESC</em></label>
+            <label><input type="checkbox"><span><b>05</b><strong>ABANDONE O PRÓPRIO NOME</strong><small>Se o farol chamar corretamente, use apenas o código de campo.</small></span><em>SV-ID</em></label>
+            <label><input type="checkbox"><span><b>06</b><strong>INTERROMPA A MISSÃO</strong><small>Sangramento, amnésia ou compulsão cartográfica exigem retirada imediata.</small></span><em>SV-RET</em></label>
+          </div>
+          <div class="protocol-confirmation"><span id="protocol-progress">00 / 06 PROTOCOLOS LIDOS</span><button class="key-button primary" id="confirm-protocols" type="button" disabled>CONFIRMAR CIÊNCIA</button></div>
+        </section>
 
-    function setupScanner() {
-      document.querySelectorAll("[data-scan]").forEach((button) => {
-        button.addEventListener("click", () => {
-          setScan(button.dataset.scan);
-        });
-      });
-    }
+        <section class="system-view" id="view-corrupted" data-view="corrupted" aria-labelledby="corrupted-title" hidden>
+          <header class="view-header"><div><p>SR-07 / RECUPERAÇÃO FORENSE</p><h2 id="corrupted-title">ARQUIVOS CORROMPIDOS</h2></div><span class="record-code critical">SETOR INSTÁVEL</span></header>
+          <div class="corruption-console">
+            <div class="hex-dump" id="hex-dump" aria-label="Dados corrompidos"></div>
+            <article class="recovery-panel">
+              <p class="terminal-kicker">RECUPERADOR MAGNÉTICO // FITA 04</p>
+              <h3>SETORES RECUPERÁVEIS: <span id="sector-count">03</span></h3>
+              <p>Selecione fragmentos no despejo hexadecimal. Alguns blocos não pertencem ao arquivo original.</p>
+              <div class="recovered-message" id="recovered-message">_ _ _ _ _ / _ / _ _ _ _ _</div>
+              <button class="key-button" id="recover-sector" type="button">TENTAR RECONSTRUÇÃO</button>
+            </article>
+          </div>
+        </section>
 
-    function startTerminal() {
-      if (terminalIndex > 0) return;
+        <section class="system-view" id="view-restricted" data-view="restricted" aria-labelledby="restricted-title" hidden>
+          <header class="view-header"><div><p>SR-07 / ÍNDICE NÃO CATALOGADO</p><h2 id="restricted-title">DIRETÓRIO RESTRITO</h2></div><span class="record-code">ACESSO FRAGMENTÁRIO</span></header>
+          <div class="restricted-vault">
+            <div class="vault-door" aria-hidden="true"><span>SV</span><i></i><b></b></div>
+            <article>
+              <p>Este diretório não responde a menus. Sete rotas foram preservadas em setores antigos do sistema.</p>
+              <p>As iniciais constam em um registro do Núcleo de Integridade:</p>
+              <blockquote><span class="secret-letter">L</span>imiar. <span class="secret-letter">Q</span>uestionário. <span class="secret-letter">O</span>rdem. <span class="secret-letter">C</span>ustódia. <span class="secret-letter">V</span>idro. <span class="secret-letter">B</span>elladonna. <span class="secret-letter">S</span>ombra.</blockquote>
+              <p class="dim">O diretório observa o teclado, mas não enquanto você escreve.</p>
+              <div class="vault-index" id="vault-index">
+                <span>LTR-12 // ADORMECIDO</span><span>QST-09 // ADORMECIDO</span><span>ORD-00 // ADORMECIDO</span><span>CST-04 // ADORMECIDO</span><span>VDR-06 // ADORMECIDO</span><span>BLD-02 // ADORMECIDO</span><span>SHD-19 // ADORMECIDO</span>
+              </div>
+            </article>
+          </div>
+        </section>
 
-      function pushLine() {
-        if (terminalIndex < terminalLines.length) {
-          terminalFeed.innerHTML += terminalLines[terminalIndex];
-          terminalIndex++;
-          setTimeout(pushLine, 420);
-        }
-      }
+        <section class="system-view" id="view-recruitment" data-view="recruitment" aria-labelledby="recruitment-title" hidden>
+          <header class="view-header"><div><p>SV / MOBILIZAÇÃO DE PESSOAL</p><h2 id="recruitment-title">RECRUTAMENTO</h2></div><span class="record-code signal-text">CANAL DISPONÍVEL</span></header>
+          <div class="recruitment-terminal">
+            <article class="recruitment-copy">
+              <p class="terminal-kicker">CONVOCAÇÃO EXTRAORDINÁRIA // SR-07</p>
+              <h3>São Firmo ainda está transmitindo.</h3>
+              <p>A Sanctum Veritatis procura agentes capazes de investigar o que foi apagado, proteger quem ainda se lembra e permanecer em silêncio quando o farol disser seus nomes.</p>
+              <ul><li>Investigação e interpretação narrativa</li><li>Operações de campo em equipe</li><li>Contato com fenômenos paranormais</li><li>Compromisso com protocolos da mesa</li></ul>
+              <a class="external-channel" href="https://discord.gg/9y2JqUSKGT" target="_blank" rel="noopener noreferrer"><span><small>CONEXÃO EXTERNA // NÃO SEGURA</small><strong>SOLICITAR INGRESSO</strong></span><b>↗</b></a>
+              <p class="security-warning">AVISO: comunicações externas não são consideradas seguras. Não compartilhe material classificado fora dos canais designados.</p>
+            </article>
+            <aside class="candidate-slip">
+              <div class="paper-label"><span>FORMULÁRIO SV-RH/19</span><span>TRIAGEM INICIAL</span></div>
+              <dl><div><dt>Operação</dt><dd>Setentrional</dd></div><div><dt>Local</dt><dd>São Firmo</dd></div><div><dt>Risco</dt><dd class="critical">Elevado</dd></div><div><dt>Vagas</dt><dd>Consultar canal</dd></div><div><dt>Estado</dt><dd class="signal-text">Recebendo perfis</dd></div></dl>
+              <div class="fan-notice"><strong>PROJETO DE FÃS</strong>Campanha independente, sem vínculo com Rafael Lange (Cellbit), Jambô Editora ou a marca Ordem Paranormal.</div>
+            </aside>
+          </div>
+        </section>
 
-      pushLine();
-    }
+        <section class="system-view" id="view-about" data-view="about" aria-labelledby="about-title" hidden>
+          <header class="view-header"><div><p>SV / REGISTRO INSTITUCIONAL</p><h2 id="about-title">SOBRE A SANCTUM</h2></div><span class="record-code">FUNDAÇÃO: [CONFLITANTE]</span></header>
+          <div class="institution-record">
+            <article>
+              <p class="terminal-kicker">SANCTUM VERITATIS // A VERDADE SOB VIGÍLIA</p>
+              <h3>Guardamos aquilo que a realidade tenta esquecer.</h3>
+              <p>A Sanctum Veritatis é uma organização de investigação, custódia e contenção paranormal. Seus primeiros registros antecedem sua fundação oficial em quarenta e três anos. Nenhum documento concorda sobre quem a criou.</p>
+              <p>Seus agentes operam em células compartimentadas. Cada arquivo é uma contenção; cada testemunho, um risco. A organização não promete salvar o mundo. Promete impedir que o Outro Lado aprenda a pronunciá-lo.</p>
+              <div class="doctrine-lines"><span>OBSERVAR SEM SER VISTO.</span><span>REGISTRAR SEM SER LEMBRADO.</span><span>CONTER SEM SER NOMEADO.</span></div>
+            </article>
+            <aside class="archive-seal" aria-label="Monograma textual da Sanctum Veritatis"><span>SV</span><p>SANCTUM<br>VERITATIS</p><small>VERITAS SUB VIGILIA</small></aside>
+          </div>
+        </section>
 
-    function openSecret() {
-      secretModal.classList.add("open");
-      secretModal.setAttribute("aria-hidden", "false");
-    }
+        <section class="system-view" id="view-external" data-view="external" aria-labelledby="external-title" hidden>
+          <header class="view-header"><div><p>SV / GATEWAY DE REDE</p><h2 id="external-title">CONEXÃO EXTERNA</h2></div><span class="record-code critical">CRIPTOGRAFIA NÃO GARANTIDA</span></header>
+          <div class="external-gateway">
+            <div class="gateway-diagram" aria-hidden="true"><span>SV-04</span><i></i><b>REDE EXTERNA</b></div>
+            <article>
+              <h3>Saída do ambiente compartimentado</h3>
+              <p>Os destinos abaixo pertencem a redes externas ou arquivos públicos da organização. A sessão operacional permanecerá registrada.</p>
+              <a href="https://discord.gg/9y2JqUSKGT" target="_blank" rel="noopener noreferrer"><span>EXT-01</span><strong>CANAL DE RECRUTAMENTO // DISCORD</strong><i>↗</i></a>
+              <a href="faq.html"><span>EXT-02</span><strong>PERGUNTAS FREQUENTES</strong><i>→</i></a>
+              <a href="Setentrional_Index.html"><span>EXT-03</span><strong>ABERTURA DA OPERAÇÃO</strong><i>→</i></a>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
 
-    function closeSecret() {
-      secretModal.classList.remove("open");
-      secretModal.setAttribute("aria-hidden", "true");
-    }
+    <footer class="command-console">
+      <div class="system-message"><span class="status-lamp"></span><p id="system-message" aria-live="polite">SISTEMA PRONTO // AGUARDANDO COMANDO</p></div>
+      <form id="command-form" autocomplete="off">
+        <label for="command-input">Terminal de comandos</label><span aria-hidden="true">SV:\SR-07&gt;</span><input id="command-input" type="text" spellcheck="false" placeholder="digite help"><button type="submit">EXEC</button>
+      </form>
+      <div class="footer-signal"><span id="footer-packet">PKT 0913</span><i></i><b>CANAL 09</b></div>
+    </footer>
+  </div>
 
-    window.addEventListener("mousemove", (event) => {
-      cursorLight.style.left = `${event.clientX}px`;
-      cursorLight.style.top = `${event.clientY}px`;
-    });
+  <dialog class="document-modal" id="document-modal" aria-labelledby="document-title">
+    <div class="modal-frame">
+      <header><div><span id="document-code">SV-000</span><strong id="document-title">DOCUMENTO</strong></div><button id="close-document" type="button" aria-label="Fechar documento">FECHAR [ESC]</button></header>
+      <div class="document-meta" id="document-meta"></div>
+      <article class="document-content" id="document-content"></article>
+      <footer><span id="document-integrity">INTEGRIDADE --%</span><span>SANCTUM VERITATIS // CÓPIA CONTROLADA</span></footer>
+    </div>
+  </dialog>
 
-    window.addEventListener("resize", resizeCanvas);
+  <div class="notification-stack" id="notification-stack" aria-live="polite" aria-atomic="false"></div>
+  <div class="redirect-overlay" id="redirect-overlay" hidden aria-live="assertive"><span>DIRETÓRIO OCULTO LOCALIZADO</span><strong id="redirect-code">SV://████</strong><i></i></div>
+  <div class="entity-flash" id="entity-flash" hidden aria-hidden="true"><span></span><i></i></div>
 
-    secretButton.addEventListener("click", openSecret);
-    closeModal.addEventListener("click", closeSecret);
-    closeModalAlt.addEventListener("click", closeSecret);
-
-    secretModal.addEventListener("click", (event) => {
-      if (event.target === secretModal) closeSecret();
-    });
-
-    document.addEventListener("keydown", (e) => {
-      const activeTag = document.activeElement?.tagName?.toLowerCase();
-
-      if (activeTag === "input" || activeTag === "textarea" || activeTag === "select") return;
-
-      if (e.key === "Escape") closeSecret();
-
-      if (e.key === "l" || e.key === "L") window.location.href = "log.html";
-      if (e.key === "q" || e.key === "Q") window.location.href = "quiz.html";
-      if (e.key === "o" || e.key === "O") window.location.href = "ordo_log.html";
-      if (e.key === "c" || e.key === "C") window.location.href = "alicia.html";
-      if (e.key === "v" || e.key === "V") window.location.href = "Vidraceiros.html";
-      if (e.key === "b" || e.key === "B") window.location.href = "belladonna.html";
-      if (e.key === "s" || e.key === "S") window.location.href = "ShadowCompany.html";
-    });
-
-    setInterval(randomRupture, 2200);
-
-    resizeCanvas();
-    drawSigils();
-    setupReveals();
-    setupTabs();
-    setupScanner();
-  </script>
+  <noscript><div class="noscript-message"><strong>INTERFACE INDISPONÍVEL.</strong> Este terminal utiliza JavaScript para autenticação e navegação. Ative-o para acessar a Operação Setentrional.</div></noscript>
+  <script src="js/setentrional-terminal.js" defer></script>
 </body>
 </html>

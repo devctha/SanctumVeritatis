@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.agents/
+.checkpoints/
+.codex/
+node_modules/
+coverage/
+dist/
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "frontline",
+    "name": "Linha de Frente",
+    "class": "combatant"
+  },
+  {
+    "id": "infiltrator",
+    "name": "Infiltrador",
+    "class": "specialist"
+  },
+  {
+    "id": "conduit",
+    "name": "Conduíte",
+    "class": "occultist"
+  }
+]

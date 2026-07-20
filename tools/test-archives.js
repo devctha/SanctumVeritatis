@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm'),path=require('path'),root=path.resolve(__dirname,'..');
+const data=JSON.parse(fs.readFileSync(path.join(root,'data/archives/archive-index.json'),'utf8').replace(/^\uFEFF/,''));
+if(data.records.length!==350)throw new Error('Quantidade materializada incorreta');
+if(data.records.filter(r=>r.layer==='principal').length!==50)throw new Error('Documentos principais incorretos');
+if(data.records.filter(r=>r.layer==='secondary').length!==300)throw new Error('Registros secundários incorretos');
+if(data.totalIndexed!==328417||data.procedural.count!==328067)throw new Error('Intervalo procedural incorreto');
+const context={window:{},SV_ARCHIVE_DATA:data};vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'js/archive-generator.js'),'utf8'),context);vm.runInContext(fs.readFileSync(path.join(root,'js/archive-search.js'),'utf8'),context);
+const a=context.window.SVArchiveGenerator.generate(4812),b=context.window.SVArchiveGenerator.generate(4812);if(JSON.stringify(a)!==JSON.stringify(b))throw new Error('Seed instável');
+const farol=context.window.SVArchiveSearch.search(data.records,'farol',{integrity:'all'});if(farol.length<5)throw new Error('Busca textual falhou');
+const date=context.window.SVArchiveSearch.search(data.records,'date:1995',{integrity:'all'});if(date.length<20)throw new Error('Operador de data falhou');
+const low=context.window.SVArchiveSearch.search(data.records,'integrity:<50',{integrity:'all'});if(!low.every(r=>r.integrity<50))throw new Error('Filtro de integridade falhou');
+const ids=new Set(data.records.map(r=>r.id));if(ids.size!==data.records.length)throw new Error('IDs duplicados');
+console.log(JSON.stringify({principal:50,secondary:300,indexed:data.totalIndexed,seedStable:true,farol:farol.length,date1995:date.length,lowIntegrity:low.length}));

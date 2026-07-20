@@ -1,0 +1,10 @@
+.operation-setentrional{--operation-accent:#628ba0;--operation-rust:#805544;background:#091015;color:var(--sv-text-primary)}
+.operation-hero{min-height:70vh;position:relative;display:grid;align-items:end;overflow:hidden;border-bottom:1px solid var(--sv-border-default);background:linear-gradient(90deg,rgba(5,10,14,.98) 8%,rgba(5,10,14,.7) 58%,rgba(5,10,14,.35)),url('../images/Farol.png') center 42%/cover no-repeat}
+.operation-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,#091015),radial-gradient(circle at 75% 35%,transparent,rgba(0,0,0,.48))}
+.operation-hero-content{position:relative;z-index:2;width:min(1500px,100%);padding:clamp(2rem,6vw,6rem);display:grid;grid-template-columns:1fr auto;align-items:end;gap:2rem}.operation-hero h1{margin:.7rem 0;font-size:clamp(3rem,8vw,7.5rem);text-transform:uppercase}.operation-hero p{max-width:45rem;color:#c4d0d3}
+.operation-code{writing-mode:vertical-rl;font:700 clamp(1.5rem,3vw,3rem) var(--sv-font-mono);letter-spacing:.18em;color:rgba(255,255,255,.18)}
+.operation-body{width:min(1500px,100%);margin:auto;padding:clamp(1.2rem,4vw,4rem)}
+.operation-kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--sv-border-default);margin-top:-3.2rem;position:relative;z-index:4;background:rgba(9,16,21,.94);backdrop-filter:blur(16px)}
+.operation-kpis .metric{padding:1.4rem;border-right:1px solid var(--sv-border-default)}
+.intel-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(20rem,.7fr);gap:1rem;margin-top:2rem}.transmission{border-left:2px solid var(--operation-accent);padding:1rem 1.2rem;background:linear-gradient(90deg,rgba(98,139,160,.12),transparent);font-family:var(--sv-font-mono)}
+@media(max-width:850px){.operation-hero-content{grid-template-columns:1fr}.operation-code{display:none}.operation-kpis{grid-template-columns:repeat(2,1fr);margin-top:-1rem}.intel-grid{grid-template-columns:1fr}}

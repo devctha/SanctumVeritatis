@@ -1,0 +1,12 @@
+[
+  {
+    "id": "cautious",
+    "name": "Cauteloso",
+    "nex": 5
+  },
+  {
+    "id": "resistant",
+    "name": "Resistente",
+    "nex": 10
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "detect",
+    "name": "Detecção de Ameaças",
+    "element": "Conhecimento",
+    "circle": 1,
+    "cost": 1
+  },
+  {
+    "id": "decay",
+    "name": "Definhar",
+    "element": "Morte",
+    "circle": 1,
+    "cost": 1
+  },
+  {
+    "id": "spark",
+    "name": "Eletrocussão",
+    "element": "Energia",
+    "circle": 1,
+    "cost": 1
+  }
+]

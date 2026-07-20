@@ -1,0 +1,106 @@
+[
+  {
+    "id": "abalado",
+    "name": "Abalado"
+  },
+  {
+    "id": "agarrado",
+    "name": "Agarrado"
+  },
+  {
+    "id": "alquebrado",
+    "name": "Alquebrado"
+  },
+  {
+    "id": "apavorado",
+    "name": "Apavorado"
+  },
+  {
+    "id": "atordoado",
+    "name": "Atordoado"
+  },
+  {
+    "id": "caído",
+    "name": "Caído"
+  },
+  {
+    "id": "cego",
+    "name": "Cego"
+  },
+  {
+    "id": "debilitado",
+    "name": "Debilitado"
+  },
+  {
+    "id": "enjoado",
+    "name": "Enjoado"
+  },
+  {
+    "id": "esmorecido",
+    "name": "Esmorecido"
+  },
+  {
+    "id": "exausto",
+    "name": "Exausto"
+  },
+  {
+    "id": "fascinado",
+    "name": "Fascinado"
+  },
+  {
+    "id": "fatigado",
+    "name": "Fatigado"
+  },
+  {
+    "id": "fraco",
+    "name": "Fraco"
+  },
+  {
+    "id": "imóvel",
+    "name": "Imóvel"
+  },
+  {
+    "id": "inconsciente",
+    "name": "Inconsciente"
+  },
+  {
+    "id": "indefeso",
+    "name": "Indefeso"
+  },
+  {
+    "id": "lento",
+    "name": "Lento"
+  },
+  {
+    "id": "machucado",
+    "name": "Machucado"
+  },
+  {
+    "id": "morrendo",
+    "name": "Morrendo"
+  },
+  {
+    "id": "ofuscado",
+    "name": "Ofuscado"
+  },
+  {
+    "id": "paralisado",
+    "name": "Paralisado"
+  },
+  {
+    "id": "perturbado",
+    "name": "Perturbado"
+  },
+  {
+    "id": "sangrando",
+    "name": "Sangrando"
+  },
+  {
+    "id": "surdo",
+    "name": "Surdo"
+  },
+  {
+    "id": "vulnerável",
+    "name": "Vulnerável"
+  }
+]

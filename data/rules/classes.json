@@ -1,0 +1,14 @@
+[
+  {
+    "id": "combatant",
+    "name": "Combatente"
+  },
+  {
+    "id": "specialist",
+    "name": "Especialista"
+  },
+  {
+    "id": "occultist",
+    "name": "Ocultista"
+  }
+]

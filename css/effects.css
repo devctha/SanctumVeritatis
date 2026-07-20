@@ -1,0 +1,7 @@
+@keyframes sv-scan{from{transform:translateY(-10vh)}to{transform:translateY(110vh)}}
+@keyframes sv-pulse{50%{opacity:.45}}
+.scanline{position:fixed;inset:-10vh 0 auto;height:18vh;pointer-events:none;z-index:20;background:linear-gradient(transparent,rgba(109,153,165,.035),transparent);animation:sv-scan 10s linear infinite}
+.ambient-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+.signal{display:inline-flex;gap:3px;align-items:end;height:.8rem}.signal i{display:block;width:2px;background:currentColor}.signal i:nth-child(1){height:30%}.signal i:nth-child(2){height:55%}.signal i:nth-child(3){height:80%}.signal i:nth-child(4){height:100%;animation:sv-pulse 1.8s infinite}
+.reveal{animation:reveal .6s both}@keyframes reveal{from{opacity:0;transform:translateY(10px);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+.stability .scanline,.stability .ambient-grid{display:none}
