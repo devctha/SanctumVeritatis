@@ -1,0 +1,14 @@
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+const file = path.join(root, 'operacoes', 'setentrional', 'index.html');
+let html = fs.readFileSync(file, 'utf8');
+html = html.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+html = html.replace('https://sanctumveritatis.com/operacoes/setentrional/', 'https://sanctumveritatis.com/operacoes/canto-da-mariposa');
+const redirect = "<script>location.replace('/operacoes/canto-da-mariposa'+location.search+location.hash)</script>";
+if (!html.includes("location.replace('/operacoes/canto-da-mariposa'")) html = html.replace('<head>', '<head>' + redirect);
+const marker = '<main>';
+const transition = '<aside class="panel panel-danger" role="status" style="margin:1rem auto;max-width:78rem"><div class="panel-header"><span class="panel-label">Arquivo reclassificado</span><span class="badge badge-danger">Designação revogada</span></div><p>A designação “Operação Setentrional” foi revogada. Novo registro autorizado: <strong>Operação Canto da Mariposa</strong>.</p><a class="btn btn-danger" href="../canto-da-mariposa">Abrir registro reclassificado</a></aside>';
+if (!html.includes('Novo registro autorizado:')) html = html.replace(marker, transition + marker);
+fs.writeFileSync(file, html);
+console.log('Legacy Setentrional route marked as reclassified.');
