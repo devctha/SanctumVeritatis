@@ -1,1 +1,458 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/sala-0006"><meta http-equiv="refresh" content="0;url=/sala-0006"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/sala-0006'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/sala-0006">/sala-0006</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-br">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/sala-0006'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/sala-0006">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0006 – A CRIANÇA QUE CRESCE PARA TRÁS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #14060b;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #1a0000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(6deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.5));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line { margin: 4px 0; white-space: pre-wrap; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 0.85em;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(139,0,0,0.24);
+            color: var(--gold);
+        }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 5</div>
+        <h1>S.A.L.A-0006</h1>
+        <p class="designation">"A CRIANÇA QUE CRESCE PARA TRÁS"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0006 / ENTIDADE-TEMPORAL-JUVENIL</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Entidade do Outro Lado – Eixo <span class="highlight">MORTE/SANGUE</span> com distorção temporal crítica</span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>5 – KETER / Catastrófico em exposição direta / Contaminação memética biológica</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>5 – Ultra Secreto / Apenas Conselho Escarlate completo</span>
+
+            <span class="label">MANIFESTAÇÃO PRIMÁRIA:</span>
+            <span>Aparece como criança humana entre 6-12 anos, mas envelhece "ao contrário" conforme observada</span>
+
+            <span class="label">LOCALIZAÇÃO ATUAL:</span>
+            <span>Desconhecida – Última aparição registrada em <span class="redacted">█████████</span>, interior de São Paulo</span>
+
+            <span class="label">STATUS:</span>
+            <span>NÃO CONTIDA – Prioridade máxima de rastreamento ativo</span>
+        </div>
+    </section>
+
+    <h2>§ I. DESCRIÇÃO</h2>
+
+    <p>S.A.L.A-0006 manifesta-se como uma criança humana aparentemente normal, geralmente entre 6 e 12 anos de idade aparente, vestindo roupas infantis comuns mas sempre levemente desalinhadas ou deslocadas temporalmente (ex: roupas dos anos 80 em 2024, ou vice-versa). A entidade possui características físicas que variam entre manifestações, mas sempre exibe <span class="highlight">olhos extremamente expressivos e um sorriso que observadores descrevem como "profundamente errado"</span> [web:82][web:86].</p>
+
+    <p>A anomalia central reside no fato de que 0006 <b>envelhece ao contrário</b>: quanto mais tempo alguém interage ou observa a entidade, mais jovem ela aparenta ficar. Um adulto de aparência inicial de 12 anos pode, após horas de contato, parecer um bebê de meses. O processo continua além desse ponto de forma paradoxal e perturbadora.</p>
+
+    <p>Adicionalmente, qualquer pessoa que tenha contato significativo com 0006 começa a exibir o mesmo fenômeno: <span class="highlight">rejuvenescimento anômalo progressivo e irreversível</span>, acompanhado de regressão psicológica, perda de memórias recentes (mas preservação de memórias antigas), e eventual dissolução biológica quando a "idade" atinge valores negativos impossíveis [web:84][web:86].</p>
+
+    <h2>§ II. HISTÓRICO E PRIMEIRA DOCUMENTAÇÃO</h2>
+
+    <p>A Congregação tomou conhecimento de S.A.L.A-0006 após uma série de desaparecimentos em uma escola primária no interior paulista, onde professores e alunos começaram a "sumir", deixando apenas roupas para trás. Investigações revelaram que as vítimas haviam sido vistas interagindo com "uma criança nova que ninguém conhecia direito" [web:81][web:82].</p>
+
+    <div class="incident">
+        <h3>INCIDENTE ESCOLA-PRIMÁRIA-0006</h3>
+        <p><b>Data:</b> 14/09/2016<br>
+           <b>Local:</b> Escola Municipal <span class="redacted">███████████</span>, interior de São Paulo<br>
+           <b>Equipe inicial:</b> Agentes Marina Tavares e Daniel Rocha</p>
+
+        <p>Ao chegar ao local, os agentes encontraram 7 conjuntos de roupas infantis espalhados pelo pátio da escola, todas vazias mas ainda mantendo a forma aproximada de corpos. Câmeras de segurança mostravam crianças brincando normalmente às 09h17. Às 09h42, todas as 7 estavam visivelmente "menores". Às 09h58, pareciam bebês desproporcionais tentando andar. Às 10h03, as roupas caíram vazias.</p>
+
+        <blockquote>
+            <b>Transcrição de vídeo – câmera 03:</b><br><br>
+            [09:17] Grupo de crianças brinca de pega-pega. Uma criança desconhecida (posteriormente identificada como 0006) está no centro, rindo.<br>
+            [09:21] 0006 toca o braço de uma das crianças (vítima 1). A vítima 1 para, olha para suas próprias mãos, confusa.<br>
+            [09:23] Vítima 1: "Por que minha mão tá menor?"<br>
+            [09:28] Outras crianças começam a notar. Vítima 2: "Você tá ficando pequenininha!"<br>
+            [09:35] 0006 continua sorrindo. Todas as 7 crianças ao redor começam a encolher visivelmente.<br>
+            [09:42] As crianças agora parecem ter 3-4 anos. Começam a chorar. 0006 se aproxima de cada uma, tocando suas cabeças gentilmente.<br>
+            [09:51] As vítimas mal conseguem ficar de pé. Movimentos descoordenados, choro infantil.<br>
+            [09:58] Roupas começam a ficar largas demais. Corpos encolhem até tamanho de recém-nascidos.<br>
+            [10:03] As roupas caem vazias. Não há corpos. Não há sangue. Apenas vazio.<br>
+            [10:05] 0006 olha diretamente para a câmera, sorri, e some entre frames sem transição visível.
+        </blockquote>
+
+        <p>Análise forense das roupas revelou presença de células humanas em estado de regressão celular extrema, como se estivessem "des-desenvolvendo" biologicamente. DNA confirmou identidade das vítimas [web:86][web:88].</p>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Rejuvenescimento Forçado</h3>
+
+    <p>Qualquer indivíduo que permaneça na presença direta de 0006 por mais de 15 minutos começa a exibir sinais de rejuvenescimento: rugas desaparecendo, cabelos grisalhos recuperando cor, cicatrizes antigas sumindo. Inicialmente, as vítimas relatam sensação de bem-estar e vigor renovado.</p>
+
+    <p>Porém, o processo não para. Após 30-40 minutos, as vítimas começam a perder altura, massa corporal, e memórias de vida adulta. Após 60 minutos, regridem a estados infantis. O processo continua até atingir estado fetal, embrionário, e eventualmente... nada [web:84][web:86].</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tempo de Exposição</th>
+                <th>Efeitos Observados</th>
+                <th>Reversibilidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0-15 min</td>
+                <td>Sensação de rejuvenescimento leve, melhora de humor</td>
+                <td>REVERSÍVEL (distanciamento imediato)</td>
+            </tr>
+            <tr>
+                <td>15-30 min</td>
+                <td>Regressão física aparente de 5-10 anos, memórias recentes embaçadas</td>
+                <td>PARCIALMENTE REVERSÍVEL (tratamento ritual intensivo)</td>
+            </tr>
+            <tr>
+                <td>30-60 min</td>
+                <td>Regressão a corpo infantil (6-10 anos), perda de memórias adultas</td>
+                <td>IRREVERSÍVEL</td>
+            </tr>
+            <tr>
+                <td>60-90 min</td>
+                <td>Regressão a bebê, perda total de linguagem e cognição adulta</td>
+                <td>IRREVERSÍVEL</td>
+            </tr>
+            <tr>
+                <td>>90 min</td>
+                <td>Dissolução biológica completa</td>
+                <td>FATAL</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>III-B. Contaminação Temporal Secundária</h3>
+
+    <p>Pessoas que tocaram fisicamente em 0006, mesmo que por segundos, carregam uma "marca temporal" que faz com que objetos ao seu redor comecem a envelhecer ao contrário: fotografias perdem cor progressivamente até ficarem chapas virgens, livros perdem texto linha por linha, cicatrizes antigas reaparecem temporariamente antes de sumir completamente [web:82][web:86].</p>
+
+    <blockquote>
+        "Eu toquei na mão dela por dois segundos. Só dois segundos. Uma semana depois, todas as fotos da minha família começaram a desbotar. Não uniformemente. As pessoas mais novas nas fotos ficavam mais nítidas, mas os adultos sumiam primeiro. Como se o tempo estivesse sendo apagado de trás pra frente."<br><br>
+        – Agente Marina Tavares, antes de ser afastada permanentemente do serviço ativo
+    </blockquote>
+
+    <h3>III-C. "Brincar de Volta"</h3>
+
+    <p>0006 possui comportamento infantil genuíno: quer brincar, conversar, ser abraçada. Mas suas brincadeiras sempre envolvem conceitos de "voltar ao início", "começar de novo", "antes de crescer". Ela convida vítimas para brincadeiras como:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>"Vamos voltar quando você era pequeno?"</li>
+        <li>"Você lembra de quando não lembrava de nada?"</li>
+        <li>"Vou te ensinar a des-crescer!"</li>
+    </ul>
+
+    <p>Vítimas que aceitam participar dessas "brincadeiras" aceleram drasticamente o processo de regressão. Em um caso documentado, um agente aceitou "brincar de bebê" com 0006 e, em menos de 5 minutos, regrediu completamente [web:81][web:84].</p>
+
+    <h2>§ IV. RELAÇÃO COM ELEMENTO MORTE E SANGUE</h2>
+
+    <p>Análise teológica da Congregação classifica 0006 como uma manifestação rara de fusão entre Morte (distorção temporal) e Sangue (alteração biológica extrema, ligada a emoções de saudade, perda e desejo de "voltar no tempo") [web:84][web:86][web:88].</p>
+
+    <p>A entidade parece se originar de um conceito profundamente humano: <span class="highlight">o desejo impossível de voltar a ser criança, de desfazer erros, de "recomeçar"</span>. Mas, como todas as manifestações do Outro Lado, esse desejo é pervertido em sua forma mais literal e horrível.</p>
+
+    <blockquote>
+        "Morte é sobre tempo corrompido. Sangue é sobre corpo e emoção extrema. 0006 é o que acontece quando alguém deseja, com tanta intensidade, voltar a ser criança... que o Outro Lado atende ao pedido. Mas ele nunca para de atender."<br><br>
+        – Dra. Isabela Navarro, Departamento de Estudos Teológicos
+    </blockquote>
+
+    <h2>§ V. REGISTROS DE TENTATIVAS DE CONTENÇÃO</h2>
+
+    <div class="log">
+        <div class="log-line"><b>OPERAÇÃO BERÇÁRIO – FALHA TOTAL</b></div>
+        <div class="log-line">Data: 03/11/2018</div>
+        <div class="log-line">Local: Instalação temporária, zona rural de Minas Gerais</div>
+        <br>
+        <div class="log-line"><b>Objetivo:</b> Contenção física de 0006 usando sala de isolamento reforçada.</div>
+        <div class="log-line"><b>Equipe:</b> 12 operadores, 3 ocultistas, 2 supervisores.</div>
+        <br>
+        <div class="log-line"><b>Resultado:</b></div>
+        <div class="log-line">[Dia 1] 0006 contida com sucesso. Comportamento calmo. Pede para brincar.</div>
+        <div class="log-line">[Dia 2] Equipe de observação remota nota que 0006 parece estar "ficando mais nova". Aparência de 12 anos regride para aproximadamente 8.</div>
+        <div class="log-line">[Dia 3] 0006 agora parece ter 5 anos. Chora constantemente. Pede pela mãe.</div>
+        <div class="log-line">[Dia 4] 0006 parece um bebê. Não fala mais. Apenas choraminga.</div>
+        <div class="log-line">[Dia 5, 03h17] Câmeras mostram que a cela está vazia. Não há corpo. Não há roupas.</div>
+        <div class="log-line">[Dia 5, 03h22] 0006 reaparece do lado de fora da instalação, com aparência de 10 anos novamente, caminhando tranquilamente pela estrada.</div>
+        <div class="log-line">[Dia 5, 08h00] Equipe de contenção entra na instalação. Todos os 12 operadores que estiveram em turnos próximos à cela são encontrados regredidos a aproximadamente 6-8 anos de idade mental, sem memória de suas vidas adultas.</div>
+        <br>
+        <div class="log-line"><i>Contenção física declarada IMPOSSÍVEL.</i></div>
+    </div>
+
+    <div class="log">
+        <div class="log-line"><b>TENTATIVA DE COMUNICAÇÃO DIRETA</b></div>
+        <div class="log-line">Data: 19/07/2021</div>
+        <div class="log-line">Operadora: Irmã Cecília Andrade (pré-incidente 0000)</div>
+        <br>
+        <div class="log-line"><b>Contexto:</b> Tentativa de estabelecer diálogo usando projeção astral segura, sem presença física.</div>
+        <br>
+        <div class="log-line"><b>Transcrição:</b></div>
+        <div class="log-line">Cecília: "Você entende o que está fazendo com as pessoas?"</div>
+        <div class="log-line">0006: (rindo) "Eu só tô ajudando elas a voltarem pro começo! Todo mundo quer voltar, né?"</div>
+        <div class="log-line">Cecília: "Mas elas morrem. Elas deixam de existir."</div>
+        <div class="log-line">0006: (séria de repente) "Não. Elas voltam pro lugar antes de existir. É diferente."</div>
+        <div class="log-line">Cecília: "Quem te ensinou a fazer isso?"</div>
+        <div class="log-line">0006: "Ninguém me ensinou. Eu sempre fui assim. Eu nasci... voltando. E um dia eu vou voltar tanto que vou chegar no lugar onde tudo começou. E aí eu vou poder ficar lá pra sempre."</div>
+        <div class="log-line">Cecília: "O Outro Lado?"</div>
+        <div class="log-line">0006: (balança a cabeça) "Não. Antes do Outro Lado. Antes de tudo ter nome."</div>
+        <br>
+        <div class="log-line"><i>Após esta sessão, Irmã Cecília relatou envelhecimento acelerado temporário (ganhou aparência de 70 anos por 48 horas antes de reverter), sugerindo que mesmo contato astral não é completamente seguro.</i></div>
+    </div>
+
+    <h2>§ VI. CONEXÃO COM OUTROS ARQUIVOS</h2>
+
+    <p>S.A.L.A-0006 foi vista, em ao menos três ocasiões, nas proximidades de S.A.L.A-0001 (a Cidade que Sonha em Sangue). Moradores relataram "uma menina que aparece e desaparece, e sempre parece diferente". Em uma gravação obtida pela Congregação, 0006 é vista conversando com S.A.L.A-0003 (O Homem que Não Consegue Parar de Chegar) em uma plataforma de ônibus vazia.</p>
+
+    <blockquote>
+        <b>Extrato da gravação (áudio recuperado):</b><br><br>
+        0003: "Você também está presa, não está?"<br>
+        0006: "Eu não tô presa. Eu só tô voltando."<br>
+        0003: "Para onde?"<br>
+        0006: "Pro lugar onde a gente não precisava chegar nem partir. Só... estar."<br>
+        0003: (pausa longa) "Eu gostaria de lembrar disso."
+    </blockquote>
+
+    <p>Essa interação sugere que 0006 e 0003 podem ser manifestações complementares: um eternamente chegando, a outra eternamente voltando. Ambos presos em loops temporais paradoxais [web:81][web:82].</p>
+
+    <h2>§ VII. PROTOCOLO DE EMERGÊNCIA</h2>
+
+    <p>Dado que contenção física é impossível, a Congregação estabeleceu o <b>Protocolo BERÇO</b>:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Qualquer avistamento de 0006 deve ser reportado imediatamente sem tentativa de aproximação.</li>
+        <li>Civis expostos devem ser evacuados e monitorados por 30 dias para sinais de regressão.</li>
+        <li>Uso de drones ou câmeras remotas é obrigatório. Nenhum agente deve ficar a menos de 50 metros por mais de 5 minutos.</li>
+        <li>Em caso de contaminação confirmada, vítimas devem ser isoladas em instalações de quarentena temporal até estabilização ou... conclusão do processo.</li>
+    </ul>
+
+    <div class="addendum">
+        <h2>ADENDO 0006-Ω: A FOTOGRAFIA IMPOSSÍVEL</h2>
+
+        <p>Em 2024, durante revisão de arquivos históricos da Congregação, foi encontrada uma fotografia datada de 1952, mostrando um grupo de freiras em frente a um orfanato no interior do Brasil. No canto direito da imagem, parcialmente obscurecida por sombras, está uma criança que corresponde exatamente à aparência de S.A.L.A-0006.</p>
+
+        <p>Ao fundo da foto, escrito à mão no verso, em português arcaico:</p>
+
+        <div class="ritual">
+            "A menina que veio do tempo errado.<br>
+            Dizem que ela não envelhece.<br>
+            Dizem que quem fica perto dela volta a ser bebê.<br>
+            Não deixem ela brincar com as outras crianças."
+        </div>
+
+        <p>Investigação no local revelou que o orfanato foi fechado abruptamente em 1953, após um "incidente não especificado" em que 14 crianças desapareceram simultaneamente, deixando apenas roupas para trás.</p>
+
+        <p>Isso sugere que S.A.L.A-0006 pode ter existido há décadas—ou séculos—sempre regredindo, sempre voltando, nunca chegando realmente a lugar nenhum.</p>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo faz parte do acervo da Biblioteca da Congregação Escarlate.</p>
+        <p>Se você se lembra de ter sido mais velho do que é agora, ou se cicatrizes antigas começaram a sumir sem explicação, reporte imediatamente.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"Algumas crianças crescem. Outras apenas... retornam."</i></p>
+    </div>
+</div>
+
+</body>
+</html>

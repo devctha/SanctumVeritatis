@@ -1,1 +1,1058 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/como-conseguir-rituais"><meta http-equiv="refresh" content="0;url=/SAS Results/como-conseguir-rituais"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/SAS Results/como-conseguir-rituais'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/SAS Results/como-conseguir-rituais">/SAS Results/como-conseguir-rituais</a>.</p></body></html>
+<!doctype html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/SAS Results/como-conseguir-rituais'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/como-conseguir-rituais">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • COMO CONSEGUIR RITUAIS • HARD+ (ANTI-VAZAMENTO)</title>
+
+  <style>
+    :root{
+      --bg0:#04030a; --bg1:#07081b;
+      --violet:#a855f7; --blue:#38bdf8; --green:#22c55e; --red:#ef4444; --orange:#fb923c;
+      --text:#dbeafe; --muted: rgba(219,234,254,.68); --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 18px rgba(239,68,68,.22);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .11; --noise-opacity: .07; --flicker: .050; --shake: 0px;
+
+      /* Fit-to-screen controls */
+      --fz: 12px;
+      --fzSmall: 11px;
+      --line: 1.45;
+      --pad: 10px;
+      --padSmall: 9px;
+
+      /* Anti-leak & difficulty */
+      --exposure: 1;              /* 1 = normal; 0 = blacked */
+      --fog: 0;                   /* 0..1 */
+      --blur: 0px;
+      --danger: rgba(239,68,68,.92);
+      --haz: rgba(251,146,60,.92);
+      --ok: rgba(34,197,94,.92);
+    }
+
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 900px at 18% 14%, rgba(168,85,247,.12), transparent 62%),
+        radial-gradient(900px 650px at 86% 22%, rgba(56,189,248,.10), transparent 60%),
+        radial-gradient(900px 650px at 50% 92%, rgba(34,197,94,.08), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, rgba(239,68,68,.10), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+      /* Anti-leak: disable selection globally; script toggles exceptions if needed */
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    /* CRT overlays */
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(10px, 1.5vw, 18px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(10px, 1.4vw, 14px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+    .crt::before{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.03), transparent 22%, rgba(0,255,255,.02) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.50;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute; inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.60) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+
+    .noise{
+      position:absolute; inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-7px,5px,0); }
+      50%{ transform: translate3d(6px,-5px,0); }
+      75%{ transform: translate3d(-4px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+    .flicker{
+      position:absolute; inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 4.4s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      33%{ opacity: calc(var(--flicker) * 1.2); }
+      34%{ opacity: 0; }
+      58%{ opacity: calc(var(--flicker) * .8); }
+      59%{ opacity: 0; }
+      88%{ opacity: calc(var(--flicker) * 1.45); }
+      89%{ opacity: 0; }
+    }
+
+    header{
+      position:relative;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,24,.72), rgba(5,6,10,.44));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: 14px;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+      max-width: 90ch;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: var(--fzSmall);
+      color: rgba(219,234,254,.74);
+      line-height:1.35;
+      max-width: 120ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(239,68,68,.22);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowR);
+      font-size: 12px;
+      color: rgba(219,234,254,.82);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--orange);
+      box-shadow: 0 0 14px rgba(251,146,60,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(168,85,247,.16);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    /* Anti-leak “fog” applied to content layer only */
+    .contentMask{
+      position:absolute;
+      inset:0;
+      z-index: 1;
+      pointer-events:none;
+      opacity: calc(1 - var(--exposure));
+      background: rgba(0,0,0,.92);
+      transition: opacity .25s ease;
+    }
+    .contentFog{
+      position:absolute;
+      inset:0;
+      z-index: 2;
+      pointer-events:none;
+      opacity: var(--fog);
+      background:
+        radial-gradient(900px 500px at 40% 30%, rgba(0,0,0,.0), rgba(0,0,0,.55) 65%, rgba(0,0,0,.72)),
+        linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.35));
+      transition: opacity .25s ease;
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:3;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn, .ghost{
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn{
+      border: 1px solid rgba(251,146,60,.22);
+      background: linear-gradient(180deg, rgba(251,146,60,.18), rgba(239,68,68,.10));
+      color: #ffe4c7;
+      box-shadow: var(--shadowO), var(--shadowR);
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+    .ghost{
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      box-shadow: var(--shadowB);
+    }
+
+    .wrap{
+      position:relative;
+      z-index:3;
+      padding: 12px;
+      min-height:0;
+      overflow:hidden; /* important: internal scroll only */
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      filter: blur(var(--blur));
+      transition: filter .25s ease;
+    }
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns: 1fr; overflow:auto; }
+    }
+
+    /* Two panels each has its own scroll: text fits screen */
+    .panel{
+      min-height:0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.25);
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.06);
+      overflow:hidden;
+    }
+    .panelHead{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .panelHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.82);
+      min-width: 0;
+    }
+    .panelBody{
+      padding: var(--pad);
+      min-height:0;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+    }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      padding: var(--padSmall);
+      box-shadow: var(--shadowV);
+      margin-bottom: 10px;
+    }
+    .kv:last-child{ margin-bottom: 0; }
+    .kv .k{
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.55);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .kv .v{
+      margin-top:6px;
+      font-size: var(--fz);
+      line-height: var(--line);
+      color: rgba(219,234,254,.82);
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+    .mono{
+      font-family: var(--mono);
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(56,189,248,.20);
+      background: rgba(2,6,23,.25);
+      color: rgba(219,234,254,.86);
+      white-space: nowrap;
+    }
+    .danger{ color: rgba(239,68,68,.90); text-shadow: 0 0 14px rgba(239,68,68,.12); }
+    .warn{ color: rgba(251,146,60,.90); text-shadow: 0 0 14px rgba(251,146,60,.12); }
+    .ok{ color: rgba(34,197,94,.90); text-shadow: 0 0 14px rgba(34,197,94,.12); }
+
+    .badge{
+      display:inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.14);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.72);
+      font-size: 12px;
+      white-space:nowrap;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .b-hard{ border-color: rgba(239,68,68,.28); background: rgba(239,68,68,.08); color: rgba(255,220,220,.92); }
+    .b-anti{ border-color: rgba(251,146,60,.28); background: rgba(251,146,60,.08); color: rgba(255,237,213,.92); }
+    .b-ok{ border-color: rgba(34,197,94,.28); background: rgba(34,197,94,.08); color: rgba(187,247,208,.92); }
+    .b-blue{ border-color: rgba(56,189,248,.28); background: rgba(56,189,248,.08); color: rgba(186,230,253,.92); }
+
+    /* Watermark overlay */
+    .wm{
+      position:absolute;
+      inset:-40px;
+      z-index: 10;
+      pointer-events:none;
+      opacity: .13;
+      transform: rotate(-16deg);
+      mix-blend-mode: overlay;
+      display:grid;
+      place-items:center;
+      filter: saturate(1.1);
+    }
+    .wmGrid{
+      width: 140%;
+      height: 140%;
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-auto-rows: 1fr;
+      gap: 28px;
+    }
+    .wmItem{
+      font-size: 12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color: rgba(239,68,68,.9);
+      text-shadow: 0 0 12px rgba(239,68,68,.16);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* Print: show nothing */
+    @media print{
+      body *{ display:none !important; }
+      body::before{
+        content:"PRINT BLOCKED";
+        display:block !important;
+        color:#000 !important;
+      }
+    }
+
+    /* Intro */
+    .intro{
+      position:fixed; inset:0; z-index:60;
+      display:grid; place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+    }
+    .introCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(239,68,68,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.90), rgba(3,6,18,.64));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 48px rgba(239,68,68,.16),
+        0 0 56px rgba(168,85,247,.10);
+      overflow:hidden;
+      position:relative;
+    }
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .introTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #ffe4e6;
+      text-shadow: var(--shadowR);
+      font-size: 13px;
+    }
+    .introTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+      max-width: 110ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      font-size: 12px;
+      min-height: 190px;
+      max-height: min(50vh, 520px);
+      overflow:auto;
+    }
+    .introActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{ font-size:12px; color: rgba(219,234,254,.62); }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(239,68,68,.25);
+      background: rgba(239,68,68,.08);
+      color: #ffe4e6;
+    }
+
+    /* “Punishment” banner */
+    .alarm{
+      position: fixed;
+      left: 12px; right: 12px; bottom: 12px;
+      z-index: 80;
+      border-radius: 16px;
+      border: 1px solid rgba(239,68,68,.24);
+      background: rgba(2,6,23,.70);
+      box-shadow: var(--shadowR);
+      padding: 10px 12px;
+      display:none;
+      gap: 10px;
+      align-items:flex-start;
+      backdrop-filter: blur(8px);
+    }
+    .alarm b{
+      color: rgba(255,220,220,.96);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size: 12px;
+    }
+    .alarm p{
+      margin: 4px 0 0;
+      color: rgba(219,234,254,.72);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    /* Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce){
+      .noise, .flicker, .crt::after{ animation:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <!-- Watermark -->
+    <div class="wm" aria-hidden="true">
+      <div class="wmGrid" id="wmGrid"></div>
+    </div>
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="title">S.A.S / Manual • Como conseguir Rituais (HARD+) • Anti-vazamento ativo</div>
+          <div class="sub">
+            Este arquivo é <span class="badge b-anti">anti-cópia</span> e <span class="badge b-hard">punitivo</span>.
+            Tentativas de exportação degradam legibilidade e ativam sanções de leitura (bloqueio/névoa/queima de sessão).
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>FILE: RITUAL_ACQUISITION_HARD+</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="contentMask" id="mask" aria-hidden="true"></div>
+      <div class="contentFog" id="fog" aria-hidden="true"></div>
+
+      <div class="toolbar">
+        <div class="k">HARD+ / LEAK-PROTECTION</div>
+        <div class="actions">
+          <button class="ghost" id="btnNoise" type="button">Ruído</button>
+          <button class="ghost" id="btnPanic" type="button">Pânico</button>
+          <button class="btn" id="btnRead" type="button">Modo: COMPACTO</button>
+          <button class="ghost" id="btnTop" type="button">Topo</button>
+        </div>
+      </div>
+
+      <div class="wrap" id="wrap">
+
+        <!-- LEFT PANEL: doctrine / prerequisites -->
+        <section class="panel">
+          <div class="panelHead">
+            <div class="h">Doutrina (não “tutorial”)</div>
+            <div class="chips">
+              <span class="chip"><b>chave</b> encaixe</span>
+              <span class="chip"><b>custo</b> identidade</span>
+              <span class="chip"><b>regra</b> prova</span>
+            </div>
+          </div>
+          <div class="panelBody" id="leftScroll">
+            <div class="kv">
+              <div class="k">Axioma do Aprendizado Invertido</div>
+              <div class="v">
+                Ritual não é técnica. É uma função que exige suporte humano para existir sem colapsar.<br/>
+                “Conseguir” um ritual = tornar-se <span class="mono">compatível</span> para que o Outro Lado escreva uma execução dentro de você.
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Regra de Ouro (punitiva)</div>
+              <div class="v">
+                Quanto mais “seguro” você tenta deixar, mais ele tenta te substituir.<br/>
+                O protocolo HARD+ assume que todo candidato é um vetor de vazamento até prova em contrário.
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Tríade obrigatória (sem exceção)</div>
+              <div class="v">
+                <span class="mono">Débito</span>: algo que te prende ao real (perda, voto, culpa, dívida real).<br/>
+                <span class="mono">Gramática</span>: hábitos repetíveis que te tornam legível (sono, escrita, contagem, rotas).<br/>
+                <span class="mono">Testemunha</span>: registro que não perdoa mentira (fita, lacre, contrato, livro vivo).
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">O que torna HARD+ “difícil de propósito”</div>
+              <div class="v">
+                - Proíbe “aprendizado direto”: só por fragmentos.<br/>
+                - Exige prova externa (testemunha) e ainda assim suspeita dela.<br/>
+                - Penaliza repetição excessiva: o ritual aprende o seu padrão e passa a antecipar.<br/>
+                - Força janelas curtas: exposição prolongada vira convite.
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Antivazamento (conceitual)</div>
+              <div class="v">
+                Um ritual é um segredo que quer ser executado. Vazamento não é “informação saindo”; é a função
+                encontrando um host mais fácil.<br/>
+                O protocolo bloqueia a migração por: <span class="mono">ruído</span>, <span class="mono">teto</span>, <span class="mono">descontinuidade</span> e <span class="mono">punição</span>.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT PANEL: steps / punishments -->
+        <section class="panel">
+          <div class="panelHead">
+            <div class="h">Procedimento (7 etapas + sanções)</div>
+            <div class="chips">
+              <span class="chip"><b>etapas</b> 7</span>
+              <span class="chip"><b>sanções</b> 6</span>
+              <span class="chip"><b>falhas</b> automáticas</span>
+            </div>
+          </div>
+          <div class="panelBody" id="rightScroll">
+            <div class="kv">
+              <div class="k">Etapa 1: Nomear sem dizer</div>
+              <div class="v">
+                Apelido privado + prova na testemunha. Se você “explica”, vira recipiente total do conceito.<br/>
+                HARD+: o apelido deve conter um <span class="mono">erro intencional</span> (para detectar cópia perfeita).
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Etapa 2: Invariantes (somente 2)</div>
+              <div class="v">
+                Escolha 2 invariantes fixos. Se escolher 3+, você está tentando “domar” demais e o ritual responde com deriva.<br/>
+                Ex.: contagem 13 + direção única. O resto deve variar de propósito.
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Etapa 3: Impedância (resistência)</div>
+              <div class="v">
+                Aumentar resistência para não entrar “com força”.<br/>
+                HARD+: a impedância deve ser desconfortável (privação controlada, ruído, quebra de espelho, escrita repetitiva),
+                mas <span class="warn">nunca</span> heroica (heroísmo vira porta).
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Etapa 4: Fragmento (fonte contaminada)</div>
+              <div class="v">
+                Um símbolo incompleto, um sonho sujo, um objeto já tocado pelo princípio.<br/>
+                HARD+: fragmento deve ser obtido por <span class="mono">Relé</span> (handoff entre 2 portadores), para reduzir captura direta.
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Etapa 5: Teto (contrato de execução limitada)</div>
+              <div class="v">
+                Defina “quantas vezes”, “em quais condições”, “o que é proibido”.<br/>
+                HARD+: teto com cláusula de <span class="mono">quebra</span>: ao menor sinal de deriva, o ciclo é interrompido e a gramática muda por 14 dias.
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Etapa 6: Primeira execução (para medir deriva)</div>
+              <div class="v">
+                Se o resultado vier “perfeito”, suspeitar de substituição.<br/>
+                HARD+: repetir apenas 1 vez (nunca três). Três cria padrão e padrão cria predador.
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Etapa 7: Auditoria (cicatriz obrigatória)</div>
+              <div class="v">
+                Marca deve existir: sono, linguagem, reflexo, compulsão, medo específico.<br/>
+                Se não existir, ou não fixou, ou fixou na testemunha (pior cenário).
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Sanções por violação (automáticas)</div>
+              <div class="v">
+                - <span class="danger">V1: Copiar/selecionar</span> → névoa + blur progressivo (sessão degradada).<br/>
+                - <span class="danger">V2: Print Screen</span> → blackout temporário + watermark agressivo.<br/>
+                - <span class="warn">V3: Troca de aba</span> → reduzir exposição (conteúdo “some”).<br/>
+                - <span class="danger">V4: DevTools</span> (suspeita) → queima de sessão (trava por tempo).<br/>
+                - <span class="warn">V5: Exposição longa</span> → texto começa a apagar (memória).<br/>
+                - <span class="danger">V6: Repetição de scroll</span> → ruído e “embaralhamento” (ilegibilidade).
+              </div>
+            </div>
+
+            <div class="kv">
+              <div class="k">Nota de severidade</div>
+              <div class="v">
+                O anti-vazamento abaixo é “in-world” e também prático (impede cópia casual), mas nada em HTML impede 100% captura por câmera.<br/>
+                No cânone, a punição “de verdade” é a deriva: o ritual segue o vazamento até o próximo host.
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <div class="alarm" id="alarm" role="status" aria-live="polite">
+      <div>
+        <b id="alarmTitle">SANÇÃO</b>
+        <p id="alarmMsg">—</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução Anti-vazamento">
+    <div class="introCard">
+      <div class="introTop">
+        <div>
+          <div class="h">SARCOPHAGUS / LEAK-PROTECTED</div>
+          <div class="s">
+            Este arquivo degrada quando detecta sinais de extração. Leia rápido, memorize pouco, registre na testemunha certa.
+            Atalhos abaixo.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>MODE: HARD+</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="introActions">
+        <button class="btn" id="btnEnter" type="button">Entrar</button>
+        <div class="kbd">
+          Atalhos: <code>Enter</code> entrar • <code>R</code> leitura • <code>/</code> ruído • <code>P</code> pânico • <code>T</code> topo
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const typebox = document.getElementById("typebox");
+    const btnEnter = document.getElementById("btnEnter");
+    const btnNoise = document.getElementById("btnNoise");
+    const btnTop = document.getElementById("btnTop");
+    const btnRead = document.getElementById("btnRead");
+    const btnPanic = document.getElementById("btnPanic");
+    const leftScroll = document.getElementById("leftScroll");
+    const rightScroll = document.getElementById("rightScroll");
+    const wrap = document.getElementById("wrap");
+
+    const alarm = document.getElementById("alarm");
+    const alarmTitle = document.getElementById("alarmTitle");
+    const alarmMsg = document.getElementById("alarmMsg");
+
+    const wmGrid = document.getElementById("wmGrid");
+
+    let compact = true;
+
+    // Anti-leak state
+    let strikes = 0;             // violations
+    let fog = 0;                 // 0..1
+    let blur = 0;                // px
+    let exposure = 1;            // 0..1
+    let sessionLocked = false;
+
+    // Exposure timer: prolonged reading increases fog slowly (punitive)
+    let exposureSeconds = 0;
+    let exposureTimer = null;
+
+    // --- Utility UI ---
+    function setVars(scan, noise, flick, shake){
+      document.documentElement.style.setProperty("--scan-opacity", scan);
+      document.documentElement.style.setProperty("--noise-opacity", noise);
+      document.documentElement.style.setProperty("--flicker", flick);
+      document.documentElement.style.setProperty("--shake", shake);
+    }
+    function pulse(){
+      const scan = (0.08 + Math.random()*0.12).toFixed(2);
+      const noise = (0.05 + Math.random()*0.09).toFixed(2);
+      const flick = (0.04 + Math.random()*0.07).toFixed(3);
+      const shake = (Math.random() < 0.10) ? ((Math.random() * 2 - 1).toFixed(1) + "px") : "0px";
+      setVars(scan, noise, flick, shake);
+      setTimeout(() => setVars(".11",".07",".050","0px"), 900);
+    }
+
+    function banner(title, msg){
+      alarmTitle.textContent = title;
+      alarmMsg.textContent = msg;
+      alarm.style.display = "flex";
+      setTimeout(() => alarm.style.display = "none", 3400);
+    }
+
+    function applyPenalty(){
+      document.documentElement.style.setProperty("--fog", String(fog.toFixed(2)));
+      document.documentElement.style.setProperty("--blur", blur.toFixed(1) + "px");
+      document.documentElement.style.setProperty("--exposure", String(exposure.toFixed(2)));
+    }
+
+    function strike(kind){
+      if (sessionLocked) return;
+
+      strikes++;
+      pulse();
+
+      // Scale penalties hard
+      fog = Math.min(1, fog + 0.18);
+      blur = Math.min(8, blur + 1.8);
+      exposure = Math.max(0, exposure - 0.22);
+
+      applyPenalty();
+
+      if (kind === "COPY"){
+        banner("V1: EXTRAÇÃO", "Seleção/cópia detectada. Sessão degradada.");
+      } else if (kind === "PRINT"){
+        banner("V2: CAPTURA", "Tentativa de print/captura. Blackout parcial ativado.");
+      } else if (kind === "BLUR"){
+        banner("V3: DESVIO", "Troca de foco/aba. Exposição reduzida.");
+      } else if (kind === "DEV"){
+        banner("V4: INTRUSÃO", "Sinais de inspeção. Queima de sessão iminente.");
+      } else if (kind === "TIME"){
+        banner("V5: EXPOSIÇÃO", "Exposição prolongada. Conteúdo se torna ilegível.");
+      } else {
+        banner("SANÇÃO", "Violação registrada.");
+      }
+
+      // If too many strikes: lock the session temporarily (punitive)
+      if (strikes >= 4){
+        lockSession(45 + strikes * 10);
+      }
+    }
+
+    function lockSession(seconds){
+      sessionLocked = true;
+      exposure = 0; // blackout
+      fog = 1; blur = 8;
+      applyPenalty();
+      banner("QUEIMA DE SESSÃO", "Leitura bloqueada por " + seconds + "s. Reabra depois.");
+      let left = seconds;
+      const t = setInterval(() => {
+        left--;
+        if (left <= 0){
+          clearInterval(t);
+          // Restore partially but keep punishments (hard mode)
+          sessionLocked = false;
+          exposure = 0.72;
+          applyPenalty();
+          banner("RETORNO", "Sessão restaurada. Penalidades persistem.");
+        }
+      }, 1000);
+    }
+
+    // Watermark builder (dynamic)
+    function buildWatermark(){
+      const now = new Date();
+      const stamp = now.toISOString().slice(0,19).replace("T"," ");
+      const fingerprint = [
+        navigator.platform || "platform",
+        navigator.language || "lang",
+        (screen.width + "x" + screen.height),
+      ].join(" • ");
+
+      wmGrid.innerHTML = "";
+      for (let i=0;i<30;i++){
+        const d = document.createElement("div");
+        d.className = "wmItem";
+        d.textContent = "S.A.S • LEAK-PROTECTED • " + stamp + " • " + fingerprint;
+        wmGrid.appendChild(d);
+      }
+    }
+
+    // Fit-to-screen toggle (compact vs legible)
+    function updateReadMode(){
+      compact = !compact;
+      if (compact){
+        document.documentElement.style.setProperty("--fz","12px");
+        document.documentElement.style.setProperty("--fzSmall","11px");
+        document.documentElement.style.setProperty("--line","1.45");
+        document.documentElement.style.setProperty("--pad","10px");
+        document.documentElement.style.setProperty("--padSmall","9px");
+        btnRead.textContent = "Modo: COMPACTO";
+      } else {
+        document.documentElement.style.setProperty("--fz","13px");
+        document.documentElement.style.setProperty("--fzSmall","12px");
+        document.documentElement.style.setProperty("--line","1.55");
+        document.documentElement.style.setProperty("--pad","12px");
+        document.documentElement.style.setProperty("--padSmall","10px");
+        btnRead.textContent = "Modo: LEGÍVEL";
+      }
+      pulse();
+    }
+
+    function panic(){
+      // “Pânico”: reduz exposição e embaralha a leitura (in-world), útil se alguém encostar
+      exposure = Math.max(0, exposure - 0.55);
+      fog = Math.min(1, fog + 0.30);
+      blur = Math.min(8, blur + 2.4);
+      applyPenalty();
+      pulse();
+      banner("PÂNICO", "Exposição reduzida. Se necessário, feche a aba.");
+      setTimeout(() => {
+        // partially recover but keep some fog
+        exposure = Math.min(1, exposure + 0.25);
+        applyPenalty();
+      }, 1600);
+    }
+
+    // Intro typing
+    const boot = [
+      "[S.A.S] file: como-conseguir-rituais.html",
+      "[S.A.S] class: HARD+ / anti-vazamento",
+      "",
+      "LEIA POUCO. PROVE MUITO.",
+      "CÓPIA = MIGRAÇÃO. MIGRAÇÃO = SUBSTITUIÇÃO.",
+      "",
+      "VIOLAÇÕES degradam a sessão automaticamente.",
+      "Pressione ENTER."
+    ];
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        setTimeout(tick, 25 + Math.random()*80);
+      };
+      tick();
+    }
+
+    function closeIntro(){
+      intro.style.display = "none";
+      pulse();
+      // Start exposure timer after entering
+      exposureTimer = setInterval(() => {
+        exposureSeconds++;
+        // After 90s, begin punitive fog; after 180s, heavier
+        if (exposureSeconds === 90) strike("TIME");
+        if (exposureSeconds > 90 && exposureSeconds % 30 === 0){
+          fog = Math.min(1, fog + 0.06);
+          blur = Math.min(8, blur + 0.35);
+          applyPenalty();
+        }
+      }, 1000);
+    }
+
+    // --- Anti-leak event hooks ---
+    // Block context menu
+    window.addEventListener("contextmenu", (e) => { e.preventDefault(); strike("COPY"); });
+
+    // Block copy/cut/paste and detect
+    ["copy","cut","paste"].forEach(evt => {
+      window.addEventListener(evt, (e) => { e.preventDefault(); strike("COPY"); });
+    });
+
+    // Detect selection attempt (mouse up / touch end)
+    window.addEventListener("mouseup", () => {
+      const sel = window.getSelection ? String(window.getSelection()) : "";
+      if (sel && sel.length > 0) strike("COPY");
+    });
+    window.addEventListener("touchend", () => {
+      const sel = window.getSelection ? String(window.getSelection()) : "";
+      if (sel && sel.length > 0) strike("COPY");
+    });
+
+    // Blur/visibility changes reduce exposure
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden){
+        exposure = Math.max(0, exposure - 0.25);
+        applyPenalty();
+        strike("BLUR");
+      }
+    });
+    window.addEventListener("blur", () => { strike("BLUR"); });
+
+    // Print-screen detection is unreliable; approximate via key combos
+    window.addEventListener("keydown", (e) => {
+      if (intro.style.display !== "none") {
+        if (e.key === "Enter") closeIntro();
+        return;
+      }
+      if (e.key === "/"){ e.preventDefault(); pulse(); }              // “ruído”
+      if (e.key.toLowerCase() === "p"){ e.preventDefault(); panic(); } // “pânico”
+      if (e.key.toLowerCase() === "t"){
+        leftScroll.scrollTop = 0;
+        rightScroll.scrollTop = 0;
+      }
+      if (e.key.toLowerCase() === "r"){
+        e.preventDefault();
+        updateReadMode();
+      }
+
+      // Most common capture combos (best-effort)
+      if (e.key === "PrintScreen"){ e.preventDefault(); strike("PRINT"); }
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && ["s","p","i","c"].includes(e.key.toLowerCase())){
+        // ctrl+shift+s (snip), ctrl+shift+i (dev), ctrl+shift+p (print dialog in some browsers)
+        e.preventDefault();
+        if (e.key.toLowerCase() === "i") strike("DEV");
+        else strike("PRINT");
+      }
+      if ((e.ctrlKey || e.metaKey) && ["c","s","p","u"].includes(e.key.toLowerCase())){
+        // ctrl+c, ctrl+s, ctrl+p, ctrl+u
+        e.preventDefault();
+        if (e.key.toLowerCase() === "u") strike("DEV");
+        else strike("COPY");
+      }
+      if (e.key === "F12"){ e.preventDefault(); strike("DEV"); }
+    });
+
+    // Punish “scroll grinding” (repetição de padrão)
+    let scrollTicks = 0;
+    function punishScroll(){
+      scrollTicks++;
+      if (scrollTicks % 22 === 0){
+        fog = Math.min(1, fog + 0.05);
+        applyPenalty();
+      }
+      if (scrollTicks === 66){
+        strike("TIME");
+      }
+    }
+    leftScroll.addEventListener("scroll", punishScroll, { passive:true });
+    rightScroll.addEventListener("scroll", punishScroll, { passive:true });
+
+    // Toolbar actions
+    btnNoise.addEventListener("click", pulse);
+    btnTop.addEventListener("click", () => { leftScroll.scrollTop = 0; rightScroll.scrollTop = 0; });
+    btnRead.addEventListener("click", () => updateReadMode());
+    btnPanic.addEventListener("click", () => panic());
+
+    btnEnter.addEventListener("click", closeIntro);
+
+    // Init
+    typeBoot();
+    buildWatermark();
+    applyPenalty();
+
+    // Refresh watermark periodically (harder to reuse screenshots)
+    setInterval(buildWatermark, 8000);
+  </script>
+</body>
+</html>

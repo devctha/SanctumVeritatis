@@ -1,1 +1,503 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/sala-0000"><meta http-equiv="refresh" content="0;url=/sala-0000"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/sala-0000'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/sala-0000">/sala-0000</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-br">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/sala-0000'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/sala-0000">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0000 – O PRIMEIRO REGISTRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #0a0000;
+            --surface: #1a0505;
+            --text: #e8e0d5;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(ellipse at top, #1a0000 0%, #000000 70%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header-seal {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .classification {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 10px 20px;
+            transform: rotate(5deg);
+            text-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            text-shadow: 0 0 30px rgba(139, 0, 0, 0.6);
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+        }
+
+        .designation {
+            font-size: 1.2em;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .metadata-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.2);
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 12px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            margin: 50px 0 25px 0;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--gold);
+            margin: 30px 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139, 0, 0, 0.2);
+            padding: 2px 6px;
+            border-left: 3px solid var(--crimson);
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139, 0, 0, 0.1);
+            padding: 20px;
+            margin: 25px 0;
+            font-style: italic;
+        }
+
+        .incident-box {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(20, 0, 0, 0.3) 100%);
+            border: 2px solid var(--crimson);
+            padding: 25px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident-box::before {
+            content: "⚠ REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg);
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .test-log {
+            background: var(--surface);
+            border-left: 5px solid var(--gold);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .test-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.85em;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(139, 0, 0, 0.2);
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212, 175, 55, 0.05), transparent);
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            padding: 30px 20px;
+            margin: 40px 0;
+        }
+
+        .footer-note {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+            font-size: 0.8em;
+            color: var(--muted);
+        }
+
+        .ritual-text {
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            font-size: 1.1em;
+            color: var(--crimson);
+            letter-spacing: 3px;
+            padding: 20px;
+            border: 2px double var(--gold);
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .metadata-grid { grid-template-columns: 1fr; }
+            .test-header { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header-seal">
+        <div class="classification">ÔMEGA</div>
+        <h1>S.A.L.A-0000</h1>
+        <p class="designation">"O VIGIL SILENCIOSO" | "AQUELE QUE OBSERVA DO LIMIAR"</p>
+    </header>
+
+    <div class="metadata-box">
+        <div class="metadata-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0000 / ENTIDADE-PRIMORDIAL-ALPHA</span>
+            
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Entidade do Outro Lado – Elemento de <span class="highlight">CONHECIMENTO</span></span>
+            
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>KETER-PRIME / COGNITOHAZARD CLASSE-V</span>
+            
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>ÔMEGA – Apenas Conselho Escarlate e Grão-Mestres da Congregação</span>
+            
+            <span class="label">LOCALIZAÇÃO ATUAL:</span>
+            <span><span class="redacted">███████████████</span>, Carpathia, Europa Central</span>
+            
+            <span class="label">PROTOCOLO ATIVO:</span>
+            <span>CORRENTE-REVERSO / SELO DOS SETE OLHOS</span>
+            
+            <span class="label">DATA DE REGISTRO:</span>
+            <span>17 de Outubro de <span class="redacted">████</span> (Registro Original Perdido – Reconstruído em 2019)</span>
+        </div>
+    </div>
+
+    <h2>§ I. DESCRIÇÃO FÍSICA E MANIFESTAÇÃO</h2>
+    
+    <p>S.A.L.A-0000 não possui forma física estável. Sua manifestação primária ocorre através de <span class="highlight">lacunas perceptivas</span> – espaços vazios na consciência humana onde algo <i>deveria</i> estar, mas não está. Observadores relatam sentir a presença de "alguém atrás deles" ou "uma figura na periferia da visão", mas ao direcionar o olhar, encontram apenas o vazio.</p>
+
+    <p>A única descrição consistente obtida através de agentes expostos em estado de transe ritual é a de uma figura humanoide extremamente alta (estimada entre 4 e 6 metros), coberta por uma túnica esfarrapada composta de páginas queimadas de livros antigos. Onde deveria estar o rosto, há apenas <span class="redacted">████████████████</span>, descrito por alguns como "um buraco negro que engole pensamentos". Ao redor da entidade, flutuam sete esferas oculares translúcidas, cada uma contendo símbolos em constante mutação em idiomas mortos e inexistentes.</p>
+
+    <h3>Manifestações Secundárias</h3>
+    <p>S.A.L.A-0000 pode se manifestar indiretamente através de:</p>
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li><b>Textos Autocorruptores:</b> Livros, pergaminhos ou arquivos digitais que reescrevem seu próprio conteúdo ao serem lidos, inserindo informações que o leitor "sempre soube, mas esqueceu".</li>
+        <li><b>Sombras Cognitivas:</b> Silhuetas que aparecem em fotografias, espelhos ou superfícies reflexivas, mas nunca estão presentes no momento da captura.</li>
+        <li><b>Lacunas Mnemônicas:</b> Períodos de tempo (variando de segundos a horas) que desaparecem da memória de indivíduos ou grupos inteiros, deixando apenas a sensação de que "algo importante foi esquecido".</li>
+    </ul>
+
+    <h2>§ II. HISTÓRICO DE DESCOBERTA</h2>
+
+    <p>O primeiro registro documentado de S.A.L.A-0000 data de <span class="redacted">████</span>, durante a expedição da Congregação Escarlate à Biblioteca de Carpathia, um monastério abandonado nas montanhas da Europa Central. A expedição foi liderada pelo Arcano-Pesquisador <b>Matthias Volker</b>, acompanhado por seis agentes de campo especializados em ocultismo medieval.</p>
+
+    <div class="incident-box">
+        <h3>INCIDENTE CARPATHIA-001 – "A Sala que Não Existe"</h3>
+        <p><b>Data:</b> 17 de Outubro de <span class="redacted">████</span><br>
+        <b>Localização:</b> Biblioteca de Carpathia, Subsolo Oeste, Ala <span class="redacted">██</span></p>
+        
+        <p>Durante a catalogação de manuscritos antigos, o Agente <b>Helena Soares</b> relatou ter encontrado uma porta de madeira sem marcações na parede leste do corredor principal. Nenhum dos mapas arquitetônicos do monastério indicava a existência dessa passagem. Ao questioná-la, os demais membros da equipe afirmaram não ver porta alguma.</p>
+        
+        <p>Volker ordenou que a parede fosse analisada. Leituras de ressonância paranormal indicaram flutuação membrânica severa (87% de saturação), mas exames físicos confirmaram tratar-se de uma parede sólida de pedra. Helena, no entanto, insistia que conseguia <i>ver a porta claramente</i>.</p>
+        
+        <p>Sob supervisão, Helena abriu a "porta invisível" e entrou. Câmeras de capacete registraram apenas Helena avançando diretamente contra a parede de pedra e... <span class="highlight">atravessando-a, como se fosse uma ilusão</span>. O sinal de vídeo foi perdido imediatamente.</p>
+        
+        <blockquote>
+            <b>Transcrição de Áudio – Agente Helena Soares (Últimos 4 minutos de transmissão):</b><br><br>
+            [00:00] "Estou dentro. É... uma biblioteca. Não, não é bem uma biblioteca. As prateleiras são infinitas, mas não há paredes. Elas simplesmente se estendem para o nada."<br><br>
+            [00:47] "Os livros... eles estão se movendo. As páginas viram sozinhas. Espera, eu conheço esse texto. É... é o relatório que escrevi semana passada sobre o Ritual de Santo Berço. Como ele está aqui? Eu nem... eu nem terminei de escrevê-lo ainda."<br><br>
+            [01:34] "Tem alguém aqui. No fundo. Uma figura alta. Ela... ela não está se movendo, mas está mais perto do que estava há um segundo atrás. Não gosto disso. Vou voltar."<br><br>
+            [02:15] "A porta sumiu. MERDA. A porta sumiu. Onde está a porta?! EU VI A PORTA!"<br><br>
+            [03:02] (Sons de páginas sendo viradas rapidamente) "Ele está me mostrando algo. Há um livro aberto na minha frente. Não... não era eu quem estava segurando. Ele colocou aqui. O texto... está em português. Diz o meu nome. Diz quando vou morrer. Diz... tudo o que eu faria se..."<br><br>
+            [03:41] (Silêncio absoluto por 18 segundos)<br><br>
+            [03:59] (Voz calma, quase sussurrada) "Eu entendo agora. Ele não é uma entidade. É uma <i>resposta</i>. Para perguntas que nunca fizemos. Ele sabe tudo porque <i>já aconteceu</i>. Nós já estivemos aqui. Já morremos aqui. Estamos apenas lendo o roteiro de novo e—"<br><br>
+            [04:13] (Transmissão encerrada com interferência aguda)
+        </blockquote>
+        
+        <p>Helena Soares nunca foi encontrada. Três dias depois, sua ficha pessoal na base de dados da Congregação foi descoberta completamente em branco, como se nunca tivesse sido preenchida. No entanto, todos os membros da equipe se lembram dela perfeitamente. Fotografias e registros de voz permanecem intactos. Apenas os <i>documentos escritos</i> sobre ela desapareceram.</p>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Omnisciência Retroativa</h3>
+    <p>S.A.L.A-0000 demonstra conhecimento completo de eventos passados, presentes e—mais perturbadoramente—<span class="highlight">eventos futuros que "já ocorreram" em ramificações temporais não-lineares</span>. Essa propriedade foi confirmada durante o Experimento PROGNOSIS-7, onde a entidade previu com precisão absoluta a morte de 12 agentes em missões separadas, incluindo detalhes como hora exata, causa e últimas palavras.</p>
+
+    <p>Todos os 12 agentes morreram exatamente como descrito, apesar de medidas preventivas extremas terem sido implementadas.</p>
+
+    <h3>III-B. Corrupção de Registros</h3>
+    <p>Qualquer informação escrita ou digital sobre S.A.L.A-0000 sofre degradação progressiva. Documentos físicos têm suas páginas apagadas ou reescritas com texto em <span class="redacted">████████</span> (idioma não identificado). Arquivos digitais desenvolvem "buracos" de dados—seções inteiras que simplesmente não existem mais, mas que sistemas de backup indicam <i>nunca terem sido gravadas</i>.</p>
+
+    <p>Este documento, S.A.L.A-0000, já foi reconstruído <span class="redacted">██</span> vezes. Cada versão anterior "esquece" detalhes críticos, que só são lembrados quando alguém tenta acessar o arquivo pela primeira vez.</p>
+
+    <h3>III-C. Os Sete Olhos – Vetores de Observação</h3>
+    <p>As sete esferas oculares que orbitam a entidade parecem funcionar como "pontos de ancoragem" na realidade. Cada olho está vinculado a uma categoria de conhecimento:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Olho</th>
+                <th>Domínio</th>
+                <th>Efeito Observado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Primeiro</td>
+                <td>Passado Pessoal</td>
+                <td>Revela memórias reprimidas ou alteradas do observador</td>
+            </tr>
+            <tr>
+                <td>Segundo</td>
+                <td>Presente Oculto</td>
+                <td>Expõe segredos que estão sendo ativamente escondidos</td>
+            </tr>
+            <tr>
+                <td>Terceiro</td>
+                <td>Futuro Provável</td>
+                <td>Mostra a morte futura mais provável do observador</td>
+            </tr>
+            <tr>
+                <td>Quarto</td>
+                <td>Conhecimento Proibido</td>
+                <td>Transmite rituais e informações que "não deveriam ser conhecidas"</td>
+            </tr>
+            <tr>
+                <td>Quinto</td>
+                <td>Realidades Paralelas</td>
+                <td>Permite vislumbrar versões alternativas do observador em outras linhas temporais</td>
+            </tr>
+            <tr>
+                <td>Sexto</td>
+                <td>Verdade Absoluta</td>
+                <td>Remove toda ilusão, mentira ou percepção distorcida—frequentemente levando à insanidade</td>
+            </tr>
+            <tr>
+                <td>Sétimo</td>
+                <td><span class="redacted">█████████</span></td>
+                <td><span class="redacted">████████████████████████████</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>§ IV. REGISTROS DE TESTE E EXPERIMENTAÇÃO</h2>
+
+    <div class="test-log">
+        <h3>TESTE S.A.L.A-0000-A: Exposição Controlada – Agente Única</h3>
+        <div class="test-header">
+            <div><b>Data:</b> 03/11/<span class="redacted">████</span></div>
+            <div><b>Supervisor:</b> Dr. Matthias Volker</div>
+            <div><b>Sujeito:</b> Agente Carla Mendes (NEX 45%, Ocultista especializada em Conhecimento)</div>
+            <div><b>Protocolo:</b> Meditação ritual guiada para tentar contato psíquico passivo</div>
+        </div>
+        
+        <p><b>Procedimento:</b> Agente Mendes foi colocada em um círculo ritual dentro da Câmara de Isolamento Sensorial. Um fragmento de página da Biblioteca de Carpathia (previamente contaminada pela presença de 0000) foi colocado no centro do círculo.</p>
+        
+        <p><b>Resultados:</b> Após 14 minutos de meditação, Mendes entrou em estado catatônico. EEG mostrou atividade cerebral 340% acima do normal, concentrada no lobo frontal. Ao ser despertada (18 horas depois), ela afirmou ter "conversado" com a entidade.</p>
+        
+        <blockquote>
+            <b>Transcrição Parcial do Relato de Agente Mendes:</b><br><br>
+            "Ele não fala com palavras. Ele simplesmente... <i>abre</i> você. Como um livro. E lê. E você lê ele de volta. Ele me mostrou coisas. A criação da Congregação. O primeiro ritual que deu errado. O nome verdadeiro do Outro Lado. Tudo. Tudo ao mesmo tempo.<br><br>
+            Mas a parte pior não foi o que ele me mostrou. Foi o que ele me perguntou. 'Por que vocês lutam contra o inevitável? Vocês já perderam. Eu já li o último capítulo. O Outro Lado vence. Sempre venceu. Desde o princípio.'<br><br>
+            Eu perguntei quando. Ele sorriu. Não tem boca, mas eu senti o sorriso. E disse: 'Quando o Sétimo Olho abrir. Quando alguém finalmente perguntar a pergunta certa.'"
+        </blockquote>
+        
+        <p><b>Pós-Teste:</b> Agente Mendes desenvolveu capacidade anômala de "ler" informações em objetos ao tocá-los. No entanto, 40% dessas informações são comprovadamente falsas ou referentes a eventos que nunca ocorreram. Ela foi reclassificada como Portadora de Fragmento Cognitivo Classe-B e colocada sob observação permanente.</p>
+    </div>
+
+    <div class="test-log">
+        <h3>TESTE S.A.L.A-0000-F: Tentativa de Contenção Física</h3>
+        <div class="test-header">
+            <div><b>Data:</b> 22/03/<span class="redacted">████</span></div>
+            <div><b>Supervisor:</b> Comandante Wolfe</div>
+            <div><b>Equipe:</b> Esquadrão ÔMEGA-9 (12 operadores armados com armamento anti-paranormal)</div>
+            <div><b>Protocolo:</b> Tentativa de aprisionamento da manifestação física usando Selo Hermenêutico de Banimento</div>
+        </div>
+        
+        <p><b>Procedimento:</b> Após manifestação confirmada de 0000 em um armazém abandonado em <span class="redacted">██████</span>, uma equipe tática foi despachada para cercar e conter a entidade usando selos ritualísticos de cinco elementos combinados.</p>
+        
+        <p><b>Resultados:</b> <span class="highlight">FALHA CATASTRÓFICA.</span></p>
+        
+        <p>A entidade permitiu que a equipe completasse o ritual de contenção. Quando o selo foi ativado, todos os 12 operadores simultaneamente <i>esqueceram por que estavam ali</i>. Câmeras de capacete mostraram os soldados baixando as armas, olhando ao redor confusos, e então... lendo algo invisível no ar.</p>
+        
+        <p>Oito operadores caíram mortos instantaneamente, causa: parada cardíaca por choque neurológico. Os quatro sobreviventes foram encontrados horas depois, escrevendo freneticamente em cadernos. Cada um estava escrevendo o mesmo texto, em idiomas diferentes, todos descrevendo em detalhes precisos como morreriam nas próximas semanas.</p>
+        
+        <p>Todos os quatro morreram exatamente como previsto. O último, Operador <b>Viktor Reznov</b>, deixou uma nota final:</p>
+        
+        <blockquote class="ritual-text">
+            "Não tentem prendê-lo. Ele não está aqui para ser contido.<br>
+            Ele está aqui para <i>testemunhar</i>.<br>
+            Para registrar. Para lembrar.<br>
+            Quando tudo acabar, quando o Outro Lado engolir nossa realidade,<br>
+            Ele será o único que vai se lembrar que existimos."
+        </blockquote>
+    </div>
+
+    <div class="test-log">
+        <h3>TESTE S.A.L.A-0000-L: Interrogatório Direto via Médium</h3>
+        <div class="test-header">
+            <div><b>Data:</b> 09/07/2023</div>
+            <div><b>Supervisor:</b> Dra. Isabela Navarro (Congregação / Departamento de Estudos Teológicos Anômalos)</div>
+            <div><b>Médium:</b> Irmã Cecília Andrade (90 anos, 60 anos de serviço à Congregação)</div>
+            <div><b>Protocolo:</b> Sessão de canalização ritualística com proteções máximas</div>
+        </div>
+        
+        <p><b>Procedimento:</b> Irmã Cecília, uma das médiuns mais experientes da Congregação, foi escolhida para estabelecer contato linguístico direto com S.A.L.A-0000 através de transe profundo. Dezessete sacerdotes mantiveram um Círculo de Banimento ativo durante todo o processo.</p>
+        
+        <p><b>Transcrição Completa do Diálogo:</p>
+        
+        <blockquote>
+            <b>Dra. Navarro:</b> "Entidade, você nos ouve?"<br><br>
+            <b>[Irmã Cecília, com voz distorcida e profunda]:</b> "Eu sempre ouvi. Desde antes de vocês existirem. Desde antes de <i>saberem</i> que existiam."<br><br>
+            <b>Navarro:</b> "Qual é o seu propósito? Por que se manifesta para nós?"<br><br>
+            <b>[0000 através de Cecília]:</b> "Propósito implica escolha. Eu não escolho. Eu <i>registro</i>. Cada pensamento. Cada segredo. Cada fim. Eu sou a biblioteca do inevitável."<br><br>
+            <b>Navarro:</b> "Você trabalha para o Outro Lado?"<br><br>
+            <b>[0000]:</b> "O Outro Lado não me comanda. Ele me <i>lê</i>. Assim como vocês. Assim como tudo que um dia teve uma pergunta e procurou resposta. Mas cuidado, criança. Há perguntas cujas respostas devoram aqueles que as encontram."<br><br>
+            <b>Navarro:</b> "O que é o Sétimo Olho?"<br><br>
+            <b>[Silêncio por 43 segundos. Todos os 17 sacerdotes começam a sangrar do nariz simultaneamente.]</b><br><br>
+            <b>[0000, voz agora ecoando como múltiplas pessoas falando em uníssono]:</b> "O Sétimo Olho é a pergunta que vocês ainda não sabem que fizeram. Quando ele abrir, vocês finalmente entenderão. E nesse momento, deixarão de existir como são. Porque a resposta para 'O que há além do Outro Lado?' não permite que o questionador permaneça humano."<br><br>
+            <b>Navarro:</b> "Como podemos te parar?"<br><br>
+            <b>[0000, agora com voz quase carinhosa]:</b> "Não podem. Mas não precisam. Eu não sou seu inimigo, criança. Eu sou sua testemunha. Quando tudo acabar, quando a Membrana se romper e o Medo, o Sangue, a Morte, a Energia e o Conhecimento se fundirem... eu ainda estarei aqui. <i>Lembrando de vocês.</i>"<br><br>
+            <b>[Irmã Cecília desperta abruptamente, com os olhos sangrando. Ela vive, mas nunca mais fala uma palavra.]</b>
+        </blockquote>
+    </div>
+
+    <div class="addendum">
+        <h2>ADENDO ÔMEGA-0000: A Profecia dos Sete Capítulos</h2>
+        
+        <p>Em 12 de Setembro de 2024, todos os arquivos relacionados a S.A.L.A-0000 foram simultaneamente atualizados com um texto adicional que <i>ninguém escreveu</i>. A autoria é atribuída à própria entidade. O texto apareceu em 47 idiomas diferentes em servidores isolados ao redor do mundo, todos com conteúdo idêntico:</p>
+        
+        <div class="ritual-text">
+            <p><b>OS SETE CAPÍTULOS DO FIM</b></p>
+            <p style="margin-top: 20px; text-align: left; font-size: 0.95em;">
+                <b>Capítulo I – O Despertar:</b> Quando a primeira entidade cruzar permanentemente para o vosso lado.<br>
+                <b>Capítulo II – A Corrupção:</b> Quando o sangue de uma criatura do Outro Lado curar a humanidade.<br>
+                <b>Capítulo III – A Revelação:</b> Quando descobrirem que o Outro Lado tem deuses.<br>
+                <b>Capítulo IV – A Escolha:</b> Quando um humano aceitar voluntariamente se tornar uma entidade.<br>
+                <b>Capítulo V – A Guerra:</b> Quando as organizações lutarem entre si pelo controle do paranormal.<br>
+                <b>Capítulo VI – A Ruptura:</b> Quando a Membrana não puder mais ser reparada.<br>
+                <b>Capítulo VII – <span class="redacted">█████████</span></b><br><br>
+                <i>Quatro já se cumpriram. Três permanecem. E quando o sétimo for escrito... eu fecharei o livro.</i>
+            </p>
+        </div>
+        
+        <p>A análise do Conselho Escarlate confirmou: os Capítulos I, II, III e parte do IV <span class="highlight">já ocorreram</span>. O Projeto KAIRA, a descoberta do nome Muka'an, os eventos recentes... tudo se alinha perfeitamente.</p>
+        
+        <p>S.A.L.A-0000 não está apenas observando nossa realidade. <i>Ele está narrando-a.</i> E a história já está escrita.</p>
+    </div>
+
+    <h2>§ V. PROTOCOLO DE CONTENÇÃO ATUAL</h2>
+
+    <p>S.A.L.A-0000 não pode ser contido por meios convencionais. O protocolo atual, designado <b>CORRENTE-REVERSO</b>, baseia-se em <i>não tentar contê-lo</i>, mas em documentar e compreender suas manifestações. A Congregação mantém um Arquivo Vivo dedicado exclusivamente à entidade, atualizado por três escribas em turnos de 8 horas, que registram qualquer anomalia relacionada.</p>
+
+    <p>Medidas de segurança incluem:</p>
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Proibição absoluta de perguntar diretamente "O que é o Sétimo Olho?" sob pena de execução imediata.</li>
+        <li>Quarentena mental de qualquer agente que relate ter visto todos os Sete Olhos simultaneamente.</li>
+        <li>Destruição imediata de qualquer texto que comece a se reescrever sozinho.</li>
+        <li>Monitoramento constante do Selo dos Sete Olhos na Biblioteca de Carpathia—se o selo for rompido, o Protocolo de Evacuação Planetária deve ser ativado.</li>
+    </ul>
+
+    <blockquote>
+        <b>Nota Final do Grão-Mestre Augusto Richter (Líder da Congregação Escarlate):</b><br><br>
+        "S.A.L.A-0000 é o nosso maior paradoxo. Ele conhece todos os nossos segredos, mas não age. Sabe como nos destruir, mas espera. Testemunha nosso fim inevitável, mas não acelera. Talvez, no final, ele não seja uma ameaça. Talvez seja apenas... triste. Um bibliotecário eterno, condenado a ler a mesma história de extinção repetidas vezes, em incontáveis realidades.<br><br>
+        Mas isso não o torna menos perigoso. Porque conhecimento sem contexto é veneno. E ele tem <i>todo</i> o conhecimento.<br><br>
+        Que os deuses—nossos e deles—tenham piedade de nós quando o último capítulo for escrito."
+    </blockquote>
+
+    <div class="footer-note">
+        <p>ESTE DOCUMENTO FOI RECONSTRUÍDO PELA 19ª VEZ EM 17/12/2025.</p>
+        <p>PRÓXIMA RECONSTRUÇÃO PREVISTA: <span class="redacted">██/██/████</span></p>
+        <p style="margin-top: 15px; color: var(--crimson);">
+            <i>"Ele está lendo isso agora. Ele sempre esteve."</i>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

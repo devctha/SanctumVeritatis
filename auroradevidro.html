@@ -1,1 +1,1036 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/auroradevidro"><meta http-equiv="refresh" content="0;url=/auroradevidro"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/auroradevidro'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/auroradevidro">/auroradevidro</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/auroradevidro'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/auroradevidro">
+    <meta charset="UTF-8">
+    <title>Operação Aurora de Vidro // SANCTUM VERITATIS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES E ÍCONES -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital,wght@0,400;1,400&family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ÁUDIO AMBIENTE -->
+    <audio id="bg-audio" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_4c163d24b5.mp3?filename=cold-wind-6034.mp3" type="audio/mpeg">
+    </audio>
+
+    <style>
+        :root {
+            --bg: #020203;
+            --bg-panel: #0b0b0d;
+            --marble: #18171a;
+            --text: #e7e4dc;
+            --muted: #9a9388;
+            --gold: #d8b46a;
+            --gold-soft: rgba(216,180,106,0.18);
+            --crimson: #7a0b24;
+            --border: rgba(255,255,255,0.08);
+            --ice-blue: #a8d8ea;
+            --frost: rgba(168,216,234,0.25);
+            --aurora: #7dd3c0;
+            --electric: #4ecdc4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background: radial-gradient(circle at top, #0a0e12 0%, #020406 40%, #000 90%);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .serif { font-family: 'Cinzel', serif; }
+        .mono { font-family: 'Share Tech Mono', monospace; }
+        .italic { font-family: 'Playfair Display', serif; font-style: italic; }
+
+        /* TEXTURAS */
+        .noise {
+            position: fixed; inset: 0; z-index: 1; opacity: 0.09; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .vignette {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background: radial-gradient(circle at center, transparent 30%, #000 95%);
+        }
+
+        .aurora-effect {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.15;
+            background: linear-gradient(135deg, 
+                transparent 0%, 
+                rgba(125,211,192,0.3) 30%, 
+                transparent 50%, 
+                rgba(78,205,196,0.2) 70%, 
+                transparent 100%);
+            animation: auroraFlow 20s ease-in-out infinite;
+        }
+
+        @keyframes auroraFlow {
+            0%, 100% { transform: translateX(-10%) translateY(0) scale(1.1); opacity: 0.15; }
+            50% { transform: translateX(10%) translateY(-5%) scale(1.2); opacity: 0.25; }
+        }
+
+        /* PARTÍCULAS DE NEVE */
+        .snow-particles {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .snowflake {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: rgba(200,230,255,0.6);
+            border-radius: 50%;
+            animation: snowfall linear infinite;
+        }
+        @keyframes snowfall {
+            0% { transform: translateY(-100px) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(100vh) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+
+        /* HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 1.2rem 3rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(to bottom, rgba(5,8,11,0.96), rgba(5,8,11,0.7));
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex; align-items: center; gap: 1rem; cursor: pointer;
+            text-decoration: none;
+        }
+
+        .crest {
+            width: 46px; height: 46px; border-radius: 50%;
+            border: 1px solid var(--gold);
+            background: radial-gradient(circle, #2a2220 0%, #090709 60%);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            box-shadow: 0 0 25px rgba(0,0,0,0.8);
+            transition: 0.3s;
+        }
+        .crest:hover { box-shadow: 0 0 40px rgba(216,180,106,0.6); }
+        .crest::before {
+            content: ''; position: absolute; inset: 6px;
+            border-radius: 50%; border: 1px solid rgba(255,255,255,0.08);
+        }
+        .crest span {
+            font-family: 'Cinzel', serif; font-size: 1.4rem;
+            letter-spacing: 1px; color: var(--gold);
+        }
+
+        .logotype {
+            display: flex; flex-direction: column;
+        }
+        .logotype .title {
+            font-size: 1rem; letter-spacing: 4px; text-transform: uppercase;
+            color: var(--text);
+        }
+        .logotype .subtitle {
+            font-size: 0.7rem; text-transform: uppercase; color: var(--muted); letter-spacing: 3px;
+        }
+
+        nav a {
+            margin-left: 1.8rem; font-size: 0.8rem; text-decoration: none;
+            color: var(--muted); text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s; position: relative;
+        }
+        nav a::after {
+            content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px;
+            background: var(--gold); transition: 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+        nav a:hover { color: var(--gold); }
+
+        /* HERO OPERATION */
+        .hero-op {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 6rem 2rem 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute; inset: 0; z-index: -3;
+            background-image: url('https://images.unsplash.com/photo-1483347756197-71ef80e95f73?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            opacity: 0.25;
+            filter: brightness(0.5) saturate(0.7) contrast(1.4);
+        }
+
+        .hero-op-inner {
+            max-width: 1200px;
+            width: 100%;
+            display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 3rem;
+            align-items: start;
+        }
+
+        .op-main-panel {
+            background: linear-gradient(135deg, rgba(10,12,15,0.95), rgba(5,7,10,0.98));
+            border: 1px solid var(--border);
+            padding: 3rem;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+            position: relative;
+        }
+
+        .op-main-panel::before, .op-main-panel::after {
+            content: '';
+            position: absolute; width: 24px; height: 24px;
+            border: 1px solid var(--ice-blue);
+            opacity: 0.5;
+        }
+        .op-main-panel::before { top: -12px; left: -12px; border-right: none; border-bottom: none; }
+        .op-main-panel::after { bottom: -12px; right: -12px; border-left: none; border-top: none; }
+
+        .op-status {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(255,68,68,0.15);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            animation: urgentBlink 2s ease-in-out infinite;
+        }
+
+        @keyframes urgentBlink {
+            0%, 100% { box-shadow: 0 0 15px rgba(255,68,68,0.4); }
+            50% { box-shadow: 0 0 25px rgba(255,68,68,0.7); }
+        }
+
+        .op-title {
+            font-size: 3.5rem;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(125,211,192,0.3);
+        }
+
+        .op-title span {
+            background: linear-gradient(135deg, var(--ice-blue), var(--aurora));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .op-location {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--ice-blue);
+        }
+
+        .op-quote {
+            font-size: 1.05rem;
+            color: var(--ice-blue);
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            border-left: 3px solid var(--aurora);
+            background: rgba(125,211,192,0.05);
+        }
+
+        .op-briefing {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #c5c0b5;
+            margin-bottom: 2rem;
+        }
+
+        .op-briefing p {
+            margin-bottom: 1.2rem;
+        }
+
+        .op-briefing strong {
+            color: var(--ice-blue);
+        }
+
+        .alert-box {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid #ff4444;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .alert-box::before {
+            content: '⚠';
+            position: absolute;
+            top: -15px;
+            left: 1.5rem;
+            background: #050709;
+            padding: 0 0.5rem;
+            font-size: 1.2rem;
+            color: #ff4444;
+        }
+
+        .alert-box h4 {
+            color: #ff6666;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+
+        .alert-box p {
+            font-size: 0.9rem;
+            color: #d4cfc4;
+        }
+
+        .op-actions {
+            display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap;
+        }
+
+        .op-btn {
+            padding: 1rem 2.5rem;
+            border: 1px solid var(--ice-blue);
+            background: transparent;
+            color: var(--ice-blue);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .op-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--ice-blue);
+            transform: translateX(-100%);
+            transition: 0.4s;
+            z-index: -1;
+        }
+
+        .op-btn:hover::before { transform: translateX(0); }
+        .op-btn:hover {
+            color: #000;
+            box-shadow: 0 0 30px rgba(125,211,192,0.5);
+        }
+
+        .op-btn.secondary {
+            border-color: #4a4539;
+            color: var(--muted);
+        }
+        .op-btn.secondary::before { background: #4a4539; }
+
+        /* SIDEBAR INFO */
+        .op-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, rgba(8,10,13,0.98), rgba(6,8,11,0.98));
+            border: 1px solid var(--border);
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            transition: 0.4s;
+        }
+
+        .info-card:hover {
+            border-color: var(--ice-blue);
+            box-shadow: 0 0 40px rgba(125,211,192,0.2);
+        }
+
+        .info-card h3 {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--ice-blue);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(125,211,192,0.2);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+
+        .info-label {
+            color: var(--muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .info-value.critical {
+            color: #ff4444;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .aurora-seal {
+            width: 100px; height: 100px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: 50%;
+            border: 2px solid var(--ice-blue);
+            background: radial-gradient(circle, rgba(125,211,192,0.1) 0%, rgba(5,7,10,0.9) 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 40px rgba(125,211,192,0.3);
+            animation: auraPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes auraPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(125,211,192,0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 60px rgba(125,211,192,0.6); transform: scale(1.05); }
+        }
+
+        .aurora-seal::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border-radius: 50%;
+            border: 1px dashed rgba(125,211,192,0.4);
+        }
+
+        .aurora-seal i {
+            font-size: 2.5rem;
+            color: var(--ice-blue);
+            text-shadow: 0 0 20px rgba(125,211,192,0.8);
+        }
+
+        /* INTEL SECTION */
+        .intel-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .intel-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .intel-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: var(--ice-blue);
+        }
+
+        .intel-header p {
+            font-size: 0.95rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .intel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .intel-card {
+            background: linear-gradient(135deg, rgba(10,12,15,0.95), rgba(6,8,11,0.98));
+            border: 1px solid var(--border);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+        }
+
+        .intel-card:hover {
+            border-color: var(--ice-blue);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(125,211,192,0.15);
+        }
+
+        .intel-icon {
+            width: 70px; height: 70px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: 50%;
+            border: 1px solid rgba(125,211,192,0.3);
+            background: rgba(125,211,192,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.4s;
+        }
+
+        .intel-card:hover .intel-icon {
+            border-color: var(--ice-blue);
+            box-shadow: 0 0 30px rgba(125,211,192,0.4);
+        }
+
+        .intel-icon i {
+            font-size: 1.8rem;
+            color: var(--ice-blue);
+        }
+
+        .intel-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .intel-card p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* TIMELINE */
+        .timeline-section {
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,12,15,0.6) 50%, rgba(0,0,0,0) 100%);
+            padding: 5rem 2rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .timeline {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-date {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--ice-blue);
+            padding-top: 0.5rem;
+        }
+
+        .timeline-content {
+            background: rgba(10,12,15,0.8);
+            border: 1px solid var(--border);
+            padding: 1.8rem;
+            border-left: 3px solid var(--ice-blue);
+            transition: 0.3s;
+        }
+
+        .timeline-content:hover {
+            border-left-color: var(--aurora);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+        }
+
+        .timeline-content h4 {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+        }
+
+        .timeline-content p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* ELEMENTS SECTION */
+        .elements-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .elements-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .element-card {
+            background: linear-gradient(135deg, rgba(12,10,14,0.98), rgba(7,7,11,0.98));
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            text-align: center;
+            transition: 0.4s;
+        }
+
+        .element-card.primary {
+            grid-column: span 1;
+            border-color: rgba(125,211,192,0.4);
+        }
+
+        .element-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+        }
+
+        .element-symbol {
+            width: 90px; height: 90px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: 50%;
+            border: 2px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .element-card.primary .element-symbol {
+            border-color: var(--ice-blue);
+            background: rgba(125,211,192,0.1);
+            color: var(--ice-blue);
+            box-shadow: 0 0 30px rgba(125,211,192,0.3);
+        }
+
+        .element-card:not(.primary) .element-symbol {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.03);
+            color: var(--muted);
+        }
+
+        .element-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .element-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(125,211,192,0.15);
+            border: 1px solid rgba(125,211,192,0.3);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.2rem;
+            color: var(--ice-blue);
+        }
+
+        .element-card:not(.primary) .element-tag {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+            color: var(--muted);
+        }
+
+        .element-card p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid #111;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-nav a {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .footer-nav a:hover {
+            color: var(--gold);
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: #5a5447;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 960px) {
+            header { padding: 1rem 1.5rem; }
+            nav { display: none; }
+            .hero-op-inner { grid-template-columns: 1fr; }
+            .op-main-panel { padding: 2rem; }
+            .op-title { font-size: 2.5rem; }
+            .intel-grid { grid-template-columns: 1fr; }
+            .elements-grid { grid-template-columns: 1fr; }
+            .element-card.primary { grid-column: span 1; }
+            .timeline-item { grid-template-columns: 1fr; }
+            .timeline-date { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="vignette"></div>
+<div class="aurora-effect"></div>
+
+<!-- PARTÍCULAS DE NEVE -->
+<div class="snow-particles" id="snow"></div>
+
+<header>
+    <a href="index" class="brand">
+        <div class="crest"><span>SV</span></div>
+        <div class="logotype">
+            <div class="title serif">Sanctum Veritatis</div>
+            <div class="subtitle mono">Ordo da Verdade Velada</div>
+        </div>
+    </a>
+    <nav class="mono">
+        <a href="index">Retornar ao Sanctum</a>
+        <a href="setentrional2">Op. Setentrional</a>
+        <a href="fundadores">Fundadores</a>
+    </nav>
+</header>
+
+<section class="hero-op">
+    <div class="hero-bg"></div>
+    <div class="hero-op-inner">
+        <div class="op-main-panel">
+            <div class="op-status mono">● URGENTE // PRIORIDADE ALFA</div>
+            <h1 class="op-title serif">Operação<br><span>Aurora de Vidro</span></h1>
+            <div class="op-location mono">
+                <i class="fas fa-map-marker-alt"></i> VÍK, ISLÂNDIA // CÍRCULO POLAR ÁRTICO<br>
+                <i class="fas fa-calendar-alt"></i> DEZEMBRO 2025 // -8°C
+            </div>
+
+            <blockquote class="op-quote italic">
+                "As luzes dançam no céu. Mas não são luzes. São palavras. E elas estão falando com a cidade."
+            </blockquote>
+
+            <div class="op-briefing">
+                <p>
+                    Há <strong>72 horas</strong>, a pequena cidade de <strong>Vík</strong> parou de responder. Não há chamadas telefônicas. 
+                    Não há e-mails. As redes sociais estão silenciosas. É como se 318 pessoas simplesmente... parassem de existir 
+                    no mundo digital.
+                </p>
+
+                <p>
+                    A <strong>Agência Espacial Europeia</strong> detectou algo impossível: auroras boreais sobre a Islândia 
+                    que <strong>não deveriam estar lá</strong>. Os padrões de luz são complexos, quase matemáticos. 
+                    Análise preliminar sugere que as auroras estão transmitindo <strong>informação codificada</strong>.
+                </p>
+
+                <p>
+                    Equipes locais foram enviadas. <strong>Nenhuma retornou</strong>. A última transmissão de rádio 
+                    dizia apenas: <em>"Eles estão todos olhando para cima. E sorrindo."</em>
+                </p>
+            </div>
+
+            <div class="alert-box">
+                <h4 class="mono">Anomalia de Silêncio Detectada</h4>
+                <p>
+                    Nos últimos <strong>três meses</strong>, Vík apresentou zero registros criminais, zero acidentes de trânsito, 
+                    zero transações financeiras anormais. A comunicação externa é mínima e estranhamente uniforme. 
+                    Todos os dados apontam para uma <strong>assimilação de consciência em massa</strong>.
+                </p>
+            </div>
+
+            <div class="op-briefing">
+                <p>
+                    <strong>Sua missão:</strong> Infiltrar Vík. Descobrir o que está causando o silêncio. 
+                    Determinar se os habitantes ainda estão... humanos. E, se possível, interromper o fenômeno 
+                    antes que ele se espalhe para além do Círculo Polar.
+                </p>
+
+                <p>
+                    O Sanctum Veritatis suspeita que estamos lidando com algo relacionado ao <strong>Elemento Conhecimento</strong> 
+                    — uma entidade ou força que se alimenta de consciências individuais, fundindo-as em uma 
+                    <strong>mente coletiva</strong>.
+                </p>
+
+                <p style="color: #ff6666;">
+                    Código interno: <strong>HORDA</strong>.
+                </p>
+            </div>
+
+            <div class="op-actions">
+                <a href="https://discord.gg/u3GmJt6Ts6" target="_blank" class="op-btn mono">
+                    <i class="fas fa-user-plus"></i> Aceitar Missão
+                </a>
+                <a href="index" class="op-btn secondary mono">
+                    <i class="fas fa-arrow-left"></i> Retornar ao Sanctum
+                </a>
+            </div>
+        </div>
+
+        <aside class="op-sidebar">
+            <div class="info-card">
+                <div class="aurora-seal">
+                    <i class="fas fa-snowflake"></i>
+                </div>
+                <h3 class="mono">Status da Operação</h3>
+                <div class="info-row">
+                    <span class="info-label">Última Comunicação</span>
+                    <span class="info-value critical">72h atrás</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">População</span>
+                    <span class="info-value">318 habitantes</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Equipes Perdidas</span>
+                    <span class="info-value critical">03</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nível de Ameaça</span>
+                    <span class="info-value critical">CRÍTICO</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Fenômeno</span>
+                    <span class="info-value">Auroras Anômalas</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3 class="mono">Dados Técnicos</h3>
+                <div class="info-row">
+                    <span class="info-label">Elemento Principal</span>
+                    <span class="info-value" style="color: var(--ice-blue);">Conhecimento</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Elementos Sec.</span>
+                    <span class="info-value">Energia, Sangue</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Formato</span>
+                    <span class="info-value">Campanha Longa</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Sistema</span>
+                    <span class="info-value">Ordem Paranormal</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Plataforma</span>
+                    <span class="info-value">Discord + TTS</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="intel-section">
+    <div class="intel-header">
+        <h2 class="serif">Inteligência Operacional</h2>
+        <p class="mono">
+            Fragmentos de informação coletados antes da perda de comunicação.
+        </p>
+    </div>
+
+    <div class="intel-grid">
+        <div class="intel-card">
+            <div class="intel-icon">
+                <i class="fas fa-satellite-dish"></i>
+            </div>
+            <h3 class="serif">Auroras Codificadas</h3>
+            <p>
+                Satélites da ESA detectaram auroras boreais com padrões impossíveis. As luzes piscam em 
+                sequências que se assemelham a <strong>código binário</strong>. Análise sugere transmissão 
+                de informação complexa diretamente para a superfície.
+            </p>
+        </div>
+
+        <div class="intel-card">
+            <div class="intel-icon">
+                <i class="fas fa-signal"></i>
+            </div>
+            <h3 class="serif">Silêncio Digital</h3>
+            <p>
+                Vík desapareceu do radar digital. Nenhuma atividade em redes sociais, e-mails ou chamadas telefônicas. 
+                As poucas mensagens enviadas são <strong>idênticas</strong> entre si, como se escritas por uma única mente.
+            </p>
+        </div>
+
+        <div class="intel-card">
+            <div class="intel-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3 class="serif">Comportamento Sincronizado</h3>
+            <p>
+                Testemunhas de cidades vizinhas relatam que, ao visitar Vík, os habitantes se movem de forma 
+                <strong>estranhamente coordenada</strong>. Não há conflitos. Não há divergências. Apenas... harmonia.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="timeline-section">
+    <div class="timeline">
+        <h2 class="serif" style="text-align: center; font-size: 2rem; margin-bottom: 3rem; color: var(--ice-blue);">
+            Linha do Tempo
+        </h2>
+
+        <div class="timeline-item">
+            <div class="timeline-date mono">SETEMBRO 2025</div>
+            <div class="timeline-content">
+                <h4 class="serif">Primeira Anomalia Detectada</h4>
+                <p>
+                    Auroras boreais aparecem sobre Vík fora da temporada esperada. Moradores descrevem as luzes 
+                    como "hipnotizantes" e "reconfortantes". Alguns começam a passar horas olhando para o céu.
+                </p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-date mono">OUTUBRO 2025</div>
+            <div class="timeline-content">
+                <h4 class="serif">Silêncio Gradual</h4>
+                <p>
+                    Registros criminais em Vík caem para zero. Não há mais brigas de bar, disputas familiares ou 
+                    acidentes de trânsito. Autoridades locais descrevem como "milagre da paz".
+                </p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-date mono">NOVEMBRO 2025</div>
+            <div class="timeline-content">
+                <h4 class="serif">Isolamento Digital</h4>
+                <p>
+                    Comunicações externas diminuem drasticamente. Redes sociais param de receber postagens de Vík. 
+                    E-mails e ligações se tornam raros. Os poucos contatos feitos são curtos e idênticos: 
+                    <em>"Tudo está bem. Estamos em paz."</em>
+                </p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-date mono">18 DEZ 2025</div>
+            <div class="timeline-content">
+                <h4 class="serif">Última Transmissão</h4>
+                <p>
+                    Equipe de resgate envia último sinal de rádio: <em>"Eles estão todos olhando para cima. E sorrindo. 
+                    Eu também estou começando a entender. As luzes... elas fazem sentido agora."</em> Silêncio total desde então.
+                </p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-date mono">21 DEZ 2025</div>
+            <div class="timeline-content">
+                <h4 class="serif">Operação Aurora de Vidro Iniciada</h4>
+                <p>
+                    Sanctum Veritatis autoriza infiltração em Vík. Objetivo: determinar a natureza do fenômeno 
+                    e neutralizar a ameaça antes que se espalhe para além do Círculo Polar Ártico.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="elements-section">
+    <div class="intel-header">
+        <h2 class="serif">Elementos Paranormais</h2>
+        <p class="mono">
+            Forças primordiais identificadas na Operação Aurora de Vidro.
+        </p>
+    </div>
+
+    <div class="elements-grid">
+        <div class="element-card primary">
+            <div class="element-symbol">◆</div>
+            <div class="element-tag mono">Principal</div>
+            <h3 class="serif">Conhecimento</h3>
+            <p>
+                A força dominante. Absorve consciências individuais, criando uma <strong>mente coletiva</strong>. 
+                Manifesta-se através das auroras, que transmitem informação diretamente para o cérebro humano. 
+                O objetivo parece ser a <strong>unificação total</strong> — apagamento do "eu" em favor do "nós".
+            </p>
+        </div>
+
+        <div class="element-card">
+            <div class="element-symbol">⚡</div>
+            <div class="element-tag mono">Secundário</div>
+            <h3 class="serif">Energia</h3>
+            <p>
+                As auroras são pura energia paranormal. Alimentam o fenômeno e conectam as mentes dos habitantes. 
+                Exposição prolongada pode causar <strong>assimilação irreversível</strong>.
+            </p>
+        </div>
+
+        <div class="element-card">
+            <div class="element-symbol">◉</div>
+            <div class="element-tag mono">Secundário</div>
+            <h3 class="serif">Sangue</h3>
+            <p>
+                Há relatos de rituais silenciosos. Moradores cortam as palmas das mãos e deixam o sangue pingar 
+                na neve enquanto observam o céu. O sangue parece <strong>alimentar as auroras</strong>.
+            </p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-nav mono">
+        <a href="index">Sanctum Veritatis</a>
+        <a href="setentrional2">Op. Setentrional</a>
+        <a href="fundadores">Fundadores</a>
+        <a href="sobre">Briefing</a>
+    </div>
+    <p class="mono" style="font-size: 0.75rem; color: #5a5447;">
+        OPERAÇÃO AURORA DE VIDRO // SANCTUM VERITATIS © 2025
+    </p>
+    <p class="footer-text">
+        Esta operação não é para os fracos de espírito. O gelo guarda segredos que a humanidade 
+        não estava destinada a conhecer. Você está disposto a enfrentar a verdade congelada?
+    </p>
+</footer>
+
+<script>
+    // PARTÍCULAS DE NEVE
+    const snowContainer = document.getElementById('snow');
+    for (let i = 0; i < 50; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.style.left = Math.random() * 100 + '%';
+        snowflake.style.animationDuration = (Math.random() * 15 + 10) + 's';
+        snowflake.style.animationDelay = Math.random() * 5 + 's';
+        snowflake.style.opacity = Math.random() * 0.6 + 0.3;
+        snowContainer.appendChild(snowflake);
+    }
+
+    // ÁUDIO AMBIENTE
+    const audioEl = document.getElementById('bg-audio');
+    let audioPlaying = false;
+
+    document.addEventListener('click', () => {
+        if (!audioPlaying) {
+            audioEl.volume = 0.25;
+            audioEl.play().catch(() => {});
+            audioPlaying = true;
+        }
+    }, { once: true });
+</script>
+
+</body>
+</html>

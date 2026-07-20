@@ -1,1 +1,1262 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/OPVeracruz"><meta http-equiv="refresh" content="0;url=/OPVeracruz"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/OPVeracruz'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/OPVeracruz">/OPVeracruz</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/OPVeracruz'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/OPVeracruz">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Operação Veracruz – Sanctum Veritatis</title>
+    <meta name="description" content="Briefing da Operação Veracruz, arquivo de missão da organização paranormal Sanctum Veritatis.">
+    <meta name="author" content="Sanctum Veritatis // Oráculo">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg: #050608;
+            --bg-alt: #0b0f16;
+            --accent-cyan: #00e1ff;
+            --accent-magenta: #ff00a0;
+            --accent-gold: #ffd700;
+            --accent-soft: rgba(0, 225, 255, 0.12);
+            --danger: #ff3366;
+            --warning: #ff9500;
+            --success: #00ff88;
+            --text: #f4f4f6;
+            --text-dim: #b8c4ce;
+            --muted: #6b7280;
+            --border: #1f2933;
+            --card-radius: 16px;
+            --shadow-soft: 0 25px 50px rgba(0, 0, 0, 0.7);
+            --shadow-glow: 0 0 40px rgba(0, 225, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: 
+                radial-gradient(ellipse at 20% 0%, rgba(0, 225, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(255, 0, 160, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #0a0f1a 0%, #020408 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Efeito de scanline */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.4;
+        }
+
+        /* Grid de fundo animado */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 225, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 225, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Partículas flutuantes */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 15s infinite;
+            box-shadow: 0 0 6px var(--accent-cyan);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid rgba(0, 225, 255, 0.2);
+            background: 
+                linear-gradient(180deg, rgba(10, 15, 26, 0.95) 0%, rgba(5, 8, 14, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--accent-cyan) 20%, 
+                var(--accent-magenta) 50%, 
+                var(--accent-cyan) 80%, 
+                transparent 100%);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .top-bar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .logo-block {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Sigilo animado */
+        .sigil-container {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+
+        .sigil {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 225, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                radial-gradient(circle at 30% 0%, rgba(0, 225, 255, 0.4), transparent 60%),
+                radial-gradient(circle at 70% 100%, rgba(255, 0, 160, 0.4), transparent 60%),
+                #020617;
+            box-shadow:
+                0 0 30px rgba(0, 225, 255, 0.4),
+                0 0 60px rgba(255, 0, 160, 0.2),
+                inset 0 0 20px rgba(0, 225, 255, 0.1);
+            position: relative;
+            animation: sigilPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes sigilPulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(0, 225, 255, 0.4), 0 0 60px rgba(255, 0, 160, 0.2);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(0, 225, 255, 0.6), 0 0 80px rgba(255, 0, 160, 0.3);
+                transform: scale(1.02);
+            }
+        }
+
+        .sigil-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 225, 255, 0.4);
+            animation: rotate 20s linear infinite;
+        }
+
+        .sigil-ring:nth-child(1) {
+            width: 70%;
+            height: 70%;
+            animation-duration: 15s;
+        }
+
+        .sigil-ring:nth-child(2) {
+            width: 85%;
+            height: 85%;
+            border-style: dotted;
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .sigil-mark {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+            box-shadow: 0 0 15px rgba(0, 225, 255, 0.8);
+            position: relative;
+            z-index: 2;
+        }
+
+        .sigil-mark::before,
+        .sigil-mark::after {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 225, 255, 0.3);
+            animation: ripple 2s ease-out infinite;
+        }
+
+        .sigil-mark::after {
+            animation-delay: 1s;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .org-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .org-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text);
+            text-shadow: 0 0 20px rgba(0, 225, 255, 0.3);
+        }
+
+        .status-chip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 255, 136, 0.5);
+            color: var(--success);
+            background: 
+                linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 225, 255, 0.05));
+            box-shadow:
+                0 0 20px rgba(0, 255, 136, 0.2),
+                inset 0 0 10px rgba(0, 255, 136, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.4); }
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success), 0 0 20px var(--success);
+            animation: dotBlink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dotBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem 3rem;
+            flex: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        /* Cards */
+        .card {
+            border-radius: var(--card-radius);
+            border: 1px solid rgba(0, 225, 255, 0.15);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(0, 225, 255, 0.05) 0%, 
+                    transparent 30%,
+                    transparent 70%,
+                    rgba(255, 0, 160, 0.03) 100%),
+                rgba(10, 15, 26, 0.85);
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                var(--shadow-soft),
+                var(--shadow-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 225, 255, 0.3);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.8),
+                0 0 60px rgba(0, 225, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 225, 255, 0.5) 20%, 
+                rgba(255, 0, 160, 0.3) 80%, 
+                transparent 100%);
+        }
+
+        .card-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-cyan);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-corner {
+            opacity: 1;
+            width: 30px;
+            height: 30px;
+        }
+
+        .card-corner-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .card-corner-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .card-corner-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .card-corner-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .card-header {
+            padding: 1.5rem 1.8rem 1rem;
+            border-bottom: 1px solid rgba(0, 225, 255, 0.1);
+            position: relative;
+        }
+
+        .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .eyebrow::before {
+            content: "▸";
+            color: var(--accent-magenta);
+        }
+
+        .title-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text);
+            text-shadow: 0 0 30px rgba(0, 225, 255, 0.3);
+        }
+
+        .code-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            background: rgba(255, 215, 0, 0.08);
+            letter-spacing: 0.05em;
+        }
+
+        .subline {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin: 0.8rem 0 0;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .card-body {
+            padding: 1.5rem 1.8rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-dim);
+        }
+
+        .card-body p + p {
+            margin-top: 1rem;
+        }
+
+        .card-body strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Oracle Banner */
+        .oracle-banner {
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 0, 160, 0.3);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(255, 0, 160, 0.08) 0%, 
+                    rgba(0, 225, 255, 0.05) 100%),
+                rgba(10, 15, 26, 0.9);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .oracle-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-magenta), var(--accent-cyan));
+        }
+
+        .oracle-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-magenta);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .oracle-tag::before {
+            content: "◈";
+            animation: diamondPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes diamondPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .oracle-body {
+            font-size: 0.95rem;
+            color: var(--text);
+            font-style: italic;
+            line-height: 1.7;
+            position: relative;
+            padding-left: 1rem;
+            border-left: 2px solid rgba(255, 0, 160, 0.2);
+        }
+
+        .oracle-body::before {
+            content: '"';
+            position: absolute;
+            left: -0.5rem;
+            top: -0.5rem;
+            font-size: 2rem;
+            color: var(--accent-magenta);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        /* Glitch Effect */
+        .glitch-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            border: 1px dashed var(--danger);
+            color: var(--danger);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: rgba(255, 51, 102, 0.08);
+            animation: glitchBorder 2s ease-in-out infinite;
+        }
+
+        @keyframes glitchBorder {
+            0%, 100% { border-style: dashed; }
+            50% { border-style: dotted; }
+        }
+
+        .glitch-pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--danger);
+            box-shadow: 0 0 10px var(--danger);
+            animation: glitchDot 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glitchDot {
+            from { transform: scale(1); }
+            to { transform: scale(1.3); }
+        }
+
+        /* Meta Grid */
+        .meta-grid {
+            padding: 1.2rem 1.8rem;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.2rem;
+            border-top: 1px solid rgba(0, 225, 255, 0.1);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 520px) {
+            .meta-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .meta-item {
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: rgba(0, 225, 255, 0.03);
+            border: 1px solid rgba(0, 225, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .meta-item:hover {
+            background: rgba(0, 225, 255, 0.06);
+            border-color: rgba(0, 225, 255, 0.15);
+        }
+
+        .meta-item-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-item-value {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .severity {
+            color: var(--danger);
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
+        }
+
+        .accent {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+        }
+
+        .danger {
+            color: var(--danger);
+        }
+
+        .warning {
+            color: var(--warning);
+        }
+
+        /* Panel Title */
+        .panel-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .panel-title::before {
+            content: "";
+            width: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-cyan), transparent);
+        }
+
+        /* Lists */
+        .list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .list-item {
+            display: flex;
+            gap: 0.8rem;
+            padding: 0.6rem;
+            border-radius: 8px;
+            background: rgba(0, 225, 255, 0.02);
+            border: 1px solid rgba(0, 225, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            background: rgba(0, 225, 255, 0.05);
+            border-color: rgba(0, 225, 255, 0.12);
+            transform: translateX(5px);
+        }
+
+        .list-bullet {
+            width: 8px;
+            height: 8px;
+            margin-top: 0.4rem;
+            border-radius: 2px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+            box-shadow: 0 0 10px rgba(0, 225, 255, 0.5);
+            flex-shrink: 0;
+        }
+
+        .list-text {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* Item Slots */
+        .items-container {
+            margin-top: 1rem;
+        }
+
+        .item-slot {
+            border-radius: 10px;
+            border: 1px solid rgba(0, 225, 255, 0.15);
+            padding: 1rem 1.2rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            background: rgba(10, 15, 26, 0.6);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .item-slot:hover {
+            border-color: rgba(0, 225, 255, 0.4);
+            background: rgba(0, 225, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .item-slot.completed {
+            border-color: rgba(0, 255, 136, 0.4);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .item-slot.completed .item-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .item-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid rgba(0, 225, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .item-checkbox::after {
+            content: "✓";
+            color: var(--bg);
+            font-size: 0.7rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .item-slot.completed .item-checkbox::after {
+            opacity: 1;
+        }
+
+        .item-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-cyan);
+            min-width: 60px;
+        }
+
+        .item-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed rgba(0, 225, 255, 0.3);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            padding: 0.2rem 0;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .item-input:focus {
+            border-bottom-style: solid;
+            border-bottom-color: var(--accent-cyan);
+        }
+
+        .item-input::placeholder {
+            color: var(--muted);
+        }
+
+        /* Code styling */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: rgba(0, 225, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 225, 255, 0.2);
+            color: var(--accent-cyan);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(0, 225, 255, 0.15);
+            padding: 1.5rem 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-align: center;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: 
+                linear-gradient(180deg, 
+                    rgba(10, 15, 26, 0.9) 0%, 
+                    rgba(5, 8, 14, 0.95) 100%);
+            position: relative;
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--accent-cyan) 50%, 
+                transparent 100%);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Decorative elements */
+        .decoration-line {
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 225, 255, 0.3) 20%, 
+                rgba(255, 0, 160, 0.2) 80%, 
+                transparent 100%);
+            margin: 1.5rem 0;
+        }
+
+        /* Typewriter effect for loading */
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end);
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 225, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 225, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            .card-header, .card-body {
+                padding: 1rem;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <header>
+        <div class="top-bar">
+            <div class="logo-block">
+                <div class="sigil-container">
+                    <div class="sigil">
+                        <div class="sigil-ring"></div>
+                        <div class="sigil-ring"></div>
+                        <div class="sigil-mark"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="org-label">Ordem Paranormal</div>
+                    <div class="org-name">Sanctum Veritatis</div>
+                </div>
+            </div>
+
+            <div class="status-chip">
+                <span class="status-dot"></span>
+                <span>Canal Seguro // Operação Ativa</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- COLUNA ESQUERDA – BRIEFING -->
+        <section class="card">
+            <div class="card-corner card-corner-tl"></div>
+            <div class="card-corner card-corner-tr"></div>
+            <div class="card-corner card-corner-bl"></div>
+            <div class="card-corner card-corner-br"></div>
+            
+            <div class="card-header">
+                <div class="eyebrow">Arquivo de missão // acesso concedido</div>
+                <div class="title-row">
+                    <h1>Operação Veracruz</h1>
+                    <span class="code-tag">ID: OPV-00X-VERACRUZ</span>
+                </div>
+                <p class="subline">
+                    Vocês são agentes recém promovidos da organização paranormal Sanctum Veritatis e este é o primeiro teste oficial sob supervisão direta do Oráculo.
+                </p>
+            </div>
+
+            <div class="card-body">
+                <p>
+                    A <strong>Operação Veracruz</strong> foi originalmente enviada pela Agente <span class="accent">Cassandra Volkova</span>, uma das operantes mais respeitadas da Sanctum Veritatis, conhecida por sua precisão cirúrgica em missões de recuperação de artefatos.
+                </p>
+                <p>
+                    Entretanto, a operação foi assumida pelo <span class="danger">Oráculo</span>, que forçou uma brecha no sistema e <span class="accent">hackeou o site oficial da Sanctum</span>, liberando o acesso a este dossiê restrito. A interferência foi registrada como <em>"autorizada por necessidade operacional"</em>.
+                </p>
+
+                <div class="oracle-banner">
+                    <div>
+                        <div class="oracle-tag">[ ORÁCULO // INTERFERÊNCIA AUTORIZADA ]</div>
+                        <p class="oracle-body">
+                            Vocês não deveriam estar vendo isso… mas a Sanctum precisa de novos olhos. Considerem este arquivo seu batismo de fogo. Eu abro a porta. Vocês atravessam. Não me decepcionem.
+                        </p>
+                    </div>
+                </div>
+
+                <p>
+                    A missão se desenrola em um <span class="warning">ponto isolado da costa</span>, cercado por <span class="danger">barreiras paranormais</span> de natureza desconhecida que impedem o acesso direto do membro veterano que lhes fez o pedido. Análises preliminares indicam distorções temporais e espaciais na região.
+                </p>
+                <p>
+                    Cabe a vocês ultrapassar essas anomalias e garantir que o protocolo seja cumprido. Seu objetivo principal é alcançar o local selado, recuperar informações sensíveis e coletar uma série de <span class="accent">9 itens especificados</span> pelo contato da Sanctum — itens que podem redefinir o entendimento da Ordem sobre o véu entre o natural e o paranormal.
+                </p>
+            </div>
+
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <div class="meta-item-label">Origem do chamado</div>
+                    <div class="meta-item-value">Agente Cassandra Volkova // Canal interno criptografado</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-item-label">Tomada de controle</div>
+                    <div class="meta-item-value">Oráculo // Invasão autorizada do sistema Sanctum</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-item-label">Nível de ameaça</div>
+                    <div class="meta-item-value severity">Classificado – Barreira Paranormal Ativa</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-item-label">Status da operação</div>
+                    <div class="meta-item-value accent">Aguardando Equipe – Vocês</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COLUNA DIREITA – OBJETIVOS, ITENS, PROTOCOLOS -->
+        <aside class="card">
+            <div class="card-corner card-corner-tl"></div>
+            <div class="card-corner card-corner-tr"></div>
+            <div class="card-corner card-corner-bl"></div>
+            <div class="card-corner card-corner-br"></div>
+            
+            <div class="card-header">
+                <div class="title-row">
+                    <div class="panel-title">Parâmetros de campo</div>
+                    <div class="glitch-label">
+                        <span class="glitch-pill-dot"></span>
+                        Override Oracular
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <h2 class="panel-title">Objetivos da missão</h2>
+                <ul class="list">
+                    <li class="list-item">
+                        <span class="list-bullet"></span>
+                        <span class="list-text">
+                            Deslocar-se até o ponto costeiro indicado pelo Oráculo, atravessando a zona de distorção sem comprometer o sigilo da Sanctum.
+                        </span>
+                    </li>
+                    <li class="list-item">
+                        <span class="list-bullet"></span>
+                        <span class="list-text">
+                            Mapear e analisar as barreiras paranormais que bloqueiam o acesso direto, registrando qualquer manifestação anômala.
+                        </span>
+                    </li>
+                    <li class="list-item">
+                        <span class="list-bullet"></span>
+                        <span class="list-text">
+                            Recuperar os 9 itens especificados na lista, garantindo integridade, rastreabilidade e contenção adequada.
+                        </span>
+                    </li>
+                    <li class="list-item">
+                        <span class="list-bullet"></span>
+                        <span class="list-text">
+                            Retornar ao ponto seguro designado e transferir todos os materiais para o canal criptografado do Oráculo.
+                        </span>
+                    </li>
+                </ul>
+
+                <div class="decoration-line"></div>
+
+                <h2 class="panel-title">Lista de itens // 9 slots</h2>
+                <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem;">
+                    O membro veterano enviará uma lista codificada de artefatos, documentos ou amostras anômalas. Clique para marcar como coletado.
+                </p>
+
+                <div class="items-container">
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-01</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-02</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-03</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-04</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-05</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-06</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-07</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-08</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                    <div class="item-slot" onclick="toggleItem(this)">
+                        <div class="item-checkbox"></div>
+                        <span class="item-number">ITEM-09</span>
+                        <input type="text" class="item-input" placeholder="[ AGUARDANDO DESIGNAÇÃO ]">
+                    </div>
+                </div>
+
+                <div class="decoration-line"></div>
+
+                <h2 class="panel-title">Protocolos de segurança</h2>
+                <ul class="list">
+                    <li class="list-item">
+                        <span class="list-bullet"></span>
+                        <span class="list-text">
+                            Comunicação apenas via canal autenticado do Oráculo. Qualquer mensagem fora do padrão pode indicar interferência hostil.
+                        </span>
+                    </li>
+                    <li class="list-item">
+                        <span class="list-bullet"></span>
+                        <span class="list-text">
+                            Em caso de colapso das barreiras ou contato direto com entidade desconhecida, priorizar sobrevivência da equipe.
+                        </span>
+                    </li>
+                    <li class="list-item">
+                        <span class="list-bullet"></span>
+                        <span class="list-text">
+                            Se o site for novamente bloqueado, use o código de recuperação <code>VERACRUZ-Σ-ORACULUM</code> em canal offline.
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            Sanctum Veritatis // Canal monitorado // Alterações registradas pelo subsistema do Oráculo // <span id="timestamp"></span>
+        </div>
+    </footer>
+
+    <script>
+        // Gerar partículas flutuantes
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 25;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Toggle de itens (checkbox interativo)
+        function toggleItem(element) {
+            // Prevenir toggle quando clicar no input
+            if (event.target.tagName === 'INPUT') return;
+            
+            element.classList.toggle('completed');
+            
+            // Efeito sonoro visual (flash)
+            const flash = document.createElement('div');
+            flash.style.cssText = `
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 255, 136, 0.1);
+                pointer-events: none;
+                z-index: 9999;
+                opacity: 0;
+                transition: opacity 0.1s ease;
+            `;
+            document.body.appendChild(flash);
+            
+            requestAnimationFrame(() => {
+                flash.style.opacity = '1';
+                setTimeout(() => {
+                    flash.style.opacity = '0';
+                    setTimeout(() => flash.remove(), 100);
+                }, 50);
+            });
+        }
+
+        // Timestamp dinâmico
+        function updateTimestamp() {
+            const now = new Date();
+            const formatted = now.toISOString().replace('T', ' ').slice(0, 19);
+            document.getElementById('timestamp').textContent = formatted + ' UTC';
+        }
+
+        // Efeito de digitação para elementos com classe typewriter
+        function typewriterEffect() {
+            const elements = document.querySelectorAll('.typewriter');
+            elements.forEach(el => {
+                const text = el.textContent;
+                el.textContent = '';
+                el.style.width = 'auto';
+                
+                let i = 0;
+                const interval = setInterval(() => {
+                    el.textContent += text[i];
+                    i++;
+                    if (i >= text.length) clearInterval(interval);
+                }, 30);
+            });
+        }
+
+        // Efeito de glitch aleatório no título
+        function randomGlitch() {
+            const title = document.querySelector('h1');
+            const originalText = title.textContent;
+            const glitchChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            setInterval(() => {
+                if (Math.random() > 0.95) {
+                    const pos = Math.floor(Math.random() * originalText.length);
+                    const glitchChar = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                    title.textContent = originalText.slice(0, pos) + glitchChar + originalText.slice(pos + 1);
+                    
+                    setTimeout(() => {
+                        title.textContent = originalText;
+                    }, 100);
+                }
+            }, 2000);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            updateTimestamp();
+            setInterval(updateTimestamp, 1000);
+            randomGlitch();
+            
+            // Salvar itens no localStorage
+            const inputs = document.querySelectorAll('.item-input');
+            inputs.forEach((input, index) => {
+                // Carregar valor salvo
+                const saved = localStorage.getItem(`item-${index}`);
+                if (saved) input.value = saved;
+                
+                // Salvar ao digitar
+                input.addEventListener('input', () => {
+                    localStorage.setItem(`item-${index}`, input.value);
+                });
+            });
+            
+            // Restaurar estado dos checkboxes
+            const slots = document.querySelectorAll('.item-slot');
+            slots.forEach((slot, index) => {
+                const saved = localStorage.getItem(`item-checked-${index}`);
+                if (saved === 'true') slot.classList.add('completed');
+                
+                // Salvar estado ao clicar
+                slot.addEventListener('click', () => {
+                    localStorage.setItem(`item-checked-${index}`, slot.classList.contains('completed'));
+                });
+            });
+        });
+
+        // Efeito de parallax no mouse
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card');
+            const x = (e.clientX / window.innerWidth - 0.5) * 10;
+            const y = (e.clientY / window.innerHeight - 0.5) * 10;
+            
+            cards.forEach((card, index) => {
+                const factor = (index + 1) * 0.5;
+                card.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,1 +1,512 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/gerador-historia"><meta http-equiv="refresh" content="0;url=/gerador-historia"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/gerador-historia'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/gerador-historia">/gerador-historia</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/gerador-historia'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/gerador-historia">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de História — A Queda de Valyria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gold:#c9a84c;--gold-lt:#e8d5a3;--gold-dk:#8a6e2f;--bg:#080808;--text:#d4c5a9;--text-lt:#f0e8d8;--border:rgba(201,168,76,.22);--panel:rgba(10,7,5,.84);--red:#b45149;--green:#6ba06b;--blue:#7ea2d1}
+    html{scroll-behavior:smooth} body{font-family:"EB Garamond",serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0805}::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px}
+    #ember-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;background:rgba(8,5,3,.96);border-bottom:1px solid var(--border)}
+    .nav-link,.nav-logo,.eyebrow,.small-label,.btn,.section-eyebrow,.chip,.mini-title{font-family:"Cinzel",serif}.nav-link,.nav-logo{text-decoration:none;letter-spacing:.16em;text-transform:uppercase}.nav-logo{font-size:.82rem;color:var(--gold);font-weight:700}.nav-link{font-size:.64rem;color:var(--text)}.nav-link:hover{color:var(--gold)}
+    #hero{position:relative;min-height:48vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 3.5rem;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 120% 60% at 50% 110%,rgba(139,0,0,.38),transparent 70%),url("https://images2.alphacoders.com/132/1329016.jpg") center/cover no-repeat;filter:brightness(.22) saturate(1.08)}
+    .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,8,.25) 0%,rgba(8,8,8,0) 35%,rgba(8,8,8,.88) 88%,#080808 100%)}
+    .hero-inner{position:relative;z-index:2;max-width:980px}.eyebrow{font-size:.68rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;opacity:0;animation:fadeUp 1s .25s forwards}.hero-title{font-family:"Cinzel Decorative",serif;font-size:clamp(2.2rem,5.7vw,4.4rem);line-height:1.08;color:#fff;text-shadow:0 0 70px rgba(201,168,76,.4);opacity:0;animation:fadeUp 1s .5s forwards}.hero-title span{display:block;background:linear-gradient(135deg,var(--gold-lt),var(--gold),#a07a20);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-divider{width:190px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:1.5rem auto;opacity:0;animation:fadeUp 1s .8s forwards}.hero-desc{max-width:790px;margin:0 auto;font-size:1.05rem;line-height:1.9;color:var(--text-lt);font-style:italic;opacity:0;animation:fadeUp 1s 1s forwards}
+    .page{max-width:1460px;margin:0 auto;padding:2rem 2rem 6rem;position:relative;z-index:1}.layout{display:grid;grid-template-columns:380px 1fr;gap:1.2rem}@media(max-width:1120px){.layout{grid-template-columns:1fr}}
+    .panel,.card{border:1px solid var(--border);background:var(--panel);position:relative;overflow:hidden}.panel::before,.card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,var(--gold),transparent)}.panel{padding:1.2rem}.card{padding:1.3rem}
+    .panel-title{font-family:"Cinzel Decorative",serif;font-size:1.25rem;color:var(--gold-lt);margin-bottom:1rem}.control-group{margin-bottom:1rem}.small-label{display:block;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+    select,input,textarea{width:100%;background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.18);color:var(--text-lt);padding:.82rem .9rem;font-size:1rem;font-family:"EB Garamond",serif;outline:none;transition:.2s}textarea{min-height:84px;resize:vertical}select:focus,input:focus,textarea:focus{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.07)}
+    .grid-2,.grid-3{display:grid;gap:.8rem}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}@media(max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;padding:.9rem 1rem;border:1px solid var(--border);background:rgba(201,168,76,.04);color:var(--gold);cursor:pointer;transition:.2s;text-decoration:none;width:100%;margin-top:.45rem}.btn:hover{background:rgba(201,168,76,.12);transform:translateY(-1px)}.btn.primary{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:#0a0805;border-color:transparent;font-weight:700}
+    .section-eyebrow{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}.section-title{font-family:"Cinzel Decorative",serif;font-size:1.45rem;color:var(--gold-lt);line-height:1.15}.section-line{width:100%;height:1px;background:linear-gradient(to right,var(--gold-dk),transparent);margin-top:.75rem}
+    .story-title{font-family:"Cinzel Decorative",serif;font-size:clamp(1.8rem,3vw,2.7rem);color:var(--gold-lt);line-height:1.08}.story-sub{font-size:1rem;color:var(--text);font-style:italic;line-height:1.7;margin-top:.55rem}
+    .chip-row{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:1rem}.chip{display:inline-flex;align-items:center;padding:.38rem .6rem;border:1px solid rgba(201,168,76,.25);background:rgba(201,168,76,.05);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}.chip.red{border-color:rgba(180,81,73,.35);background:rgba(180,81,73,.08);color:#e3a29d}.chip.green{border-color:rgba(107,160,107,.3);background:rgba(107,160,107,.08);color:#b9deb9}.chip.blue{border-color:rgba(126,162,209,.3);background:rgba(126,162,209,.08);color:#bcd0ec}
+    .lead{font-size:1rem;line-height:1.82;color:var(--text);margin-top:1rem}.story-grid{display:grid;grid-template-columns:1.2fr .9fr;gap:1rem;margin-top:1rem}@media(max-width:960px){.story-grid{grid-template-columns:1fr}}
+    .mini-card{border:1px solid var(--border);background:rgba(201,168,76,.03);padding:1rem}.mini-title{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:.55rem}.mini-card p,.mini-card li{font-size:.96rem;line-height:1.65;color:var(--text)}.mini-card ul{padding-left:1.05rem;display:grid;gap:.25rem}
+    .timeline{display:grid;gap:.9rem}.timeline-item{border-left:2px solid rgba(201,168,76,.35);padding-left:.9rem}.timeline-item h4{font-family:"Cinzel",serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.25rem}.timeline-item p{font-size:.97rem;line-height:1.68;color:var(--text)}
+    .toast{position:fixed;right:18px;bottom:18px;z-index:120;background:rgba(8,6,4,.96);border:1px solid var(--border);color:var(--gold-lt);padding:.9rem 1rem;font-family:"Cinzel",serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateY(0)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  </style>
+</head>
+<body>
+<canvas id="ember-canvas"></canvas>
+<nav>
+  <a href="index" class="nav-link">← Início</a>
+  <a href="#hero" class="nav-logo">Gerador de História</a>
+  <a href="quiz-personagem" class="nav-link">Quiz</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">A Queda de Valyria — Base de Personagem</p>
+    <h1 class="hero-title">Gerador de <span>História Complexa</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">Escolha origem, tom, posição social, vínculos, trauma, fé, ambição e relação com o sangue valiriano. O site transforma essas escolhas em uma base forte de passado, conflito, segredo, motivação e ganchos prontos para o jogador levar à mesa.</p>
+  </div>
+</section>
+
+<main class="page">
+  <div class="layout">
+    <aside class="panel">
+      <h2 class="panel-title">Escolhas do Personagem</h2>
+      <div class="grid-2">
+        <div class="control-group">
+          <label class="small-label">Nome</label>
+          <input id="charName" type="text" placeholder="Ex: Aelor, Myria, Brandon..." />
+        </div>
+        <div class="control-group">
+          <label class="small-label">Idade</label>
+          <input id="charAge" type="number" min="12" max="90" value="24" />
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="control-group">
+          <label class="small-label">Gênero</label>
+          <select id="charGender">
+            <option value="masculino">Masculino</option>
+            <option value="feminino">Feminino</option>
+            <option value="neutro">Neutro / livre</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="small-label">Tom da história</label>
+          <select id="toneSelect">
+            <option value="tragico">Trágico</option>
+            <option value="heroico">Heróico</option>
+            <option value="politico">Político</option>
+            <option value="sombrio">Sombrio</option>
+            <option value="mistico">Místico</option>
+            <option value="redencao">Redenção</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="small-label">Origem principal</label>
+        <select id="originSelect">
+          <option value="norte">Norte</option>
+          <option value="vale">Vale</option>
+          <option value="fluviais">Terras Fluviais</option>
+          <option value="ocidente">Terras Ocidentais</option>
+          <option value="campina">Campina</option>
+          <option value="tempestade">Terras da Tempestade</option>
+          <option value="dorne">Dorne</option>
+          <option value="ferro">Ilhas de Ferro</option>
+          <option value="coroa">Terras da Coroa</option>
+          <option value="dragonstone">Dragonstone / Derivamarca</option>
+          <option value="velaryon">Casa Velaryon / sangue marítimo valiriano</option>
+          <option value="celtigar">Casa Celtigar / Claw Isle</option>
+          <option value="oldvalyria">Descendência da Velha Valíria</option>
+          <option value="volantis">Velho Sangue de Volantis</option>
+          <option value="lys">Lys / linhagem valiriana</option>
+          <option value="pentos">Pentos / comerciantes valirianos</option>
+          <option value="myr">Myr / artesãos valirianos</option>
+          <option value="tyrosh">Tyrosh / nobres e mercadores</option>
+          <option value="braavos">Braavos / sangue refugiado de Valíria</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="control-group">
+          <label class="small-label">Posição social</label>
+          <select id="statusSelect">
+            <option value="bastardo">Bastardo / sem legitimidade</option>
+            <option value="comum">Povo comum</option>
+            <option value="soldado">Soldado / servo armado</option>
+            <option value="mercador">Mercador / artesão</option>
+            <option value="cavaleiro">Cavaleiro / escudeiro</option>
+            <option value="nobre">Nobre menor</option>
+            <option value="alta">Alta nobreza</option>
+            <option value="exilado">Exilado / refugiado</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="small-label">Criação</label>
+          <select id="upbringingSelect">
+            <option value="corte">Criado em corte</option>
+            <option value="castelo">Criado em castelo</option>
+            <option value="porto">Criado em porto / cidade</option>
+            <option value="campo">Criado no campo</option>
+            <option value="guerra">Criado em tempos de guerra</option>
+            <option value="templo">Criado por fé ou ordem religiosa</option>
+            <option value="mar">Criado no mar</option>
+            <option value="exilio">Criado no exílio</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="control-group">
+          <label class="small-label">Trauma central</label>
+          <select id="traumaSelect">
+            <option value="traicao">Traição familiar</option>
+            <option value="guerra">Perda em guerra</option>
+            <option value="fome">Fome / inverno / pobreza</option>
+            <option value="morte">Morte de alguém amado</option>
+            <option value="exilio">Exílio forçado</option>
+            <option value="captura">Cativeiro</option>
+            <option value="dragao">Fogo / dragão / sangue</option>
+            <option value="segredo">Segredo terrível descoberto</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="small-label">Ambição</label>
+          <select id="ambitionSelect">
+            <option value="honra">Restaurar honra</option>
+            <option value="poder">Conquistar poder</option>
+            <option value="riqueza">Acumular riqueza</option>
+            <option value="vinganca">Vingança</option>
+            <option value="protecao">Proteger alguém</option>
+            <option value="conhecimento">Descobrir a verdade</option>
+            <option value="dragao">Reivindicar legado valiriano</option>
+            <option value="sobreviver">Apenas sobreviver</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="small-label">Vínculo dominante</label>
+          <select id="bondSelect">
+            <option value="familia">Família</option>
+            <option value="casa">Casa / juramento</option>
+            <option value="amor">Amor perdido ou proibido</option>
+            <option value="irmaos">Companheiro de armas / irmandade</option>
+            <option value="mestre">Mestre, mentor ou protetor</option>
+            <option value="filho">Filho, herdeiro ou pupilo</option>
+            <option value="dragao">Sangue, ovo ou memória de dragão</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="control-group">
+          <label class="small-label">Fé</label>
+          <select id="faithSelect">
+            <option value="sete">Fé dos Sete</option>
+            <option value="antigos">Deuses Antigos</option>
+            <option value="rhlor">R'hllor</option>
+            <option value="afogado">Deus Afogado</option>
+            <option value="muitos">Muitos Rostos</option>
+            <option value="dragao">Culto / presságio do Deus Dragão</option>
+            <option value="nenhuma">Nenhuma</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="small-label">Relação com magia</label>
+          <select id="magicSelect">
+            <option value="nenhuma">Nenhuma</option>
+            <option value="suspeita">Suspeita / presságios</option>
+            <option value="toque">Já testemunhou algo impossível</option>
+            <option value="sonhos">Sonhos ou visões</option>
+            <option value="sangue">Sangue valiriano desperto</option>
+            <option value="ritual">Ligação com rituais</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label class="small-label">Relação com dragões</label>
+          <select id="dragonSelect">
+            <option value="nenhuma">Nenhuma</option>
+            <option value="fascinio">Fascínio distante</option>
+            <option value="medo">Medo profundo</option>
+            <option value="sangue">Orgulho do próprio sangue</option>
+            <option value="ovo">Ligação a ovo, osso ou relíquia</option>
+            <option value="montaria">Sonha cavalgar um dia</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="small-label">Detalhe opcional</label>
+        <textarea id="customSeed" placeholder="Algo que você quer forçar na história: um irmão desaparecido, um anel, uma profecia, uma dívida, um casamento prometido..."></textarea>
+      </div>
+      <button class="btn primary" id="generateBtn">Gerar história-base</button>
+      <button class="btn" id="copyBtn">Copiar história</button>
+      <button class="btn" id="saveBtn">Salvar em JSON</button>
+    </aside>
+
+    <section style="display:grid;gap:1rem">
+      <div class="card">
+        <p class="section-eyebrow">Resultado</p>
+        <h2 class="section-title">Base narrativa do personagem</h2>
+        <div class="section-line"></div>
+        <div style="margin-top:1rem">
+          <div class="story-title" id="storyTitle">Seu personagem ainda não foi forjado.</div>
+          <div class="story-sub" id="storySub">Escolha as opções ao lado para montar uma história longa, coerente e cheia de ganchos.</div>
+          <div class="chip-row" id="storyChips"></div>
+          <p class="lead" id="storyMain">A narrativa principal aparecerá aqui.</p>
+        </div>
+      </div>
+
+      <div class="story-grid">
+        <div class="card">
+          <p class="section-eyebrow">Linha de vida</p>
+          <h2 class="section-title">Passado em camadas</h2>
+          <div class="section-line"></div>
+          <div class="timeline" id="timelineBox" style="margin-top:1rem"></div>
+        </div>
+        <div style="display:grid;gap:1rem">
+          <div class="mini-card"><div class="mini-title">Segredo central</div><p id="secretBox">—</p></div>
+          <div class="mini-card"><div class="mini-title">Objetivo atual</div><p id="goalBox">—</p></div>
+          <div class="mini-card"><div class="mini-title">Gancho de campanha</div><p id="hookBox">—</p></div>
+          <div class="mini-card"><div class="mini-title">Conflitos internos</div><ul id="conflictList"></ul></div>
+          <div class="mini-card"><div class="mini-title">Relações úteis</div><ul id="relationList"></ul></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="toast" class="toast">Copiado</div>
+
+<script>
+const ORIGINS = {
+  norte:{label:'Norte', vibe:'frio, honra antiga e sobrevivência', birth:['uma fortaleza gelada','uma aldeia marcada pelo inverno','as terras de um lorde austero'], childhood:['aprendeu cedo a suportar silêncio, fome e neve','cresceu ouvindo que promessas são mais duras que aço','foi criado entre muralhas frias e lealdades antigas'], legacy:['o peso dos Primeiros Homens','um nome que ainda inspira respeito entre veteranos','a memória de um juramento que nunca foi esquecido']},
+  vale:{label:'Vale', vibe:'pedra, cavalaria e orgulho andal', birth:['um castelo de montanha','um vale protegido por casas antigas','uma estrada vigiada por cavaleiros'], childhood:['foi moldado por disciplina, etiqueta e hierarquia','aprendeu a sorrir em público e desconfiar em privado','cresceu ouvindo histórias de honra e linhagem'], legacy:['a expectativa de servir com distinção','o orgulho de sangue antigo','a sombra de ancestrais célebres']},
+  fluviais:{label:'Terras Fluviais', vibe:'terra disputada, memória de guerra e alianças frágeis', birth:['uma vila junto ao rio','terras frequentemente atravessadas por exércitos','um domínio pequeno entre casas rivais'], childhood:['cresceu aprendendo a negociar com o perigo','viu lealdades mudarem com as estações','aprendeu cedo que quem vive no rio paga por guerras alheias'], legacy:['uma rixa que atravessa gerações','o nome de uma casa pressionada por todos os lados','um passado feito de tréguas instáveis']},
+  ocidente:{label:'Terras Ocidentais', vibe:'ouro, status e cálculo', birth:['uma cidade rica','uma fortaleza orgulhosa','um domínio de vassalos ambiciosos'], childhood:['cresceu cercado por expectativas de prestígio','aprendeu o preço do nome e do luxo','foi ensinado a nunca parecer fraco'], legacy:['a obsessão por reputação','um padrão impossível herdado da família','uma relação amarga com riqueza e poder']},
+  campina:{label:'Campina', vibe:'cortesia, fertilidade e jogos de influência', birth:['um castelo cercado de jardins','vinhas antigas e estradas movimentadas','uma corte menor cheia de etiqueta'], childhood:['aprendeu a esconder aço dentro de boas maneiras','cresceu entre música, intriga e aparência impecável','foi treinado a agradar os olhos certos'], legacy:['a pressão de parecer perfeito','laços políticos delicados','um sobrenome bonito com rachaduras invisíveis']},
+  tempestade:{label:'Terras da Tempestade', vibe:'fúria, resistência e dever', birth:['uma costa batida pelo vento','uma fortaleza de muros grossos','terras marcadas por trovão e sal'], childhood:['cresceu entre tempestades, perdas e disciplina marcial','aprendeu a se erguer depois de cada golpe','foi educado para aguentar mais do que reclamar'], legacy:['um dever que pesa mais que afeto','uma história familiar de guerra','uma reputação de dureza difícil de sustentar']},
+  dorne:{label:'Dorne', vibe:'calor, orgulho, memória e liberdade', birth:['uma cidade de pedra quente','um oásis ligado a velhas rotas','um assento nobre moldado pelo sol'], childhood:['cresceu cercado por paixão, honra e ressentimentos antigos','aprendeu a responder ofensa com memória longa','foi criado entre beleza, veneno e política'], legacy:['o orgulho de não se curvar facilmente','um sangue acostumado a lembrar insultos','uma família onde afeto e ambição andam juntos']},
+  ferro:{label:'Ilhas de Ferro', vibe:'sal, pilhagem e dureza', birth:['uma ilha varrida por vento e spray do mar','um salão de pedra onde força vale mais que conforto','uma família que mede valor em medo e conquista'], childhood:['cresceu ouvindo que o mar toma o que é fraco','aprendeu cedo a suportar dor e desprezo','foi criado entre rezas duras e honra brutal'], legacy:['a exigência de nunca parecer pequeno','um sobrenome temido em alguns portos','a marca de uma cultura que cobra dureza constante']},
+  coroa:{label:'Terras da Coroa', vibe:'proximidade do trono, pragmatismo e tensão', birth:['um domínio próximo de Porto Real','terras onde política e sobrevivência se misturam','uma casa menor espremida entre interesses maiores'], childhood:['cresceu perto do cheiro de corte e perigo','aprendeu a medir palavras antes de medir aço','foi educado para sobreviver entre gente mais poderosa'], legacy:['o hábito de servir sem confiar','uma ligação incômoda com a coroa','um nome pequeno orbitando poder grande demais']},
+  dragonstone:{label:'Dragonstone / Derivamarca', vibe:'pedra negra, mar e ecos do fogo antigo', birth:['uma ilha de rocha vulcânica','corredores escuros onde o vento soa como um presságio','terras marcadas por dragões, mar e cinza'], childhood:['cresceu vendo símbolos valirianos antes de entendê-los','aprendeu que o passado ainda vive na pedra','foi criado sob histórias de fogo, perda e soberania'], legacy:['ecos do velho sangue','uma herança cercada por símbolos de dragão','a sensação de que sua família serviu coisas maiores do que reis']},
+  velaryon:{label:'Casa Velaryon / sangue marítimo valiriano', vibe:'mar, nobreza naval e memória valiriana', birth:['um porto nobre ligado a velhas frotas','uma casa de mapas, velas e ambição','uma linhagem que se orgulha do mar e do sangue'], childhood:['cresceu entre navios, prata e histórias de Valíria','aprendeu a ver o mundo como rota e oportunidade','foi criado para lembrar que seu sangue já navegou impérios'], legacy:['uma ambição herdada do mar','a memória de uma linhagem valiriana respeitada','uma relação entre prestígio naval e nostalgia imperial']},
+  celtigar:{label:'Casa Celtigar / Claw Isle', vibe:'tesouro, tradição e sangue antigo menor', birth:['uma ilha ligada a cofres e marés','um domínio menor de sangue valiriano','salas onde riqueza antiga compra silêncio novo'], childhood:['cresceu entre histórias de tesouros, perdas e cálculo','aprendeu a proteger o que a família ainda possui','foi educado a valorizar nome, conta e herança'], legacy:['o peso de provar valor apesar de viver à sombra de nomes maiores','um orgulho antigo sustentado por riqueza e memória','a sensação de ter mais passado do que futuro garantido']},
+  oldvalyria:{label:'Descendência da Velha Valíria', vibe:'ruína, grandeza perdida e sangue perigoso', birth:['uma família que jura descender dos senhores de dragões','um ramo decadente de sangue antigo','um exílio que transformou grandeza em lenda doméstica'], childhood:['cresceu ouvindo que o fogo corre em suas veias','aprendeu a confundir glória ancestral com destino pessoal','foi criado entre nomes antigos, prata escura e silêncio reverente'], legacy:['a maldição de comparar a própria vida a um império morto','o fascínio por tudo que lembre dragões e feitiçaria','um orgulho que às vezes parece herança e às vezes delírio']},
+  volantis:{label:'Velho Sangue de Volantis', vibe:'aristocracia, escravidão e ambição imperial', birth:['um ramo menor do Velho Sangue','uma casa orgulhosa das antigas marcas valirianas','um mundo onde tradição e crueldade andam juntas'], childhood:['cresceu sendo lembrado de pureza, posição e distância social','aprendeu política antes de misericórdia','foi educado para obedecer símbolos antigos e manipular homens novos'], legacy:['a arrogância do Velho Sangue','uma educação feita para governar','culpas e privilégios herdados do mundo livre e cruel de Essos']},
+  lys:{label:'Lys / linhagem valiriana', vibe:'beleza, refinamento e decadência', birth:['uma cidade onde perfume, política e prazer se confundem','um ramo elegante de sangue valiriano','um ambiente onde aparência vale quase tanto quanto poder'], childhood:['cresceu entre seda, música e promessas caras','aprendeu cedo a ler desejo e mentira','foi moldado por charme, beleza e segredos'], legacy:['a capacidade de seduzir ou manipular sem erguer a voz','uma reputação ligada ao brilho de Lys','uma relação perigosa entre afeto, luxo e utilidade']},
+  pentos:{label:'Pentos / comerciantes valirianos', vibe:'riqueza, diplomacia e fragilidade política', birth:['uma família de negociadores e patronos','uma cidade de contratos, medos e alianças caras','um lar onde fortuna e prudência sempre caminharam juntas'], childhood:['cresceu ouvindo mais sobre dívidas do que sobre espadas','aprendeu que paz também custa sangue','foi criado para valorizar palavra, navio e rota comercial'], legacy:['o instinto de negociar antes de atacar','uma herança de pragmatismo essosi','uma família que sobrevive comprando tempo e favores']},
+  myr:{label:'Myr / artesãos valirianos', vibe:'arte, técnica e curiosidade', birth:['uma família ligada a ofícios finos e conhecimento útil','uma cidade de engenho, vidro e precisão','um ambiente onde beleza e técnica se misturam'], childhood:['cresceu cercado por ferramentas, invenções e paciência','aprendeu a admirar o detalhe antes do espetáculo','foi moldado por método, curiosidade e mãos habilidosas'], legacy:['o impulso de compreender tudo que toca','uma educação orientada ao trabalho refinado','uma visão de mundo mais técnica do que cavaleiresca']},
+  tyrosh:{label:'Tyrosh / nobres e mercadores', vibe:'ostentação, bravata e comércio armado', birth:['um clã de mercadores orgulhosos','uma cidade vistosa de tintas, navios e vaidades','uma família acostumada a negociar e intimidar'], childhood:['cresceu entre cor, exagero e cálculo','aprendeu a parecer maior do que realmente era','foi treinado a falar alto, observar bem e esquecer pouco'], legacy:['o gosto pelo espetáculo útil','uma postura entre charme e ameaça','uma família que confunde reputação com arma']},
+  braavos:{label:'Braavos / sangue refugiado de Valíria', vibe:'segredo, mobilidade e liberdade comprada', birth:['descendentes de fugitivos, navegadores ou devedores libertos','um ambiente de máscaras, canais e lembranças fragmentadas','uma casa menor acostumada a esconder o passado para garantir o futuro'], childhood:['cresceu ouvindo que liberdade precisa ser defendida com astúcia','aprendeu a desconfiar de tronos, credores e profetas','foi criado entre discrição, comércio e silêncio bem pago'], legacy:['a memória de antepassados que fugiram de senhores de dragões','um apego feroz à autonomia','uma herança valiriana feita de fragmentos, não de coroas']}
+};
+
+const TONES = {
+  tragico:{line:'uma trajetória marcada por perda e custo pessoal', opening:['sempre carregou a sensação de que algo precioso lhe foi arrancado cedo demais','aprendeu a viver como quem já enterrou parte de si'], pivot:['Quando a perda finalmente ganhou nome, tudo que veio depois passou a orbitá-la.','O momento que deveria defini-lo pela dor acabou moldando também sua força.'], end:['Agora vive entre memória e dever, sem saber qual dos dois o destruirá primeiro.','Hoje segue adiante, mas cada vitória tem gosto de luto.']},
+  heroico:{line:'uma trajetória de coragem, dever e sacrifício', opening:['foi criado para acreditar que coragem vale mais do que conforto','aprendeu cedo que proteção também é uma forma de liderança'], pivot:['Quando o perigo veio, escolheu agir mesmo sem garantia de retorno.','A primeira vez que teve medo de verdade foi também a primeira vez que alguém dependeu dele.'], end:['Agora busca se tornar alguém digno das histórias que ouviu na infância.','Hoje tenta fazer do próprio nome um abrigo para os outros.']},
+  politico:{line:'uma trajetória de alianças, intriga e sobrevivência social', opening:['cresceu entendendo que palavras podem abrir portas ou cavar sepulturas','aprendeu que ninguém permanece inocente perto demais do poder'], pivot:['Quando passou a enxergar as rachaduras por trás da cortesia, deixou de acreditar em neutralidade.','A primeira grande lição veio quando descobriu que lealdade sem utilidade raramente dura.'], end:['Agora mede afeto e vantagem na mesma balança, ainda que se odeie por isso.','Hoje sabe que toda amizade relevante tem preço, risco ou utilidade.']},
+  sombrio:{line:'uma trajetória cercada por culpa, violência e escolhas ruins', opening:['aprendeu cedo que o mundo raramente pune o primeiro erro, mas sempre cobra o segundo','cresceu num ambiente onde inocência parecia luxo passageiro'], pivot:['Quando cruzou uma linha que jurava nunca tocar, descobriu como é difícil voltar inteiro.','O pior momento de sua vida foi também o momento em que percebeu do que era capaz.'], end:['Agora caminha como quem tenta esconder os próprios dentes atrás de boas intenções.','Hoje vive entre necessidade, culpa e a tentação de repetir o que mais odeia.']},
+  mistico:{line:'uma trajetória marcada por presságios, ecos antigos e sinais inexplicáveis', opening:['sempre teve a impressão de que o mundo escondia mais do que os olhos comuns podiam suportar','cresceu ouvindo histórias que pareciam mito até começarem a responder seu nome'], pivot:['Quando o impossível o tocou, já era tarde demais para voltar a ser apenas comum.','O primeiro sinal foi pequeno demais para convencer os outros, mas grande demais para ser ignorado.'], end:['Agora tenta descobrir se foi escolhido, amaldiçoado ou apenas observado por forças antigas.','Hoje vive dividido entre interpretar os sinais e sobreviver a eles.']},
+  redencao:{line:'uma trajetória de culpa, reparação e segunda chance', opening:['carrega a convicção silenciosa de que já falhou quando mais importava','aprendeu que arrependimento sem ação apodrece por dentro'], pivot:['Quando teve a oportunidade de corrigir uma pequena parte do passado, percebeu que ainda podia escolher.','O encontro com alguém que lembrava sua antiga queda abriu uma rota difícil de volta.'], end:['Agora tenta construir algo digno sobre os escombros do próprio erro.','Hoje busca provar que um passado manchado não precisa determinar o fim da história.']}
+};
+
+const STATUS = {
+  bastardo:['nunca lhe permitiram esquecer a própria falta de legitimidade','cresceu tendo de conquistar respeito sem direito automático a ele'],
+  comum:['aprendeu cedo a contar comida, favores e promessas','viveu perto da dureza real da terra e do preço da guerra'],
+  soldado:['foi tratado como útil antes de ser tratado como humano','aprendeu disciplina pela necessidade, não pelo ideal'],
+  mercador:['foi educado a pensar em risco, dívida e oportunidade','aprendeu a medir pessoas como mede rotas e custos'],
+  cavaleiro:['foi instruído em dever, aparência e violência ritualizada','cresceu ouvindo que honra é uma roupa que precisa ser mantida limpa'],
+  nobre:['carregou expectativas grandes demais para uma posição pequena demais','aprendeu a sorrir para gente que poderia destrui-lo'],
+  alta:['foi criado sob vigilância, expectativa e importância pública','aprendeu cedo que família poderosa também é prisão dourada'],
+  exilado:['cresceu sem saber se pertencia ao lugar onde estava ou ao lugar que havia perdido','foi moldado por deslocamento, desconfiança e saudade mal definida']
+};
+
+const UPBRINGING = {
+  corte:['aprimorou etiqueta, observação e máscara social','aprendeu que silêncio e postura podem ser armas'],
+  castelo:['cresceu entre dever, hierarquia e histórias de ancestralidade','aprendeu a enxergar pessoas pelo lugar que ocupam na muralha do poder'],
+  porto:['cresceu ouvindo sotaques, boatos e promessas de partida','aprendeu cedo a distinguir oportunidade de armadilha'],
+  campo:['aprendeu o valor do trabalho visível e da sobrevivência simples','cresceu perto do ritmo das estações e da dureza honesta'],
+  guerra:['foi moldado por urgência, medo e improviso','aprendeu antes do tempo como homens quebram'],
+  templo:['cresceu entre ritos, disciplina e culpa sagrada','aprendeu a interpretar o mundo como sinal ou julgamento'],
+  mar:['foi criado com horizonte aberto e perigo constante','aprendeu a pensar em rota, vento e retorno incerto'],
+  exilio:['aprendeu a adaptar identidade conforme o lugar exigia','cresceu entendendo que lar pode ser memória, não endereço']
+};
+
+const TRAUMA = {
+  traicao:['alguém do próprio sangue vendeu sua confiança por segurança, poder ou medo','uma traição doméstica ensinou que nem toda família merece o nome que carrega'],
+  guerra:['a guerra tomou algo que jamais pôde ser devolvido','viu o mundo adulto se revelar como um lugar que queima inocentes com facilidade'],
+  fome:['a escassez lhe mostrou que virtude e necessidade nem sempre convivem','aprendeu a sentir vergonha de sobreviver quando outros não conseguiram'],
+  morte:['a morte de alguém amado virou a medida silenciosa de tudo que veio depois','nunca superou o vazio deixado por quem deveria ter envelhecido ao seu lado'],
+  exilio:['foi arrancado do próprio chão antes de entender o valor dele','cresceu com a ferida específica de não pertencer por inteiro a lugar nenhum'],
+  captura:['conheceu o peso da impotência no corpo e na memória','descobriu que humilhação e medo deixam marcas mais duras que cicatrizes'],
+  dragao:['o fogo, o sangue ou a sombra de um dragão redefiniram sua infância','associou maravilha e horror a uma mesma imagem ardente'],
+  segredo:['viu ou ouviu algo que jamais deveria ter chegado a seus ouvidos','carrega um conhecimento perigoso que altera o sentido da própria história']
+};
+
+const AMBITION = {
+  honra:['reconstruir a honra perdida de si mesmo ou de sua família','ter um nome lembrado sem vergonha'],
+  poder:['tomar espaço num mundo que respeita força antes de virtude','deixar de ser peça e se tornar jogador'],
+  riqueza:['nunca mais depender da boa vontade de ninguém','transformar segurança material em liberdade'],
+  vinganca:['fazer alguém pagar pelo que foi destruído','provar que a dor não foi esquecida'],
+  protecao:['manter viva a única pessoa ou causa que ainda importa','impedir que outros sofram a mesma queda'],
+  conhecimento:['descobrir a verdade enterrada sob versões convenientes','separar mito, mentira e sangue'],
+  dragao:['reivindicar para si um legado valiriano que ainda arde em rumor e memória','provar que o sangue antigo não morreu por completo'],
+  sobreviver:['atravessar o próximo inverno político, militar ou literal','continuar vivo num mundo que consome os fracos']
+};
+
+const BONDS = {
+  familia:['a família é ferida e refúgio ao mesmo tempo','seus laços de sangue ainda decidem mais do que ele admite'],
+  casa:['a casa, o juramento ou o brasão moldaram quase todas as suas escolhas','a lealdade institucional pesa tanto quanto qualquer afeto'],
+  amor:['um amor perdido, proibido ou impossível ainda orienta seus passos','há alguém cuja lembrança muda a forma como enxerga dever e desejo'],
+  irmaos:['deve a própria vida a um companheiro de armas ou laço semelhante','confia mais em quem sangrou ao seu lado do que em parentes de nome nobre'],
+  mestre:['um mentor deixou marcas profundas, boas ou cruéis','a voz de um antigo mestre ainda ecoa quando precisa decidir'],
+  filho:['vive em torno da proteção, culpa ou esperança ligada a um filho, herdeiro ou pupilo','mede risco e futuro a partir de alguém mais jovem'],
+  dragao:['guarda uma ligação íntima com algo ligado a dragões, ossos, ovos, canções ou sangue','trata o legado valiriano menos como história e mais como chamado']
+};
+
+const FAITH = {
+  sete:['enxerga culpa, virtude e dever através da Fé dos Sete','aprendeu a dividir o mundo entre pecado público e fraqueza privada'],
+  antigos:['carrega uma visão antiga e silenciosa do sagrado','confia mais em memória, árvore e promessa do que em sermão'],
+  rhlor:['vê o mundo como luta entre chama e escuridão','suspeita que toda dor possa ter propósito oculto'],
+  afogado:['mede valor por provação, perda e retorno','foi ensinado a temer fraqueza mais do que morte'],
+  muitos:['aprendeu cedo a desconfiar da permanência dos rostos','vê identidade como ferramenta, não essência'],
+  dragao:['encara o fogo e o sangue como linguagem de destino','trata presságios valirianos com reverência inquieta'],
+  nenhuma:['não confia em deuses, mas reconhece o poder que fé exerce sobre homens','aprendeu a buscar causa e consequência antes de milagre']
+};
+
+const MAGIC = {
+  nenhuma:['nunca viu prova suficiente para confiar no sobrenatural','prefere acreditar no peso concreto do aço, do ouro e da fome'],
+  suspeita:['coleciona coincidências estranhas demais para ignorar','já sentiu a realidade falhar por um instante e nunca esqueceu'],
+  toque:['testemunhou algo impossível e desde então perdeu a simplicidade da incredulidade','carrega a certeza inquietante de que o mundo é mais fundo do que parece'],
+  sonhos:['seus sonhos trazem símbolos, rostos ou ruínas que às vezes se confirmam','acorda com a sensação incômoda de ter sido visto enquanto dormia'],
+  sangue:['há sinais de que o sangue antigo responde de alguma forma dentro de si','tem medo de que herança e maldição sejam a mesma coisa'],
+  ritual:['já participou, foi alvo ou sobreviveu a um ritual que alterou sua visão do mundo','sabe que certas portas se abrem com preço alto demais']
+};
+
+const DRAGONS = {
+  nenhuma:['dragões, para ele, são memória distante ou instrumento de reis','não organiza sua vida em torno deles'],
+  fascinio:['sempre olhou para dragões como símbolo de grandeza perdida','sente atração por tudo que cheira a cinza antiga e majestade'],
+  medo:['associa dragões a descontrole, perda e devastação','o simples rumor de fogo vivo já o deixa inquieto'],
+  sangue:['vê nos dragões um espelho possível do próprio destino','orgulha-se, teme ou exagera o que pensa herdar deles'],
+  ovo:['guarda ou busca uma relíquia dracônica que talvez mude sua vida','trata restos de dragão como prova de que o mundo ainda pode arder'],
+  montaria:['sonha secretamente em ser digno de uma montaria impossível','mede a própria grandeza futura pela imagem de um dragão sob seu comando']
+};
+
+const SECRET_BY_ORIGIN = {
+  val:'há rumores de que sua linhagem não é apenas valiriana, mas ligada a um ramo que tentou esconder um nome antigo, um ovo perdido ou um juramento feito em fogo',
+  west:'há uma verdade enterrada sobre o passado de sua família que, se revelada, alteraria alianças, heranças ou a legitimidade de alguém importante',
+  sea:'carrega mapa, carta, chave ou conhecimento herdado de uma rota, cofre ou refúgio que mais gente deseja encontrar',
+  default:'há uma peça do passado que foi escondida por alguém que dizia protegê-lo, mas talvez só estivesse protegendo a si mesmo'
+};
+
+const RELATIONS = {
+  rival:['um rival conhece parte da verdade e espera o momento certo para usá-la','alguém da mesma geração deseja aquilo que considera seu por direito'],
+  ally:['um aliado improvável enxerga valor onde os outros veem risco','uma figura mais velha aposta em seu potencial por motivos que ainda não ficaram claros'],
+  blood:['um parente distante pode ser a ponte para redenção ou ruína','alguém do próprio sangue esconde arrependimento, inveja ou dívida antiga'],
+  patron:['um patrono oferece proteção em troca de lealdade que talvez cobre demais','um superior poderoso observa seus passos com interesse desconfortável']
+};
+
+let currentStory = null;
+function rnd(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function isVal(origin){return ['dragonstone','velaryon','celtigar','oldvalyria','volantis','lys','pentos','myr','tyrosh','braavos'].includes(origin)}
+function addChip(el,text,cls=''){const s=document.createElement('span');s.className='chip '+cls;s.textContent=text;el.appendChild(s)}
+function byId(id){return document.getElementById(id)}
+
+function buildStory(){
+  const name = byId('charName').value.trim() || 'Personagem sem nome';
+  const age = Number(byId('charAge').value)||24;
+  const gender = byId('charGender').value;
+  const toneKey = byId('toneSelect').value;
+  const originKey = byId('originSelect').value;
+  const statusKey = byId('statusSelect').value;
+  const upKey = byId('upbringingSelect').value;
+  const traumaKey = byId('traumaSelect').value;
+  const ambitionKey = byId('ambitionSelect').value;
+  const bondKey = byId('bondSelect').value;
+  const faithKey = byId('faithSelect').value;
+  const magicKey = byId('magicSelect').value;
+  const dragonKey = byId('dragonSelect').value;
+  const custom = byId('customSeed').value.trim();
+
+  const o = ORIGINS[originKey], t = TONES[toneKey];
+  const val = isVal(originKey);
+  const article = gender === 'feminino' ? 'nascida' : gender === 'masculino' ? 'nascido' : 'nascide';
+  const bloodLine = val ? 'com ecos claros de sangue valiriano' : 'marcado pelas tradições de sua terra';
+  const secret = val ? rnd([SECRET_BY_ORIGIN.val,SECRET_BY_ORIGIN.sea,SECRET_BY_ORIGIN.default]) : rnd([SECRET_BY_ORIGIN.west,SECRET_BY_ORIGIN.default]);
+
+  const opening = `${name}, ${article} em ${rnd(o.birth)} e hoje com ${age} anos, vem de ${o.label}, uma origem definida por ${o.vibe}. ${rnd(o.childhood)}. ${rnd(STATUS[statusKey])}. ${rnd(UPBRINGING[upKey])}.`;
+  const middle = `${rnd(t.opening)} ${rnd(TRAUMA[traumaKey])}. ${rnd(BONDS[bondKey])}. ${rnd(FAITH[faithKey])}. ${rnd(MAGIC[magicKey])}. ${rnd(DRAGONS[dragonKey])}.`;
+  const pivot = `${rnd(t.pivot)} Desde então, ${name} passou a perseguir ${rnd(AMBITION[ambitionKey])}. ${val ? `Essa busca é atravessada por uma herança ${bloodLine}, cercada por símbolos, rumores e expectativas que lembram Valíria, Dragonstone, Velaryon, Volantis, Lys ou outros ramos do legado antigo.` : `Essa busca nasce de ${rnd(o.legacy)}.`}`;
+  const customLine = custom ? `Há ainda um elemento que complica tudo: ${custom}. Isso não é detalhe de cor; é uma peça viva da narrativa e deve aparecer cedo na campanha.` : '';
+  const ending = `${rnd(t.end)} Seu passado oferece material para intriga, alianças frágeis, ressentimentos familiares, escolhas morais e crescimento pessoal.`;
+  const story = `${opening} ${middle} ${pivot} ${customLine} ${ending}`.replace(/\s+/g,' ').trim();
+
+  const timeline = [
+    {title:'Infância', text:`Na infância, ${name} foi moldado por ${o.vibe} e por uma criação ${byId('upbringingSelect').selectedOptions[0].text.toLowerCase()}. ${rnd(o.childhood)}.`},
+    {title:'Primeira Marca', text:`O evento que primeiro rachou sua visão de mundo foi: ${byId('traumaSelect').selectedOptions[0].text.toLowerCase()}. ${rnd(TRAUMA[traumaKey])}.`},
+    {title:'Virada', text:`O ponto de virada veio quando ${rnd(t.pivot).charAt(0).toLowerCase()+rnd(t.pivot).slice(1)}`},
+    {title:'Agora', text:`No presente, ${name} tenta ${rnd(AMBITION[ambitionKey])} enquanto lida com ${rnd(BONDS[bondKey])} e com uma história de tom ${byId('toneSelect').selectedOptions[0].text.toLowerCase()}.`}
+  ];
+
+  const conflicts = [
+    `${name} quer ${rnd(AMBITION[ambitionKey])}, mas teme pagar o preço moral disso.`,
+    `${name} carrega dever para com ${byId('bondSelect').selectedOptions[0].text.toLowerCase()}, ainda que esse dever colida com desejo pessoal.`,
+    `${val ? 'O sangue valiriano ou a sombra dele' : 'O passado familiar'} pode ser fonte de orgulho e ruína ao mesmo tempo.`,
+    `${byId('faithSelect').selectedOptions[0].text} e ${byId('magicSelect').selectedOptions[0].text.toLowerCase()} não convivem de forma simples na sua vida.`
+  ];
+
+  const relations = [
+    rnd(RELATIONS.ally),
+    rnd(RELATIONS.rival),
+    rnd(RELATIONS.blood),
+    rnd(RELATIONS.patron)
+  ];
+
+  const goal = `${name} quer ${rnd(AMBITION[ambitionKey])}, mas precisa fazê-lo antes que seu segredo, seus rivais ou a própria origem cobrem um preço irreversível.`;
+  const hook = val
+    ? `${name} pode entrar na campanha por causa de uma carta, relíquia, profecia, dívida ou juramento ligado ao legado valiriano. O narrador pode conectá-lo a Dragonstone, Velaryon, Volantis, Lys, Braavos ou a boatos sobre ovos, ossos e sangue antigo.`
+    : `${name} entra na campanha quando um conflito local toca diretamente seu trauma, sua ambição e o vínculo que ainda o prende ao passado. O narrador pode conectá-lo a disputa de casa, vingança, casamento, guerra ou juramento.`;
+
+  currentStory = {name, age, gender, tone:toneKey, origin:originKey, status:statusKey, upbringing:upKey, trauma:traumaKey, ambition:ambitionKey, bond:bondKey, faith:faithKey, magic:magicKey, dragon:dragonKey, custom, story, secret, goal, hook, timeline, conflicts, relations};
+  renderStory();
+  try{localStorage.setItem('valyria_story_generator', JSON.stringify(currentStory));}catch(e){}
+}
+
+function renderStory(){
+  if(!currentStory) return;
+  byId('storyTitle').textContent = currentStory.name;
+  byId('storySub').textContent = `${ORIGINS[currentStory.origin].label} · ${byId('toneSelect').selectedOptions[0].text} · ${byId('statusSelect').selectedOptions[0].text} · ${currentStory.age} anos`;
+  const chips = byId('storyChips'); chips.innerHTML='';
+  addChip(chips, ORIGINS[currentStory.origin].label, isVal(currentStory.origin)?'red':'blue');
+  addChip(chips, byId('toneSelect').selectedOptions[0].text, 'green');
+  addChip(chips, byId('ambitionSelect').selectedOptions[0].text, 'blue');
+  addChip(chips, byId('bondSelect').selectedOptions[0].text, '');
+  if(isVal(currentStory.origin) || currentStory.dragon!=='nenhuma' || currentStory.magic==='sangue') addChip(chips,'traço valiriano','red');
+  byId('storyMain').textContent = currentStory.story;
+  byId('secretBox').textContent = currentStory.secret;
+  byId('goalBox').textContent = currentStory.goal;
+  byId('hookBox').textContent = currentStory.hook;
+  const tl = byId('timelineBox'); tl.innerHTML='';
+  currentStory.timeline.forEach(item=>{ const el=document.createElement('div'); el.className='timeline-item'; el.innerHTML=`<h4>${item.title}</h4><p>${item.text}</p>`; tl.appendChild(el); });
+  const cl = byId('conflictList'); cl.innerHTML=''; currentStory.conflicts.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; cl.appendChild(li); });
+  const rl = byId('relationList'); rl.innerHTML=''; currentStory.relations.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; rl.appendChild(li); });
+}
+
+const toast = byId('toast'); let toastTimer;
+function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),1600)}
+byId('generateBtn').addEventListener('click', buildStory);
+byId('copyBtn').addEventListener('click', async ()=>{
+  if(!currentStory) buildStory();
+  const txt = `${currentStory.name}\n\n${currentStory.story}\n\nSegredo: ${currentStory.secret}\nObjetivo: ${currentStory.goal}\nGancho: ${currentStory.hook}`;
+  try{await navigator.clipboard.writeText(txt);showToast('História copiada')}catch(e){showToast('Falha ao copiar')}
+});
+byId('saveBtn').addEventListener('click', ()=>{
+  if(!currentStory) buildStory();
+  const blob = new Blob([JSON.stringify(currentStory,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `historia-${(currentStory.name||'personagem').replace(/\s+/g,'-').toLowerCase()}.json`;
+  a.click(); URL.revokeObjectURL(a.href); showToast('JSON salvo');
+});
+
+try{
+  const raw = localStorage.getItem('valyria_story_generator');
+  if(raw){ currentStory = JSON.parse(raw); if(currentStory.name) byId('charName').value=currentStory.name; if(currentStory.age) byId('charAge').value=currentStory.age; ['charGender','toneSelect','originSelect','statusSelect','upbringingSelect','traumaSelect','ambitionSelect','bondSelect','faithSelect','magicSelect','dragonSelect'].forEach(id=>{ if(currentStory[id.replace('Select','').replace('char','').toLowerCase()]||currentStory[id]){} }); }
+}catch(e){}
+
+const map = {charGender:'gender', toneSelect:'tone', originSelect:'origin', statusSelect:'status', upbringingSelect:'upbringing', traumaSelect:'trauma', ambitionSelect:'ambition', bondSelect:'bond', faithSelect:'faith', magicSelect:'magic', dragonSelect:'dragon'};
+if(currentStory){
+  Object.entries(map).forEach(([id,key])=>{ if(currentStory[key]) byId(id).value=currentStory[key]; });
+  if(currentStory.custom) byId('customSeed').value=currentStory.custom;
+  renderStory();
+}
+
+const canvas=document.getElementById('ember-canvas'); const ctx=canvas.getContext('2d'); let W,H,embers=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight} resize(); window.addEventListener('resize',resize);
+function createEmber(){return{x:Math.random()*W,y:H+10,r:Math.random()*2+.45,vx:(Math.random()-.5)*.55,vy:-(Math.random()*1+.35),alpha:Math.random()*.4+.2,life:0,maxLife:Math.random()*320+150}}
+for(let i=0;i<46;i++){const e=createEmber();e.y=Math.random()*H;e.life=Math.random()*e.maxLife;embers.push(e)}
+function anim(){ctx.clearRect(0,0,W,H);embers.forEach((e,i)=>{e.life++;e.x+=e.vx+Math.sin(e.life*.03)*.34;e.y+=e.vy;const p=e.life/e.maxLife;const a=e.alpha*(1-Math.pow(p,2));ctx.beginPath();ctx.arc(e.x,e.y,e.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,${55+Math.floor(p*75)},0,${a})`;ctx.fill(); if(e.life>=e.maxLife||e.y<-20) embers[i]=createEmber()}); requestAnimationFrame(anim)} anim();
+</script>
+</body>
+</html>

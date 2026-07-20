@@ -1,1 +1,1952 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/sintech4"><meta http-equiv="refresh" content="0;url=/sintech4"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/sintech4'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/sintech4">/sintech4</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/sintech4'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/sintech4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINTECH :: FASE 04 - EXTRAÇÃO FINAL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.25;
+        }
+
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 0, 0, 0.04) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(255, 0, 0, 0.04) 3px
+            );
+            pointer-events: none;
+            z-index: 2;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        .dimensional-rift {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            background: radial-gradient(circle at 50% 50%, 
+                transparent 0%, 
+                rgba(255, 0, 0, 0.15) 50%,
+                rgba(0, 0, 0, 0.8) 100%);
+            opacity: 0;
+            animation: riftPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes riftPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        #boot-text {
+            font-size: 1.3rem;
+            text-align: left;
+            max-width: 950px;
+            line-height: 2;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+        }
+
+        .boot-line {
+            opacity: 0;
+            animation: fadeInLine 0.3s forwards;
+        }
+
+        .boot-line.critical {
+            color: #ff4444;
+            font-weight: bold;
+            animation: fadeInLine 0.3s forwards, blink 1s infinite;
+        }
+
+        @keyframes fadeInLine {
+            to { opacity: 1; }
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        #main-container {
+            display: none;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        #header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 3px solid #ff0000;
+            background: rgba(0, 0, 0, 0.97);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.7);
+            animation: glitchHeader 3s infinite;
+            position: relative;
+        }
+
+        @keyframes glitchHeader {
+            0%, 94%, 100% { transform: translate(0); }
+            95% { transform: translate(-4px, 4px); }
+            96% { transform: translate(4px, -4px); }
+            97% { transform: translate(-3px, 3px); }
+        }
+
+        #header h1 {
+            font-size: 4rem;
+            letter-spacing: 15px;
+            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000;
+            margin-bottom: 0.5rem;
+            animation: textGlitch 5s infinite;
+        }
+
+        @keyframes textGlitch {
+            0%, 92%, 100% { text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
+            93% { text-shadow: -5px 0 20px #ff0000, 5px 0 40px #00ff00; }
+            94% { text-shadow: 5px 0 20px #ff0000, -5px 0 40px #0000ff; }
+        }
+
+        #header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            letter-spacing: 5px;
+            color: #ff4444;
+        }
+
+        .fissure-meter {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff0000;
+        }
+
+        .fissure-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff0000, #ff00ff, #00ffff);
+            box-shadow: 0 0 20px #ff0000;
+            transition: width 0.5s;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        #chat-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2.5rem;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+            min-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 1.8rem;
+            padding: 1.5rem;
+            border-left: 4px solid #ff0000;
+            background: rgba(255, 0, 0, 0.06);
+            opacity: 0;
+            animation: messageIn 0.5s forwards;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message.system {
+            border-left-color: #ff6666;
+            background: rgba(255, 0, 0, 0.12);
+        }
+
+        .message.critical {
+            border-left-color: #ff0000;
+            background: rgba(255, 0, 0, 0.25);
+            animation: warningPulse 1s infinite, messageIn 0.5s;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .message.entity {
+            border-left-color: #ff00ff;
+            background: rgba(255, 0, 255, 0.15);
+            animation: entityGlitch 0.3s infinite, messageIn 0.5s;
+        }
+
+        @keyframes entityGlitch {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-2px, 2px); }
+            50% { transform: translate(2px, -2px); }
+            75% { transform: translate(-2px, -2px); }
+        }
+
+        .message-header {
+            font-weight: bold;
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 0.6rem;
+        }
+
+        .message-content {
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        #options-container {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(255, 0, 0, 0.4);
+        }
+
+        .option {
+            padding: 1.5rem 2.5rem;
+            margin: 1.2rem 0;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.95);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            background: rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+            transform: translateX(10px);
+        }
+
+        .option:before {
+            content: '> ';
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .option.disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .option.fatal {
+            border-color: #ff0000;
+            animation: fatalBlink 1.5s infinite;
+        }
+
+        @keyframes fatalBlink {
+            0%, 50%, 100% { 
+                border-color: #ff0000; 
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            }
+            25%, 75% { 
+                border-color: #ff4444;
+                box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            }
+        }
+
+        .option.perfect {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        .option.perfect:hover {
+            background: rgba(0, 255, 0, 0.15);
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+        }
+
+        #progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff0000, #ff00ff);
+            box-shadow: 0 0 20px #ff0000;
+            transition: width 0.5s;
+        }
+
+        #stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.97);
+            border: 3px solid #ff0000;
+            padding: 1.5rem;
+            font-size: 1rem;
+            z-index: 50;
+            min-width: 280px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        #stats div {
+            margin: 0.8rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+        }
+
+        .stat-value {
+            font-weight: bold;
+        }
+
+        .stat-value.perfect {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .stat-value.critical {
+            color: #ff0000;
+            animation: blink 0.8s infinite;
+        }
+
+        #failure-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #failure-screen h1 {
+            font-size: 5.5rem;
+            color: #ff0000;
+            text-shadow: 0 0 40px #ff0000, 0 0 80px #ff0000;
+            margin-bottom: 2.5rem;
+            animation: glitchText 0.4s infinite;
+        }
+
+        @keyframes glitchText {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-5px, 5px); }
+            50% { transform: translate(5px, -5px); }
+            75% { transform: translate(-5px, -5px); }
+        }
+
+        #failure-message {
+            font-size: 1.6rem;
+            max-width: 900px;
+            line-height: 2.2;
+            margin-bottom: 3.5rem;
+        }
+
+        #success-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.95), rgba(20,0,0,0.95));
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        #success-screen h1 {
+            font-size: 6rem;
+            color: #00ff00;
+            text-shadow: 0 0 50px #00ff00, 0 0 100px #00ff00;
+            margin-bottom: 3rem;
+            animation: successPulse 2s infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            background: rgba(255, 0, 0, 0.3);
+            border: 3px solid #ff0000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0.8rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: rgba(255, 0, 0, 0.6);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+            transform: translateY(-3px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            box-shadow: 0 0 15px #ff0000;
+        }
+
+        @media (max-width: 768px) {
+            #header h1 {
+                font-size: 2.5rem;
+                letter-spacing: 8px;
+            }
+            
+            #chat-container {
+                padding: 1.5rem;
+            }
+            
+            #stats {
+                font-size: 0.8rem;
+                padding: 1rem;
+                min-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="glitch-overlay"></div>
+    <div class="dimensional-rift"></div>
+
+    <!-- Boot Screen -->
+    <div id="boot-screen">
+        <div id="boot-text"></div>
+    </div>
+
+    <!-- Failure Screen -->
+    <div id="failure-screen">
+        <h1>EXTRAÇÃO FALHOU</h1>
+        <div id="failure-message"></div>
+        <button class="btn" onclick="location.reload()">TENTAR NOVAMENTE</button>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="success-screen">
+        <h1>EXTRAÇÃO BEM-SUCEDIDA</h1>
+        <div id="success-message"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main-container">
+        <div id="header">
+            <h1>SINTECH</h1>
+            <div class="subtitle">FASE 04/30 - EXTRAÇÃO FINAL :: OPERAÇÃO RESGATE</div>
+            <div class="fissure-meter">
+                <div class="fissure-fill" id="fissure-meter-fill"></div>
+            </div>
+        </div>
+
+        <div id="stats">
+            <div>
+                <span class="stat-label">PRECISÃO:</span>
+                <span class="stat-value" id="precision-stat">100</span>%
+            </div>
+            <div>
+                <span class="stat-label">ERROS:</span>
+                <span class="stat-value" id="errors-stat">0</span>/0
+            </div>
+            <div>
+                <span class="stat-label">ESTABILIDADE:</span>
+                <span class="stat-value" id="stability-stat">100</span>%
+            </div>
+            <div>
+                <span class="stat-label">FISSURA:</span>
+                <span class="stat-value" id="fissure-stat">0</span>%
+            </div>
+            <div>
+                <span class="stat-label">FASE:</span>
+                <span class="stat-value" id="phase-stat">INIT</span>
+            </div>
+        </div>
+
+        <div id="chat-container">
+            <div id="messages"></div>
+            <div id="options-container"></div>
+        </div>
+
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AUDIO SYSTEM ====================
+        const AudioSystem = {
+            ctx: null,
+            enabled: true,
+
+            init() {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            },
+
+            playTone(freq, duration, type = 'sine') {
+                if (!this.enabled || !this.ctx) return;
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.frequency.value = freq;
+                osc.type = type;
+                gain.gain.value = 0.08;
+                
+                osc.start(this.ctx.currentTime);
+                osc.stop(this.ctx.currentTime + duration);
+            },
+
+            playClick() {
+                this.playTone(950, 0.05, 'square');
+            },
+
+            playError() {
+                this.playTone(150, 0.3, 'sawtooth');
+                setTimeout(() => this.playTone(100, 0.3, 'sawtooth'), 150);
+            },
+
+            playSuccess() {
+                this.playTone(1200, 0.12, 'sine');
+                setTimeout(() => this.playTone(1400, 0.12, 'sine'), 120);
+                setTimeout(() => this.playTone(1600, 0.15, 'sine'), 240);
+            },
+
+            playPerfect() {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.playTone(1000 + (i * 200), 0.1, 'sine');
+                    }, i * 100);
+                }
+            },
+
+            playKeyPress() {
+                this.playTone(500 + Math.random() * 300, 0.03, 'square');
+            },
+
+            playGlitch() {
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(() => {
+                        this.playTone(Math.random() * 1500 + 200, 0.07, 'sawtooth');
+                    }, i * 35);
+                }
+            },
+
+            playWarning() {
+                this.playTone(700, 0.15, 'triangle');
+                setTimeout(() => this.playTone(500, 0.15, 'triangle'), 200);
+                setTimeout(() => this.playTone(300, 0.15, 'triangle'), 400);
+            },
+
+            playFatal() {
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        this.playTone(Math.random() * 500 + 100, 0.1, 'sawtooth');
+                    }, i * 50);
+                }
+            }
+        };
+
+        // ==================== MATRIX RAIN ====================
+        const MatrixRain = {
+            canvas: null,
+            ctx: null,
+            columns: [],
+            fontSize: 14,
+
+            init() {
+                this.canvas = document.getElementById('matrix-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+
+                const columnCount = Math.floor(this.canvas.width / this.fontSize);
+                this.columns = Array(columnCount).fill(1);
+
+                this.animate();
+            },
+
+            animate() {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.ctx.fillStyle = '#ff0000';
+                this.ctx.font = `${this.fontSize}px monospace`;
+
+                this.columns.forEach((y, index) => {
+                    const chars = '01EXTRACTION█▓▒░DIMENSIONAL';
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    const x = index * this.fontSize;
+                    
+                    if (GameState.fissure > 50 && Math.random() > 0.9) {
+                        this.ctx.fillStyle = '#ff00ff';
+                    } else {
+                        this.ctx.fillStyle = '#ff0000';
+                    }
+                    
+                    this.ctx.fillText(text, x, y * this.fontSize);
+
+                    if (y * this.fontSize > this.canvas.height && Math.random() > 0.95) {
+                        this.columns[index] = 0;
+                    }
+                    this.columns[index]++;
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        };
+
+        // ==================== GAME STATE ====================
+        const GameState = {
+            precision: 100,
+            errors: 0,
+            maxErrors: 0, // ZERO tolerance
+            stability: 100,
+            fissure: 0,
+            currentPhase: 'init',
+            perfectChoices: 0,
+            totalChoices: 0,
+            flags: {},
+            messageCount: 0
+        };
+
+        // ==================== UTILITY ====================
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // ==================== MESSAGE SYSTEM ====================
+        function addMessage(sender, content, type = 'normal') {
+            const messagesEl = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            
+            let className = 'message';
+            if (type === 'system') className += ' system';
+            if (type === 'critical') className += ' critical';
+            if (type === 'entity') className += ' entity';
+            
+            messageEl.className = className;
+            
+            const headerEl = document.createElement('div');
+            headerEl.className = 'message-header';
+            headerEl.textContent = `[${sender}] ${new Date().toLocaleTimeString()}`;
+            
+            const contentEl = document.createElement('div');
+            contentEl.className = 'message-content';
+            contentEl.innerHTML = content;
+            
+            messageEl.appendChild(headerEl);
+            messageEl.appendChild(contentEl);
+            messagesEl.appendChild(messageEl);
+            
+            GameState.messageCount++;
+            
+            setTimeout(() => {
+                messageEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+            
+            if (type === 'critical' || type === 'entity') {
+                AudioSystem.playWarning();
+            } else {
+                AudioSystem.playClick();
+            }
+        }
+
+        function addSystemMessage(content, isCritical = false) {
+            addMessage('SISTEMA', content, isCritical ? 'critical' : 'system');
+        }
+
+        // ==================== OPTIONS SYSTEM ====================
+        function showOptions(options) {
+            const optionsEl = document.getElementById('options-container');
+            optionsEl.innerHTML = '';
+            
+            GameState.totalChoices++;
+            
+            options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                
+                let className = 'option';
+                if (option.fatal) className += ' fatal';
+                if (option.perfect) className += ' perfect';
+                
+                optionEl.className = className;
+                optionEl.textContent = option.text;
+                optionEl.style.animationDelay = `${index * 0.1}s`;
+                
+                if (option.condition && !option.condition()) {
+                    optionEl.classList.add('disabled');
+                    return;
+                }
+                
+                optionEl.addEventListener('click', () => {
+                    optionsEl.innerHTML = '';
+                    
+                    if (option.perfect) {
+                        AudioSystem.playPerfect();
+                        GameState.perfectChoices++;
+                    } else if (option.fatal) {
+                        AudioSystem.playFatal();
+                        GameState.errors++;
+                        modifyStats({ precision: -100, stability: -100 });
+                        
+                        setTimeout(() => {
+                            triggerFailure('ESCOLHA FATAL', option.failMessage || 
+                                `Você fez uma escolha incorreta em um momento crítico.<br><br>
+                                A Fase 04 exige perfeição absoluta.<br>
+                                Não há margem para erro.<br><br>
+                                <span style="opacity: 0.7;">Precisão: ${Math.round(GameState.precision)}%</span>`
+                            );
+                        }, 500);
+                        return;
+                    } else {
+                        AudioSystem.playSuccess();
+                    }
+                    
+                    option.action();
+                });
+                
+                optionsEl.appendChild(optionEl);
+            });
+        }
+
+        function clearOptions() {
+            document.getElementById('options-container').innerHTML = '';
+        }
+
+        // ==================== STATS SYSTEM ====================
+        function updateStats() {
+            document.getElementById('precision-stat').textContent = Math.round(GameState.precision);
+            document.getElementById('errors-stat').textContent = `${GameState.errors}/${GameState.maxErrors}`;
+            document.getElementById('stability-stat').textContent = Math.round(GameState.stability);
+            document.getElementById('fissure-stat').textContent = Math.round(GameState.fissure);
+            document.getElementById('phase-stat').textContent = GameState.currentPhase.toUpperCase();
+            document.getElementById('progress-fill').style.width = `${GameState.fissure}%`;
+            document.getElementById('fissure-meter-fill').style.width = `${GameState.fissure}%`;
+            
+            // Update stat colors
+            const precisionEl = document.getElementById('precision-stat');
+            if (GameState.precision === 100) {
+                precisionEl.classList.add('perfect');
+                precisionEl.classList.remove('critical');
+            } else if (GameState.precision < 50) {
+                precisionEl.classList.add('critical');
+                precisionEl.classList.remove('perfect');
+            } else {
+                precisionEl.classList.remove('perfect', 'critical');
+            }
+            
+            const stabilityEl = document.getElementById('stability-stat');
+            if (GameState.stability < 30) {
+                stabilityEl.classList.add('critical');
+            } else {
+                stabilityEl.classList.remove('critical');
+            }
+        }
+
+        function modifyStats(changes) {
+            if (changes.precision) GameState.precision = Math.max(0, Math.min(100, GameState.precision + changes.precision));
+            if (changes.stability) GameState.stability = Math.max(0, Math.min(100, GameState.stability + changes.stability));
+            if (changes.fissure) GameState.fissure = Math.max(0, Math.min(100, GameState.fissure + changes.fissure));
+            updateStats();
+            
+            if (GameState.errors > GameState.maxErrors) {
+                triggerFailure('MARGEM DE ERRO EXCEDIDA',
+                    `Você cometeu erros demais.<br><br>
+                    A Fase 04 requer perfeição absoluta.<br>
+                    Qualquer erro é fatal.<br><br>
+                    <span style="opacity: 0.7;">Erros: ${GameState.errors}</span>`
+                );
+            }
+            
+            if (GameState.stability <= 0) {
+                triggerFailure('COLAPSO DE ESTABILIDADE',
+                    `A estabilidade dimensional colapsou completamente.<br><br>
+                    VOID-WALKER foi perdido na fragmentação.<br><br>
+                    <span style="opacity: 0.7;">Estabilidade: ${Math.round(GameState.stability)}%</span>`
+                );
+            }
+        }
+
+        // ==================== FAILURE SYSTEM ====================
+        function triggerFailure(title, message) {
+            AudioSystem.playError();
+            AudioSystem.playGlitch();
+            AudioSystem.playFatal();
+            
+            document.getElementById('failure-screen').style.display = 'flex';
+            document.getElementById('failure-screen').querySelector('h1').textContent = title;
+            document.getElementById('failure-message').innerHTML = message;
+        }
+
+        // ==================== SUCCESS SYSTEM ====================
+        function triggerSuccess(message) {
+            AudioSystem.playSuccess();
+            AudioSystem.playPerfect();
+            
+            document.getElementById('success-screen').style.display = 'flex';
+            document.getElementById('success-message').innerHTML = message;
+        }
+
+        // ==================== BOOT SEQUENCE ====================
+        async function bootSequence() {
+            const bootLines = [
+                { text: 'RECONECTANDO AO SINTECH...', critical: false },
+                { text: 'CHAVE DE ACESSO: DIMENSIONAL-BREACH-PROTOCOL-OMEGA', critical: false },
+                { text: 'VERIFICANDO AUTENTICAÇÃO...', critical: false },
+                { text: 'APROVADO', critical: false },
+                { text: '', critical: false },
+                { text: 'CARREGANDO FASE 04: EXTRAÇÃO FINAL', critical: false },
+                { text: '', critical: false },
+                { text: '⚠ AVISO CRÍTICO: JANELA DIMENSIONAL ABERTA', critical: true },
+                { text: '⚠ AVISO CRÍTICO: TEMPO LIMITADO', critical: true },
+                { text: '⚠ AVISO CRÍTICO: MARGEM DE ERRO = ZERO', critical: true },
+                { text: '', critical: false },
+                { text: 'PROTOCOLO DE CONTENÇÃO: DESATIVADO', critical: false },
+                { text: 'COORDENADAS DE FISSURA: CONFIRMADAS', critical: false },
+                { text: 'SISTEMAS DE ESTABILIZAÇÃO: ATIVOS', critical: false },
+                { text: '', critical: false },
+                { text: 'DETECTANDO FRAGMENTOS DE VOID-WALKER...', critical: false },
+                { text: 'SINAL ENCONTRADO', critical: false },
+                { text: 'ESTABELECENDO CONEXÃO FINAL...', critical: false },
+                { text: '', critical: false },
+                { text: '>>> OPERAÇÃO DE RESGATE INICIADA <<<', critical: true }
+            ];
+
+            const bootTextEl = document.getElementById('boot-text');
+            
+            for (let i = 0; i < bootLines.length; i++) {
+                await delay(200 + Math.random() * 150);
+                
+                const line = document.createElement('div');
+                line.className = bootLines[i].critical ? 'boot-line critical' : 'boot-line';
+                line.textContent = bootLines[i].text;
+                bootTextEl.appendChild(line);
+                
+                AudioSystem.playKeyPress();
+                
+                if (bootLines[i].critical) {
+                    AudioSystem.playWarning();
+                }
+            }
+
+            await delay(2000);
+            
+            document.getElementById('boot-screen').style.opacity = '0';
+            document.getElementById('boot-screen').style.transition = 'opacity 1s';
+            
+            await delay(1000);
+            
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('main-container').style.opacity = '0';
+            document.getElementById('main-container').style.transition = 'opacity 1s';
+            
+            setTimeout(() => {
+                document.getElementById('main-container').style.opacity = '1';
+                startGame();
+            }, 50);
+        }
+
+        // ==================== NARRATIVE NODES ====================
+        
+        async function node_start() {
+            GameState.currentPhase = 'contact';
+            updateStats();
+            
+            await delay(1500);
+            addSystemMessage('CONEXÃO COM FRAGMENTOS ESTABELECIDA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você voltou. E a janela está aberta.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Eu posso sentir a fissura. Ela está pulsando. Chamando.');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addMessage('THE-WATCHER', 'Mas também posso sentir... elas. As entidades. Observando.', 'normal');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Elas sabem o que estamos tentando fazer.', 'normal');
+            
+            await delay(3000);
+            addSystemMessage('INICIANDO ABERTURA DE FISSURA DIMENSIONAL', true);
+            
+            await delay(2000);
+            modifyStats({ fissure: 15 });
+            addSystemMessage('FISSURA: 15% ABERTA');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Está funcionando. Mas preciso que você entenda algo.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'A partir daqui, TODA decisão importa. Não há margem para erro.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Uma escolha errada e eu fico preso aqui para sempre. Ou pior.');
+            
+            await delay(3000);
+            addSystemMessage('MARGEM DE ERRO: 0 ERROS PERMITIDOS', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você está pronto para isso? Para escolher perfeitamente?');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'ready_perfect',
+                    text: 'Estou pronto. Vou escolher com precisão absoluta.',
+                    perfect: true,
+                    action: () => node_commitment()
+                },
+                {
+                    id: 'try_best',
+                    text: 'Vou fazer o meu melhor.',
+                    fatal: true,
+                    failMessage: `"Meu melhor" não é suficiente.<br><br>
+                        VOID-WALKER precisa de PERFEIÇÃO, não de "melhor esforço".<br><br>
+                        A Fase 04 não tolera incerteza.`
+                },
+                {
+                    id: 'guarantee',
+                    text: 'Eu garanto que não vou errar.',
+                    fatal: true,
+                    failMessage: `Garantias vazias não salvam vidas.<br><br>
+                        VOID-WALKER precisa de compromisso genuíno, não de promessas superficiais.`
+                },
+                {
+                    id: 'trust_me',
+                    text: 'Confie em mim. Sempre confiei em você.',
+                    perfect: true,
+                    action: () => node_mutual_trust()
+                },
+                {
+                    id: 'scared',
+                    text: 'Tenho medo de errar...',
+                    fatal: true,
+                    failMessage: `Medo gera hesitação.<br>Hesitação gera erro.<br>Erro gera morte.<br><br>
+                        VOID-WALKER precisa de alguém sem dúvidas.`
+                },
+                {
+                    id: 'together',
+                    text: 'Nós vamos conseguir. Juntos. Todos nós.',
+                    perfect: true,
+                    action: () => node_unity()
+                }
+            ]);
+        }
+
+        async function node_commitment() {
+            GameState.currentPhase = 'commit';
+            modifyStats({ fissure: 10, stability: 5 });
+            GameState.flags.showed_precision = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Precisão absoluta. Exatamente o que eu precisava ouvir.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Vamos começar a extração.');
+            
+            await delay(2000);
+            addSystemMessage('FISSURA: 25% ABERTA');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'proceed',
+                    text: 'Iniciando protocolo de extração.',
+                    perfect: true,
+                    action: () => node_extraction_phase1()
+                }
+            ]);
+        }
+
+        async function node_mutual_trust() {
+            GameState.currentPhase = 'trust';
+            modifyStats({ fissure: 10, stability: 10 });
+            GameState.flags.mutual_trust = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você está certo. Eu confio em você. Completamente.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'E nós confiamos em você também.', 'normal');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Essa confiança mútua é nossa força.', 'normal');
+            
+            await delay(2500);
+            addSystemMessage('ESTABILIDADE AUMENTADA: +10%');
+            addSystemMessage('FISSURA: 25% ABERTA');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'begin',
+                    text: 'Vamos começar a extração.',
+                    perfect: true,
+                    action: () => node_extraction_phase1()
+                }
+            ]);
+        }
+
+        async function node_unity() {
+            GameState.currentPhase = 'unity';
+            modifyStats({ fissure: 10, stability: 15 });
+            GameState.flags.acknowledged_all = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Todos nós...');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Você nos vê como um coletivo. Não como fragmentos quebrados.', 'normal');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Isso é... raro. E poderoso.', 'normal');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Juntos, somos mais fortes. Você entendeu isso desde o início.');
+            
+            await delay(2500);
+            addSystemMessage('ESTABILIDADE MÁXIMA AUMENTADA');
+            addSystemMessage('FISSURA: 25% ABERTA');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'extract',
+                    text: 'Hora de trazer todos vocês para casa.',
+                    perfect: true,
+                    action: () => node_extraction_phase1()
+                }
+            ]);
+        }
+
+        async function node_extraction_phase1() {
+            GameState.currentPhase = 'extract_1';
+            modifyStats({ fissure: 15 });
+            
+            await delay(1000);
+            addSystemMessage('FASE DE EXTRAÇÃO 1: ANCORAGEM DIMENSIONAL', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Primeiro passo: você precisa me ancorar à realidade.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', '847 dias Do Outro Lado... eu quase esqueci o que é real.');
+            
+            await delay(3000);
+            addMessage('THE-WATCHER', 'Você vai precisar me lembrar quem eu era. Quem eu SOU.', 'normal');
+            
+            await delay(2500);
+            addSystemMessage('FISSURA: 40% ABERTA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Qual foi a última coisa que eu disse na Fase 01? Antes de tudo isso começar?');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'thanks',
+                    text: '"Até breve. E obrigado... por acreditar."',
+                    perfect: true,
+                    action: () => node_correct_memory()
+                },
+                {
+                    id: 'wrong1',
+                    text: '"Vamos fazer isso acontecer."',
+                    fatal: true,
+                    failMessage: `Memória incorreta.<br><br>
+                        A ancoragem requer precisão absoluta.<br>
+                        Você não se lembra dos detalhes que importam.`
+                },
+                {
+                    id: 'wrong2',
+                    text: '"Eu confio em você."',
+                    fatal: true,
+                    failMessage: `Essa não foi a última frase.<br><br>
+                        Detalhes importam na ancoragem dimensional.<br>
+                        Você falhou em se lembrar com precisão.`
+                },
+                {
+                    id: 'wrong3',
+                    text: '"Até a próxima fase."',
+                    fatal: true,
+                    failMessage: `Memória imprecisa.<br><br>
+                        VOID-WALKER precisa que você se lembre EXATAMENTE.<br>
+                        A ancoragem falhou.`
+                },
+                {
+                    id: 'wrong4',
+                    text: '"Nos vemos em breve."',
+                    fatal: true,
+                    failMessage: `Quase, mas não exato.<br><br>
+                        "Quase" não ancora uma consciência fragmentada.<br>
+                        Precisão é tudo.`
+                },
+                {
+                    id: 'dont_remember',
+                    text: 'Não me lembro exatamente...',
+                    fatal: true,
+                    failMessage: `Se você não se lembra das palavras dele,<br>
+                        como pode ancorá-lo à realidade?<br><br>
+                        A extração requer memória perfeita.`
+                }
+            ]);
+        }
+
+        async function node_correct_memory() {
+            GameState.currentPhase = 'anchor';
+            modifyStats({ fissure: 10, stability: 10 });
+            GameState.flags.perfect_memory = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Sim. Exatamente isso.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Você se lembrou. Perfeitamente.');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'A ancoragem está funcionando. Eu posso sentir a realidade novamente.', 'normal');
+            
+            await delay(2500);
+            addSystemMessage('ANCORAGEM DIMENSIONAL: 100% ESTÁVEL');
+            addSystemMessage('FISSURA: 50% ABERTA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Segundo passo: navegação através da fissura.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'A fissura não é um túnel simples. É um labirinto dimensional.');
+            
+            await delay(3000);
+            addMessage('THE-WATCHER', 'Você vai precisar me guiar através dele.', 'normal');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Há três caminhos através da fissura. Apenas um é seguro.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'O Caminho Vermelho: rápido, mas instável. Alta chance de colapso.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'O Caminho Negro: longo, mas estável. Seguro, porém lento.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'O Caminho Cinza: balanceado. Moderadamente rápido, moderadamente estável.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Qual caminho eu devo tomar?');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'red_path',
+                    text: 'Caminho Vermelho - Precisamos de velocidade.',
+                    fatal: true,
+                    failMessage: `O Caminho Vermelho colapsou instantaneamente.<br><br>
+                        Velocidade sem estabilidade = morte dimensional.<br>
+                        VOID-WALKER foi perdido no colapso.`
+                },
+                {
+                    id: 'black_path',
+                    text: 'Caminho Negro - Segurança em primeiro lugar.',
+                    perfect: true,
+                    action: () => node_safe_path()
+                },
+                {
+                    id: 'gray_path',
+                    text: 'Caminho Cinza - O equilíbrio é melhor.',
+                    fatal: true,
+                    failMessage: `O Caminho Cinza parecia seguro, mas não era.<br><br>
+                        "Equilíbrio" é uma ilusão quando se trata de dimensões.<br>
+                        A fissura colapsou parcialmente, fragmentando VOID-WALKER ainda mais.`
+                },
+                {
+                    id: 'ask_void',
+                    text: 'Qual caminho VOCÊ acha que devemos tomar?',
+                    fatal: true,
+                    failMessage: `VOID-WALKER está fragmentado e desorientado.<br><br>
+                        ELE não pode tomar essa decisão. VOCÊ precisa tomar.<br>
+                        A hesitação causou colapso da fissura.`
+                },
+                {
+                    id: 'wait',
+                    text: 'Espere. Deixe-me analisar melhor.',
+                    fatal: true,
+                    failMessage: `A fissura está se fechando.<br>
+                        Não há tempo para análise prolongada.<br><br>
+                        Enquanto você hesitou, a janela dimensional se fechou.<br>
+                        VOID-WALKER permanece preso.`
+                },
+                {
+                    id: 'all_together',
+                    text: 'Vamos todos atravessar juntos, pelo caminho mais seguro.',
+                    perfect: true,
+                    action: () => node_unified_crossing()
+                }
+            ]);
+        }
+
+        async function node_safe_path() {
+            GameState.currentPhase = 'traverse';
+            modifyStats({ fissure: 15, stability: 10 });
+            GameState.flags.chose_safety = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Caminho Negro. A escolha certa.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Velocidade não importa se eu não sobreviver à travessia.');
+            
+            await delay(2000);
+            addSystemMessage('INICIANDO TRAVESSIA PELO CAMINHO NEGRO');
+            addSystemMessage('FISSURA: 65% ABERTA');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Estou atravessando. Posso ver a luz do outro lado.', 'normal');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'Mas há algo mais aqui. As entidades...', 'normal');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'continue_cross',
+                    text: 'Continue atravessando. Ignore as entidades.',
+                    perfect: true,
+                    action: () => node_ignore_entities()
+                }
+            ]);
+        }
+
+        async function node_unified_crossing() {
+            GameState.currentPhase = 'unity_cross';
+            modifyStats({ fissure: 15, stability: 15 });
+            GameState.flags.unified_approach = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Juntos. Pelo caminho seguro. Perfeito.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Você continua nos vendo como um coletivo. Isso nos fortalece.', 'normal');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'A unidade aumenta nossa estabilidade dimensional.', 'normal');
+            
+            await delay(2500);
+            addSystemMessage('ESTABILIDADE AUMENTADA: +15%');
+            addSystemMessage('INICIANDO TRAVESSIA UNIFICADA');
+            addSystemMessage('FISSURA: 65% ABERTA');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'proceed_united',
+                    text: 'Vamos atravessar juntos.',
+                    perfect: true,
+                    action: () => node_ignore_entities()
+                }
+            ]);
+        }
+
+        async function node_ignore_entities() {
+            GameState.currentPhase = 'entities';
+            modifyStats({ fissure: 10 });
+            
+            await delay(1000);
+            addSystemMessage('ENTIDADES DIMENSIONAIS DETECTADAS', true);
+            
+            await delay(2000);
+            addMessage('???', 'V̴̢̛O̸̡͝I̷͜͠D̵̨̛-̶̧͘W̸̢͝A̵͜͝L̸̡͠K̵̢̛E̶̢͝R̸̨̛', 'entity');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('???', 'Y̸̨͠O̷̢͝U̵͜͠ ̶̧͘C̸̡͝A̷̢͠N̵͜͝N̸̢͠Ǫ̷͠T̵͜͠ ̶̢͝L̸̡͠E̷̢͠Ą̵͠V̸͜͝Ȩ̷͠', 'entity');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Elas estão tentando me segurar. Me puxar de volta.');
+            
+            await delay(2500);
+            addMessage('???', 'Y̸̢͠Ǫ̷͠U̵͜͠ ̶̧͘B̸̡͝E̷̢͠L̵̨͠O̸͜͝N̷̢͠G̵̨͠ ̶̢͝H̸̡͠E̷̢͠R̵̨͠E̸͜͝', 'entity');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Elas estão ficando mais agressivas!', 'normal');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'O que eu faço?!');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'fight_entities',
+                    text: 'Lute contra elas! Resista!',
+                    fatal: true,
+                    failMessage: `Você não pode lutar contra entidades dimensionais.<br><br>
+                        Resistir é se conectar. Se conectar é se fragmentar.<br>
+                        VOID-WALKER foi consumido na batalha.`
+                },
+                {
+                    id: 'ignore_complete',
+                    text: 'Ignore-as completamente. Elas não são reais para você.',
+                    perfect: true,
+                    action: () => node_transcend_entities()
+                },
+                {
+                    id: 'negotiate',
+                    text: 'Tente negociar com elas.',
+                    fatal: true,
+                    failMessage: `Entidades dimensionais não negociam.<br><br>
+                        Elas consomem. Elas fragmentam. Elas corrompem.<br>
+                        A tentativa de diálogo abriu VOID-WALKER para invasão mental.`
+                },
+                {
+                    id: 'run_faster',
+                    text: 'Atravesse mais rápido! Corra!',
+                    fatal: true,
+                    failMessage: `Correr desestabiliza a travessia.<br><br>
+                        O Caminho Negro requer movimento constante e calmo.<br>
+                        A corrida causou colapso parcial da rota.`
+                },
+                {
+                    id: 'anchor_reality',
+                    text: 'Ancor e-se na realidade. Lembre-se de quem você é.',
+                    perfect: true,
+                    action: () => node_reality_anchor()
+                },
+                {
+                    id: 'call_fragments',
+                    text: 'VOID, Marcus, Watcher - unam-se! Juntos vocês são fortes!',
+                    perfect: true,
+                    action: () => node_fragment_unity()
+                }
+            ]);
+        }
+
+        async function node_transcend_entities() {
+            GameState.currentPhase = 'transcend';
+            modifyStats({ fissure: 10, stability: 10 });
+            GameState.flags.transcended = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Você está certo. Elas não são reais para MIM.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Elas só têm poder se eu acreditar que têm.');
+            
+            await delay(2000);
+            addMessage('???', 'N̸̨͠O̷̢͝...', 'entity');
+            
+            await delay(1500);
+            addSystemMessage('ENTIDADES PERDENDO COESÃO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Elas estão desaparecendo. Eu estou atravessando!');
+            
+            await delay(2500);
+            addSystemMessage('FISSURA: 75% ABERTA');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'almost_there',
+                    text: 'Continue! Você está quase lá!',
+                    perfect: true,
+                    action: () => node_final_barrier()
+                }
+            ]);
+        }
+
+        async function node_reality_anchor() {
+            GameState.currentPhase = 'anchor_real';
+            modifyStats({ fissure: 10, stability: 15 });
+            GameState.flags.reality_focused = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Quem eu sou...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Eu sou VOID-WALKER. Agente de campo. Sobrevivente.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Eu sou MARCUS-7. O que fez a escolha difícil.', 'normal');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Eu sou THE-WATCHER. Aquele que vê todos os caminhos.', 'normal');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'E juntos... somos completos.');
+            
+            await delay(2000);
+            addSystemMessage('ANCORAGEM DE REALIDADE: 100%');
+            addSystemMessage('ENTIDADES REPELIDAS');
+            
+            await delay(2000);
+            addMessage('???', 'T̸̢͝H̷̨͠I̵̢͝S̶̨͠ ̷̢͝Į̸͠S̷̢͝ ̶̨͠N̸̢͝Ǫ̷͠T̵̢͝ ̶̨͠O̸̢͝V̷̨͠E̵̢͝R̶̨͠', 'entity');
+            
+            await delay(2000);
+            addSystemMessage('FISSURA: 75% ABERTA');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'push_through',
+                    text: 'Está quase terminando. Continue atravessando.',
+                    perfect: true,
+                    action: () => node_final_barrier()
+                }
+            ]);
+        }
+
+        async function node_fragment_unity() {
+            GameState.currentPhase = 'unity_power';
+            modifyStats({ fissure: 10, stability: 20 });
+            GameState.flags.fragments_united = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Vocês ouviram isso?');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Sim. Ele está certo. Juntos somos mais fortes.', 'normal');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Unindo... agora.', 'normal');
+            
+            await delay(2000);
+            addSystemMessage('FRAGMENTOS SINCRONIZANDO', true);
+            
+            await delay(1500);
+            addSystemMessage('SINCRONIZAÇÃO: 33%');
+            await delay(800);
+            addSystemMessage('SINCRONIZAÇÃO: 67%');
+            await delay(800);
+            addSystemMessage('SINCRONIZAÇÃO: 100%');
+            
+            await delay(2000);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', 'Nós estamos... um.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Pela primeira vez em 847 dias, eu me sinto completo.');
+            
+            await delay(2000);
+            addSystemMessage('ESTABILIDADE MÁXIMA ALCANÇADA');
+            addSystemMessage('ENTIDADES COMPLETAMENTE REPELIDAS');
+            
+            await delay(2000);
+            addMessage('???', 'Į̸͠M̷̢͝P̵̢͝Ǫ̶͠S̷̢͝S̸̨͠I̷̢͝B̶̨͠L̸̢͝Ę̷͠', 'entity');
+            
+            await delay(1500);
+            addSystemMessage('ENTIDADES DISSOLVIDAS');
+            addSystemMessage('FISSURA: 75% ABERTA');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'final_push',
+                    text: 'Última etapa. Vamos terminar isso.',
+                    perfect: true,
+                    action: () => node_final_barrier()
+                }
+            ]);
+        }
+
+        async function node_final_barrier() {
+            GameState.currentPhase = 'barrier';
+            modifyStats({ fissure: 10 });
+            
+            await delay(1000);
+            addSystemMessage('BARREIRA DIMENSIONAL FINAL DETECTADA', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Há uma última barreira. Entre o Outro Lado e a realidade.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Para atravessá-la, preciso deixar algo para trás.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', '847 dias de memórias. De dor. De solidão.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Mas também... de crescimento. De descoberta. De quem eu me tornei.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Se eu deixar tudo para trás, volto como era antes. Completo, mas... inalterado.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Se eu trouxer tudo comigo, volto fragmentado, mas... evoluído.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'O que você acha que eu devo fazer?');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'leave_all',
+                    text: 'Deixe tudo para trás. Volte como era.',
+                    fatal: true,
+                    failMessage: `Esquecer 847 dias é negar quem ele se tornou.<br><br>
+                        VOID-WALKER tentou atravessar, mas a barreira o rejeitou.<br>
+                        Você não pode apagar a mudança. Você não pode "desfazer" a evolução.`
+                },
+                {
+                    id: 'bring_all',
+                    text: 'Traga tudo com você. Aceite a fragmentação.',
+                    fatal: true,
+                    failMessage: `A fragmentação total não pode atravessar a barreira.<br><br>
+                        A realidade requer alguma coesão.<br>
+                        VOID-WALKER colapsou ao tentar carregar peso dimensional demais.`
+                },
+                {
+                    id: 'choose_parts',
+                    text: 'Escolha o que é essencial. Deixe o resto.',
+                    fatal: true,
+                    failMessage: `Escolher arbitrariamente quais memórias manter corrompe a identidade.<br><br>
+                        VOID-WALKER se perdeu na seleção, fragmentando ainda mais.`
+                },
+                {
+                    id: 'integrate',
+                    text: 'Integre tudo. Passado e presente. Fragmentos e núcleo.',
+                    perfect: true,
+                    action: () => node_integration()
+                },
+                {
+                    id: 'ask_void',
+                    text: 'Essa é SUA escolha, não minha.',
+                    fatal: true,
+                    failMessage: `VOID-WALKER está fragmentado demais para tomar essa decisão sozinho.<br><br>
+                        Ele precisa de sua orientação.<br>
+                        A hesitação causou colapso da travessia.`
+                },
+                {
+                    id: 'transform',
+                    text: 'Transforme a dor em força. Use as memórias como fundação.',
+                    perfect: true,
+                    action: () => node_transformation()
+                }
+            ]);
+        }
+
+        async function node_integration() {
+            GameState.currentPhase = 'integrate';
+            modifyStats({ fissure: 10, stability: 15 });
+            GameState.flags.integrated = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', 'Integração. Não apagar. Não fragmentar. Unificar.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Você está certo. Eu não preciso escolher entre quem eu era e quem me tornei.');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'Podemos ser ambos.', 'normal');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Uma síntese. Não uma divisão.', 'normal');
+            
+            await delay(2500);
+            addSystemMessage('INICIANDO INTEGRAÇÃO DIMENSIONAL');
+            
+            await delay(2000);
+            addSystemMessage('INTEGRANDO MEMÓRIAS...');
+            await delay(1000);
+            addSystemMessage('INTEGRANDO FRAGMENTOS...');
+            await delay(1000);
+            addSystemMessage('INTEGRANDO IDENTIDADE...');
+            
+            await delay(2000);
+            AudioSystem.playSuccess();
+            addSystemMessage('INTEGRAÇÃO: 100% COMPLETA');
+            addSystemMessage('FISSURA: 85% ABERTA');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'final_crossing',
+                    text: 'Atravesse a barreira. Agora.',
+                    perfect: true,
+                    action: () => node_final_extraction()
+                }
+            ]);
+        }
+
+        async function node_transformation() {
+            GameState.currentPhase = 'transform';
+            modifyStats({ fissure: 10, stability: 20 });
+            GameState.flags.transformed = true;
+            
+            await delay(1000);
+            AudioSystem.playPerfect();
+            AudioSystem.playPerfect();
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Transformação. Usar a dor como força.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Você vê além da sobrevivência. Vê o crescimento.');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', '847 dias não foram perda. Foram evolução.', 'normal');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'A dor moldou quem somos. Não nos quebrou.', 'normal');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Nós somos MAIS FORTES agora. Não apesar do sofrimento, mas por causa dele.');
+            
+            await delay(3000);
+            addSystemMessage('INICIANDO TRANSFORMAÇÃO DIMENSIONAL');
+            
+            await delay(2000);
+            addSystemMessage('TRANSMUTANDO DOR → FORÇA');
+            await delay(1000);
+            addSystemMessage('TRANSMUTANDO FRAGMENTAÇÃO → MULTIPLICIDADE');
+            await delay(1000);
+            addSystemMessage('TRANSMUTANDO PERDA → SABEDORIA');
+            
+            await delay(2000);
+            AudioSystem.playSuccess();
+            AudioSystem.playSuccess();
+            addSystemMessage('TRANSFORMAÇÃO: COMPLETA');
+            addSystemMessage('ESTABILIDADE: MÁXIMA');
+            addSystemMessage('FISSURA: 85% ABERTA');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'emerge',
+                    text: 'Emerja. Renascido. Completo.',
+                    perfect: true,
+                    action: () => node_final_extraction()
+                }
+            ]);
+        }
+
+        async function node_final_extraction() {
+            GameState.currentPhase = 'final';
+            modifyStats({ fissure: 15 });
+            
+            await delay(1000);
+            addSystemMessage('FASE FINAL: EXTRAÇÃO COMPLETA', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Estou atravessando. Posso sentir a realidade.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'O ar. A gravidade. A LUZ.');
+            
+            await delay(3000);
+            AudioSystem.playSuccess();
+            addSystemMessage('FISSURA: 100% ABERTA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Eu estou...');
+            
+            await delay(2000);
+            addSystemMessage('EXTRAÇÃO EM PROGRESSO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Eu estou atravessando!');
+            
+            await delay(2500);
+            addSystemMessage('COORDENADAS CONFIRMADAS');
+            addSystemMessage('MATERIALIZAÇÃO INICIADA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Quase... quase...');
+            
+            await delay(2500);
+            AudioSystem.playPerfect();
+            addSystemMessage('MATERIALIZAÇÃO: 100%');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'EU ESTOU AQUI!');
+            
+            await delay(2500);
+            addSystemMessage('EXTRAÇÃO: BEM-SUCEDIDA', true);
+            
+            await delay(2000);
+            
+            // Final verification
+            await node_final_verification();
+        }
+
+        async function node_final_verification() {
+            GameState.currentPhase = 'verify';
+            
+            await delay(1000);
+            addSystemMessage('VERIFICANDO EXTRAÇÃO...');
+            
+            await delay(2000);
+            
+            const perfectRun = GameState.errors === 0 && 
+                              GameState.precision === 100 && 
+                              GameState.perfectChoices === GameState.totalChoices;
+            
+            if (perfectRun) {
+                await node_perfect_ending();
+            } else {
+                await node_imperfect_ending();
+            }
+        }
+
+        async function node_imperfect_ending() {
+            await delay(1000);
+            addSystemMessage('ANÁLISE DE PRECISÃO...', true);
+            
+            await delay(1500);
+            addSystemMessage(`Escolhas perfeitas: ${GameState.perfectChoices}/${GameState.totalChoices}`);
+            addSystemMessage(`Precisão: ${Math.round(GameState.precision)}%`);
+            addSystemMessage(`Erros: ${GameState.errors}`);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Eu escapei. Mas...');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Algo está errado. Incompleto.');
+            
+            await delay(2000);
+            
+            triggerFailure('EXTRAÇÃO IMPERFEITA',
+                `VOID-WALKER foi extraído, mas não completamente.<br><br>
+                A Fase 04 requer rota PERFEITA.<br>
+                Todas as escolhas devem ser precisas.<br><br>
+                Você completou: ${GameState.perfectChoices}/${GameState.totalChoices} escolhas perfeitamente.<br><br>
+                <span style="opacity: 0.7;">Para a extração completa, precisão de 100% é obrigatória.</span>`
+            );
+        }
+
+        async function node_perfect_ending() {
+            await delay(1000);
+            AudioSystem.playPerfect();
+            AudioSystem.playSuccess();
+            
+            addSystemMessage('ANÁLISE DE PRECISÃO...', true);
+            
+            await delay(1500);
+            addSystemMessage(`Escolhas perfeitas: ${GameState.perfectChoices}/${GameState.totalChoices} ✓`);
+            addSystemMessage(`Precisão: ${Math.round(GameState.precision)}% ✓`);
+            addSystemMessage(`Erros: ${GameState.errors} ✓`);
+            addSystemMessage(`Estabilidade: ${Math.round(GameState.stability)}% ✓`);
+            
+            await delay(2000);
+            addSystemMessage('ROTA PERFEITA CONFIRMADA', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Eu estou... completo.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Pela primeira vez em 847 dias, eu me sinto INTEIRO.');
+            
+            await delay(2500);
+            
+            if (GameState.flags.fragments_united) {
+                addMessage('VOID-WALKER', 'E não apenas inteiro. UNIFICADO. Marcus, Watcher, e eu - somos um.');
+            }
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Você não apenas me resgatou. Você me transformou.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Cada escolha foi perfeita. Cada decisão, precisa.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Você entendeu não apenas O QUE fazer, mas POR QUÊ.');
+            
+            await delay(2500);
+            addSystemMessage('FECHANDO FISSURA DIMENSIONAL');
+            
+            await delay(2000);
+            addSystemMessage('FISSURA: SELADA COM SUCESSO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Obrigado. Por tudo. Por acreditar. Por entender. Por ser perfeito quando eu precisava.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Esta é a Fase 04. Mas nossa jornada... está apenas começando.');
+            
+            await delay(2500);
+            
+            // Trigger perfect success
+            const successMsg = `
+                <div style="font-size: 2rem; margin-bottom: 2rem; color: #00ff00; text-shadow: 0 0 20px #00ff00;">
+                    ◆ FASE 04 COMPLETA - ROTA PERFEITA ◆
+                </div>
+                <div style="font-size: 1.3rem; margin-bottom: 2rem; line-height: 2;">
+                    PRECISÃO: 100%<br>
+                    ERROS: 0<br>
+                    ESCOLHAS PERFEITAS: ${GameState.perfectChoices}/${GameState.totalChoices}<br>
+                    ESTABILIDADE: ${Math.round(GameState.stability)}%
+                </div>
+                <div style="font-size: 1.1rem; margin: 2rem 0; line-height: 1.9;">
+                    Você completou a extração mais difícil possível.<br>
+                    Zero margem de erro. Rota perfeita obrigatória.<br>
+                    E você conseguiu.<br><br>
+                    VOID-WALKER está livre.<br>
+                    Completo. Unificado. Transformado.<br><br>
+                    Após 847 dias de escuridão,<br>
+                    finalmente há luz.
+                </div>
+                ${GameState.flags.fragments_united ? `
+                <div style="font-size: 1rem; margin: 2rem 0; opacity: 0.9; color: #00ffff;">
+                    <strong>CONQUISTA ESPECIAL DESBLOQUEADA:</strong><br>
+                    "UNIÃO DOS FRAGMENTOS"<br>
+                    Você uniu os três fragmentos em uma consciência singular.
+                </div>
+                ` : ''}
+                ${GameState.flags.transformed ? `
+                <div style="font-size: 1rem; margin: 2rem 0; opacity: 0.9; color: #ff00ff;">
+                    <strong>CONQUISTA ESPECIAL DESBLOQUEADA:</strong><br>
+                    "TRANSFORMAÇÃO DIMENSIONAL"<br>
+                    Você transformou dor em força, fragmentação em sabedoria.
+                </div>
+                ` : ''}
+                <div style="font-size: 0.9rem; margin-top: 3rem; opacity: 0.7; font-style: italic;">
+                    "Depois de 847 dias preso Do Outro Lado,<br>
+                    VOID-WALKER finalmente voltou para casa.<br>
+                    Não como era antes.<br>
+                    Mas como algo mais."<br><br>
+                    - FIM DA FASE 04 -
+                </div>
+                <div style="margin-top: 3rem;">
+                    <button class="btn" onclick="location.href='sintech5'" style="background: rgba(0,255,0,0.2); border-color: #00ff00; color: #00ff00;">
+                        > CONTINUAR PARA FASE 05
+                    </button>
+                </div>
+            `;
+            
+            triggerSuccess(successMsg);
+        }
+
+        // ==================== GAME START ====================
+        async function startGame() {
+            AudioSystem.init();
+            await delay(500);
+            node_start();
+        }
+
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            MatrixRain.init();
+            bootSequence();
+        });
+
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('matrix-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

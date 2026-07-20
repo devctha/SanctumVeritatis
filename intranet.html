@@ -1,1 +1,1234 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/intranet"><meta http-equiv="refresh" content="0;url=/intranet"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/intranet'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/intranet">/intranet</a>.</p></body></html>
+<!doctype html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/intranet'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/intranet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sanctum Veritatis — Intranet</title>
+  <meta name="color-scheme" content="dark" />
+  <style>
+    :root{
+      --bg: #07070a;
+      --panel: rgba(255,255,255,.05);
+      --panel2: rgba(255,255,255,.075);
+      --line: rgba(255,255,255,.10);
+      --muted: rgba(255,255,255,.65);
+      --text: rgba(255,255,255,.90);
+
+      /* Gold family (inspirada em paleta black+gold comum em UI) */
+      --gold: #AD974F;     /* light gold */
+      --gold2:#8E793E;     /* dark gold */
+      --gold3:#E7D7A6;     /* highlight */
+
+      --danger: #ff4d6d;
+      --ok: #36d399;
+
+      --radius: 16px;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --shadow2: 0 12px 30px rgba(0,0,0,.55);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 0%, rgba(173,151,79,.10), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(142,121,62,.10), transparent 60%),
+        radial-gradient(900px 600px at 50% 100%, rgba(255,255,255,.05), transparent 70%),
+        linear-gradient(180deg, #050508, #07070a 45%, #06060a);
+      overflow-x:hidden;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    /* Layout */
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      gap: 0;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:0;
+      height:100vh;
+      padding: 22px 18px;
+      border-right: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      backdrop-filter: blur(10px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      padding: 10px 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(173,151,79,.18);
+      background: linear-gradient(180deg, rgba(173,151,79,.10), rgba(255,255,255,.02));
+      box-shadow: var(--shadow2);
+    }
+
+    .sigil{
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      position:relative;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(231,215,166,.35), transparent 55%),
+        linear-gradient(135deg, rgba(173,151,79,.35), rgba(142,121,62,.15));
+      border: 1px solid rgba(231,215,166,.35);
+      overflow:hidden;
+    }
+    .sigil:before{
+      content:"";
+      position:absolute;
+      inset:-20px;
+      background:
+        conic-gradient(from 180deg,
+          rgba(231,215,166,.0),
+          rgba(231,215,166,.35),
+          rgba(231,215,166,.0),
+          rgba(173,151,79,.0),
+          rgba(173,151,79,.30),
+          rgba(173,151,79,.0)
+        );
+      filter: blur(0px);
+      opacity:.9;
+      animation: spin 8s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+
+    .brand h1{
+      font-size: 14px;
+      line-height: 1.1;
+      margin:0;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .brand small{
+      display:block;
+      margin-top:4px;
+      color: var(--muted);
+      letter-spacing:.06em;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .nav{
+      margin-top: 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      padding: 8px 2px;
+    }
+    .nav a{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      color: rgba(255,255,255,.82);
+      background: transparent;
+      transition: .15s ease;
+      user-select:none;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,.04);
+      border-color: rgba(255,255,255,.08);
+    }
+    .nav a.active{
+      background: linear-gradient(180deg, rgba(173,151,79,.14), rgba(255,255,255,.02));
+      border-color: rgba(173,151,79,.30);
+      color: rgba(255,255,255,.92);
+    }
+    .ico{
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      display:grid;
+      place-items:center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(231,215,166,.95);
+    }
+
+    .sidebar-footer{
+      position:absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .status-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(173,151,79,.25);
+      background: rgba(173,151,79,.08);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.02em;
+      color: rgba(231,215,166,.95);
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius:50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 6px rgba(54,211,153,.08);
+    }
+
+    /* Main */
+    .main{
+      padding: 22px 22px 44px;
+    }
+
+    .topbar{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 16px;
+    }
+
+    .search{
+      flex:1;
+      min-width: 240px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      box-shadow: var(--shadow2);
+    }
+    .search input{
+      width:100%;
+      border:0;
+      outline:0;
+      color: rgba(255,255,255,.90);
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing:.02em;
+    }
+    .search kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,.65);
+      padding: 4px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      white-space:nowrap;
+    }
+
+    .userbox{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      box-shadow: var(--shadow2);
+    }
+    .avatar{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      border: 1px solid rgba(173,151,79,.35);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(231,215,166,.35), transparent 60%),
+        linear-gradient(135deg, rgba(173,151,79,.25), rgba(142,121,62,.10));
+    }
+    .userbox .meta{
+      display:flex; flex-direction:column;
+      line-height:1.1;
+    }
+    .userbox .meta strong{
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+    }
+    .userbox .meta small{
+      font-size: 11px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+    .btn{
+      border: 1px solid rgba(173,151,79,.28);
+      background: rgba(173,151,79,.10);
+      color: rgba(231,215,166,.95);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: .15s ease;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .btn:hover{
+      border-color: rgba(231,215,166,.45);
+      background: rgba(173,151,79,.14);
+    }
+
+    /* Panels */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+      align-items:start;
+    }
+
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .card .hd h2{
+      margin:0;
+      font-size: 13px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+    }
+    .card .hd p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: var(--mono);
+    }
+    .card .bd{
+      padding: 14px 16px 16px;
+    }
+
+    .ops{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 980px){
+      .app{ grid-template-columns: 1fr; }
+      .sidebar{ position:relative; height:auto; }
+      .sidebar-footer{ position:relative; left:auto; right:auto; bottom:auto; margin-top: 12px; }
+      .grid{ grid-template-columns: 1fr; }
+      .ops{ grid-template-columns: 1fr; }
+    }
+
+    .op{
+      border-radius: 16px;
+      border: 1px solid rgba(173,151,79,.22);
+      background:
+        radial-gradient(900px 200px at 10% 0%, rgba(173,151,79,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.10));
+      padding: 14px;
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .op:after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: 18px;
+      border: 1px solid rgba(231,215,166,.12);
+      pointer-events:none;
+      mask: linear-gradient(#000, transparent 65%);
+    }
+    .op .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.03em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color: rgba(255,255,255,.78);
+      white-space:nowrap;
+    }
+    .tag.gold{
+      border-color: rgba(173,151,79,.30);
+      background: rgba(173,151,79,.10);
+      color: rgba(231,215,166,.95);
+    }
+
+    .op h3{
+      margin: 0 0 6px;
+      font-size: 16px;
+      letter-spacing:.06em;
+    }
+    .op p{
+      margin: 0;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      font-family: var(--mono);
+      line-height: 1.55;
+    }
+    .op .row{
+      margin-top: 12px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .op .row .mini{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .mini .kv{
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,.78);
+    }
+    .mini .kv b{ color: rgba(231,215,166,.95); font-weight:600; }
+
+    /* Right column widgets */
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .item{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+    }
+    .item .ttl{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .item .ttl strong{
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+    }
+    .item .ttl small{
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 11px;
+      white-space:nowrap;
+    }
+    .item p{
+      margin:0;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.75);
+    }
+
+    /* Modal */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .overlay.open{ display:flex; }
+    .modal{
+      width: min(980px, 100%);
+      max-height: min(82vh, 860px);
+      overflow:auto;
+      border-radius: 18px;
+      border: 1px solid rgba(173,151,79,.28);
+      background:
+        radial-gradient(1200px 500px at 10% 0%, rgba(173,151,79,.18), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.25));
+      box-shadow: 0 40px 120px rgba(0,0,0,.75);
+    }
+    .modal .mh{
+      position:sticky;
+      top:0;
+      z-index: 2;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      background: rgba(5,5,8,.72);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .modal .mh h3{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+    }
+    .modal .mb{
+      padding: 14px 16px 18px;
+    }
+    .cols{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 860px){
+      .cols{ grid-template-columns: 1fr; }
+    }
+    .box{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+    }
+    .box h4{
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      color: rgba(231,215,166,.95);
+    }
+    .box ul{
+      margin:0;
+      padding-left: 18px;
+      color: rgba(255,255,255,.78);
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .box li{ margin: 6px 0; }
+
+    .mono{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.80);
+      line-height: 1.6;
+    }
+    .hr{
+      height:1px;
+      background: rgba(255,255,255,.10);
+      margin: 12px 0;
+    }
+
+    /* Subtle “secure terminal” */
+    .terminal{
+      border-radius: 16px;
+      border: 1px solid rgba(173,151,79,.25);
+      background: rgba(0,0,0,.28);
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(231,215,166,.92);
+      overflow:auto;
+      max-height: 220px;
+    }
+    .terminal .dim{ color: rgba(255,255,255,.55); }
+    .terminal .warn{ color: rgba(255,77,109,.90); }
+    .terminal .ok{ color: rgba(54,211,153,.90); }
+
+    /* Tiny “glow” selection */
+    ::selection{
+      background: rgba(173,151,79,.28);
+      color: rgba(255,255,255,.95);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand" role="banner" aria-label="Sanctum Veritatis">
+        <div class="sigil" aria-hidden="true"></div>
+        <div>
+          <h1>Sanctum Veritatis</h1>
+          <small>INTRANET // ORDO • VERDADE</small>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navegação">
+        <a class="active" href="#/dashboard" data-route="dashboard">
+          <span class="ico">SV</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#/operacoes" data-route="operacoes">
+          <span class="ico">OP</span>
+          <span>Operações</span>
+        </a>
+        <a href="#/arquivos" data-route="arquivos">
+          <span class="ico">AR</span>
+          <span>Arquivos</span>
+        </a>
+        <a href="#/diretorio" data-route="diretorio">
+          <span class="ico">DI</span>
+          <span>Diretório</span>
+        </a>
+        <a href="#/sistemas" data-route="sistemas">
+          <span class="ico">SY</span>
+          <span>Sistemas</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer" role="contentinfo" aria-label="Status">
+        <div class="status-row">
+          <span class="pill"><span class="dot"></span> Link interno estável</span>
+          <button class="btn" id="lockBtn" title="Bloquear sessão (apenas visual)">LOCK</button>
+        </div>
+        <div class="hr"></div>
+        <div class="mono" style="display:flex; justify-content:space-between; gap:10px;">
+          <span class="dim">Sessão:</span>
+          <span id="sessId" style="color:rgba(231,215,166,.95);">SV-000000</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="topbar">
+        <div class="search" role="search">
+          <span class="ico" aria-hidden="true">⌕</span>
+          <input id="searchInput" placeholder="Buscar (operação, protocolo, arquivo, agente)..." autocomplete="off" />
+          <kbd>Ctrl K</kbd>
+        </div>
+
+        <div class="userbox" aria-label="Identidade">
+          <div class="avatar" aria-hidden="true"></div>
+          <div class="meta">
+            <strong>ACESSO: VISITANTE</strong>
+            <small>Nível: 01 // Leitura</small>
+          </div>
+          <button class="btn" id="helpBtn" title="Atalhos">AJUDA</button>
+        </div>
+      </div>
+
+      <!-- Views -->
+      <section id="view-dashboard" class="view">
+        <div class="grid">
+          <div class="card">
+            <div class="hd">
+              <div>
+                <h2>Painel interno</h2>
+                <p>Resumo operacional para perfis com acesso básico (Nível 01).</p>
+              </div>
+              <span class="tag gold" id="clock">00:00:00</span>
+            </div>
+
+            <div class="bd">
+              <div class="ops" aria-label="Operações visíveis">
+                <!-- OP: Setentrional -->
+                <article class="op" data-search="setentrional operacao norte setentrional">
+                  <div class="top">
+                    <span class="tag gold">OPERAÇÃO</span>
+                    <span class="tag">VISÍVEL</span>
+                  </div>
+                  <h3>Setentrional</h3>
+                  <p>Registro resumido disponível. Seções sensíveis bloqueadas por política de compartimentação.</p>
+                  <div class="row">
+                    <div class="mini">
+                      <span class="kv"><b>Status:</b> Ativa</span>
+                      <span class="kv"><b>Sigilo:</b> Compart.</span>
+                      <span class="kv"><b>Último update:</b> 48h</span>
+                    </div>
+                    <button class="btn" data-open="setentrional">ABRIR</button>
+                  </div>
+                </article>
+
+                <!-- OP: Aurora de Vidro -->
+                <article class="op" data-search="aurora de vidro operacao aurora vidro">
+                  <div class="top">
+                    <span class="tag gold">OPERAÇÃO</span>
+                    <span class="tag">VISÍVEL</span>
+                  </div>
+                  <h3>Aurora de Vidro</h3>
+                  <p>Conteúdo controlado liberado para consulta. Materiais anexos podem conter trechos ocultos.</p>
+                  <div class="row">
+                    <div class="mini">
+                      <span class="kv"><b>Status:</b> Ativa</span>
+                      <span class="kv"><b>Sigilo:</b> Interno</span>
+                      <span class="kv"><b>Último update:</b> 06h</span>
+                    </div>
+                    <button class="btn" data-open="aurora">ABRIR</button>
+                  </div>
+                </article>
+              </div>
+
+              <div class="hr"></div>
+
+              <div class="cols">
+                <div class="box">
+                  <h4>Alertas</h4>
+                  <ul>
+                    <li>Política de acesso: documentos sensíveis exigem dupla autenticação.</li>
+                    <li>Uploads de campo devem manter cadeia de custódia (metadados preservados).</li>
+                    <li>Qualquer tentativa de exfiltração será registrada no diário de auditoria.</li>
+                  </ul>
+                </div>
+
+                <div class="box">
+                  <h4>Atalhos internos</h4>
+                  <ul>
+                    <li><span class="pill">Ctrl</span> + <span class="pill">K</span> — foco na busca.</li>
+                    <li><span class="pill">Esc</span> — fechar janelas/diálogos.</li>
+                    <li><span class="pill">/operacoes</span> — listar operações visíveis.</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="hd">
+              <div>
+                <h2>Atividade recente</h2>
+                <p>Eventos do sistema (resumo).</p>
+              </div>
+              <span class="tag">AUDIT</span>
+            </div>
+
+            <div class="bd">
+              <div class="list" id="activityList">
+                <div class="item">
+                  <div class="ttl"><strong>Sincronização</strong><small>há 2 min</small></div>
+                  <p>Espelhos internos atualizados. Integridade: <span class="ok">OK</span>.</p>
+                </div>
+                <div class="item">
+                  <div class="ttl"><strong>Operações</strong><small>há 1 h</small></div>
+                  <p>“Aurora de Vidro” recebeu novo anexo (classificação: interno).</p>
+                </div>
+                <div class="item">
+                  <div class="ttl"><strong>Auditoria</strong><small>há 6 h</small></div>
+                  <p>Revisão de permissões. Contas inativas marcadas para quarentena.</p>
+                </div>
+                <div class="item">
+                  <div class="ttl"><strong>Segurança</strong><small>há 2 d</small></div>
+                  <p>Tentativa de acesso não autorizado bloqueada. Evidência preservada.</p>
+                </div>
+              </div>
+
+              <div class="hr"></div>
+              <div class="terminal" aria-label="Terminal de status">
+<span class="dim">svnet@core:</span>~$ status --brief
+[ <span class="ok">OK</span> ] roteamento interno
+[ <span class="ok">OK</span> ] indexação de arquivos
+[ <span class="warn">WARN</span> ] anomalia de checksum em /ops/aurora_vidro/anexos/
+[ <span class="ok">OK</span> ] cofre lógico (vault) inacessível ao nível atual
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-operacoes" class="view" hidden>
+        <div class="card">
+          <div class="hd">
+            <div>
+              <h2>Operações</h2>
+              <p>Listagem filtrada por visibilidade e nível de acesso.</p>
+            </div>
+            <span class="tag gold">NÍVEL 01</span>
+          </div>
+          <div class="bd">
+            <div class="ops">
+              <article class="op" data-search="setentrional">
+                <div class="top">
+                  <span class="tag gold">SETENTRIONAL</span>
+                  <span class="tag">ATIVA</span>
+                </div>
+                <h3>Setentrional</h3>
+                <p>Resumo: ocorrências em latitude alta. Parte do material permanece compartimentado.</p>
+                <div class="row">
+                  <div class="mini">
+                    <span class="kv"><b>Cód:</b> SV-OP-NT</span>
+                    <span class="kv"><b>Setor:</b> Campo</span>
+                  </div>
+                  <button class="btn" data-open="setentrional">VER</button>
+                </div>
+              </article>
+
+              <article class="op" data-search="aurora de vidro">
+                <div class="top">
+                  <span class="tag gold">AURORA DE VIDRO</span>
+                  <span class="tag">ATIVA</span>
+                </div>
+                <h3>Aurora de Vidro</h3>
+                <p>Resumo: evento recorrente associado a “refração” e padrões de luz em ambientes fechados.</p>
+                <div class="row">
+                  <div class="mini">
+                    <span class="kv"><b>Cód:</b> SV-OP-AV</span>
+                    <span class="kv"><b>Setor:</b> Investigação</span>
+                  </div>
+                  <button class="btn" data-open="aurora">VER</button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-arquivos" class="view" hidden>
+        <div class="card">
+          <div class="hd">
+            <div>
+              <h2>Arquivos</h2>
+              <p>Índice superficial (apenas nomes e categorias).</p>
+            </div>
+            <span class="tag">INDEX</span>
+          </div>
+          <div class="bd">
+            <div class="box">
+              <h4>Pastas visíveis</h4>
+              <ul>
+                <li>/ops/setentrional/ (resumo, cronologia, relatórios)</li>
+                <li>/ops/aurora_vidro/ (resumo, anexos, evidências)</li>
+                <li>/policies/ (conduta, segurança, cadeia de custódia)</li>
+                <li>/directory/ (ramais e contatos internos)</li>
+                <li>/systems/ (status, manuais, solicitações)</li>
+              </ul>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="box">
+              <h4>Nota</h4>
+              <div class="mono">
+                Alguns itens podem existir apenas em versões antigas (backups) e não aparecem no índice.
+                Acesso por caminho direto pode retornar “404” ou “permissão negada”, dependendo da classificação.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-diretorio" class="view" hidden>
+        <div class="card">
+          <div class="hd">
+            <div>
+              <h2>Diretório</h2>
+              <p>Contatos internos (limitado).</p>
+            </div>
+            <span class="tag">DIR</span>
+          </div>
+          <div class="bd">
+            <div class="list">
+              <div class="item">
+                <div class="ttl"><strong>Recepção / Triagem</strong><small>Ramal 110</small></div>
+                <p>Encaminhamento de chamados, registro de ocorrências e autorização de entrada.</p>
+              </div>
+              <div class="item">
+                <div class="ttl"><strong>Arquivo / Custódia</strong><small>Ramal 204</small></div>
+                <p>Entrada de evidências, lacres, devoluções e armazenamento.</p>
+              </div>
+              <div class="item">
+                <div class="ttl"><strong>Operações de Campo</strong><small>Ramal 311</small></div>
+                <p>Planejamento e coordenação de deslocamento, logística e extração.</p>
+              </div>
+              <div class="item">
+                <div class="ttl"><strong>Segurança da Informação</strong><small>Ramal 404</small></div>
+                <p>Permissões, incidentes, auditoria e quarentena de contas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-sistemas" class="view" hidden>
+        <div class="card">
+          <div class="hd">
+            <div>
+              <h2>Sistemas</h2>
+              <p>Ferramentas internas (somente leitura).</p>
+            </div>
+            <span class="tag gold">CORE</span>
+          </div>
+          <div class="bd">
+            <div class="cols">
+              <div class="box">
+                <h4>Solicitações</h4>
+                <ul>
+                  <li>Pedido de material (bloqueado — permissões insuficientes).</li>
+                  <li>Registro de anexo de evidência (bloqueado — permissões insuficientes).</li>
+                  <li>Chamado de suporte (aberto — leitura).</li>
+                </ul>
+              </div>
+              <div class="box">
+                <h4>Status</h4>
+                <ul>
+                  <li>Indexação: OK</li>
+                  <li>Espelhos: OK</li>
+                  <li>Vault: inacessível</li>
+                  <li>Auditoria: ativa</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="terminal">
+<span class="dim">svnet@core:</span>~$ systems --list
+sv.indexer     running
+sv.audit       running
+sv.ops         running
+sv.vault       <span class="warn">restricted</span>
+sv.backups     running
+sv.directory   running
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Operation details -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Detalhes da operação">
+      <div class="mh">
+        <h3 id="modalTitle">Operação</h3>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="tag gold" id="modalTag">VISÍVEL</span>
+          <button class="btn" id="closeModal">FECHAR</button>
+        </div>
+      </div>
+      <div class="mb" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Help -->
+  <div class="overlay" id="help" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Ajuda">
+      <div class="mh">
+        <h3>Ajuda</h3>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="tag">ATALHOS</span>
+          <button class="btn" id="closeHelp">FECHAR</button>
+        </div>
+      </div>
+      <div class="mb">
+        <div class="cols">
+          <div class="box">
+            <h4>Navegação</h4>
+            <ul>
+              <li>Use a barra lateral para trocar de seção.</li>
+              <li>O endereço muda via hash (#/dashboard etc.).</li>
+              <li>Pressione Esc para fechar diálogos.</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Busca</h4>
+            <ul>
+              <li>Ctrl+K foca a busca.</li>
+              <li>A busca filtra cartões na seção atual quando aplicável.</li>
+              <li>Limpe a busca para restaurar todos os itens.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="mono dim">
+          Nota: esta intranet é uma interface diegética; “bloqueios” aqui podem ser substituídos por puzzles/credenciais no seu jogo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Lock screen -->
+  <div class="overlay" id="lock" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Sessão bloqueada">
+      <div class="mh">
+        <h3>Sessão bloqueada</h3>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="tag gold">SV-LOCK</span>
+          <button class="btn" id="unlockBtn">DESBLOQUEAR</button>
+        </div>
+      </div>
+      <div class="mb">
+        <div class="box">
+          <h4>Mensagem do sistema</h4>
+          <div class="mono">
+            A sessão foi bloqueada manualmente. Para continuar, pressione “DESBLOQUEAR”.
+          </div>
+        </div>
+        <div class="hr"></div>
+        <div class="terminal">
+<span class="dim">sv.audit:</span> event=SESSION_LOCK user=VISITANTE level=01
+<span class="dim">sv.audit:</span> hint="credenciais superiores exigidas para cofre lógico"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Utilities
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    // Session ID (diegético)
+    const sess = "SV-" + Math.floor(Math.random() * 1e6).toString().padStart(6, "0");
+    $("#sessId").textContent = sess;
+
+    // Clock
+    function tick(){
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mm = String(d.getMinutes()).padStart(2,"0");
+      const ss = String(d.getSeconds()).padStart(2,"0");
+      $("#clock").textContent = `${hh}:${mm}:${ss}`;
+    }
+    setInterval(tick, 1000); tick();
+
+    // Routing (hash)
+    const routes = ["dashboard","operacoes","arquivos","diretorio","sistemas"];
+    function show(route){
+      if(!routes.includes(route)) route = "dashboard";
+      $$(".view").forEach(v => v.hidden = true);
+      $("#view-" + route).hidden = false;
+
+      $$(".nav a").forEach(a => a.classList.toggle("active", a.dataset.route === route));
+      // reset search on route change
+      $("#searchInput").value = "";
+      applyFilter("");
+    }
+    function onHash(){
+      const raw = (location.hash || "#/dashboard").replace("#/","");
+      show(raw);
+    }
+    window.addEventListener("hashchange", onHash);
+    onHash();
+
+    // Search filter: filters operation cards in visible view
+    function applyFilter(q){
+      const query = (q || "").trim().toLowerCase();
+      const container = document.querySelector(".view:not([hidden])");
+      if(!container) return;
+
+      // Filter cards that have data-search
+      const cards = $$("[data-search]", container);
+      cards.forEach(card => {
+        const hay = (card.getAttribute("data-search") || "").toLowerCase() + " " + card.textContent.toLowerCase();
+        const ok = !query || hay.includes(query);
+        card.style.display = ok ? "" : "none";
+      });
+    }
+
+    const search = $("#searchInput");
+    search.addEventListener("input", (e) => applyFilter(e.target.value));
+
+    // Ctrl+K focus
+    window.addEventListener("keydown", (e) => {
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k"){
+        e.preventDefault();
+        search.focus();
+      }
+      if(e.key === "Escape"){
+        closeAll();
+      }
+    });
+
+    // Modals
+    const overlay = $("#overlay");
+    const help = $("#help");
+    const lock = $("#lock");
+
+    function openModal(title, tag, html){
+      $("#modalTitle").textContent = title;
+      $("#modalTag").textContent = tag;
+      $("#modalBody").innerHTML = html;
+      overlay.classList.add("open");
+      overlay.setAttribute("aria-hidden","false");
+    }
+    function closeModal(){
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden","true");
+    }
+    $("#closeModal").addEventListener("click", closeModal);
+    overlay.addEventListener("click", (e) => { if(e.target === overlay) closeModal(); });
+
+    function openHelp(){
+      help.classList.add("open");
+      help.setAttribute("aria-hidden","false");
+    }
+    function closeHelp(){
+      help.classList.remove("open");
+      help.setAttribute("aria-hidden","true");
+    }
+    $("#helpBtn").addEventListener("click", openHelp);
+    $("#closeHelp").addEventListener("click", closeHelp);
+    help.addEventListener("click", (e) => { if(e.target === help) closeHelp(); });
+
+    function openLock(){
+      lock.classList.add("open");
+      lock.setAttribute("aria-hidden","false");
+    }
+    function closeLock(){
+      lock.classList.remove("open");
+      lock.setAttribute("aria-hidden","true");
+    }
+    $("#lockBtn").addEventListener("click", openLock);
+    $("#unlockBtn").addEventListener("click", closeLock);
+    lock.addEventListener("click", (e) => { if(e.target === lock) closeLock(); });
+
+    function closeAll(){
+      closeModal(); closeHelp(); closeLock();
+    }
+
+    // Operation content
+    const opHtml = {
+      setentrional: `
+        <div class="cols">
+          <div class="box">
+            <h4>Resumo (liberado)</h4>
+            <div class="mono">
+              Operação ativa. O conteúdo completo encontra-se compartimentado por setor.
+              Acesso atual permite apenas visão geral e cronologia resumida.
+            </div>
+            <div class="hr"></div>
+            <ul>
+              <li>Classificação: Compartimentada.</li>
+              <li>Visibilidade: Parcial (Nível 01).</li>
+              <li>Observação: anexos e evidências exigem credencial superior.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h4>Blocos indisponíveis</h4>
+            <ul>
+              <li>Relatórios de campo (RPT-*) — PERMISSÃO NEGADA</li>
+              <li>Evidências (EVD-*) — PERMISSÃO NEGADA</li>
+              <li>Contatos e ativos — PERMISSÃO NEGADA</li>
+            </ul>
+            <div class="hr"></div>
+            <div class="terminal">
+<span class="dim">sv.ops:</span> open setentrional
+<span class="warn">AccessDenied</span>: scope=ops:setentrional:attachments
+            </div>
+          </div>
+        </div>
+      `,
+      aurora: `
+        <div class="cols">
+          <div class="box">
+            <h4>Ficha da operação</h4>
+            <ul>
+              <li>Codinome: Aurora de Vidro</li>
+              <li>Código interno: SV-OP-AV</li>
+              <li>Status: Ativa</li>
+              <li>Sigilo: Interno</li>
+              <li>Visibilidade: Liberada (Nível 01 — leitura)</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h4>Sumário (liberado)</h4>
+            <div class="mono">
+              Ocorrências compatíveis com “fenômeno de refração” em ambientes com baixa luminosidade.
+              Há indícios de padrão repetitivo (datas, ângulos, superfícies).
+              A equipe recomenda preservar registros brutos (sem compressão).
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="cols">
+          <div class="box">
+            <h4>Linha do tempo (resumo)</h4>
+            <ul>
+              <li>D-07: abertura do caso após múltiplas chamadas correlacionadas.</li>
+              <li>D-03: coleta de amostras e imagens em alta resolução.</li>
+              <li>D-01: revisão de evidências; inconsistência de checksum detectada.</li>
+              <li>D+00: anexos liberados em modo leitura para auditoria interna.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h4>Anexos (listagem)</h4>
+            <ul>
+              <li>/ops/aurora_vidro/anexos/EVD-AV-01.jpg (imagem)</li>
+              <li>/ops/aurora_vidro/anexos/EVD-AV-02.wav (áudio)</li>
+              <li>/ops/aurora_vidro/anexos/RPT-AV-00.pdf (relatório)</li>
+              <li>/ops/aurora_vidro/anexos/NOTA-AV.txt (nota curta)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="terminal" aria-label="Diário de auditoria (trecho)">
+<span class="dim">sv.audit:</span> event=FILE_INDEXED path=/ops/aurora_vidro/anexos/RPT-AV-00.pdf
+<span class="dim">sv.audit:</span> event=CHECKSUM_MISMATCH path=/ops/aurora_vidro/anexos/EVD-AV-01.jpg
+<span class="dim">sv.audit:</span> event=ACCESS_GRANTED scope=ops:aurora_vidro:read level=01
+        </div>
+      `
+    };
+
+    // Buttons to open operations
+    $$("[data-open]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-open");
+        if(key === "aurora"){
+          openModal("Operação — Aurora de Vidro", "VISÍVEL", opHtml.aurora);
+        }else{
+          openModal("Operação — Setentrional", "VISÍVEL", opHtml.setentrional);
+        }
+      });
+    });
+
+    // Search special commands (diegético)
+    search.addEventListener("keydown", (e) => {
+      if(e.key !== "Enter") return;
+      const q = search.value.trim().toLowerCase();
+      if(q === "/operacoes" || q === "/ops"){
+        location.hash = "#/operacoes";
+      }
+      if(q === "/dashboard"){
+        location.hash = "#/dashboard";
+      }
+      if(q === "/lock"){
+        openLock();
+      }
+    });
+  </script>
+</body>
+</html>

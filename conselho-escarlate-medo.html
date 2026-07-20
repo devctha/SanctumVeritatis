@@ -1,1 +1,578 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/conselho-escarlate-medo"><meta http-equiv="refresh" content="0;url=/conselho-escarlate-medo"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/conselho-escarlate-medo'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/conselho-escarlate-medo">/conselho-escarlate-medo</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/conselho-escarlate-medo'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/conselho-escarlate-medo">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACESSO RESTRITO: CONSELHO ESCARLATE // RELÍQUIAS DE MEDO</title>
+    <style>
+        :root {
+            --primary: #f2f2f2;      /* palidez */
+            --secondary: #c40000;    /* vermelho ansiedade */
+            --accent: #14141a;       /* sombra pesada */
+            --bg: #030308;
+            --text: #e6e6e6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
+        
+        body {
+            background: radial-gradient(circle at top, #1a1820 0, #05040a 45%, #000 100%);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.35;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.015) 0px,
+                rgba(255,255,255,0.015) 1px,
+                rgba(0,0,0,0.55) 2px,
+                rgba(0,0,0,0.55) 4px
+            );
+            z-index: 10;
+            pointer-events: none;
+            animation: scan 12s linear infinite;
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9;
+            background: radial-gradient(circle at center, transparent 0, transparent 45%, rgba(0,0,0,0.7) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--primary);
+            text-shadow: 
+                0 0 8px rgba(0,0,0,0.9),
+                0 0 25px rgba(196,0,0,0.4);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: "CONSELHO ESCARLATE";
+            position: absolute;
+            left: -2px;
+            top: 1px;
+            color: rgba(196,0,0,0.2);
+            letter-spacing: 6px;
+            text-shadow: none;
+            mix-blend-mode: screen;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #9b9b9b;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .warning-box {
+            border: 1px solid var(--secondary);
+            background: rgba(5,0,0,0.85);
+            padding: 10px 15px;
+            color: var(--primary);
+            font-size: 0.75rem;
+            margin-bottom: 18px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: heartbeat 1.6s infinite;
+        }
+
+        .relics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        .relic-card {
+            border: 1px solid #262632;
+            background: radial-gradient(circle at top, #171720 0, #0e0e14 50%, #050509 100%);
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .relic-card::before {
+            content: "";
+            position: absolute;
+            inset: -30%;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(255,0,0,0.1), transparent 55%),
+                radial-gradient(circle at 90% 80%, rgba(255,0,0,0.08), transparent 60%);
+            opacity: 0;
+            transition: 0.6s;
+            mix-blend-mode: screen;
+        }
+
+        .relic-card:hover::before {
+            opacity: 1;
+        }
+
+        .relic-card:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 0 25px rgba(196,0,0,0.5);
+            transform: translateY(-4px);
+        }
+
+        .relic-icon {
+            font-size: 3.1rem;
+            text-align: center;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 8px rgba(0,0,0,0.9));
+            transition: 0.4s;
+        }
+
+        .relic-card:hover .relic-icon {
+            transform: scale(1.05) translateY(-3px);
+        }
+
+        .data-label {
+            color: #7d7d90;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .relic-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            border-left: 3px solid var(--secondary);
+            padding-left: 10px;
+            text-transform: uppercase;
+        }
+
+        .encrypted-text {
+            color: #c8c8d8;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            min-height: 80px;
+            position: relative;
+        }
+
+        .encrypted-text::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0,
+                transparent 2px,
+                rgba(0,0,0,0.35) 3px
+            );
+            opacity: 0;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .relic-card:hover .encrypted-text::after {
+            opacity: 0.4;
+        }
+
+        .origin-tag {
+            display: inline-block;
+            background: rgba(3,3,10,0.95);
+            color: #d9d9e0;
+            padding: 3px 9px;
+            font-size: 0.7rem;
+            margin-top: 14px;
+            border: 1px solid var(--secondary);
+            letter-spacing: 1px;
+        }
+
+        .aspect-tag {
+            float: right;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+        }
+
+        .demonlarium-section {
+            margin-top: 60px;
+            border-top: 1px dashed #3d3d4a;
+            padding-top: 20px;
+            opacity: 0.65;
+            transition: 0.8s;
+        }
+
+        .demonlarium-section:hover {
+            opacity: 1;
+        }
+
+        .demonlarium-section h3 {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .demonlarium-section p {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            max-width: 650px;
+            line-height: 1.7;
+            color: #e2e2e2;
+        }
+
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.97);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            width: 85%;
+            max-width: 680px;
+            border: 2px solid var(--secondary);
+            background: radial-gradient(circle, #181820 0, #050508 70%);
+            padding: 26px 26px 20px;
+            box-shadow: 0 0 45px rgba(0,0,0,0.9);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 6px;
+            right: 12px;
+            color: var(--secondary);
+            font-size: 1.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.15);
+        }
+
+        #modal-title {
+            color: var(--primary);
+            font-size: 1.35rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #343444;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        #modal-body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            color: #f0f0f0;
+            line-height: 1.7;
+        }
+
+        #modal-body strong {
+            color: var(--secondary);
+        }
+
+        .modal-status {
+            margin-top: 16px;
+            border: 1px solid #343444;
+            padding: 8px 10px;
+            font-size: 0.7rem;
+            color: #bfbfd0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { box-shadow: 0 0 4px rgba(196,0,0,0.6); }
+            20% { box-shadow: 0 0 14px rgba(196,0,0,0.9); }
+            40% { box-shadow: 0 0 6px rgba(196,0,0,0.7); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.1rem; letter-spacing: 3px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="warning-box">
+                ⚠ PROTOCOLO F-EAR ATIVO // EXPOSIÇÃO ÀS RELÍQUIAS DE MEDO PODE MATERIALIZAR FOBIAS ADORMECIDAS.
+            </div>
+            <h1>CONSELHO ESCARLATE</h1>
+            <p class="subtitle">Arquivo: Relíquias de Medo // Origem: Demonlarium</p>
+        </header>
+
+        <main class="relics-grid">
+            <!-- RELÍQUIA DE MEDO 1 -->
+            <div class="relic-card" onclick="openModal('mascara')">
+                <span class="data-label">Relíquia F-001 // Classe: Fobia Coletiva</span>
+                <span class="aspect-tag">Aspecto: Medo</span>
+                <div class="relic-icon">🎭</div>
+                <h2 class="relic-title">Máscara da Fobia Coletiva</h2>
+                <p class="encrypted-text" data-original="Uma máscara sem feições definidas. Quando usada em meio a uma multidão, ela lê o medo predominante do grupo e o manifesta fisicamente ao redor. Quanto mais pessoas presentes, mais sólido e letal se torna o terror criado.">
+                    PERFIL EMOCIONAL: COLETADO // FOBIA DOMINANTE: [REDIGIDO] // MANIFESTAÇÃO: EM ANDAMENTO...
+                </p>
+                <div class="origin-tag">Recuperada após pânico em massa sem causa identificável.</div>
+            </div>
+
+            <!-- RELÍQUIA DE MEDO 2 -->
+            <div class="relic-card" onclick="openModal('caixa')">
+                <span class="data-label">Relíquia F-002 // Classe: Sussurro Incontável</span>
+                <span class="aspect-tag">Aspecto: Medo</span>
+                <div class="relic-icon">📦</div>
+                <h2 class="relic-title">Caixa do Sussurro Incontável</h2>
+                <p class="encrypted-text" data-original="Uma pequena caixa escura que nunca é totalmente aberta. De dentro dela saem sussurros que descrevem, em detalhes, a pior coisa que poderia acontecer a quem ouvir — não necessariamente algo real, mas algo plausível o suficiente para destruir a paz de espírito para sempre.">
+                    ÁUDIO NÃO RECOMENDADO // RISCO DE PARANOIA CRÔNICA // VOLUME: IRRELEVANTE.
+                </p>
+                <div class="origin-tag">Encontrada em quarto sem portas, trancado por dentro.</div>
+            </div>
+
+            <!-- RELÍQUIA DE MEDO 3 -->
+            <div class="relic-card" onclick="openModal('lamina')">
+                <span class="data-label">Relíquia F-003 // Classe: Autoperseguição</span>
+                <span class="aspect-tag">Aspecto: Medo</span>
+                <div class="relic-icon">🔪</div>
+                <h2 class="relic-title">Lâmina da Autoperseguição</h2>
+                <p class="encrypted-text" data-original="Uma lâmina fina, quase translúcida, que corta apenas reflexos. Sempre que usada diante de um espelho, cria uma versão distorcida do próprio portador, feita de tudo que ele teme se tornar. Essa cópia passa a persegui-lo, aparecendo em reflexos aleatórios até o fim de sua sanidade.">
+                    REFLEXO COMPROMETIDO // VERSÃO HOSTIL DETECTADA // FUGA: IMPROVÁVEL.
+                </p>
+                <div class="origin-tag">Coletada em banheiro onde ninguém conseguia se olhar no espelho.</div>
+            </div>
+        </main>
+
+        <div class="demonlarium-section">
+            <h3>>> ANEXO: SUB-SETOR DE MEDO DO DEMONLARIUM</h3>
+            <p>
+                O setor de Medo do Demonlarium é um labirinto sem paredes, construído apenas com possibilidades horríveis que ainda não aconteceram. 
+                Cada passo ecoa um futuro que deu errado. As relíquias de Medo são atalhos nesse labirinto — atalhos que trazem para a realidade 
+                aquilo que deveria existir apenas como ameaça. Elas não criam medo; apenas lhe dão um corpo para correr atrás de você.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body"></div>
+            <div class="modal-status">
+                STATUS: OBSERVAÇÃO CONSTANTE // USO RESTRITO A CÉLULAS DO CONSELHO ESCARLATE COM IMUNIDADE PSICOLÓGICA COMPROVADA.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // EFEITO DE "CORRUPÇÃO" DO TEXTO
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789?!#%&";
+
+        document.querySelectorAll('.encrypted-text').forEach(element => {
+            const originalText = element.getAttribute('data-original');
+            let running = false;
+
+            element.addEventListener('mouseover', event => {
+                if (running) return;
+                running = true;
+                let iterations = 0;
+                let interval = setInterval(() => {
+                    event.target.innerText = originalText
+                        .split("")
+                        .map((letter, index) => {
+                            if (index < iterations) return originalText[index];
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join("");
+
+                    if (iterations >= originalText.length) {
+                        clearInterval(interval);
+                        running = false;
+                    }
+
+                    iterations += 0.45;
+                }, 30);
+            });
+        });
+
+        // FUNDO: PARTICULAS / SOMBRAS
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class ShadowParticle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 0.5;
+                this.speedX = (Math.random() * 0.6) - 0.3;
+                this.speedY = (Math.random() * 0.6) - 0.3;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.01;
+                if (
+                    this.size <= 0.2 ||
+                    this.x < -20 || this.x > canvas.width + 20 ||
+                    this.y < -20 || this.y > canvas.height + 20
+                ) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(0,0,0," + this.alpha + ")";
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // olhos distantes ocasionais
+                if (Math.random() > 0.995) {
+                    ctx.fillStyle = "rgba(242,242,242,0.35)";
+                    ctx.fillRect(this.x - 3, this.y - 1, 2, 2);
+                    ctx.fillRect(this.x + 3, this.y - 1, 2, 2);
+                }
+            }
+        }
+
+        const particles = [];
+        function initParticles() {
+            for (let i = 0; i < 140; i++) {
+                particles.push(new ShadowParticle());
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // MODAL
+        const modal = document.getElementById('modal-overlay');
+        const mTitle = document.getElementById('modal-title');
+        const mBody = document.getElementById('modal-body');
+
+        const db = {
+            'mascara': {
+                t: 'MÁSCARA DA FOBIA COLETIVA (F-001)',
+                b: `
+                    <strong>Origem conhecida:</strong> Resgatada após um incidente em que centenas de pessoas correram de algo que nenhuma câmera registrou. 
+                    A máscara estava no centro do tumulto, intacta.<br><br>
+                    <strong>Efeito Primário:</strong> Quando usada em um ambiente com pelo menos 5 pessoas conscientes, 
+                    a máscara identifica o medo mais recorrente entre elas e o converte em uma manifestação física. 
+                    Pode variar de criaturas a cenários inteiros, dependendo da intensidade emocional envolvida.<br><br>
+                    <strong>Custo Psíquico:</strong> O usuário torna-se gradualmente incapaz de distinguir seus próprios medos dos dos outros, 
+                    recebendo penalidades severas em testes de Sanidade ligados a fobias pessoais.
+                `
+            },
+            'caixa': {
+                t: 'CAIXA DO SUSSURRO INCONTÁVEL (F-002)',
+                b: `
+                    <strong>Procedimento de Uso:</strong> Aproximar o ouvido da caixa por um turno completo. 
+                    O som emitido não pode ser gravado nem descrito com precisão após o contato.<br><br>
+                    <strong>Efeito Primário:</strong> O ouvinte é exposto à descrição detalhada de um futuro possível, 
+                    onde tudo que ele teme acontece da pior forma plausível. 
+                    A partir daí, em qualquer teste que envolva risco, o jogador pode escolher ter vantagem — 
+                    mas, em compensação, qualquer falha passa a ser percebida como um passo na direção daquele futuro descrito.<br><br>
+                    <strong>Consequência:</strong> Exposições repetidas podem gerar paranoia crônica, 
+                    alucinações leves e dificuldade em diferenciar antecipação de ameaça real.
+                `
+            },
+            'lamina': {
+                t: 'LÂMINA DA AUTOPERSEGUIÇÃO (F-003)',
+                b: `
+                    <strong>Ativação:</strong> A lâmina deve ser empunhada diante de um reflexo (espelho, vidro, superfície polida) 
+                    enquanto o portador pensa intensamente em seu maior medo sobre si mesmo.<br><br>
+                    <strong>Efeito Primário:</strong> O reflexo se separa da superfície e ganha forma própria, 
+                    tornando-se uma entidade que representa tudo que o portador teme se tornar (covarde, cruel, impotente, monstruoso, etc.). 
+                    Essa entidade passa a persegui-lo em momentos de vulnerabilidade, podendo interferir em cenas importantes.<br><br>
+                    <strong>Uso Tático:</strong> Em situações extremas, o portador pode tentar "negociar" com a própria projeção, 
+                    aceitando temporariamente parte daquele medo como verdade em troca de poder ou informação. 
+                    Isso sempre deixa cicatrizes psicológicas permanentes.
+                `
+            }
+        };
+
+        function openModal(id) {
+            mTitle.innerText = db[id].t;
+            mBody.innerHTML = db[id].b;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Console "assombrado"
+        console.log("%c CONSELHO ESCARLATE // RELÍQUIAS DE MEDO", "color: #f2f2f2; font-size: 14px; font-weight: bold; background: #000; padding: 4px;");
+        console.log("Alguns medos nasceram em você.");
+        console.log("Outros vieram de lugares como o Demonlarium.");
+    </script>
+</body>
+</html>
