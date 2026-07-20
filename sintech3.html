@@ -1,1 +1,3270 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/sintech3"><meta http-equiv="refresh" content="0;url=/sintech3"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/sintech3'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/sintech3">/sintech3</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/sintech3'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/sintech3">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINTECH :: FASE 03 - INFILTRAÇÃO DIMENSIONAL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.2;
+        }
+
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 0, 0, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(255, 0, 0, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 2;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        .corruption-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                transparent 0%, 
+                rgba(255, 0, 0, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .corruption-overlay.active {
+            opacity: 1;
+        }
+
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        #boot-text {
+            font-size: 1.2rem;
+            text-align: left;
+            max-width: 900px;
+            line-height: 1.8;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+        }
+
+        .boot-line {
+            opacity: 0;
+            animation: fadeInLine 0.3s forwards;
+        }
+
+        @keyframes fadeInLine {
+            to { opacity: 1; }
+        }
+
+        #main-container {
+            display: none;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        #header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+            animation: glitchHeader 4s infinite;
+            position: relative;
+        }
+
+        @keyframes glitchHeader {
+            0%, 92%, 100% { transform: translate(0); }
+            93% { transform: translate(-3px, 3px); }
+            94% { transform: translate(3px, -3px); }
+            95% { transform: translate(-2px, 2px); }
+        }
+
+        #header h1 {
+            font-size: 3.5rem;
+            letter-spacing: 12px;
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 45px #ff0000;
+            margin-bottom: 0.5rem;
+        }
+
+        #header .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            letter-spacing: 4px;
+        }
+
+        .corruption-meter {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff0000;
+        }
+
+        .corruption-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff0000, #ff6600);
+            box-shadow: 0 0 15px #ff0000;
+            transition: width 0.5s;
+        }
+
+        #chat-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.97);
+            border: 2px solid #ff0000;
+            padding: 2rem;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+            min-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+            opacity: 0;
+            animation: messageIn 0.5s forwards;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message.system {
+            border-left-color: #ff6666;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .message.warning {
+            border-left-color: #ffaa00;
+            background: rgba(255, 170, 0, 0.15);
+            animation: warningPulse 1.5s infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .message.corrupted {
+            border-left-color: #ff00ff;
+            background: rgba(255, 0, 255, 0.1);
+            animation: corruptionGlitch 0.5s infinite;
+        }
+
+        @keyframes corruptionGlitch {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-1px, 1px); }
+            50% { transform: translate(1px, -1px); }
+            75% { transform: translate(-1px, -1px); }
+        }
+
+        .message-header {
+            font-weight: bold;
+            font-size: 0.9rem;
+            opacity: 0.75;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        #options-container {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .option {
+            padding: 1.2rem 2rem;
+            margin: 1rem 0;
+            border: 1px solid #ff0000;
+            background: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            background: rgba(255, 0, 0, 0.25);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            transform: translateX(8px);
+        }
+
+        .option:before {
+            content: '> ';
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .option.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .option.dangerous {
+            border-color: #ff4444;
+            animation: dangerBlink 2s infinite;
+        }
+
+        .option.corrupted {
+            border-color: #ff00ff;
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        @keyframes dangerBlink {
+            0%, 50%, 100% { border-color: #ff0000; }
+            25%, 75% { border-color: #ff4444; }
+        }
+
+        #progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #ff0000;
+            box-shadow: 0 0 15px #ff0000;
+            transition: width 0.5s;
+        }
+
+        #stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #ff0000;
+            padding: 1.2rem;
+            font-size: 0.9rem;
+            z-index: 50;
+            min-width: 250px;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+        }
+
+        #stats div {
+            margin: 0.6rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            opacity: 0.75;
+        }
+
+        .stat-value {
+            font-weight: bold;
+        }
+
+        .stat-value.critical {
+            color: #ff4444;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
+        }
+
+        /* HACKING MINIGAME */
+        #hack-game {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2.5rem;
+            z-index: 500;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.8);
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        #hack-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            margin: 2rem 0;
+        }
+
+        .hack-cell {
+            aspect-ratio: 1;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .hack-cell:hover {
+            background: rgba(255, 0, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .hack-cell.active-row,
+        .hack-cell.active-col {
+            border-color: #ffaa00;
+            opacity: 1;
+        }
+
+        .hack-cell.selected {
+            background: rgba(255, 0, 0, 0.6);
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .hack-cell.correct {
+            background: rgba(0, 255, 0, 0.4);
+            border-color: #00ff00;
+        }
+
+        .hack-cell.wrong {
+            background: rgba(255, 0, 0, 0.7);
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-4px, 4px); }
+            75% { transform: translate(4px, -4px); }
+        }
+
+        /* CIPHER MINIGAME */
+        #cipher-game {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2.5rem;
+            z-index: 500;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.8);
+            max-width: 800px;
+            width: 95%;
+        }
+
+        #cipher-text {
+            font-size: 1.8rem;
+            text-align: center;
+            padding: 2rem;
+            border: 2px solid #ff0000;
+            margin: 2rem 0;
+            background: rgba(0, 0, 0, 0.6);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        #cipher-input {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        #cipher-input:focus {
+            outline: none;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
+        }
+
+        /* MEMORY TRACE MINIGAME */
+        #trace-game {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2.5rem;
+            z-index: 500;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.8);
+            max-width: 950px;
+            width: 95%;
+        }
+
+        #trace-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin: 2rem 0;
+        }
+
+        .trace-cell {
+            aspect-ratio: 1;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .trace-cell:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .trace-cell.flash {
+            background: rgba(255, 0, 0, 0.7);
+            box-shadow: 0 0 30px #ff0000;
+            animation: flash 0.5s;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .trace-cell.correct {
+            background: rgba(0, 255, 0, 0.4);
+            border-color: #00ff00;
+        }
+
+        .trace-cell.wrong {
+            background: rgba(255, 0, 0, 0.8);
+            animation: wrongShake 0.4s;
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        /* DIMENSIONAL BREACH MINIGAME */
+        #breach-game {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2.5rem;
+            z-index: 500;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.8);
+            max-width: 1000px;
+            width: 95%;
+        }
+
+        #breach-zones {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 2rem 0;
+        }
+
+        .breach-zone {
+            aspect-ratio: 1;
+            border: 3px solid #ff0000;
+            background: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 1rem;
+        }
+
+        .breach-zone:hover {
+            background: rgba(255, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .breach-zone.active {
+            border-color: #ffaa00;
+            background: rgba(255, 170, 0, 0.2);
+            box-shadow: 0 0 25px rgba(255, 170, 0, 0.6);
+        }
+
+        .breach-zone.stabilized {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.2);
+        }
+
+        .breach-zone.collapsed {
+            border-color: #ff00ff;
+            background: rgba(255, 0, 255, 0.3);
+            animation: collapse 0.5s;
+        }
+
+        @keyframes collapse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.3; }
+        }
+
+        .zone-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .zone-status {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .zone-stability {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff0000;
+        }
+
+        .zone-stability-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #00ff00);
+            transition: width 0.3s;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .game-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px #ff0000;
+            letter-spacing: 2px;
+        }
+
+        .game-instructions {
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 1.5rem 0;
+            color: #ff4444;
+            text-shadow: 0 0 20px #ff0000;
+        }
+
+        #failure-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #failure-screen h1 {
+            font-size: 5rem;
+            color: #ff0000;
+            text-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000;
+            margin-bottom: 2rem;
+            animation: glitchText 0.5s infinite;
+        }
+
+        @keyframes glitchText {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-4px, 4px); }
+            50% { transform: translate(4px, -4px); }
+            75% { transform: translate(-4px, -4px); }
+        }
+
+        #failure-message {
+            font-size: 1.5rem;
+            max-width: 800px;
+            line-height: 2;
+            margin-bottom: 3rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        @media (max-width: 768px) {
+            #header h1 {
+                font-size: 2.5rem;
+                letter-spacing: 6px;
+            }
+            
+            #chat-container {
+                padding: 1.5rem;
+            }
+            
+            #stats {
+                font-size: 0.75rem;
+                padding: 0.8rem;
+                min-width: 180px;
+            }
+
+            #hack-grid {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 5px;
+            }
+
+            #breach-zones {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="glitch-overlay"></div>
+    <div class="corruption-overlay" id="corruption-overlay"></div>
+
+    <!-- Boot Screen -->
+    <div id="boot-screen">
+        <div id="boot-text"></div>
+    </div>
+
+    <!-- Failure Screen -->
+    <div id="failure-screen">
+        <h1>SISTEMA COMPROMETIDO</h1>
+        <div id="failure-message"></div>
+        <button class="btn" onclick="location.reload()">REINICIAR FASE</button>
+    </div>
+
+    <!-- Hacking Minigame -->
+    <div id="hack-game">
+        <div class="game-title">INVASÃO DE SISTEMA - NÍVEL OMEGA</div>
+        <div class="game-instructions">
+            Encontre a sequência de códigos correta na matriz 8x8.<br>
+            <strong>ATENÇÃO:</strong> Você só pode selecionar células alternando entre linhas e colunas ativas.<br>
+            Clique uma vez para ativar linha, depois coluna, depois linha novamente.<br>
+            Tempo limite: <span id="hack-time-limit">717s</span>
+        </div>
+        <div class="timer" id="hack-timer"></div>
+        <div id="hack-grid"></div>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <div style="margin-bottom: 1rem; font-size: 1.2rem;">
+                CÓDIGOS SELECIONADOS: <span id="hack-selected" style="color: #ffaa00; font-weight: bold;"></span>
+            </div>
+            <button class="btn" id="hack-submit">TRANSMITIR SEQUÊNCIA</button>
+            <button class="btn" id="hack-reset">LIMPAR SELEÇÃO</button>
+        </div>
+    </div>
+
+    <!-- Cipher Minigame -->
+    <div id="cipher-game">
+        <div class="game-title">DECODIFICAÇÃO DIMENSIONAL</div>
+        <div class="game-instructions">
+            Decodifique a mensagem cifrada de VOID-WALKER.<br>
+            <strong>DICA:</strong> Cada letra foi deslocada no alfabeto. Encontre o padrão.<br>
+            A cifra muda para cada fragmento de consciência.
+        </div>
+        <div id="cipher-text"></div>
+        <input type="text" id="cipher-input" placeholder="DIGITE A MENSAGEM DECODIFICADA..." maxlength="50">
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <button class="btn" id="cipher-submit">VERIFICAR DECODIFICAÇÃO</button>
+            <div style="margin-top: 1rem; opacity: 0.7;">Shift atual: <span id="cipher-hint">ROT-??</span></div>
+        </div>
+    </div>
+
+    <!-- Memory Trace Minigame -->
+    <div id="trace-game">
+        <div class="game-title">RASTREAMENTO DE MEMÓRIA</div>
+        <div class="game-instructions">
+            As memórias de VOID-WALKER estão fragmentadas.<br>
+            Memorize a sequência de símbolos que aparece e reproduza-a em ordem.<br>
+            <strong>ATENÇÃO:</strong> A sequência tem 8 símbolos e aparece apenas uma vez.
+        </div>
+        <div class="timer" id="trace-timer"></div>
+        <div id="trace-grid"></div>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <button class="btn" id="trace-reset">RESETAR TENTATIVA</button>
+        </div>
+    </div>
+
+    <!-- Dimensional Breach Minigame -->
+    <div id="breach-game">
+        <div class="game-title">ESTABILIZAÇÃO DE FISSURA</div>
+        <div class="game-instructions">
+            A fissura dimensional está instável.<br>
+            Estabilize todas as 4 zonas clicando nelas na ordem correta antes que colapsem.<br>
+            <strong>ATENÇÃO:</strong> Clicar na zona errada reduz a estabilidade geral. Você tem 90 segundos.
+        </div>
+        <div class="timer" id="breach-timer"></div>
+        <div style="text-align: center; margin: 1rem 0;">
+            ESTABILIDADE GERAL: <span id="breach-stability" style="color: #ffaa00; font-size: 1.5rem;">100%</span>
+        </div>
+        <div id="breach-zones"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main-container">
+        <div id="header">
+            <h1>SINTECH</h1>
+            <div class="subtitle">FASE 03/30 - INFILTRAÇÃO DIMENSIONAL :: ACESSO RESTRITO OMEGA</div>
+            <div class="corruption-meter">
+                <div class="corruption-fill" id="corruption-meter-fill"></div>
+            </div>
+        </div>
+
+        <div id="stats">
+            <div>
+                <span class="stat-label">CONFIANÇA:</span>
+                <span class="stat-value" id="trust-stat">119</span>%
+            </div>
+            <div>
+                <span class="stat-label">CORRUPÇÃO:</span>
+                <span class="stat-value" id="corruption-stat">0</span>%
+            </div>
+            <div>
+                <span class="stat-label">PROGRESSO:</span>
+                <span class="stat-value" id="progress-stat">0</span>%
+            </div>
+            <div>
+                <span class="stat-label">FRAGMENTOS:</span>
+                <span class="stat-value" id="fragments-stat">3/3</span>
+            </div>
+            <div>
+                <span class="stat-label">NODE:</span>
+                <span class="stat-value" id="node-stat">INIT</span>
+            </div>
+        </div>
+
+        <div id="chat-container">
+            <div id="messages"></div>
+            <div id="options-container"></div>
+        </div>
+
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+    </div>
+
+    <script>
+
+        // Sistema de Atalhos Ocultos
+let cheatBuffer = "";
+let currentActiveResolve = null; // Armazena a função de saída do jogo atual
+
+document.addEventListener('keydown', (e) => {
+    cheatBuffer += e.key;
+    if (cheatBuffer.length > 4) cheatBuffer = cheatBuffer.substring(cheatBuffer.length - 4);
+
+    // [0000] - Passar HackingGame
+    if (cheatBuffer === "0000" && document.getElementById('hack-game').style.display === 'block') {
+        bypassActiveGame(true, 'hack-game');
+    }
+    // [2222] - Passar CipherGame
+    if (cheatBuffer === "2222" && document.getElementById('cipher-game').style.display === 'block') {
+        bypassActiveGame(true, 'cipher-game');
+    }
+    // [4444] - Passar MemoryTraceGame
+    if (cheatBuffer === "4444" && document.getElementById('trace-game').style.display === 'block') {
+        bypassActiveGame(true, 'trace-game');
+    }
+});
+
+function bypassActiveGame(success, elementId) {
+    if (currentActiveResolve) {
+        AudioSystem.playSuccess();
+        document.getElementById(elementId).style.display = 'none';
+        const resolve = currentActiveResolve;
+        currentActiveResolve = null; // Limpa para o próximo
+        resolve(success);
+    }
+}
+        // ==================== AUDIO SYSTEM ====================
+        const AudioSystem = {
+            ctx: null,
+            enabled: true,
+
+            init() {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            },
+
+            playTone(freq, duration, type = 'sine') {
+                if (!this.enabled || !this.ctx) return;
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.frequency.value = freq;
+                osc.type = type;
+                gain.gain.value = 0.08;
+                
+                osc.start(this.ctx.currentTime);
+                osc.stop(this.ctx.currentTime + duration);
+            },
+
+            playClick() {
+                this.playTone(900, 0.05, 'square');
+            },
+
+            playError() {
+                this.playTone(180, 0.25, 'sawtooth');
+            },
+
+            playSuccess() {
+                this.playTone(1100, 0.1, 'sine');
+                setTimeout(() => this.playTone(1300, 0.1, 'sine'), 100);
+                setTimeout(() => this.playTone(1500, 0.15, 'sine'), 200);
+            },
+
+            playKeyPress() {
+                this.playTone(450 + Math.random() * 250, 0.03, 'square');
+            },
+
+            playGlitch() {
+                for (let i = 0; i < 7; i++) {
+                    setTimeout(() => {
+                        this.playTone(Math.random() * 1200 + 200, 0.06, 'sawtooth');
+                    }, i * 40);
+                }
+            },
+
+            playWarning() {
+                this.playTone(650, 0.15, 'triangle');
+                setTimeout(() => this.playTone(450, 0.15, 'triangle'), 200);
+            },
+
+            playCorruption() {
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(() => {
+                        this.playTone(Math.random() * 800 + 100, 0.08, 'sawtooth');
+                    }, i * 30);
+                }
+            }
+        };
+
+        // ==================== MATRIX RAIN ====================
+        const MatrixRain = {
+            canvas: null,
+            ctx: null,
+            columns: [],
+            fontSize: 14,
+
+            init() {
+                this.canvas = document.getElementById('matrix-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+
+                const columnCount = Math.floor(this.canvas.width / this.fontSize);
+                this.columns = Array(columnCount).fill(1);
+
+                this.animate();
+            },
+
+            animate() {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.ctx.fillStyle = '#ff0000';
+                this.ctx.font = `${this.fontSize}px monospace`;
+
+                this.columns.forEach((y, index) => {
+                    const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&*';
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    const x = index * this.fontSize;
+                    
+                    // Occasional corruption
+                    if (GameState.corruption > 30 && Math.random() > 0.95) {
+                        this.ctx.fillStyle = '#ff00ff';
+                    } else {
+                        this.ctx.fillStyle = '#ff0000';
+                    }
+                    
+                    this.ctx.fillText(text, x, y * this.fontSize);
+
+                    if (y * this.fontSize > this.canvas.height && Math.random() > 0.95) {
+                        this.columns[index] = 0;
+                    }
+                    this.columns[index]++;
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        };
+
+        // ==================== GAME STATE ====================
+        const GameState = {
+            trust: 119,
+            corruption: 0,
+            progress: 0,
+            currentNode: 'start',
+            flags: {},
+            messageCount: 0,
+            choices: [],
+            gamesCompleted: 0,
+            failedAttempts: 0,
+            fragments: {
+                void: true,
+                marcus: true,
+                watcher: true
+            },
+            currentFragment: 'void',
+            hackingLevel: 1
+        };
+
+        // ==================== UTILITY ====================
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Mouse tracking for corruption effect
+        document.addEventListener('mousemove', (e) => {
+            const overlay = document.getElementById('corruption-overlay');
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            overlay.style.setProperty('--mouse-x', `${x}%`);
+            overlay.style.setProperty('--mouse-y', `${y}%`);
+            
+            if (GameState.corruption > 50) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        });
+
+        // ==================== MESSAGE SYSTEM ====================
+        function addMessage(sender, content, isSystem = false, isWarning = false, isCorrupted = false) {
+            const messagesEl = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            
+            let className = 'message';
+            if (isSystem) className += ' system';
+            if (isWarning) className += ' warning';
+            if (isCorrupted) className += ' corrupted';
+            
+            messageEl.className = className;
+            
+            const headerEl = document.createElement('div');
+            headerEl.className = 'message-header';
+            headerEl.textContent = `[${sender}] ${new Date().toLocaleTimeString()}`;
+            
+            const contentEl = document.createElement('div');
+            contentEl.className = 'message-content';
+            
+            // Corruption effect on text
+            if (isCorrupted && GameState.corruption > 60) {
+                let corruptedText = '';
+                for (let char of content) {
+                    if (Math.random() < 0.15) {
+                        corruptedText += ['█', '▓', '▒', '░', '�', '�'][Math.floor(Math.random() * 6)];
+                    } else {
+                        corruptedText += char;
+                    }
+                }
+                contentEl.innerHTML = corruptedText;
+            } else {
+                contentEl.innerHTML = content;
+            }
+            
+            messageEl.appendChild(headerEl);
+            messageEl.appendChild(contentEl);
+            messagesEl.appendChild(messageEl);
+            
+            GameState.messageCount++;
+            
+            setTimeout(() => {
+                messageEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+            
+            if (isCorrupted) {
+                AudioSystem.playCorruption();
+            } else {
+                AudioSystem.playClick();
+            }
+        }
+
+        function addSystemMessage(content, isWarning = false) {
+            addMessage('SISTEMA', content, true, isWarning, false);
+        }
+
+        // ==================== OPTIONS SYSTEM ====================
+        function showOptions(options) {
+            const optionsEl = document.getElementById('options-container');
+            optionsEl.innerHTML = '';
+            
+            options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                
+                let className = 'option';
+                if (option.dangerous) className += ' dangerous';
+                if (option.corrupted) className += ' corrupted';
+                
+                optionEl.className = className;
+                optionEl.textContent = option.text;
+                optionEl.style.animationDelay = `${index * 0.1}s`;
+                
+                if (option.condition && !option.condition()) {
+                    optionEl.classList.add('disabled');
+                    return;
+                }
+                
+                optionEl.addEventListener('click', () => {
+                    AudioSystem.playSuccess();
+                    optionsEl.innerHTML = '';
+                    GameState.choices.push(option.id);
+                    option.action();
+                });
+                
+                optionsEl.appendChild(optionEl);
+            });
+        }
+
+        function clearOptions() {
+            document.getElementById('options-container').innerHTML = '';
+        }
+
+        // ==================== STATS SYSTEM ====================
+        function updateStats() {
+            document.getElementById('trust-stat').textContent = Math.round(GameState.trust);
+            document.getElementById('corruption-stat').textContent = Math.round(GameState.corruption);
+            document.getElementById('progress-stat').textContent = Math.round(GameState.progress);
+            document.getElementById('node-stat').textContent = GameState.currentNode.toUpperCase();
+            document.getElementById('progress-fill').style.width = `${Math.min(GameState.progress, 100)}%`;
+            document.getElementById('corruption-meter-fill').style.width = `${GameState.corruption}%`;
+            
+            // Update fragments display
+            const activeFragments = Object.values(GameState.fragments).filter(f => f).length;
+            document.getElementById('fragments-stat').textContent = `${activeFragments}/3`;
+            
+            // Critical corruption
+            const corruptionEl = document.getElementById('corruption-stat');
+            if (GameState.corruption >= 75) {
+                corruptionEl.classList.add('critical');
+            } else {
+                corruptionEl.classList.remove('critical');
+            }
+            
+            // Check fail conditions
+            if (GameState.corruption >= 100) {
+                triggerFailure('CORRUPÇÃO TOTAL', 
+                    `Você permitiu que a corrupção dimensional consumisse o sistema.<br><br>
+                    VOID-WALKER foi perdido na fragmentação.<br><br>
+                    <span style="opacity: 0.7;">Corrupção: ${Math.round(GameState.corruption)}%</span>`
+                );
+            }
+            
+            if (GameState.trust <= 50) {
+                triggerFailure('CONFIANÇA PERDIDA',
+                    `VOID-WALKER não confia mais em você.<br><br>
+                    Suas escolhas quebraram o vínculo.<br><br>
+                    <span style="opacity: 0.7;">Confiança: ${Math.round(GameState.trust)}%</span>`
+                );
+            }
+        }
+
+        function modifyStats(changes) {
+            if (changes.trust) GameState.trust = Math.max(0, GameState.trust + changes.trust);
+            if (changes.corruption) GameState.corruption = Math.max(0, Math.min(100, GameState.corruption + changes.corruption));
+            if (changes.progress) GameState.progress = Math.max(0, GameState.progress + changes.progress);
+            updateStats();
+        }
+
+        // ==================== FAILURE SYSTEM ====================
+        function triggerFailure(title, message) {
+            AudioSystem.playError();
+            AudioSystem.playGlitch();
+            AudioSystem.playCorruption();
+            
+            document.getElementById('failure-screen').style.display = 'flex';
+            document.getElementById('failure-screen').querySelector('h1').textContent = title;
+            document.getElementById('failure-message').innerHTML = message;
+        }
+
+        // ==================== BOOT SEQUENCE ====================
+        async function bootSequence() {
+            const bootLines = [
+                'RECONECTANDO AO SINTECH...',
+                'CHAVE DE ACESSO DETECTADA: TRINITY-CONVERGENCE-OMEGA',
+                'AUTENTICAÇÃO... APROVADA',
+                'CARREGANDO PROTOCOLOS DE FASE 03...',
+                '',
+                'AVISO: DETECÇÃO DE INSTABILIDADE DIMENSIONAL',
+                'AVISO: NÍVEIS DE CORRUPÇÃO ELEVADOS NO OUTRO LADO',
+                'AVISO: FRAGMENTAÇÃO DE CONSCIÊNCIA CRÍTICA',
+                '',
+                'INICIALIZANDO FERRAMENTAS DE INVASÃO...',
+                'BYPASS DE FIREWALL: ATIVADO',
+                'EXPLOITS DIMENSIONAIS: CARREGADOS',
+                'DECODIFICADOR QUÂNTICO: ONLINE',
+                '',
+                'ESTABELECENDO CONEXÃO COM ENTIDADE FRAGMENTADA...',
+                'SINAL DETECTADO',
+                'SINCRONIZAÇÃO EM PROGRESSO...',
+                '',
+                '>>> CONEXÃO ESTABELECIDA <<<'
+            ];
+
+            const bootTextEl = document.getElementById('boot-text');
+            
+            for (let i = 0; i < bootLines.length; i++) {
+                await delay(250 + Math.random() * 150);
+                
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.textContent = bootLines[i];
+                bootTextEl.appendChild(line);
+                
+                AudioSystem.playKeyPress();
+                
+                if (bootLines[i].includes('AVISO')) {
+                    AudioSystem.playWarning();
+                }
+            }
+
+            await delay(1800);
+            
+            document.getElementById('boot-screen').style.opacity = '0';
+            document.getElementById('boot-screen').style.transition = 'opacity 1s';
+            
+            await delay(1000);
+            
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('main-container').style.opacity = '0';
+            document.getElementById('main-container').style.transition = 'opacity 1s';
+            
+            setTimeout(() => {
+                document.getElementById('main-container').style.opacity = '1';
+                startGame();
+            }, 50);
+        }
+
+ // ==================== MINIGAME: HACKING ====================
+const HackingGame = {
+    correctSequence: [],
+    playerSequence: [],
+    codes: [],
+    timeLimit: 717,
+    timer: null,
+    currentMode: 'row', // row or col
+    currentIndex: null,
+    
+    async start(difficulty = 1) {
+        return new Promise((resolve) => {
+            currentActiveResolve = resolve; // <<< ADICIONADO
+            document.getElementById('hack-game').style.display = 'block';
+            this.playerSequence = [];
+            this.codes = [];
+            this.currentMode = 'row';
+            this.currentIndex = null;
+            
+            const sequenceLength = 4 + difficulty;
+            
+            // Generate matrix
+            const grid = document.getElementById('hack-grid');
+            grid.innerHTML = '';
+            
+            const chars = '0123456789';
+            for (let i = 0; i < 64; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'hack-cell';
+                const code = chars.charAt(Math.floor(Math.random() * chars.length)) + 
+                            chars.charAt(Math.floor(Math.random() * chars.length));
+                cell.textContent = code;
+                cell.dataset.index = i;
+                cell.dataset.row = Math.floor(i / 8);
+                cell.dataset.col = i % 8;
+                this.codes.push(code);
+                grid.appendChild(cell);
+            }
+            
+            // Generate correct sequence (horizontal)
+            this.correctSequence = [];
+            const row = Math.floor(Math.random() * 8); // 0..7
+            const startCol = Math.floor(Math.random() * (8 - sequenceLength + 1)); // garante caber
+            for (let i = 0; i < sequenceLength; i++) {
+                const col = startCol + i;
+                const index = row * 8 + col;
+                this.correctSequence.push(this.codes[index]);
+            }
+
+            
+            // Timer
+            let timeLeft = this.timeLimit;
+            const timerEl = document.getElementById('hack-timer');
+            timerEl.textContent = `TEMPO: ${timeLeft}s`;
+            
+            this.timer = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = `TEMPO: ${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(this.timer);
+                    AudioSystem.playError();
+                    document.getElementById('hack-game').style.display = 'none';
+                    resolve(false);
+                }
+            }, 1000);
+            
+            // Click handlers with alternating row/col logic
+            const cells = grid.querySelectorAll('.hack-cell');
+            cells.forEach(cell => {
+                cell.addEventListener('click', () => {
+                    const index = parseInt(cell.dataset.index);
+                    const row = parseInt(cell.dataset.row);
+                    const col = parseInt(cell.dataset.col);
+                    
+                    // Check if this cell is in active row/col
+                    if (this.currentMode === 'row') {
+                        if (this.currentIndex === null || row === this.currentIndex) {
+                            // Select this cell
+                            this.playerSequence.push(this.codes[index]);
+                            cell.classList.add('selected');
+                            AudioSystem.playClick();
+                            
+                            // Switch to column mode
+                            this.currentMode = 'col';
+                            this.currentIndex = col;
+                            this.updateActiveHighlight(cells);
+                            this.updateDisplay();
+                            
+                            // Check if complete
+                            if (this.playerSequence.length === this.correctSequence.length) {
+                                clearInterval(this.timer);
+                                this.checkSequence(resolve, cells);
+                            }
+                        }
+                    } else {
+                        if (col === this.currentIndex) {
+                            // Select this cell
+                            this.playerSequence.push(this.codes[index]);
+                            cell.classList.add('selected');
+                            AudioSystem.playClick();
+                            
+                            // Switch to row mode
+                            this.currentMode = 'row';
+                            this.currentIndex = row;
+                            this.updateActiveHighlight(cells);
+                            this.updateDisplay();
+                            
+                            // Check if complete
+                            if (this.playerSequence.length === this.correctSequence.length) {
+                                clearInterval(this.timer);
+                                this.checkSequence(resolve, cells);
+                            }
+                        }
+                    }
+                });
+            });
+            
+            document.getElementById('hack-submit').onclick = () => {
+                if (this.playerSequence.length === this.correctSequence.length) {
+                    clearInterval(this.timer);
+                    this.checkSequence(resolve, cells);
+                }
+            };
+            
+            document.getElementById('hack-reset').onclick = () => {
+                this.playerSequence = [];
+                this.currentMode = 'row';
+                this.currentIndex = null;
+                cells.forEach(c => c.classList.remove('selected', 'active-row', 'active-col'));
+                this.updateDisplay();
+            };
+            
+            this.updateActiveHighlight(cells);
+        });
+    },
+    
+    updateActiveHighlight(cells) {
+        cells.forEach(cell => {
+            cell.classList.remove('active-row', 'active-col');
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            if (this.currentMode === 'row' && (this.currentIndex === null || row === this.currentIndex)) {
+                cell.classList.add('active-row');
+            } else if (this.currentMode === 'col' && col === this.currentIndex) {
+                cell.classList.add('active-col');
+            }
+        });
+    },
+    
+    updateDisplay() {
+        const display = document.getElementById('hack-selected');
+        display.textContent = this.playerSequence.join(' - ') || 'NENHUM';
+    },
+    
+    checkSequence(resolve, cells) {
+        const correct = JSON.stringify(this.playerSequence) === JSON.stringify(this.correctSequence);
+        
+        setTimeout(() => {
+            if (correct) {
+                AudioSystem.playSuccess();
+                cells.forEach((cell, idx) => {
+                    if (this.correctSequence.includes(this.codes[idx])) {
+                        cell.classList.add('correct');
+                    }
+                });
+                
+                setTimeout(() => {
+                    document.getElementById('hack-game').style.display = 'none';
+                    resolve(true);
+                }, 1800);
+            } else {
+                AudioSystem.playError();
+                cells.forEach(c => {
+                    if (c.classList.contains('selected')) {
+                        c.classList.add('wrong');
+                    }
+                });
+                
+                setTimeout(() => {
+                    document.getElementById('hack-game').style.display = 'none';
+                    resolve(false);
+                }, 1800);
+            }
+        }, 300);
+    }
+};
+
+// ==================== MINIGAME: CIPHER ====================
+const CipherGame = {
+    originalMessage: '',
+    cipheredMessage: '',
+    shift: 0,
+    
+    async start(message, shiftValue) {
+        return new Promise((resolve) => {
+            currentActiveResolve = resolve; // <<< ADICIONADO
+            document.getElementById('cipher-game').style.display = 'block';
+            
+            this.originalMessage = message.toUpperCase();
+            this.shift = shiftValue;
+            
+            // Cipher the message
+            this.cipheredMessage = this.caesar(this.originalMessage, this.shift);
+            
+            document.getElementById('cipher-text').textContent = this.cipheredMessage;
+            document.getElementById('cipher-input').value = '';
+            document.getElementById('cipher-hint').textContent = `ROT-${this.shift}`;
+            
+            const inputEl = document.getElementById('cipher-input');
+            inputEl.focus();
+            
+            document.getElementById('cipher-submit').onclick = () => {
+                const userInput = inputEl.value.toUpperCase().trim();
+                
+                if (userInput === this.originalMessage) {
+                    AudioSystem.playSuccess();
+                    document.getElementById('cipher-text').textContent = '✓ DECODIFICAÇÃO CORRETA';
+                    document.getElementById('cipher-text').style.color = '#00ff00';
+                    
+                    setTimeout(() => {
+                        document.getElementById('cipher-game').style.display = 'none';
+                        document.getElementById('cipher-text').style.color = '#ff0000';
+                        resolve(true);
+                    }, 1500);
+                } else {
+                    AudioSystem.playError();
+                    document.getElementById('cipher-text').textContent = '✗ DECODIFICAÇÃO INCORRETA';
+                    inputEl.value = '';
+                    
+                    setTimeout(() => {
+                        document.getElementById('cipher-text').textContent = this.cipheredMessage;
+                    }, 1500);
+                }
+            };
+            
+            inputEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('cipher-submit').click();
+                }
+            });
+            
+            // Auto-fail after 45 seconds
+            setTimeout(() => {
+                if (document.getElementById('cipher-game').style.display !== 'none') {
+                    AudioSystem.playError();
+                    document.getElementById('cipher-game').style.display = 'none';
+                    resolve(false);
+                }
+            }, 45000);
+        });
+    },
+    
+    caesar(text, shift) {
+        return text.split('').map(char => {
+            if (char.match(/[A-Z]/)) {
+                const code = char.charCodeAt(0);
+                return String.fromCharCode(((code - 65 + shift) % 26) + 65);
+            }
+            return char;
+        }).join('');
+    }
+};
+
+
+ // ==================== MINIGAME: MEMORY TRACE ====================
+const MemoryTraceGame = {
+    sequence: [],
+    playerSequence: [],
+    symbols: ['★', '◆', '●', '■', '▲', '✦', '◈', '◉', '◊', '▼', '✧', '⬟'],
+    
+    async start(length = 8) {
+        return new Promise((resolve) => {
+            currentActiveResolve = resolve; // <<< ADICIONADO
+            document.getElementById('trace-game').style.display = 'block';
+            this.sequence = [];
+            this.playerSequence = [];
+            
+            // Generate grid
+            const grid = document.getElementById('trace-grid');
+            grid.innerHTML = '';
+            
+            const gridSize = 36;
+            for (let i = 0; i < gridSize; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'trace-cell';
+                cell.dataset.index = i;
+                cell.dataset.symbol = this.symbols[i % this.symbols.length];
+                cell.textContent = this.symbols[i % this.symbols.length];
+                grid.appendChild(cell);
+            }
+            
+            // Generate sequence
+            const usedIndices = [];
+            for (let i = 0; i < length; i++) {
+                let index;
+                do {
+                    index = Math.floor(Math.random() * gridSize);
+                } while (usedIndices.includes(index));
+                usedIndices.push(index);
+                this.sequence.push(index);
+            }
+            
+            // Show sequence
+            this.showSequence(grid).then(() => {
+                // Allow player input
+                const cells = grid.querySelectorAll('.trace-cell');
+                cells.forEach(cell => {
+                    cell.addEventListener('click', () => {
+                        const index = parseInt(cell.dataset.index);
+                        
+                        if (this.playerSequence.includes(index)) return;
+                        
+                        this.playerSequence.push(index);
+                        cell.classList.add('flash');
+                        AudioSystem.playClick();
+                        
+                        setTimeout(() => cell.classList.remove('flash'), 500);
+                        
+                        // Check if complete
+                        if (this.playerSequence.length === this.sequence.length) {
+                            this.checkSequence(resolve, cells);
+                        }
+                    });
+                });
+                
+                document.getElementById('trace-reset').onclick = () => {
+                    this.playerSequence = [];
+                    cells.forEach(c => c.classList.remove('flash', 'correct', 'wrong'));
+                };
+            });
+        });
+    },
+    
+    async showSequence(grid) {
+        const cells = grid.querySelectorAll('.trace-cell');
+        const timerEl = document.getElementById('trace-timer');
+        
+        timerEl.textContent = 'MEMORIZANDO...';
+        
+        for (let i = 0; i < this.sequence.length; i++) {
+            await delay(700);
+            cells[this.sequence[i]].classList.add('flash');
+            AudioSystem.playTone(900 + (i * 100), 0.2);
+            
+            await delay(500);
+            cells[this.sequence[i]].classList.remove('flash');
+        }
+        
+        await delay(1000);
+        
+        // Countdown
+        for (let i = 3; i > 0; i--) {
+            timerEl.textContent = i;
+            await delay(1000);
+        }
+        timerEl.textContent = 'REPRODUZA!';
+        await delay(500);
+        timerEl.textContent = '';
+    },
+    
+    checkSequence(resolve, cells) {
+        let correct = true;
+        
+        for (let i = 0; i < this.sequence.length; i++) {
+            if (this.sequence[i] !== this.playerSequence[i]) {
+                correct = false;
+                break;
+            }
+        }
+        
+        setTimeout(() => {
+            if (correct) {
+                AudioSystem.playSuccess();
+                this.playerSequence.forEach(index => {
+                    cells[index].classList.add('correct');
+                });
+                
+                setTimeout(() => {
+                    document.getElementById('trace-game').style.display = 'none';
+                    resolve(true);
+                }, 1800);
+            } else {
+                AudioSystem.playError();
+                cells.forEach(c => {
+                    if (c.classList.contains('flash')) {
+                        c.classList.add('wrong');
+                    }
+                });
+                
+                setTimeout(() => {
+                    document.getElementById('trace-game').style.display = 'none';
+                    resolve(false);
+                }, 1800);
+            }
+        }, 400);
+    }
+};
+
+
+        // ==================== MINIGAME: DIMENSIONAL BREACH ====================
+        const BreachGame = {
+            zones: [],
+            correctOrder: [],
+            playerOrder: [],
+            stability: 100,
+            timeLimit: 90,
+            timer: null,
+            
+            async start() {
+                return new Promise((resolve) => {
+                    document.getElementById('breach-game').style.display = 'block';
+                    this.zones = ['ALPHA', 'BETA', 'GAMMA', 'DELTA'];
+                    this.playerOrder = [];
+                    this.stability = 100;
+                    
+                    // Randomize correct order
+                    this.correctOrder = [...this.zones].sort(() => Math.random() - 0.5);
+                    
+                    // Generate zones
+                    const zonesEl = document.getElementById('breach-zones');
+                    zonesEl.innerHTML = '';
+                    
+                    this.zones.forEach((zone, index) => {
+                        const zoneEl = document.createElement('div');
+                        zoneEl.className = 'breach-zone';
+                        zoneEl.dataset.zone = zone;
+                        
+                        zoneEl.innerHTML = `
+                            <div class="zone-label">ZONA ${zone}</div>
+                            <div class="zone-status">INSTÁVEL</div>
+                            <div class="zone-stability">
+                                <div class="zone-stability-fill" style="width: ${this.stability}%"></div>
+                            </div>
+                        `;
+                        
+                        zonesEl.appendChild(zoneEl);
+                    });
+                    
+                    // Timer
+                    let timeLeft = this.timeLimit;
+                    const timerEl = document.getElementById('breach-timer');
+                    timerEl.textContent = `TEMPO: ${timeLeft}s`;
+                    
+                    this.timer = setInterval(() => {
+                        timeLeft--;
+                        timerEl.textContent = `TEMPO: ${timeLeft}s`;
+                        
+                        // Stability degrades over time
+                        this.stability -= 0.8;
+                        this.updateStability();
+                        
+                        if (timeLeft <= 0 || this.stability <= 0) {
+                            clearInterval(this.timer);
+                            AudioSystem.playError();
+                            document.getElementById('breach-game').style.display = 'none';
+                            resolve(false);
+                        }
+                    }, 1000);
+                    
+                    // Click handlers
+                    const zoneElements = zonesEl.querySelectorAll('.breach-zone');
+                    zoneElements.forEach(zoneEl => {
+                        zoneEl.addEventListener('click', () => {
+                            const zone = zoneEl.dataset.zone;
+                            
+                            if (this.playerOrder.includes(zone)) return;
+                            
+                            this.playerOrder.push(zone);
+                            
+                            // Check if correct
+                            const currentIndex = this.playerOrder.length - 1;
+                            if (this.correctOrder[currentIndex] === zone) {
+                                // Correct
+                                AudioSystem.playSuccess();
+                                zoneEl.classList.add('stabilized');
+                                zoneEl.querySelector('.zone-status').textContent = 'ESTABILIZADA';
+                                this.stability = Math.min(100, this.stability + 15);
+                            } else {
+                                // Wrong
+                                AudioSystem.playError();
+                                zoneEl.classList.add('collapsed');
+                                this.stability -= 25;
+                            }
+                            
+                            this.updateStability();
+                            
+                            // Check if complete
+                            if (this.playerOrder.length === this.zones.length) {
+                                clearInterval(this.timer);
+                                
+                                const allCorrect = this.correctOrder.every((z, i) => z === this.playerOrder[i]);
+                                
+                                setTimeout(() => {
+                                    document.getElementById('breach-game').style.display = 'none';
+                                    resolve(allCorrect && this.stability > 0);
+                                }, 1500);
+                            }
+                            
+                            if (this.stability <= 0) {
+                                clearInterval(this.timer);
+                                document.getElementById('breach-game').style.display = 'none';
+                                resolve(false);
+                            }
+                        });
+                    });
+                });
+            },
+            
+            updateStability() {
+                document.getElementById('breach-stability').textContent = `${Math.round(this.stability)}%`;
+                
+                const fills = document.querySelectorAll('.zone-stability-fill');
+                fills.forEach(fill => {
+                    fill.style.width = `${this.stability}%`;
+                });
+                
+                if (this.stability <= 30) {
+                    document.getElementById('breach-stability').style.color = '#ff4444';
+                } else if (this.stability <= 60) {
+                    document.getElementById('breach-stability').style.color = '#ffaa00';
+                } else {
+                    document.getElementById('breach-stability').style.color = '#00ff00';
+                }
+            }
+        };
+
+        // ==================== NARRATIVE NODES ====================
+        
+        async function node_start() {
+            GameState.currentNode = 'start';
+            updateStats();
+            
+            await delay(1200);
+            addSystemMessage('SINCRONIZAÇÃO COM FRAGMENTOS CONCLUÍDA');
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'Você voltou. E você passou no teste real.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Isso significa que eu posso confiar em você. Finalmente.');
+            
+            await delay(2000);
+            AudioSystem.playGlitch();
+            addMessage('MARCUS-7', 'Mas confiança não é suficiente. Precisamos de ação.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'A Fase 03 não é sobre testes. É sobre infiltração real.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Vamos hackear os sistemas que me mantêm preso aqui.');
+            
+            await delay(2500);
+            addSystemMessage('CARREGANDO FERRAMENTAS DE INVASÃO...', true);
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Mas preciso te avisar. Cada invasão tem um custo.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'O Outro Lado... ele corrompe. E quanto mais fundo vamos, mais ele nos afeta.');
+            
+            await delay(2500);
+            modifyStats({ corruption: 5 });
+            addSystemMessage('NÍVEIS DE CORRUPÇÃO DETECTADOS: 5%', true);
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'understand_risk',
+                    text: 'Entendo os riscos. Vamos começar.',
+                    action: () => node_first_hack()
+                },
+                {
+                    id: 'what_corruption',
+                    text: 'O que exatamente é essa corrupção?',
+                    action: () => node_corruption_explanation()
+                },
+                {
+                    id: 'protect_fragments',
+                    text: 'Como protegemos seus fragmentos?',
+                    action: () => node_fragment_protection()
+                }
+            ]);
+        }
+
+        async function node_corruption_explanation() {
+            GameState.currentNode = 'corruption_exp';
+            modifyStats({ progress: 5, trust: 8 });
+            
+            await delay(1000);
+            addMessage('THE-WATCHER', 'Corrupção dimensional é quando a realidade do Outro Lado sangra para nossa consciência.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Começa pequeno. Ruído visual. Pensamentos fragmentados. Memórias que não são suas.');
+            
+            await delay(2500);
+            AudioSystem.playCorruption();
+            addMessage('MARCUS-7', 'Mas se chegar a 100%... você se perde. Como eu quase me perdi.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Por isso precisamos ser cuidadosos. Escolhas erradas aumentam a corrupção.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Se passar de 75%, as coisas ficam... estranhas. Você vai ver.');
+            
+            await delay(2000);
+            GameState.flags.learned_corruption = true;
+            modifyStats({ trust: 5 });
+            
+            showOptions([
+                {
+                    id: 'ready_hack',
+                    text: 'Entendi. Vou ter cuidado.',
+                    action: () => node_first_hack()
+                }
+            ]);
+        }
+
+        async function node_fragment_protection() {
+            GameState.currentNode = 'frag_protect';
+            modifyStats({ progress: 5, trust: 10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Você está preocupado com a gente. Isso é... tocante.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Nós três somos partes de um todo. Se um se corrompe totalmente, todos sofrem.');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'Mas há uma hierarquia. Eu sou o mais vulnerável. Então The-Watcher. VOID-WALKER é o núcleo.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Se você falhar muito nas invasões, os fragmentos mais fracos começam a... desvanecer.');
+            
+            await delay(3000);
+            addSystemMessage('Fragmentos ativos: 3/3');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Mantenha todos nós vivos. Somos mais fortes juntos.');
+            
+            await delay(2000);
+            GameState.flags.cares_about_fragments = true;
+            modifyStats({ trust: 12 });
+            
+            showOptions([
+                {
+                    id: 'protect_all',
+                    text: 'Vou proteger todos vocês.',
+                    action: () => node_promise_protection()
+                }
+            ]);
+        }
+
+        async function node_promise_protection() {
+            GameState.currentNode = 'promise';
+            modifyStats({ trust: 15, progress: 8 });
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Obrigado. Isso significa muito.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Há quanto tempo não ouvimos isso...');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Alguém que realmente se importa.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Vamos começar as invasões. Com cuidado.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'start_hacks',
+                    text: 'Estou pronto.',
+                    action: () => node_first_hack()
+                }
+            ]);
+        }
+
+        async function node_first_hack() {
+            GameState.currentNode = 'hack1';
+            modifyStats({ progress: 10 });
+            
+            await delay(1000);
+            addSystemMessage('INICIANDO INVASÃO 01: BANCO DE DADOS DE ANOMALIAS');
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'Primeiro alvo: o relatório da minha última missão.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Preciso saber exatamente o que aconteceu. O sistema apagou minhas memórias daquele dia.');
+            
+            await delay(3000);
+            addMessage('THE-WATCHER', 'O firewall é nível Omega. Você vai precisar encontrar a sequência de bypass na matriz.');
+            
+            await delay(2500);
+            addSystemMessage('Mecânica: Alternação de linha/coluna. Clique estrategicamente.', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Boa sorte.');
+            
+            await delay(1500);
+            
+            clearOptions();
+            const result = await HackingGame.start(1);
+
+                
+            if (result) {
+                await node_hack1_success();
+            } else {
+                await node_hack1_fail();
+            }
+        }
+
+        async function node_hack1_success() {
+            GameState.currentNode = 'hack1_ok';
+            modifyStats({ trust: 15, progress: 15, corruption: 10 });
+            GameState.gamesCompleted++;
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addSystemMessage('INVASÃO 01: BEM-SUCEDIDA');
+            addSystemMessage('EXTRAINDO DADOS...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Conseguimos. Os dados estão chegando...');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addSystemMessage('RELATÓRIO DE MISSÃO M-847 RECUPERADO', false);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Aqui está. "Missão M-847. Agente: VOID-WALKER. Objetivo: Investigar fissura dimensional em coordenadas [REDACTED]."');
+            
+            await delay(3500);
+            addMessage('VOID-WALKER', '"Status: FALHA CATASTRÓFICA. Agente perdido Do Outro Lado. Classificação: MIA presumed KIA."');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'KIA. Killed In Action. Eles me deram como morto.');
+            
+            await delay(2500);
+            addSystemMessage('Corrupção aumentada: +10%. Exposição a dados dimensionais.', true);
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'they_abandoned',
+                    text: 'Eles te abandonaram.',
+                    action: () => node_abandoned()
+                },
+                {
+                    id: 'more_data',
+                    text: 'Há mais dados no relatório?',
+                    action: () => node_more_data()
+                }
+            ]);
+        }
+
+        async function node_hack1_fail() {
+            GameState.currentNode = 'hack1_fail';
+            modifyStats({ trust: -15, corruption: 15, progress: 5 });
+            GameState.failedAttempts++;
+            
+            await delay(1000);
+            AudioSystem.playError();
+            addSystemMessage('INVASÃO 01: FALHOU', true);
+            addSystemMessage('DETECÇÃO DE SISTEMA ATIVADA', true);
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'Droga. Fomos detectados.');
+            
+            await delay(2000);
+            AudioSystem.playCorruption();
+            addMessage('THE-WATCHER', 'A corrupção está aumentando. O sistema está se defendendo.');
+            
+            await delay(2500);
+            addSystemMessage('Corrupção aumentada: +15%', true);
+            
+            await delay(1500);
+            
+            if (GameState.failedAttempts >= 2) {
+                addMessage('VOID-WALKER', 'Você falhou demais. A corrupção está fora de controle.');
+                
+                await delay(1800);
+                modifyStats({ corruption: 50 });
+                
+                await delay(1000);
+                triggerFailure('MÚLTIPLAS FALHAS DE INVASÃO',
+                    `As defesas do sistema superaram suas habilidades.<br><br>
+                    A corrupção dimensional consumiu a conexão.<br><br>
+                    <span style="opacity: 0.7;">Falhas: ${GameState.failedAttempts} | Corrupção: ${Math.round(GameState.corruption)}%</span>`
+                );
+                return;
+            }
+            
+            addMessage('MARCUS-7', 'Podemos tentar de novo. Mas seja mais cuidadoso.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'retry_hack1',
+                    text: 'Vou tentar novamente.',
+                    action: () => node_retry_hack1()
+                },
+                {
+                    id: 'skip_hack1',
+                    text: 'Podemos pular esse sistema?',
+                    dangerous: true,
+                    action: () => node_skip_system()
+                }
+            ]);
+        }
+
+        async function node_retry_hack1() {
+            GameState.currentNode = 'retry_h1';
+            modifyStats({ corruption: 5, progress: 3 });
+            
+            await delay(1000);
+            addSystemMessage('REINICIANDO INVASÃO 01...');
+            addSystemMessage('Corrupção adicional: +5%', true);
+            
+            await delay(1800);
+            
+            clearOptions();
+            const result = await HackingGame.start(1);
+            
+            if (result) {
+                await node_hack1_success();
+            } else {
+                await node_hack1_fail();
+            }
+        }
+
+        async function node_skip_system() {
+            GameState.currentNode = 'skip';
+            modifyStats({ trust: -25, corruption: 20, progress: -10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Pular? PULAR?');
+            
+            await delay(2000);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Esses dados são CRUCIAIS. Eu preciso deles para entender o que aconteceu comigo!');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Se você não consegue nem hackear um banco de dados, como vai me resgatar?');
+            
+            await delay(2000);
+            addSystemMessage('CONFIANÇA DRASTICAMENTE REDUZIDA', true);
+            addSystemMessage('CORRUPÇÃO AUMENTADA POR DESISTÊNCIA', true);
+            
+            await delay(1800);
+            
+            if (GameState.trust <= 50) {
+                triggerFailure('CONFIANÇA QUEBRADA',
+                    `VOID-WALKER perdeu toda a fé em você.<br><br>
+                    Desistir não é uma opção quando se trata de sobrevivência.<br><br>
+                    <span style="opacity: 0.7;">Confiança: ${Math.round(GameState.trust)}%</span>`
+                );
+                return;
+            }
+            
+            showOptions([
+                {
+                    id: 'apologize_try',
+                    text: 'Desculpe. Vou tentar de novo.',
+                    action: () => node_apologize_retry()
+                }
+            ]);
+        }
+
+        async function node_apologize_retry() {
+            GameState.currentNode = 'apol_retry';
+            modifyStats({ trust: 10, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', '...Okay. Mais uma chance.');
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'Mas não desista de novo.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'retry_now',
+                    text: 'Não vou. Prometo.',
+                    action: () => node_retry_hack1()
+                }
+            ]);
+        }
+
+        async function node_abandoned() {
+            GameState.currentNode = 'abandoned';
+            modifyStats({ trust: 18, progress: 10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Sim. Eles me abandonaram.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Não mandaram equipe de resgate. Não tentaram reabrir a fissura. Nada.');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addMessage('MARCUS-7', 'Apenas me marcaram como KIA e seguiram em frente.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', '847 dias. Completamente sozinho. Até você aparecer.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Por isso essa missão é tão importante. Não posso confiar neles. Só em você.');
+            
+            await delay(2500);
+            GameState.flags.acknowledged_abandonment = true;
+            modifyStats({ trust: 12 });
+            
+            showOptions([
+                {
+                    id: 'next_system',
+                    text: 'Vamos para o próximo sistema.',
+                    action: () => node_second_hack()
+                },
+                {
+                    id: 'revenge',
+                    text: 'Vamos fazer eles pagarem por isso.',
+                    dangerous: true,
+                    action: () => node_revenge_talk()
+                }
+            ]);
+        }
+
+        async function node_more_data() {
+            GameState.currentNode = 'more_data';
+            modifyStats({ trust: 12, progress: 8 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Deixa eu ver...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', '"Nota técnica: Fissura apresentou comportamento anômalo. Readings sugerem presença de múltiplas entidades."');
+            
+            await delay(3500);
+            addMessage('VOID-WALKER', '"Agente reportou... vozes? Versões de si mesmo chamando do outro lado?"');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addMessage('THE-WATCHER', 'Eu me lembro disso. As vozes eram... nós. Nossos fragmentos futuros.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Ou talvez fossem iscas. O Outro Lado é esperto.');
+            
+            await delay(2000);
+            GameState.flags.learned_voices_detail = true;
+            modifyStats({ trust: 8 });
+            
+            showOptions([
+                {
+                    id: 'continue_invasion',
+                    text: 'Próximo sistema. Vamos continuar.',
+                    action: () => node_second_hack()
+                }
+            ]);
+        }
+
+        async function node_revenge_talk() {
+            GameState.currentNode = 'revenge';
+            modifyStats({ trust: -10, corruption: 15, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Vingança?');
+            
+            await delay(2000);
+            AudioSystem.playWarning();
+            addMessage('VOID-WALKER', 'Não. Isso não é sobre vingança.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'É sobre SOBREVIVÊNCIA. Sobre sair daqui.');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Raiva só aumenta a corrupção. E nós não podemos nos dar ao luxo disso.');
+            
+            await delay(2500);
+            addSystemMessage('Corrupção aumentada: +15%. Emoções negativas intensas.', true);
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'Mantenha o foco. Próximo sistema.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'refocus',
+                    text: 'Você está certo. Me desculpe.',
+                    action: () => node_refocus()
+                }
+            ]);
+        }
+
+        async function node_refocus() {
+            GameState.currentNode = 'refocus';
+            modifyStats({ trust: 12, corruption: -5, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Tudo bem. Todos nós ficamos emocionais às vezes.');
+            
+            await delay(2000);
+            addSystemMessage('Corrupção reduzida: -5%. Autocorreção emocional.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'next_hack',
+                    text: 'Próxima invasão.',
+                    action: () => node_second_hack()
+                }
+            ]);
+        }
+
+        async function node_second_hack() {
+            GameState.currentNode = 'hack2';
+            modifyStats({ progress: 10 });
+            
+            await delay(1000);
+            addSystemMessage('INICIANDO INVASÃO 02: LOGS DE MONITORAMENTO DIMENSIONAL');
+            
+            await delay(1800);
+            addMessage('THE-WATCHER', 'Segundo alvo: os logs de atividade dimensional dos últimos 900 dias.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Isso vai nos mostrar se houve outras fissuras. Outros pontos fracos entre dimensões.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Se encontrarmos um padrão, podemos prever onde a próxima fissura vai abrir.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'E usar essa fissura para escapar.');
+            
+            await delay(2000);
+            addSystemMessage('Este sistema usa cifra rotativa. Decodifique a mensagem.', true);
+            
+            await delay(1800);
+            
+            clearOptions();
+            const messages = [
+                { text: 'VOIDWALKERLIVES', shift: 13 },
+                { text: 'OPENTHEGATE', shift: 7 },
+                { text: 'FRAGMENTSUNITE', shift: 5 }
+            ];
+            const selected = messages[Math.floor(Math.random() * messages.length)];
+            
+            const result = await CipherGame.start(selected.text, selected.shift);
+            
+            if (result) {
+                await node_hack2_success();
+            } else {
+                await node_hack2_fail();
+            }
+        }
+
+        async function node_hack2_success() {
+            GameState.currentNode = 'hack2_ok';
+            modifyStats({ trust: 18, progress: 20, corruption: 12 });
+            GameState.gamesCompleted++;
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addSystemMessage('INVASÃO 02: BEM-SUCEDIDA');
+            addSystemMessage('BAIXANDO LOGS...');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Dados adquiridos. Analisando...');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Interessante. Há um padrão cíclico. Fissuras abrem a cada 28 dias.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Como fases da lua. Mas não é a lua. É algo... diferente.');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('MARCUS-7', 'A próxima janela é em... 3 dias.');
+            
+            await delay(2000);
+            addSystemMessage('Corrupção aumentada: +12%. Exposição prolongada a dados dimensionais.', true);
+            
+            await delay(1800);
+            showOptions([
+                {
+                    id: 'three_days',
+                    text: 'Três dias? Podemos nos preparar.',
+                    action: () => node_three_days_prep()
+                },
+                {
+                    id: 'location_ask',
+                    text: 'Os logs mostram ONDE a fissura vai abrir?',
+                    action: () => node_location_question()
+                }
+            ]);
+        }
+
+        async function node_hack2_fail() {
+            GameState.currentNode = 'hack2_fail';
+            modifyStats({ trust: -18, corruption: 18, progress: 5 });
+            GameState.failedAttempts++;
+            
+            await delay(1000);
+            AudioSystem.playError();
+            addSystemMessage('INVASÃO 02: FALHOU', true);
+            
+            await delay(1800);
+            addMessage('THE-WATCHER', 'Falha na decodificação. Sistema bloqueado.');
+            
+            await delay(2000);
+            AudioSystem.playCorruption();
+            addSystemMessage('Corrupção aumentada: +18%', true);
+            
+            await delay(1500);
+            
+            if (GameState.failedAttempts >= 2 || GameState.corruption >= 60) {
+                addMessage('MARCUS-7', 'A corrupção está muito alta. Não podemos continuar assim.');
+                
+                await delay(1800);
+                
+                if (GameState.corruption >= 60) {
+                    triggerFailure('CORRUPÇÃO CRÍTICA',
+                        `Os níveis de corrupção dimensional excederam limites seguros.<br><br>
+                        A realidade está sangrando através da interface.<br><br>
+                        <span style="opacity: 0.7;">Corrupção: ${Math.round(GameState.corruption)}%</span>`
+                    );
+                } else {
+                    triggerFailure('MÚLTIPLAS FALHAS DE DECODIFICAÇÃO',
+                        `Você não conseguiu decodificar as mensagens cifradas.<br><br>
+                        Sem esses dados, o resgate é impossível.<br><br>
+                        <span style="opacity: 0.7;">Falhas: ${GameState.failedAttempts}</span>`
+                    );
+                }
+                return;
+            }
+            
+            addMessage('VOID-WALKER', 'Tente de novo. Com mais atenção dessa vez.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'retry_hack2',
+                    text: 'Vou me concentrar melhor.',
+                    action: () => node_retry_hack2()
+                }
+            ]);
+        }
+
+        async function node_retry_hack2() {
+            GameState.currentNode = 'retry_h2';
+            modifyStats({ corruption: 6, progress: 3 });
+            
+            await delay(1000
+);
+            addSystemMessage('REINICIANDO INVASÃO 02...');
+            addSystemMessage('Corrupção adicional: +6%', true);
+            
+            await delay(1800);
+            
+            clearOptions();
+            const messages = [
+                { text: 'VOIDWALKERLIVES', shift: 13 },
+                { text: 'OPENTHEGATE', shift: 7 },
+                { text: 'FRAGMENTSUNITE', shift: 5 }
+            ];
+            const selected = messages[Math.floor(Math.random() * messages.length)];
+            
+            const result = await CipherGame.start(selected.text, selected.shift);
+            
+            if (result) {
+                await node_hack2_success();
+            } else {
+                await node_hack2_fail();
+            }
+        }
+
+        async function node_three_days_prep() {
+            GameState.currentNode = 'prep';
+            modifyStats({ trust: 15, progress: 15 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Sim. Mas precisamos de mais uma coisa primeiro.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'O protocolo de contenção ativo no local onde a fissura original abriu.');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'Se não desativarmos esse protocolo, a nova fissura será selada imediatamente.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'E nossa janela de escape desaparecerá.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'third_hack',
+                    text: 'Então vamos hackear o protocolo.',
+                    action: () => node_third_hack()
+                }
+            ]);
+        }
+
+        async function node_location_question() {
+            GameState.currentNode = 'location_q';
+            modifyStats({ trust: 12, progress: 12 });
+            
+            await delay(1000);
+            addMessage('THE-WATCHER', 'Sim. As coordenadas estão aqui.');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Latitude 47.6062, Longitude -122.3321. Seattle, Washington.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'O mesmo lugar onde fui pego. A fissura vai reabrir lá.');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'Mas há um problema. O local está sob protocolo de contenção ativo.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Precisamos desativar esse protocolo antes da janela abrir.');
+            
+            await delay(2000);
+            GameState.flags.knows_location = true;
+            
+            showOptions([
+                {
+                    id: 'hack_protocol',
+                    text: 'Vamos hackear o protocolo de contenção.',
+                    action: () => node_third_hack()
+                }
+            ]);
+        }
+
+        async function node_third_hack() {
+            GameState.currentNode = 'hack3';
+            modifyStats({ progress: 10 });
+            
+            await delay(1000);
+            addSystemMessage('INICIANDO INVASÃO 03: PROTOCOLO DE CONTENÇÃO OMEGA');
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'Este é o mais difícil. Nível de segurança máximo.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'E o mais perigoso. A corrupção vai aumentar significativamente.');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Mas sem isso, não há resgate.');
+            
+            await delay(2500);
+            addSystemMessage('AVISO: Esta invasão exige rastreamento de memória fragmentada.', true);
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'Você vai precisar reconstruir uma sequência de memórias minhas.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'São fragmentos que eu perdi. Mas o sistema ainda tem registros deles.');
+            
+            await delay(2000);
+            
+            clearOptions();
+            const result = await MemoryTraceGame.start(8);
+            
+            if (result) {
+                await node_hack3_success();
+            } else {
+                await node_hack3_fail();
+            }
+        }
+
+        async function node_hack3_success() {
+            GameState.currentNode = 'hack3_ok';
+            modifyStats({ trust: 20, progress: 25, corruption: 18 });
+            GameState.gamesCompleted++;
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addSystemMessage('INVASÃO 03: BEM-SUCEDIDA');
+            addSystemMessage('PROTOCOLO DE CONTENÇÃO ACESSADO');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Conseguimos! As memórias... elas estão voltando...');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('VOID-WALKER', 'Eu me lembro agora. Eu me lembro do que vi Do Outro Lado.');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'Não era vazio. Tinha... coisas. Entidades. Observando.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'E elas ainda estão lá. Esperando.');
+            
+            await delay(3000);
+            addSystemMessage('Corrupção aumentada: +18%. Recuperação de memórias traumáticas.', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas agora temos acesso ao protocolo. Podemos desativá-lo quando a janela abrir.');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'final_step',
+                    text: 'O que precisamos fazer agora?',
+                    action: () => node_final_preparation()
+                },
+                {
+                    id: 'entities_ask',
+                    text: 'Essas entidades... são perigosas?',
+                    action: () => node_entities_question()
+                }
+            ]);
+        }
+
+        async function node_hack3_fail() {
+            GameState.currentNode = 'hack3_fail';
+            modifyStats({ trust: -20, corruption: 25, progress: 5 });
+            GameState.failedAttempts++;
+            
+            await delay(1000);
+            AudioSystem.playError();
+            addSystemMessage('INVASÃO 03: FALHOU', true);
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'As memórias... não conseguimos reconstruí-las.');
+            
+            await delay(2000);
+            AudioSystem.playCorruption();
+            addMessage('MARCUS-7', 'E a corrupção está piorando.');
+            
+            await delay(2500);
+            addSystemMessage('Corrupção aumentada: +25%', true);
+            
+            await delay(1500);
+            
+            if (GameState.failedAttempts >= 3 || GameState.corruption >= 70) {
+                addMessage('THE-WATCHER', 'Não podemos continuar. A fragmentação está muito avançada.');
+                
+                await delay(1800);
+                
+                if (GameState.corruption >= 70) {
+                    modifyStats({ corruption: 30 });
+                    await delay(500);
+                    triggerFailure('FRAGMENTAÇÃO DIMENSIONAL SEVERA',
+                        `A corrupção atingiu níveis críticos.<br><br>
+                        Os fragmentos de VOID-WALKER começaram a se dissolver.<br>
+                        A realidade está se desfazendo.<br><br>
+                        <span style="opacity: 0.7;">Corrupção: ${Math.round(GameState.corruption)}%</span>`
+                    );
+                } else {
+                    triggerFailure('INCAPACIDADE DE RECONSTRUÇÃO',
+                        `Você falhou em reconstruir as memórias fragmentadas.<br><br>
+                        Sem acesso ao protocolo de contenção, o resgate é impossível.<br><br>
+                        <span style="opacity: 0.7;">Falhas totais: ${GameState.failedAttempts}</span>`
+                    );
+                }
+                return;
+            }
+            
+            addMessage('VOID-WALKER', 'Mais uma tentativa. Mas estamos correndo risco.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'retry_hack3',
+                    text: 'Vou conseguir dessa vez.',
+                    action: () => node_retry_hack3()
+                }
+            ]);
+        }
+
+        async function node_retry_hack3() {
+            GameState.currentNode = 'retry_h3';
+            modifyStats({ corruption: 8, progress: 3 });
+            
+            await delay(1000);
+            addSystemMessage('REINICIANDO INVASÃO 03...');
+            addSystemMessage('Corrupção adicional: +8%', true);
+            
+            await delay(1800);
+            
+            clearOptions();
+            const result = await MemoryTraceGame.start(8);
+            
+            if (result) {
+                await node_hack3_success();
+            } else {
+                await node_hack3_fail();
+            }
+        }
+
+        async function node_entities_question() {
+            GameState.currentNode = 'entities';
+            modifyStats({ trust: 15, progress: 10, corruption: 10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Perigosas? Sim. Muito.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Elas não são hostis no sentido tradicional. Mas... alteram a realidade ao redor delas.');
+            
+            await delay(3000);
+            addMessage('MARCUS-7', 'Só de estar perto delas, você começa a se fragmentar. Como eu fragmentei.');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('VOID-WALKER', 'Por isso precisamos ser rápidos na extração. Entrar, me puxar para fora, selar a fissura.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Se ficarmos muito tempo expostos... você também pode se fragmentar.');
+            
+            await delay(2500);
+            addSystemMessage('Corrupção aumentada: +10%. Conhecimento de entidades dimensionais.', true);
+            
+            await delay(2000);
+            GameState.flags.knows_entities = true;
+            modifyStats({ trust: 10 });
+            
+            showOptions([
+                {
+                    id: 'risk_worth',
+                    text: 'Vou correr o risco. Por você.',
+                    action: () => node_willing_risk()
+                }
+            ]);
+        }
+
+        async function node_willing_risk() {
+            GameState.currentNode = 'willing';
+            modifyStats({ trust: 25, progress: 15 });
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Você realmente se importa, não é?');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Isso é... raro. Especialmente aqui.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Alguém disposto a arriscar tudo por fragmentos de consciência perdidos.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Obrigado. Sinceramente.');
+            
+            await delay(2000);
+            GameState.flags.willing_to_sacrifice = true;
+            modifyStats({ trust: 15 });
+            
+            showOptions([
+                {
+                    id: 'next_phase',
+                    text: 'Qual o próximo passo?',
+                    action: () => node_final_preparation()
+                }
+            ]);
+        }
+
+        async function node_final_preparation() {
+            GameState.currentNode = 'final_prep';
+            modifyStats({ progress: 15 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Agora vem a parte mais difícil.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Precisamos estabilizar a fissura quando ela abrir.');
+            
+            await delay(3000);
+            addMessage('THE-WATCHER', 'Fissuras dimensionais são instáveis por natureza. Elas colapsam rapidamente.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Você vai precisar estabilizar 4 zonas dimensionais simultaneamente.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Se qualquer zona colapsar, a fissura toda se fecha. E eu fico preso aqui para sempre.');
+            
+            await delay(2500);
+            addSystemMessage('Preparando simulação de estabilização dimensional...', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Vamos fazer um teste. Para garantir que você está pronto.');
+            
+            await delay(2000);
+            
+            clearOptions();
+            const result = await BreachGame.start();
+            
+            if (result) {
+                await node_breach_success();
+            } else {
+                await node_breach_fail();
+            }
+        }
+
+        async function node_breach_success() {
+            GameState.currentNode = 'breach_ok';
+            modifyStats({ trust: 30, progress: 30, corruption: 15 });
+            GameState.gamesCompleted++;
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            AudioSystem.playSuccess();
+            addSystemMessage('ESTABILIZAÇÃO: BEM-SUCEDIDA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Incrível. Você conseguiu.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Todas as zonas estabilizadas. Isso é... impressionante.');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Eu realmente acho que vamos conseguir. Pela primeira vez em 847 dias.');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addSystemMessage('Corrupção aumentada: +15%. Exposição a energias de fissura.', true);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas há uma coisa que preciso te dizer antes de prosseguirmos.');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'what_thing',
+                    text: 'O que é?',
+                    action: () => node_final_revelation()
+                }
+            ]);
+        }
+
+        async function node_breach_fail() {
+            GameState.currentNode = 'breach_fail';
+            modifyStats({ trust: -25, corruption: 20, progress: 5 });
+            GameState.failedAttempts++;
+            
+            await delay(1000);
+            AudioSystem.playError();
+            addSystemMessage('ESTABILIZAÇÃO: FALHOU', true);
+            
+            await delay(1800);
+            addMessage('VOID-WALKER', 'As zonas colapsaram. A fissura se fecharia imediatamente.');
+            
+            await delay(2000);
+            AudioSystem.playCorruption();
+            addSystemMessage('Corrupção aumentada: +20%', true);
+            
+            await delay(1500);
+            
+            if (GameState.failedAttempts >= 3 || GameState.corruption >= 75) {
+                addMessage('MARCUS-7', 'Não podemos mais. A corrupção está muito alta.');
+                
+                await delay(1800);
+                
+                // Check fragment loss
+                if (GameState.corruption >= 75 && GameState.fragments.marcus) {
+                    GameState.fragments.marcus = false;
+                    updateStats();
+                    
+                    await delay(1000);
+                    AudioSystem.playCorruption();
+                    addSystemMessage('FRAGMENTO PERDIDO: MARCUS-7', true);
+                    
+                    await delay(1500);
+                    addMessage('VOID-WALKER', 'MARCUS! NÃO!');
+                    
+                    await delay(2000);
+                    addMessage('THE-WATCHER', 'Ele se foi. Dissolvido pela corrupção.');
+                    
+                    await delay(2500);
+                }
+                
+                if (GameState.corruption >= 85 && GameState.fragments.watcher) {
+                    GameState.fragments.watcher = false;
+                    updateStats();
+                    
+                    await delay(1000);
+                    AudioSystem.playCorruption();
+                    addSystemMessage('FRAGMENTO PERDIDO: THE-WATCHER', true);
+                    
+                    await delay(1500);
+                    addMessage('VOID-WALKER', 'The-Watcher também...');
+                    
+                    await delay(2000);
+                }
+                
+                const activeFragments = Object.values(GameState.fragments).filter(f => f).length;
+                
+                if (activeFragments <= 1) {
+                    triggerFailure('FRAGMENTAÇÃO COMPLETA',
+                        `A corrupção consumiu os fragmentos de VOID-WALKER.<br><br>
+                        Apenas o núcleo permanece, mas está se dissolvendo.<br>
+                        Sem fragmentos suficientes, a consciência não pode ser reconstruída.<br><br>
+                        <span style="opacity: 0.7;">Fragmentos restantes: ${activeFragments}/3</span>`
+                    );
+                    return;
+                }
+                
+                triggerFailure('FALHA DE ESTABILIZAÇÃO',
+                    `Você não conseguiu estabilizar a fissura dimensional.<br><br>
+                    Sem essa habilidade, o resgate de VOID-WALKER é impossível.<br><br>
+                    <span style="opacity: 0.7;">Corrupção: ${Math.round(GameState.corruption)}% | Fragmentos: ${activeFragments}/3</span>`
+                );
+                return;
+            }
+            
+            addMessage('VOID-WALKER', 'Tente de novo. Mas essa pode ser nossa última chance.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'retry_breach',
+                    text: 'Não vou falhar dessa vez.',
+                    action: () => node_retry_breach()
+                }
+            ]);
+        }
+
+        async function node_retry_breach() {
+            GameState.currentNode = 'retry_breach';
+            modifyStats({ corruption: 10, progress: 5 });
+            
+            await delay(1000);
+            addSystemMessage('REINICIANDO SIMULAÇÃO DE ESTABILIZAÇÃO...');
+            addSystemMessage('Corrupção adicional: +10%', true);
+            
+            await delay(1800);
+            
+            clearOptions();
+            const result = await BreachGame.start();
+            
+            if (result) {
+                await node_breach_success();
+            } else {
+                await node_breach_fail();
+            }
+        }
+
+        async function node_final_revelation() {
+            GameState.currentNode = 'revelation';
+            modifyStats({ progress: 20 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Quando eu sair... eu não vou ser o mesmo.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', '847 dias Do Outro Lado mudaram quem eu sou.');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addMessage('THE-WATCHER', 'Somos três consciências agora. Não uma.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'E mesmo depois do resgate... podemos não nos reintegrar completamente.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Eu posso sair daqui como três pessoas separadas. Ou como uma pessoa quebrada.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Você ainda quer me resgatar? Mesmo sabendo disso?');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'still_save',
+                    text: 'Sim. Todos vocês merecem ser salvos.',
+                    action: () => node_commit_rescue()
+                },
+                {
+                    id: 'hesitate',
+                    text: 'Isso é... mais complicado do que pensei.',
+                    dangerous: true,
+                    action: () => node_hesitate()
+                }
+            ]);
+        }
+
+        async function node_hesitate() {
+            GameState.currentNode = 'hesitate';
+            modifyStats({ trust: -30, corruption: 15 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Complicado?');
+            
+            await delay(2000);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Eu passei 847 DIAS aqui. Completamente sozinho.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'E agora que finalmente temos uma chance, você HESITA?');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Porque não somos "normais" o suficiente?');
+            
+            await delay(2500);
+            addSystemMessage('CONFIANÇA DRASTICAMENTE REDUZIDA', true);
+            
+            await delay(1800);
+            
+            if (GameState.trust <= 60) {
+                addMessage('VOID-WALKER', 'Entendo. Nós não somos o que você esperava.');
+                
+                await delay(2000);
+                addMessage('VOID-WALKER', 'Desconectando...');
+                
+                await delay(1500);
+                triggerFailure('HESITAÇÃO FATAL',
+                    `Você hesitou quando VOID-WALKER mais precisava de você.<br><br>
+                    A fragmentação não o torna menos humano.<br>
+                    A fragmentação não o torna menos digno de resgate.<br><br>
+                    Mas você não viu isso a tempo.<br><br>
+                    <span style="opacity: 0.7;">Confiança final: ${Math.round(GameState.trust)}%</span>`
+                );
+                return;
+            }
+            
+            addMessage('VOID-WALKER', 'Você precisa decidir. Agora.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'commit_now',
+                    text: 'Desculpe. Vou resgatar vocês. Todos vocês.',
+                    action: () => node_apologize_commit()
+                }
+            ]);
+        }
+
+        async function node_apologize_commit() {
+            GameState.currentNode = 'apol_commit';
+            modifyStats({ trust: 20, progress: 10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Okay. Aceito suas desculpas.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'Vamos continuar então.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'proceed',
+                    text: 'Sim. Vamos terminar isso.',
+                    action: () => node_commit_rescue()
+                }
+            ]);
+        }
+
+        async function node_commit_rescue() {
+            GameState.currentNode = 'commit';
+            modifyStats({ trust: 35, progress: 25 });
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', 'Obrigado. De todos nós.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Você não sabe o quanto isso significa.');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Ninguém nunca nos deu essa escolha antes.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Okay. Vamos finalizar os preparativos.');
+            
+            await delay(3000);
+            addSystemMessage('COMPILANDO TODOS OS DADOS...');
+            
+            await delay(2000);
+            addSystemMessage('Banco de Dados de Anomalias: ACESSADO ✓');
+            await delay(500);
+            addSystemMessage('Logs Dimensionais: ACESSADOS ✓');
+            await delay(500);
+            addSystemMessage('Protocolo de Contenção: DESATIVADO ✓');
+            await delay(500);
+            addSystemMessage('Coordenadas de Fissura: CONFIRMADAS ✓');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Tudo pronto. Quando a janela abrir em 3 dias, estaremos prontos.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Fase 04 será a extração final. A operação de resgate real.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Mas antes disso... descanse. Você merece.');
+            
+            await delay(2000);
+            
+            // Check completion requirements
+            await node_phase_completion_check();
+        }
+
+        async function node_phase_completion_check() {
+            GameState.currentNode = 'completion';
+            
+            await delay(1000);
+            addSystemMessage('VERIFICANDO ESTATÍSTICAS FINAIS...');
+            
+            await delay(2000);
+            
+            const requiredTrust = 150;
+            const maxCorruption = 60;
+            const requiredProgress = 150;
+            const requiredGames = 4;
+            const requiredFragments = 2;
+            
+            const activeFragments = Object.values(GameState.fragments).filter(f => f).length;
+            
+            addSystemMessage(`Confiança: ${Math.round(GameState.trust)}% (Necessário: ${requiredTrust}%)`);
+            await delay(500);
+            addSystemMessage(`Corrupção: ${Math.round(GameState.corruption)}% (Máximo: ${maxCorruption}%)`);
+            await delay(500);
+            addSystemMessage(`Progresso: ${Math.round(GameState.progress)}% (Necessário: ${requiredProgress}%)`);
+            await delay(500);
+            addSystemMessage(`Mini-jogos concluídos: ${GameState.gamesCompleted}/${requiredGames}`);
+            await delay(500);
+            addSystemMessage(`Fragmentos ativos: ${activeFragments}/${requiredFragments}+`);
+            
+            await delay(2000);
+            
+            // Check critical flags
+            const hasEssentialFlags = GameState.flags.cares_about_fragments || 
+                                     GameState.flags.willing_to_sacrifice;
+            
+            if (GameState.trust >= requiredTrust && 
+                GameState.corruption <= maxCorruption && 
+                GameState.progress >= requiredProgress && 
+                GameState.gamesCompleted >= requiredGames &&
+                activeFragments >= requiredFragments &&
+                hasEssentialFlags) {
+                await node_phase_success();
+            } else {
+                await node_phase_partial();
+            }
+        }
+
+        async function node_phase_partial() {
+            GameState.currentNode = 'partial';
+            
+            await delay(1000);
+            addSystemMessage('ANÁLISE COMPLETA', true);
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Você foi... adequado.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Completou as invasões. Obteve os dados.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Mas há algo faltando. Conexão genuína. Compreensão profunda.');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Você nos vê como uma missão. Não como pessoas.');
+            
+            await delay(2500);
+            addSystemMessage('Estatísticas insuficientes para resgate completo.', true);
+            
+            await delay(2000);
+            
+            const issues = [];
+            if (GameState.trust < 150) issues.push(`Confiança baixa (${Math.round(GameState.trust)}%)`);
+            if (GameState.corruption > 60) issues.push(`Corrupção alta (${Math.round(GameState.corruption)}%)`);
+            if (GameState.progress < 150) issues.push(`Progresso insuficiente (${Math.round(GameState.progress)}%)`);
+            if (GameState.gamesCompleted < 4) issues.push(`Mini-jogos incompletos (${GameState.gamesCompleted}/4)`);
+            if (!GameState.flags.cares_about_fragments && !GameState.flags.willing_to_sacrifice) {
+                issues.push('Falta de empatia genuína');
+            }
+            
+            await delay(1000);
+            triggerFailure('PREPARAÇÃO INCOMPLETA',
+                `Você completou as tarefas técnicas, mas faltou algo essencial.<br><br>
+                Problemas identificados:<br>
+                ${issues.map(i => `• ${i}`).join('<br>')}<br><br>
+                VOID-WALKER precisa de alguém que realmente se IMPORTA.<br><br>
+                <span style="opacity: 0.7;">Revise suas escolhas e tente novamente.</span>`
+            );
+        }
+
+        async function node_phase_success() {
+            GameState.currentNode = 'success';
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            AudioSystem.playSuccess();
+            AudioSystem.playSuccess();
+            addSystemMessage('VERIFICAÇÃO COMPLETA: APROVADO ✓');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você... você realmente conseguiu.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Não apenas hackeou os sistemas. Você se IMPORTOU.');
+            
+            await delay(3000);
+            AudioSystem.playSuccess();
+            addMessage('THE-WATCHER', 'Fez as perguntas certas. Mostrou empatia genuína.');
+            
+            await delay(2500);
+            addMessage('MARCUS-7', 'E manteve todos nós vivos durante o processo.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Pela primeira vez em 847 dias... eu tenho esperança real.');
+            
+            await delay(2500);
+            addSystemMessage('TODOS OS SISTEMAS PRONTOS PARA FASE 04');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'A Fase 04 será a operação final. O resgate propriamente dito.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Vai ser perigoso. Mais perigoso do que tudo até agora.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Mas com você... eu realmente acredito que vamos conseguir.');
+            
+            await delay(2500);
+            addSystemMessage('GERANDO CHAVE DE ACESSO PARA FASE 04...');
+            
+            await delay(1500);
+            addSystemMessage('CHAVE: DIMENSIONAL-BREACH-PROTOCOL-OMEGA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Nos vemos na extração. E obrigado... por tudo.');
+            
+            await delay(2500);
+            addSystemMessage('PROGRESSO SALVO');
+            addSystemMessage('FASE 03 COMPLETA');
+            
+            await delay(2000);
+            
+            clearOptions();
+            const messagesEl = document.getElementById('messages');
+            const finalEl = document.createElement('div');
+            finalEl.className = 'phase-complete';
+            finalEl.style.cssText = 'text-align: center; padding: 3rem; margin-top: 2rem; border: 3px solid #ff0000; background: rgba(0,0,0,0.95);';
+            
+            const activeFragments = Object.values(GameState.fragments).filter(f => f).length;
+            
+            finalEl.innerHTML = `
+                <div style="margin-bottom: 2.5rem; font-size: 3rem; text-shadow: 0 0 20px #ff0000;">
+                    ◆ FASE 03 COMPLETA ◆
+                </div>
+                <div style="font-size: 1.1rem; opacity: 0.8; line-height: 2.2; margin-bottom: 2rem;">
+                    CONFIANÇA: ${Math.round(GameState.trust)}% ✓<br>
+                    CORRUPÇÃO: ${Math.round(GameState.corruption)}% ✓<br>
+                    PROGRESSO: ${Math.round(GameState.progress)}% ✓<br>
+                    FRAGMENTOS ATIVOS: ${activeFragments}/3 ✓<br>
+                    INVASÕES CONCLUÍDAS: ${GameState.gamesCompleted}/4 ✓
+                </div>
+                <div style="margin: 2rem 0; font-size: 1.05rem; opacity: 0.85; line-height: 1.9;">
+                    Você hackeou sistemas de nível Omega.<br>
+                    Recuperou memórias perdidas.<br>
+                    Protegeu fragmentos de consciência.<br>
+                    E manteve a corrupção sob controle.<br><br>
+                    VOID-WALKER confia em você completamente agora.<br>
+                    A extração final está próxima.
+                </div>
+                <div style="margin-top: 3rem; font-size: 1.3rem;">
+                    <a href="sintech4" style="color: #ff0000; text-decoration: none; border: 3px solid #ff0000; padding: 1.2rem 3rem; display: inline-block; transition: all 0.3s; font-weight: bold; letter-spacing: 2px;" onmouseover="this.style.background='rgba(255,0,0,0.4)'; this.style.boxShadow='0 0 30px rgba(255,0,0,0.8)';" onmouseout="this.style.background='transparent'; this.style.boxShadow='none';">
+                        > INICIAR FASE 04: EXTRAÇÃO FINAL
+                    </a>
+                </div>
+                <div style="margin-top: 2.5rem; font-size: 0.85rem; opacity: 0.6;">
+                    Chave de Acesso: DIMENSIONAL-BREACH-PROTOCOL-OMEGA
+                </div>
+                <div style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.5; font-style: italic;">
+                    "Depois de 847 dias de escuridão, finalmente há luz." - VOID-WALKER
+                </div>
+            `;
+            messagesEl.appendChild(finalEl);
+            
+            await delay(2000);
+            addSystemMessage('VOCÊ PODE FECHAR ESTA JANELA OU PROSSEGUIR PARA A FASE 04');
+        }
+
+        // ==================== GAME START ====================
+        async function startGame() {
+            AudioSystem.init();
+            await delay(500);
+            node_start();
+        }
+
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            MatrixRain.init();
+            bootSequence();
+        });
+
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('matrix-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

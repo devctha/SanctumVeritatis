@@ -1,1 +1,894 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/coruja"><meta http-equiv="refresh" content="0;url=/SAS Results/coruja"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/SAS Results/coruja'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/SAS Results/coruja">/SAS Results/coruja</a>.</p></body></html>
+<!doctype html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/SAS Results/coruja'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/coruja">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • CORUJA • Vera Belcadior</title>
+
+  <style>
+    :root{
+      --bg0:#04030a;
+      --bg1:#07081b;
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted: rgba(219,234,254,.68);
+      --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.20);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .11;
+      --noise-opacity: .07;
+      --flicker: .050;
+      --shake: 0px;
+
+      --fz: 13px;
+      --fzSmall: 12px;
+      --pad: 12px;
+      --padSmall: 10px;
+      --line: 1.55;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 16% 12%, rgba(168,85,247,.12), transparent 62%),
+        radial-gradient(900px 650px at 86% 22%, rgba(56,189,248,.10), transparent 60%),
+        radial-gradient(900px 650px at 50% 92%, rgba(34,197,94,.08), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, rgba(239,68,68,.10), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(12px, 2vw, 20px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(10px, 1.6vw, 16px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.03), transparent 22%, rgba(0,255,255,.02) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.50;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.60) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-7px,5px,0); }
+      50%{ transform: translate3d(6px,-5px,0); }
+      75%{ transform: translate3d(-4px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 4.4s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      33%{ opacity: calc(var(--flicker) * 1.2); }
+      34%{ opacity: 0; }
+      58%{ opacity: calc(var(--flicker) * .8); }
+      59%{ opacity: 0; }
+      88%{ opacity: calc(var(--flicker) * 1.45); }
+      89%{ opacity: 0; }
+    }
+
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,24,.72), rgba(5,6,10,.44));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: 15px;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: var(--fzSmall);
+      color: rgba(219,234,254,.74);
+      line-height:1.35;
+      max-width: 92ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.24);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowB);
+      font-size: 12px;
+      color: rgba(219,234,254,.82);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--blue);
+      box-shadow: 0 0 14px rgba(56,189,248,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(168,85,247,.16);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(86, 88, 240, .10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(86, 88, 240, .10) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:1;
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn, .ghost{
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn{
+      border: 1px solid rgba(251,146,60,.22);
+      background: linear-gradient(180deg, rgba(251,146,60,.18), rgba(239,68,68,.10));
+      color: #ffe4c7;
+      box-shadow: var(--shadowO), var(--shadowR);
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .ghost{
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      box-shadow: var(--shadowB);
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      padding: 14px;
+      min-height:0;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+      display:grid;
+      gap: 12px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.25);
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.06);
+      overflow:hidden;
+      min-width: 0;
+    }
+
+    .cardHead{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      min-width: 0;
+    }
+    .cardHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.82);
+      min-width: 0;
+    }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.28);
+      font-size: 12px;
+      color: rgba(219,234,254,.62);
+      white-space:nowrap;
+    }
+    .chip b{ color: rgba(219,234,254,.90); }
+
+    .cardBody{
+      padding: var(--pad);
+      min-width: 0;
+    }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      padding: var(--padSmall);
+      box-shadow: var(--shadowV);
+      min-width: 0;
+    }
+    .kv .k{
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.55);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .kv .v{
+      margin-top:6px;
+      font-size: var(--fz);
+      line-height: var(--line);
+      color: rgba(219,234,254,.82);
+      min-width: 0;
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+
+    .ok{ color: rgba(34,197,94,.90); text-shadow: var(--shadowG); }
+    .warn{ color: rgba(251,146,60,.90); text-shadow: var(--shadowO); }
+    .danger{ color: rgba(239,68,68,.90); text-shadow: var(--shadowR); }
+
+    .mono{
+      font-family: var(--mono);
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(56,189,248,.20);
+      background: rgba(2,6,23,.25);
+      color: rgba(219,234,254,.86);
+      white-space: nowrap;
+    }
+
+    .redact{
+      background: linear-gradient(90deg, rgba(239,68,68,.16), rgba(0,0,0,.0));
+      border-left: 3px solid rgba(239,68,68,.55);
+      padding: 10px 10px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    .redact .k{
+      font-size: 11px; letter-spacing:.12em; text-transform:uppercase;
+      color: rgba(239,68,68,.78);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .redact .v{
+      margin-top:6px;
+      font-size: var(--fz);
+      line-height: var(--line);
+      color: rgba(219,234,254,.78);
+      overflow-wrap:anywhere;
+    }
+
+    /* Ops table area */
+    .opsWrap{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      box-shadow: var(--shadowV);
+      overflow:hidden;
+    }
+    .opsScroll{
+      max-height: 52vh;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+    }
+    table{
+      width:100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td{
+      text-align:left;
+      padding: 10px;
+      border-bottom: 1px solid rgba(56,189,248,.12);
+      vertical-align:top;
+      font-size: var(--fz);
+      line-height: 1.45;
+      color: rgba(219,234,254,.82);
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+    th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.72);
+      background: rgba(2,6,23,.60);
+      backdrop-filter: blur(6px);
+    }
+    tr:last-child td{ border-bottom:none; }
+
+    .colCode{ width: 110px; }
+    .colStatus{ width: 110px; }
+    .colOp{ width: 40%; }
+    .colRec{ width: auto; }
+
+    /* Compact mode */
+    body.compact{
+      --fz: 12px;
+      --fzSmall: 11px;
+      --pad: 10px;
+      --padSmall: 9px;
+      --line: 1.45;
+    }
+
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+    }
+    .introCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.90), rgba(3,6,18,.64));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 48px rgba(168,85,247,.18),
+        0 0 56px rgba(56,189,248,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .introTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      font-size: 13px;
+    }
+    .introTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+      max-width: 110ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      font-size: 12px;
+      min-height: 200px;
+      max-height: min(52vh, 560px);
+      overflow:auto;
+    }
+    .introActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.62);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,.25);
+      background: rgba(251,146,60,.08);
+      color: #ffe4c7;
+    }
+  </style>
+</head>
+
+<body class="compact">
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="title">S.A.S / Perfil • Coruja</div>
+          <div class="sub">
+            Identidade: <span class="ok">Vera Belcadior</span> • Codinome: <span class="warn">CORUJA</span>.<br/>
+            Perfil conhecido: análise, vigília, contra-memética e “escuta” de padrões. Onde o Corvo corta, a Coruja prevê.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>FILE: CORUJA_PROFILE • UI: FIT</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <div class="k">BIO / INDEX</div>
+        <div class="actions">
+          <button class="ghost" id="btnNoise" type="button">Ruído</button>
+          <button class="btn" id="btnRead" type="button">Modo: COMPACTO</button>
+          <button class="ghost" id="btnTop" type="button">Topo</button>
+        </div>
+      </div>
+
+      <div class="wrap" id="scrollArea">
+        <div class="grid2">
+          <section class="card">
+            <div class="cardHead">
+              <div class="h">Ficha rápida</div>
+              <div class="chips">
+                <span class="chip"><b>Status</b> Ativa</span>
+                <span class="chip"><b>Função</b> análise</span>
+                <span class="chip"><b>Risco</b> médio-alto</span>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="k">Nome</div>
+                <div class="v">Vera Belcadior</div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="kv">
+                <div class="k">Organização atual</div>
+                <div class="v"><span class="ok">Sanctum Veritatis</span> (Divisão de Observação / “Vigília”).</div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="kv">
+                <div class="k">Organizações anteriores</div>
+                <div class="v">
+                  Ordo Realitas (observação e validação) • Arquivistas do Véu (intercâmbio) • Departamento Mnemônico (apoio técnico, curto período).
+                </div>
+              </div>
+
+              <div class="redact">
+                <div class="k">Nota de risco</div>
+                <div class="v">
+                  Coruja é “perigosa” por um motivo simples: ela identifica o padrão antes do padrão acontecer.
+                  Organizações que vivem de segredo odeiam isso.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="cardHead">
+              <div class="h">Vínculos e relações</div>
+              <div class="chips">
+                <span class="chip"><b>Irmão</b> Corvo</span>
+                <span class="chip"><b>Rede</b> observadores</span>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="k">Corvo (Varn Blackwood)</div>
+                <div class="v">
+                  Relação: irmã; vínculo protetivo recíproco (mas assimétrico).<br/>
+                  Coruja tenta impedir o Corvo de se tornar mártir; Corvo tenta impedir a Coruja de virar “ferramenta” institucional.
+                </div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="kv">
+                <div class="k">Contato recorrente</div>
+                <div class="v">
+                  <span class="mono">“Index”</span> (Arquivistas do Véu) • <span class="mono">“Hush”</span> (Departamento Mnemônico) •
+                  <span class="mono">“Seal”</span> (Coalizão de Selo) • <span class="mono">“Lumen”</span> (logística de falsos registros).
+                </div>
+              </div>
+
+              <div class="redact">
+                <div class="k">Condecorações</div>
+                <div class="v">
+                  2× Platina (Sanctum, “previsão confirmada em campo”).<br/>
+                  1× Aquia Vermelha (Ordo, “resgate sob ruído memético”).<br/>
+                  Observação: evita palco; aceita medalhas para proteger recursos do setor.
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Biografia (encaixada)</div>
+            <div class="chips">
+              <span class="chip"><b>Traço</b> vigília</span>
+              <span class="chip"><b>Assinatura</b> padrões</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="grid2">
+              <div class="kv">
+                <div class="k">Como ela opera</div>
+                <div class="v">
+                  Coruja trabalha no intervalo: entre a palavra e o significado, entre o relatório e o fato.
+                  Especialidade: detectar quando o “outro lado” está influenciando linguagem, hábito e decisão.
+                </div>
+              </div>
+              <div class="kv">
+                <div class="k">O que a diferencia</div>
+                <div class="v">
+                  Enquanto muitos analistas procuram “o evento”, Coruja procura “a repetição”.
+                  Ela registra micro-padrões: frases que voltam, números que insistem, rotas que se curvam.
+                </div>
+              </div>
+            </div>
+
+            <div class="redact">
+              <div class="k">Segredo pessoal</div>
+              <div class="v">
+                Coruja sabe coisas que não deveria saber — e, diferente do Corvo, ela sabe quando guardar.
+                O limite dela não é “mentir”: é permitir que a mentira vire sistema.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Operações assistidas</div>
+            <div class="chips">
+              <span class="chip"><b>Sucesso</b> 112</span>
+              <span class="chip"><b>Falha</b> 2</span>
+              <span class="chip"><b>Sem info</b> 3</span>
+              <span class="chip"><b>Total</b> 117</span>
+            </div>
+          </div>
+
+          <div class="cardBody">
+            <div class="kv">
+              <div class="k">Leitura</div>
+              <div class="v">
+                Lista com rolagem interna e cabeçalho fixo.
+                “Sem info” indica arquivo removido, negado ou corrompido.
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="opsWrap">
+              <div class="opsScroll">
+                <table id="opsTable">
+                  <thead>
+                    <tr>
+                      <th class="colCode">Cod</th>
+                      <th class="colStatus">Status</th>
+                      <th class="colOp">Operação</th>
+                      <th class="colRec">Registro</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução Coruja">
+    <div class="introCard">
+      <div class="introTop">
+        <div>
+          <div class="h">SARCOPHAGUS / OPEN FILE</div>
+          <div class="s">
+            Perfil de observação e contra-memética. “Coruja” aparece em relatórios como sinônimo de aviso prévio.<br/>
+            Atalho: <code>R</code> alterna Compacto/Legível.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>MODE: FIT</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="introActions">
+        <button class="btn" id="btnEnter" type="button">Entrar</button>
+        <div class="kbd">Atalhos: <code>Enter</code> entrar • <code>/</code> ruído • <code>T</code> topo • <code>R</code> leitura</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const typebox = document.getElementById("typebox");
+    const scrollArea = document.getElementById("scrollArea");
+
+    const btnNoise = document.getElementById("btnNoise");
+    const btnTop = document.getElementById("btnTop");
+    const btnEnter = document.getElementById("btnEnter");
+    const btnRead = document.getElementById("btnRead");
+
+    const opsTbody = document.querySelector("#opsTable tbody");
+
+    let compact = true;
+
+    function setVars(scan, noise, flick, shake){
+      document.documentElement.style.setProperty("--scan-opacity", scan);
+      document.documentElement.style.setProperty("--noise-opacity", noise);
+      document.documentElement.style.setProperty("--flicker", flick);
+      document.documentElement.style.setProperty("--shake", shake);
+    }
+
+    function dopaminePulse(){
+      const scan = (0.08 + Math.random()*0.12).toFixed(2);
+      const noise = (0.05 + Math.random()*0.09).toFixed(2);
+      const flick = (0.04 + Math.random()*0.07).toFixed(3);
+      const shake = (Math.random() < 0.10) ? ((Math.random() * 2 - 1).toFixed(1) + "px") : "0px";
+      setVars(scan, noise, flick, shake);
+      setTimeout(() => setVars(".11",".07",".050","0px"), 1100);
+    }
+
+    function closeIntro(){
+      intro.style.display = "none";
+      dopaminePulse();
+      scrollArea.scrollTop = 0;
+    }
+
+    function pad4(n){ return String(n).padStart(4,"0"); }
+    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+    function statusBadge(s){
+      if (s === "SUCESSO") return `<span class="ok">${s}</span>`;
+      if (s === "FALHA") return `<span class="danger">${s}</span>`;
+      return `<span class="warn">${s}</span>`;
+    }
+
+    function buildOps(){
+      // 112 sucesso, 2 falha, 3 sem info = 117
+      const ops = [];
+
+      const tags = [
+        "Vigília de Sal","Olho Aberto","Noite Parada","Ponto Cego","Cifra de Vidro",
+        "Relógio Mudo","Mapa de Ruído","Linha de Fumaça","Selo Suave","Eco Branco",
+        "Íris Fria","Tranca de Luz","Corredor Cinza","Pulsar Baixo","Janela de Giz",
+        "Anotação Viva","Véu Estático","Asa Quieta","Chave de Areia","Sussurro Longo"
+      ];
+      const romans = ["I","II","III","IV","V","VI","VII","VIII","IX","X"];
+
+      for (let i=1; i<=112; i++){
+        ops.push({
+          code: "CV-" + pad4(i),
+          status: "SUCESSO",
+          title: `Operação ${pick(tags)} ${pick(romans)}`,
+          rec: "Completo (resumo interno)."
+        });
+      }
+
+      const fails = [
+        { t:"Operação Íris Partida", r:"Falha por overload de ruído: previsões conflitantes no mesmo ciclo." },
+        { t:"Operação Pêndulo Negro", r:"Falha por vazamento: o inimigo leu o alerta antes da equipe." }
+      ];
+      for (let i=113; i<=114; i++){
+        ops.push({
+          code:"CV-"+pad4(i),
+          status:"FALHA",
+          title:fails[i-113].t,
+          rec:fails[i-113].r
+        });
+      }
+
+      ops.push({ code:"CV-0115", status:"SEM INFO", title:"[REMOVIDO]", rec:"Registro removido por veto; restou somente o índice." });
+      ops.push({ code:"CV-0116", status:"SEM INFO", title:"[NEGADO]", rec:"Registro negado. O arquivo não responde a consultas." });
+      ops.push({ code:"CV-0117", status:"SEM INFO", title:"[CORROMPIDO]", rec:"Arquivo corrompido por ruído semântico; leitura não segura." });
+
+      return ops;
+    }
+
+    function renderOps(){
+      const ops = buildOps();
+      opsTbody.innerHTML = ops.map(o => `
+        <tr>
+          <td class="colCode"><span class="mono">${o.code}</span></td>
+          <td class="colStatus">${statusBadge(o.status)}</td>
+          <td class="colOp">${o.title}</td>
+          <td class="colRec">${o.rec}</td>
+        </tr>
+      `).join("");
+    }
+
+    function updateReadMode(){
+      document.body.classList.toggle("compact", compact);
+      btnRead.textContent = "Modo: " + (compact ? "COMPACTO" : "LEGÍVEL");
+    }
+
+    const boot = [
+      "[S.A.S] file: coruja.html",
+      "[S.A.S] ui: fit (wrap + fixed table + internal scroll)",
+      "",
+      "AGENTE: CORUJA",
+      "Vera Belcadior",
+      "Condecorações: 2× Platina • 1× Aquia Vermelha",
+      "Operações: 112 sucesso • 2 falha • 3 sem info",
+      "",
+      "Pressione ENTER."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        setTimeout(tick, 25 + Math.random()*80);
+      };
+      tick();
+    }
+
+    btnNoise.addEventListener("click", dopaminePulse);
+    btnTop.addEventListener("click", () => scrollArea.scrollTop = 0);
+    btnEnter.addEventListener("click", closeIntro);
+
+    btnRead.addEventListener("click", () => {
+      compact = !compact;
+      updateReadMode();
+      dopaminePulse();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (intro.style.display !== "none") {
+        if (e.key === "Enter") closeIntro();
+        return;
+      }
+      if (e.key === "/") { e.preventDefault(); dopaminePulse(); }
+      if (e.key.toLowerCase() === "t") scrollArea.scrollTop = 0;
+      if (e.key.toLowerCase() === "r") { compact = !compact; updateReadMode(); dopaminePulse(); }
+    });
+
+    // init
+    typeBoot();
+    renderOps();
+    updateReadMode();
+  </script>
+</body>
+</html>

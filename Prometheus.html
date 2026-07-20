@@ -1,1 +1,2541 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/Prometheus"><meta http-equiv="refresh" content="0;url=/Prometheus"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/Prometheus'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/Prometheus">/Prometheus</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/Prometheus'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/Prometheus">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundação PROMETHEUS • Guardiões da Chama Eterna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Bodoni+Moda:wght@400;500;600;700;800;900&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f4e4bc;
+      --gold-dark: #8a6d3b;
+      --gold-glow: rgba(212, 175, 55, 0.7);
+      --crimson: #8b0000;
+      --crimson-light: #dc143c;
+      --burgundy: #4a0e0e;
+      --black: #000000;
+      --black-soft: #0a0a0a;
+      --ink: #f8f5f0;
+      --muted: #c9b896;
+      --border: rgba(212, 175, 55, 0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Jost', sans-serif; background: var(--black); color: var(--ink); overflow-x: hidden; scroll-behavior: smooth; }
+
+    .bg-royal {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 30% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 80%, rgba(139, 0, 0, 0.08) 0%, transparent 60%),
+                  linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(0, 0, 0, 1) 100%);
+    }
+
+    .ornamental-pattern {
+      position: absolute; inset: 0; opacity: 0.15;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(212, 175, 55, 0.03) 50px, rgba(212, 175, 55, 0.03) 51px),
+        repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(212, 175, 55, 0.03) 50px, rgba(212, 175, 55, 0.03) 51px);
+      background-size: 100px 100px;
+      animation: patternMove 30s linear infinite;
+    }
+
+    @keyframes patternMove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 100px 100px, 100px 100px; }
+    }
+
+    .vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.9) 100%);
+    }
+
+    .floating-embers {
+      position: absolute; inset: 0;
+    }
+
+    .ember {
+      position: absolute; width: 4px; height: 4px;
+      background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+      border-radius: 50%; animation: emberFloat 25s linear infinite;
+      opacity: 0; box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    @keyframes emberFloat {
+      0% { transform: translate(0, 100vh) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) translateX(var(--drift)) scale(1.5); opacity: 0; }
+    }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      backdrop-filter: blur(30px) saturate(180%);
+      background: rgba(0, 0, 0, 0.9); border-bottom: 2px solid var(--border);
+      box-shadow: 0 8px 50px rgba(212, 175, 55, 0.2);
+    }
+
+    .header-inner {
+      max-width: 1900px; margin: 0 auto; padding: 25px 70px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo-container {
+      display: flex; align-items: center; gap: 30px; text-decoration: none;
+    }
+
+    .emblem {
+      width: 80px; height: 80px; border: 3px solid var(--gold);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.25), transparent 70%);
+      box-shadow: 0 0 50px var(--gold-glow), inset 0 0 30px rgba(212, 175, 55, 0.15);
+      position: relative; animation: emblemPulse 5s ease-in-out infinite;
+    }
+
+    @keyframes emblemPulse {
+      0%, 100% { box-shadow: 0 0 50px var(--gold-glow), inset 0 0 30px rgba(212, 175, 55, 0.15); }
+      50% { box-shadow: 0 0 80px var(--gold-glow), inset 0 0 50px rgba(212, 175, 55, 0.25); }
+    }
+
+    .emblem::before {
+      content: ''; position: absolute; inset: -3px;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--gold), var(--crimson-light), var(--gold)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      animation: emblemRotate 8s linear infinite;
+    }
+
+    @keyframes emblemRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    .emblem svg {
+      width: 48px; height: 48px; fill: var(--gold);
+      filter: drop-shadow(0 0 20px var(--gold-glow));
+    }
+
+    .brand-text {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .brand-name {
+      font-family: 'Cinzel', serif; font-size: 42px; font-weight: 900;
+      letter-spacing: 12px; text-transform: uppercase;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--crimson-light) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1; text-shadow: 0 0 60px var(--gold-glow);
+    }
+
+    .brand-motto {
+      font-family: 'Cormorant Garamond', serif; font-size: 14px;
+      font-style: italic; letter-spacing: 4px; color: var(--muted);
+      text-transform: lowercase;
+    }
+
+    nav {
+      display: flex; gap: 55px; align-items: center;
+    }
+
+    .nav-link {
+      font-family: 'Cinzel', serif; font-size: 14px; font-weight: 500;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--ink);
+      text-decoration: none; position: relative; padding: 10px 0;
+      transition: all 0.4s ease;
+    }
+
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 0; left: 50%; width: 0;
+      height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transition: all 0.4s ease; transform: translateX(-50%);
+    }
+
+    .nav-link:hover {
+      color: var(--gold-light);
+    }
+
+    .nav-link:hover::after {
+      width: 120%;
+    }
+
+    .header-cta {
+      padding: 16px 45px; background: linear-gradient(135deg, var(--gold) 0%, var(--crimson) 100%);
+      border: none; border-radius: 8px; font-family: 'Cinzel', serif;
+      font-size: 13px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--ink); cursor: pointer;
+      box-shadow: 0 0 50px var(--gold-glow); transition: all 0.4s ease;
+      position: relative; overflow: hidden;
+    }
+
+    .header-cta::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 0; height: 0; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .header-cta:hover::before {
+      width: 400px; height: 400px;
+    }
+
+    .header-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 60px var(--gold-glow);
+    }
+
+    .header-cta span {
+      position: relative; z-index: 1;
+    }
+
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 160px 70px 120px; overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 1700px; text-align: center; position: relative; z-index: 10;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 15px;
+      padding: 14px 35px; border: 2px solid var(--border);
+      border-radius: 60px; background: rgba(212, 175, 55, 0.08);
+      font-family: 'Cormorant Garamond', serif; font-size: 16px;
+      font-style: italic; letter-spacing: 3px; color: var(--gold-light);
+      margin-bottom: 50px; box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+      animation: badgeFade 1.5s ease-out;
+    }
+
+    @keyframes badgeFade {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-light {
+      width: 14px; height: 14px; background: var(--gold);
+      border-radius: 50%; box-shadow: 0 0 25px var(--gold-glow);
+      animation: lightPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes lightPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.6); opacity: 0.7; }
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif; font-size: clamp(65px, 13vw, 145px);
+      font-weight: 900; line-height: 1.05; margin-bottom: 45px;
+      letter-spacing: 15px; text-transform: uppercase;
+      animation: titleAppear 2s ease-out 0.3s both;
+    }
+
+    @keyframes titleAppear {
+      from { opacity: 0; transform: translateY(70px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title .gradient-flame {
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--crimson-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: flameGradient 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 80px var(--gold-glow));
+    }
+
+    @keyframes flameGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.8; color: var(--muted); max-width: 1100px;
+      margin: 0 auto 45px; font-style: italic; font-weight: 400;
+      animation: subtitleAppear 2s ease-out 0.6s both;
+    }
+
+    @keyframes subtitleAppear {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-divider {
+      width: 200px; height: 3px; margin: 45px auto;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      animation: dividerGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes dividerGlow {
+      0%, 100% { box-shadow: 0 0 20px var(--gold-glow); opacity: 0.5; }
+      50% { box-shadow: 0 0 40px var(--gold-glow); opacity: 1; }
+    }
+
+    .hero-motto {
+      font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600;
+      letter-spacing: 10px; text-transform: uppercase; color: var(--gold-light);
+      margin-bottom: 60px; text-shadow: 0 0 40px var(--gold-glow);
+      animation: mottoGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes mottoGlow {
+      0%, 100% { text-shadow: 0 0 40px var(--gold-glow); }
+      50% { text-shadow: 0 0 70px var(--gold-glow), 0 0 100px rgba(139, 0, 0, 0.5); }
+    }
+
+    .hero-cta-group {
+      display: flex; justify-content: center; gap: 35px; flex-wrap: wrap;
+      animation: ctaAppear 2s ease-out 1.2s both;
+    }
+
+    @keyframes ctaAppear {
+      from { opacity: 0; transform: translateY(60px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn {
+      padding: 24px 60px; font-family: 'Cinzel', serif; font-size: 16px;
+      font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+      text-decoration: none; border-radius: 12px; cursor: pointer;
+      transition: all 0.5s ease; position: relative; overflow: hidden;
+      border: none; display: inline-block;
+    }
+
+    .btn::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 0; height: 0; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      transform: translate(-50%, -50%);
+      transition: width 0.8s ease, height 0.8s ease;
+    }
+
+    .btn:hover::before {
+      width: 500px; height: 500px;
+    }
+
+    .btn span {
+      position: relative; z-index: 1;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--crimson) 100%);
+      color: var(--ink); box-shadow: 0 0 50px var(--gold-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 70px var(--gold-glow);
+    }
+
+    .btn-secondary {
+      background: transparent; color: var(--gold-light);
+      border: 2px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(212, 175, 55, 0.1);
+      box-shadow: 0 0 50px var(--gold-glow);
+    }
+
+    section {
+      position: relative; padding: 140px 70px;
+      max-width: 1900px; margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center; margin-bottom: 100px; position: relative;
+    }
+
+    .section-badge {
+      display: inline-block; padding: 10px 30px;
+      border: 1px solid var(--gold); border-radius: 50px;
+      background: rgba(212, 175, 55, 0.08);
+      font-family: 'Cormorant Garamond', serif; font-size: 14px;
+      font-style: italic; letter-spacing: 3px; color: var(--gold-light);
+      margin-bottom: 30px; box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif; font-size: clamp(45px, 8vw, 80px);
+      font-weight: 900; margin-bottom: 30px;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--muted) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1.2; letter-spacing: 8px; text-transform: uppercase;
+    }
+
+    .section-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 24px;
+      color: var(--muted); max-width: 1000px; margin: 0 auto;
+      line-height: 1.9; font-style: italic;
+    }
+
+    .royal-divider {
+      width: 250px; height: 2px; margin: 40px auto;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      box-shadow: 0 0 30px var(--gold-glow);
+    }
+
+    .legacy-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 50px; margin-top: 80px;
+    }
+
+    .legacy-card {
+      border: 2px solid var(--border); border-radius: 20px;
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
+      backdrop-filter: blur(20px); padding: 60px 50px;
+      transition: all 0.5s ease; position: relative; overflow: hidden;
+    }
+
+    .legacy-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 5px; background: linear-gradient(90deg, var(--gold), var(--crimson));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.6s ease;
+    }
+
+    .legacy-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .legacy-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-12px);
+      box-shadow: 0 30px 100px rgba(212, 175, 55, 0.4);
+    }
+
+    .legacy-icon {
+      width: 90px; height: 90px; margin-bottom: 35px;
+      border: 3px solid var(--gold); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent);
+      box-shadow: 0 0 40px var(--gold-glow);
+    }
+
+    .legacy-icon svg {
+      width: 50px; height: 50px; fill: var(--gold);
+      filter: drop-shadow(0 0 15px var(--gold-glow));
+    }
+
+    .legacy-title {
+      font-family: 'Cinzel', serif; font-size: 32px;
+      font-weight: 700; color: var(--ink); margin-bottom: 20px;
+      letter-spacing: 3px;
+    }
+
+    .legacy-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 18px;
+      line-height: 1.9; color: var(--muted); font-style: italic;
+    }
+
+    .timeline {
+      position: relative; padding: 80px 0; margin-top: 80px;
+    }
+
+    .timeline::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 3px; background: linear-gradient(180deg, var(--gold), var(--crimson), var(--gold));
+      transform: translateX(-50%); box-shadow: 0 0 30px var(--gold-glow);
+    }
+
+    .timeline-item {
+      position: relative; margin-bottom: 120px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+
+    .timeline-item:nth-child(even) .timeline-content {
+      order: 2;
+    }
+
+    .timeline-item:nth-child(even) .timeline-visual {
+      order: 1;
+    }
+
+    .timeline-marker {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%); width: 40px; height: 40px;
+      background: var(--black); border: 5px solid var(--gold);
+      border-radius: 50%; box-shadow: 0 0 0 12px rgba(212, 175, 55, 0.2),
+                                      0 0 50px var(--gold-glow);
+      z-index: 10; animation: markerPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes markerPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.3); }
+    }
+
+    .timeline-content {
+      padding: 50px; border: 2px solid var(--border);
+      border-radius: 25px; background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px); transition: all 0.5s ease;
+    }
+
+    .timeline-content:hover {
+      border-color: var(--gold);
+      transform: scale(1.03);
+      box-shadow: 0 25px 90px rgba(212, 175, 55, 0.4);
+    }
+
+    .timeline-year {
+      font-family: 'Cinzel', serif; font-size: 48px; font-weight: 900;
+      background: linear-gradient(135deg, var(--gold-light), var(--crimson-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 20px; letter-spacing: 6px;
+    }
+
+    .timeline-title {
+      font-family: 'Cinzel', serif; font-size: 28px;
+      font-weight: 700; color: var(--ink); margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+
+    .timeline-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 18px;
+      line-height: 1.9; color: var(--muted); font-style: italic;
+    }
+
+    .timeline-visual {
+      height: 350px; border: 2px solid var(--border);
+      border-radius: 25px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(139, 0, 0, 0.05));
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative; transition: all 0.5s ease;
+    }
+
+    .timeline-visual:hover {
+      border-color: var(--gold);
+      box-shadow: 0 25px 90px rgba(212, 175, 55, 0.4);
+    }
+
+    .visual-icon {
+      width: 150px; height: 150px; fill: var(--gold); opacity: 0.3;
+      filter: drop-shadow(0 0 40px var(--gold-glow));
+    }
+
+    .council-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 50px; margin-top: 80px;
+    }
+
+    .council-card {
+      border: 2px solid var(--border); border-radius: 25px;
+      background: rgba(0, 0, 0, 0.95); overflow: hidden;
+      transition: all 0.5s ease; position: relative;
+    }
+
+    .council-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
+      opacity: 0; transition: opacity 0.5s ease;
+    }
+
+    .council-card:hover::before {
+      opacity: 1;
+    }
+
+    .council-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-12px);
+      box-shadow: 0 30px 100px rgba(212, 175, 55, 0.4);
+    }
+
+    .council-portrait {
+      width: 100%; height: 320px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(139, 0, 0, 0.1));
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; border-bottom: 2px solid var(--border);
+    }
+
+    .council-portrait::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, rgba(0, 0, 0, 0.1) 0px, transparent 2px
+      );
+    }
+
+    .portrait-icon {
+      width: 130px; height: 130px; fill: var(--gold);
+      opacity: 0.4; filter: drop-shadow(0 0 30px var(--gold-glow));
+      position: relative; z-index: 1;
+    }
+
+    .council-info {
+      padding: 45px 40px;
+    }
+
+    .council-name {
+      font-family: 'Cinzel', serif; font-size: 28px;
+      font-weight: 700; color: var(--ink); margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .council-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 16px;
+      font-style: italic; color: var(--gold-light);
+      text-transform: uppercase; letter-spacing: 3px; margin-bottom: 25px;
+    }
+
+    .council-bio {
+      font-family: 'Cormorant Garamond', serif; font-size: 17px;
+      line-height: 1.8; color: var(--muted); margin-bottom: 25px;
+    }
+
+    .council-specialties {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+
+    .specialty-tag {
+      padding: 8px 18px; background: rgba(212, 175, 55, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 25px; font-size: 13px; color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    .divisions-showcase {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 60px; margin-top: 80px;
+    }
+
+    .division-card {
+      padding: 60px 50px; border: 2px solid var(--border);
+      border-radius: 25px; background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px); transition: all 0.5s ease;
+      position: relative; overflow: hidden;
+    }
+
+    .division-card::after {
+      content: ''; position: absolute; top: -50%; right: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+      transform: scale(0); transition: transform 0.6s ease;
+    }
+
+    .division-card:hover::after {
+      transform: scale(1);
+    }
+
+    .division-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-12px);
+      box-shadow: 0 30px 100px rgba(212, 175, 55, 0.4);
+    }
+
+    .division-header {
+      display: flex; align-items: center; gap: 25px; margin-bottom: 35px;
+    }
+
+    .division-icon {
+      width: 80px; height: 80px; border: 3px solid var(--gold);
+      border-radius: 20px; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+      box-shadow: 0 0 40px var(--gold-glow); position: relative; z-index: 1;
+    }
+
+    .division-icon svg {
+      width: 45px; height: 45px; fill: var(--gold);
+    }
+
+    .division-header-text {
+      flex: 1;
+    }
+
+    .division-name {
+      font-family: 'Cinzel', serif; font-size: 32px;
+      font-weight: 700; color: var(--ink); margin-bottom: 10px;
+      letter-spacing: 3px;
+    }
+
+    .division-subtitle {
+      font-family: 'Cormorant Garamond', serif; font-size: 15px;
+      font-style: italic; color: var(--gold-light);
+      text-transform: uppercase; letter-spacing: 3px;
+    }
+
+    .division-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 18px;
+      line-height: 1.9; color: var(--muted); margin-bottom: 30px;
+      position: relative; z-index: 1;
+    }
+
+    .division-features {
+      list-style: none; padding: 0; position: relative; z-index: 1;
+    }
+
+    .division-features li {
+      padding: 15px 0; padding-left: 40px; color: var(--muted);
+      position: relative; font-size: 16px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .division-features li:last-child {
+      border-bottom: none;
+    }
+
+    .division-features li::before {
+      content: '◆'; position: absolute; left: 0; top: 15px;
+      color: var(--gold); font-size: 20px;
+    }
+
+    .relics-gallery {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 50px; margin-top: 80px;
+    }
+
+    .relic-card {
+      border: 2px solid var(--border); border-radius: 25px;
+      background: rgba(0, 0, 0, 0.95); overflow: hidden;
+      transition: all 0.5s ease; position: relative;
+    }
+
+    .relic-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 6px; background: linear-gradient(90deg, var(--gold), var(--crimson), var(--gold));
+      transform: scaleX(0); transition: transform 0.6s ease;
+    }
+
+    .relic-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .relic-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 30px 100px rgba(212, 175, 55, 0.4);
+    }
+
+    .relic-display {
+      width: 100%; height: 280px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(139, 0, 0, 0.08));
+      display: flex; align-items: center; justify-content: center;
+      position: relative; border-bottom: 2px solid var(--border);
+    }
+
+    .relic-display svg {
+      width: 120px; height: 120px; fill: var(--gold);
+      opacity: 0.5; filter: drop-shadow(0 0 40px var(--gold-glow));
+    }
+
+    .relic-classification {
+      position: absolute; top: 20px; right: 20px;
+      padding: 8px 20px; background: rgba(212, 175, 55, 0.15);
+      border: 1px solid var(--gold); border-radius: 25px;
+      font-family: 'Cinzel', serif; font-size: 11px;
+      font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold);
+      box-shadow: 0 0 30px var(--gold-glow);
+    }
+
+    .relic-info {
+      padding: 45px 40px;
+    }
+
+    .relic-name {
+      font-family: 'Cinzel', serif; font-size: 28px;
+      font-weight: 700; color: var(--ink); margin-bottom: 15px;
+      letter-spacing: 2px;
+    }
+
+    .relic-origin {
+      font-family: 'Cormorant Garamond', serif; font-size: 15px;
+      font-style: italic; color: var(--gold-light);
+      margin-bottom: 25px; letter-spacing: 2px;
+    }
+
+    .relic-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 17px;
+      line-height: 1.8; color: var(--muted); margin-bottom: 25px;
+    }
+
+    .relic-properties {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+
+    .property-badge {
+      padding: 8px 16px; background: rgba(139, 0, 0, 0.15);
+      border: 1px solid rgba(220, 20, 60, 0.3);
+      border-radius: 20px; font-size: 12px;
+      color: var(--crimson-light); letter-spacing: 1px;
+    }
+
+    .research-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 50px; margin-top: 80px;
+    }
+
+    .research-card {
+      padding: 55px 50px; border: 2px solid var(--border);
+      border-radius: 25px; background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px); transition: all 0.5s ease;
+      position: relative; overflow: hidden;
+    }
+
+    .research-card::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+      transition: left 0.7s ease;
+    }
+
+    .research-card:hover::before {
+      left: 100%;
+    }
+
+    .research-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-12px);
+      box-shadow: 0 30px 100px rgba(212, 175, 55, 0.4);
+    }
+
+    .research-header {
+      margin-bottom: 30px; position: relative; z-index: 1;
+    }
+
+    .research-category {
+      display: inline-block; padding: 8px 20px;
+      background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold);
+      border-radius: 25px; font-family: 'Cinzel', serif;
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+    }
+
+    .research-title {
+      font-family: 'Cinzel', serif; font-size: 30px;
+      font-weight: 700; color: var(--ink); letter-spacing: 2px;
+    }
+
+    .research-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 18px;
+      line-height: 1.9; color: var(--muted); margin-bottom: 30px;
+      position: relative; z-index: 1;
+    }
+
+    .research-meta {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 25px; position: relative; z-index: 1;
+    }
+
+    .meta-item {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .meta-label {
+      font-size: 12px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 2px;
+    }
+
+    .meta-value {
+      font-family: 'Cinzel', serif; font-size: 16px;
+      font-weight: 600; color: var(--gold-light);
+    }
+
+    .stats-royal {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px; padding: 100px 70px;
+      background: linear-gradient(135deg, rgba(10, 10, 10, 0.98) 0%, rgba(0, 0, 0, 1) 100%);
+      border-top: 2px solid var(--border); border-bottom: 2px solid var(--border);
+      position: relative;
+    }
+
+    .stats-royal::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.05), transparent 70%);
+    }
+
+    .stat-item {
+      text-align: center; padding: 50px 30px;
+      border: 2px solid var(--border); border-radius: 20px;
+      background: rgba(0, 0, 0, 0.8); transition: all 0.5s ease;
+      position: relative; z-index: 1;
+    }
+
+    .stat-item:hover {
+      border-color: var(--gold);
+      transform: translateY(-12px) scale(1.05);
+      box-shadow: 0 30px 100px rgba(212, 175, 55, 0.4);
+    }
+
+    .stat-value {
+      font-family: 'Cinzel', serif; font-size: 68px;
+      font-weight: 900; margin-bottom: 15px; line-height: 1;
+      background: linear-gradient(135deg, var(--gold-light), var(--crimson-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      font-family: 'Cormorant Garamond', serif; font-size: 16px;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 3px;
+    }
+
+    .testimonials {
+      padding: 120px 70px; background: rgba(10, 10, 10, 0.5);
+    }
+
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 50px; margin-top: 80px;
+    }
+
+    .testimonial-card {
+      padding: 50px 45px; border: 2px solid var(--border);
+      border-radius: 25px; background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px); transition: all 0.5s ease;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '"'; position: absolute; top: 30px; left: 35px;
+      font-family: 'Cinzel', serif; font-size: 140px;
+      font-weight: 900; color: rgba(212, 175, 55, 0.08);
+      line-height: 1; z-index: 0;
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-12px);
+      box-shadow: 0 30px 100px rgba(212, 175, 55, 0.4);
+    }
+
+    .testimonial-text {
+      font-family: 'Cormorant Garamond', serif; font-size: 19px;
+      line-height: 1.9; color: var(--muted); font-style: italic;
+      margin-bottom: 35px; position: relative; z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex; align-items: center; gap: 25px;
+      position: relative; z-index: 1;
+    }
+
+    .author-avatar {
+      width: 70px; height: 70px; border: 3px solid var(--gold);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), transparent);
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    }
+
+    .author-avatar svg {
+      width: 40px; height: 40px; fill: var(--gold);
+    }
+
+    .author-info {
+      flex: 1;
+    }
+
+    .author-name {
+      font-family: 'Cinzel', serif; font-size: 20px;
+      font-weight: 700; color: var(--ink); margin-bottom: 8px;
+    }
+
+    .author-position {
+      font-family: 'Cormorant Garamond', serif; font-size: 14px;
+      font-style: italic; color: var(--gold-light); letter-spacing: 2px;
+    }
+
+    .cta-royal {
+      padding: 140px 70px; text-align: center;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(139, 0, 0, 0.05) 100%);
+      border-top: 2px solid var(--border); border-bottom: 2px solid var(--border);
+    }
+
+    .cta-content {
+      max-width: 1300px; margin: 0 auto;
+    }
+
+    .cta-title {
+      font-family: 'Cinzel', serif; font-size: clamp(40px, 7vw, 75px);
+      font-weight: 900; margin-bottom: 35px; letter-spacing: 8px;
+      background: linear-gradient(135deg, var(--gold-light), var(--crimson-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .cta-desc {
+      font-family: 'Cormorant Garamond', serif; font-size: 24px;
+      color: var(--muted); line-height: 1.9; margin-bottom: 60px;
+      max-width: 900px; margin-left: auto; margin-right: auto;
+      font-style: italic;
+    }
+
+    .cta-buttons {
+      display: flex; justify-content: center; gap: 35px; flex-wrap: wrap;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.98); border-top: 3px solid var(--border);
+      padding: 120px 70px 60px; position: relative;
+    }
+
+    .footer-content {
+      max-width: 1900px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 70px; margin-bottom: 80px;
+    }
+
+    .footer-section h4 {
+      font-family: 'Cinzel', serif; font-size: 24px;
+      font-weight: 700; margin-bottom: 30px; color: var(--gold);
+      letter-spacing: 3px; text-transform: uppercase;
+    }
+
+    .footer-section p {
+      font-family: 'Cormorant Garamond', serif; font-size: 17px;
+      color: var(--muted); line-height: 1.9; margin-bottom: 25px;
+    }
+
+    .footer-links {
+      display: flex; flex-direction: column; gap: 18px;
+    }
+
+    .footer-links a {
+      color: var(--muted); text-decoration: none;
+      transition: all 0.3s ease; padding-left: 30px; position: relative;
+      font-size: 15px;
+    }
+
+    .footer-links a::before {
+      content: '›'; position: absolute; left: 0; color: var(--gold);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold-light); padding-left: 35px;
+    }
+
+    .footer-links a:hover::before {
+      opacity: 1;
+    }
+
+    .footer-logo-section {
+      display: flex; flex-direction: column; gap: 25px;
+    }
+
+    .footer-logo {
+      display: flex; align-items: center; gap: 20px;
+    }
+
+    .footer-emblem {
+      width: 60px; height: 60px; fill: var(--gold);
+      filter: drop-shadow(0 0 20px var(--gold-glow));
+    }
+
+    .footer-brand {
+      font-family: 'Cinzel', serif; font-size: 32px;
+      font-weight: 900; color: var(--gold); letter-spacing: 6px;
+    }
+
+    .footer-badges {
+      display: flex; gap: 15px; flex-wrap: wrap;
+    }
+
+    .footer-badge {
+      padding: 10px 20px; background: rgba(212, 175, 55, 0.08);
+      border: 1px solid var(--border); border-radius: 25px;
+      font-size: 12px; color: var(--gold); letter-spacing: 1px;
+    }
+
+    .footer-bottom {
+      max-width: 1900px; margin: 0 auto; padding-top: 60px;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 30px; font-size: 14px; color: var(--muted);
+    }
+
+    .footer-seal {
+      display: flex; align-items: center; gap: 20px;
+      padding: 15px 30px; border: 1px solid var(--border);
+      border-radius: 12px; background: rgba(212, 175, 55, 0.05);
+    }
+
+    .seal-icon {
+      width: 35px; height: 35px; fill: var(--gold);
+    }
+
+    .seal-text {
+      font-family: 'Cinzel', serif; font-size: 13px;
+      font-weight: 700; color: var(--gold); letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .fade-in {
+      opacity: 0; transform: translateY(60px);
+      transition: all 1s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    @media (max-width: 1200px) {
+      .legacy-grid, .divisions-showcase, .relics-gallery, .research-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline::before {
+        left: 30px;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        padding-left: 80px;
+      }
+
+      .timeline-item:nth-child(even) .timeline-content,
+      .timeline-item:nth-child(even) .timeline-visual {
+        order: initial;
+      }
+
+      .timeline-marker {
+        left: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      section, .hero, .stats-royal, footer, .cta-royal, .testimonials {
+        padding-left: 30px; padding-right: 30px;
+      }
+
+      .header-inner {
+        padding: 20px 30px; flex-wrap: wrap;
+      }
+
+      nav {
+        order: 3; width: 100%; flex-direction: column;
+        gap: 20px; padding-top: 25px;
+        border-top: 1px solid var(--border);
+        display: none;
+      }
+
+      nav.active {
+        display: flex;
+      }
+
+      .council-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column; text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-royal">
+    <div class="ornamental-pattern"></div>
+    <div class="vignette"></div>
+    <div class="floating-embers" id="embers"></div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo-container">
+        <div class="emblem">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.7 2.8c.2-.3.6-.4.9-.4.3 0 .7.1.9.4l7.6 8.8c.3.3.3.9 0 1.2-.1.2-.3.3-.5.4v8.4c0 .5-.4.9-.9.9H4.3c-.5 0-.9-.4-.9-.9v-8.4c-.2-.1-.4-.2-.5-.4-.3-.3-.3-.9 0-1.2l7.8-8.8zm.9 1.7L5.2 12v9.1h13.6V12l-7.2-7.5zM12 6c.8 0 1.5.3 2.1.9.6.6.9 1.3.9 2.1v1.2c0 .4-.3.8-.8.8-.4 0-.8-.3-.8-.8V9c0-.4-.2-.8-.5-1.1-.3-.3-.7-.5-1.1-.5s-.8.2-1.1.5c-.3.3-.5.7-.5 1.1v1.2c0 .4-.3.8-.8.8-.4 0-.8-.3-.8-.8V9c0-.8.3-1.5.9-2.1C10.5 6.3 11.2 6 12 6z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">PROMETHEUS</div>
+          <div class="brand-motto">Lux in Tenebris Lucet</div>
+        </div>
+      </a>
+
+      <nav>
+        <a href="#legacy" class="nav-link">Legado</a>
+        <a href="#council" class="nav-link">Conselho</a>
+        <a href="#divisions" class="nav-link">Divisões</a>
+        <a href="#relics" class="nav-link">Relíquias</a>
+        <a href="#research" class="nav-link">Pesquisas</a>
+      </nav>
+
+      <button class="header-cta">
+        <span>SOLICITAR ACESSO</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="status-light"></span>
+        <span>Fundada em 1897 • Guardiões do Conhecimento Proibido</span>
+      </div>
+
+      <h1 class="hero-title">
+        FUNDAÇÃO<br>
+        <span class="gradient-flame">PROMETHEUS</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Durante mais de um século, temos preservado a Chama do Conhecimento contra as trevas da ignorância. 
+        Somos os guardiões das verdades ancestrais, protetores de relíquias sagradas e pioneiros na pesquisa 
+        paranormal avançada. Nossa missão transcende gerações: iluminar a humanidade enquanto a protegemos 
+        dos perigos que ela ainda não está preparada para compreender.
+      </p>
+
+      <div class="royal-divider"></div>
+
+      <div class="hero-motto">
+        "A Luz que Arde nas Trevas"
+      </div>
+
+      <div class="hero-cta-group">
+        <a href="#legacy" class="btn btn-primary">
+          <span>EXPLORE NOSSO LEGADO</span>
+        </a>
+        <a href="#contact" class="btn btn-secondary">
+          <span>JUNTE-SE A NÓS</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="legacy">
+    <div class="section-header fade-in">
+      <span class="section-badge">Nossa Essência</span>
+      <h2 class="section-title">O Legado Prometheus</h2>
+      <div class="royal-divider"></div>
+      <p class="section-desc">
+        Construído sobre os pilares da sabedoria, coragem e preservação, nosso legado se estende por 128 anos 
+        de dedicação incansável à causa da verdade e do conhecimento. Cada conquista, cada descoberta, cada vida 
+        salva contribui para a chama eterna que mantemos acesa.
+      </p>
+    </div>
+
+    <div class="legacy-grid">
+      <div class="legacy-card fade-in">
+        <div class="legacy-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+          </svg>
+        </div>
+        <h3 class="legacy-title">Sabedoria Ancestral</h3>
+        <p class="legacy-desc">
+          Guardiões de textos milenares, manuscritos proibidos e conhecimentos perdidos das civilizações antigas. 
+          Nossa biblioteca contém mais de 40.000 volumes raros, incluindo grimórios, pergaminhos sumérios e códices 
+          medievais que documentam a verdadeira história do paranormal na humanidade.
+        </p>
+      </div>
+
+      <div class="legacy-card fade-in">
+        <div class="legacy-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+          </svg>
+        </div>
+        <h3 class="legacy-title">Proteção Global</h3>
+        <p class="legacy-desc">
+          Operando em 47 países através de 23 santuários fortificados, protegemos a humanidade de ameaças que 
+          transcendem a compreensão comum. Nossas equipes de elite responderam a mais de 8.700 incidentes paranormais, 
+          salvando incontáveis vidas enquanto preservamos o véu da normalidade.
+        </p>
+      </div>
+
+      <div class="legacy-card fade-in">
+        <div class="legacy-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+          </svg>
+        </div>
+        <h3 class="legacy-title">Pesquisa Pioneira</h3>
+        <p class="legacy-desc">
+          Liderando a fronteira da pesquisa paranormal com 156 cientistas, ocultistas e teólogos de elite. 
+          Desenvolvemos metodologias revolucionárias para estudo de fenômenos sobrenaturais, catalogamos 2.340 
+          entidades distintas e publicamos mais de 500 tratados acadêmicos classificados.
+        </p>
+      </div>
+
+      <div class="legacy-card fade-in">
+        <div class="legacy-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          </svg>
+        </div>
+        <h3 class="legacy-title">Custódia de Relíquias</h3>
+        <p class="legacy-desc">
+          A maior coleção particular de artefatos paranormais do mundo. 1.892 relíquias sagradas, objetos 
+          amaldiçoados e ferramentas místicas sob nossa proteção. Cada item catalogado, estudado e guardado 
+          em câmaras especialmente projetadas para conter suas energias extraordinárias.
+        </p>
+      </div>
+
+      <div class="legacy-card fade-in">
+        <div class="legacy-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 13H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
+          </svg>
+        </div>
+        <h3 class="legacy-title">Formação de Elite</h3>
+        <p class="legacy-desc">
+          Nossa Academia treina a próxima geração de guardiões do conhecimento. Programas de 7 anos que combinam 
+          estudos acadêmicos rigorosos, treinamento em combate paranormal e iniciação nos mistérios arcanos. 
+          Apenas 5% dos candidatos completam o curso, tornando-se membros plenos da Fundação.
+        </p>
+      </div>
+
+      <div class="legacy-card fade-in">
+        <div class="legacy-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <h3 class="legacy-title">Cooperação Internacional</h3>
+        <p class="legacy-desc">
+          Parcerias estratégicas com as principais organizações paranormais globais: Sanctum Veritatis, Shadow Company, 
+          Ordo Realitas, Draconia e Conselho Setentrional. Através do Protocolo A.S.T.R.A., coordenamos resposta a 
+          ameaças globais e compartilhamos recursos críticos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header fade-in">
+      <span class="section-badge">História Viva</span>
+      <h2 class="section-title">Linha do Tempo</h2>
+      <div class="royal-divider"></div>
+      <p class="section-desc">
+        Cada era da Fundação Prometheus marca um capítulo na luta eterna entre conhecimento e ignorância, 
+        luz e trevas. Nossa jornada está escrita com sacrifício, descoberta e triunfo.
+      </p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1897</div>
+          <h3 class="timeline-title">A Fundação</h3>
+          <p class="timeline-desc">
+            Em uma noite tempestuosa de outubro, sete estudiosos visionários se reuniram em uma biblioteca secreta 
+            em Londres. O Professor Nathaniel Ashford, Lady Catherine Blackwell, Dr. Viktor Morgenstern e outros 
+            fundadores estabeleceram a Fundação Prometheus, jurando preservar o conhecimento proibido e proteger 
+            a humanidade das trevas que espreitam além do véu da realidade.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-icon" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1923</div>
+          <h3 class="timeline-title">O Grande Incêndio</h3>
+          <p class="timeline-desc">
+            Nossa sede original em Londres foi consumida por chamas sobrenaturais durante o ataque do Culto da 
+            Serpente Negra. Perdemos 40% da biblioteca original e 12 membros heroicos que deram suas vidas protegendo 
+            os textos mais sagrados. Das cinzas, construímos um santuário ainda mais fortificado, com proteções 
+            místicas impenetráveis.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-icon" viewBox="0 0 24 24">
+            <path d="M19.48 12.35c-.18-.2-.38-.38-.59-.54-.21-.16-.43-.29-.65-.39-.22-.1-.46-.17-.7-.21-.24-.04-.48-.04-.72 0-.24.04-.47.11-.69.21-.22.1-.42.23-.62.39-.2.16-.38.34-.54.54-.16.2-.29.42-.39.65-.1.23-.16.47-.19.72-.03.25-.02.5.02.74.04.24.11.47.21.69.1.22.23.42.39.62.16.2.34.38.54.54.2.16.42.29.65.39.23.1.47.16.72.19.25.03.5.02.74-.02.24-.04.47-.11.69-.21.22-.1.42-.23.62-.39.2-.16.38-.34.54-.54.16-.2.29-.42.39-.65.1-.23.16-.47.19-.72.03-.25.02-.5-.02-.74-.04-.24-.11-.47-.21-.69-.1-.22-.23-.42-.39-.62zM18 13c0 .34-.14.67-.39.92-.25.25-.58.39-.92.39-.34 0-.67-.14-.92-.39-.25-.25-.39-.58-.39-.92 0-.34.14-.67.39-.92.25-.25.58-.39.92-.39.34 0 .67.14.92.39.25.25.39.58.39.92z"/>
+            <path d="M15.5 1h-8v11l4 4.5 4-4.5V1zM14 10.5L11.5 13 9 10.5V3h5v7.5z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1957</div>
+          <h3 class="timeline-title">Descoberta das Câmaras de Alexandria</h3>
+          <p class="timeline-desc">
+            Expedição liderada pela Dra. Miriam Goldstein descobriu câmaras subterrâneas sob as ruínas da antiga 
+            Biblioteca de Alexandria. Recuperamos 840 textos que se acreditavam perdidos há milênios, incluindo 
+            o lendário "Liber Ignis", tratado definitivo sobre a natureza do fogo primordial e suas manifestações 
+            paranormais.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-icon" viewBox="0 0 24 24">
+            <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">1985</div>
+          <h3 class="timeline-title">Formação do Conselho Superior</h3>
+          <p class="timeline-desc">
+            Reforma estrutural estabeleceu o Conselho Superior de Sete Chamas, corpo governante máximo da Fundação. 
+            Sistema meritocrático baseado em conhecimento, linhagem e sacrifício pelos ideais da organização. 
+            Cada membro representa uma das sete disciplinas fundamentais: História, Teologia, Ocultismo, Ciência, 
+            Combate, Diplomacia e Preservação.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-icon" viewBox="0 0 24 24">
+            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2003</div>
+          <h3 class="timeline-title">Crise das Três Portas</h3>
+          <p class="timeline-desc">
+            Evento apocalíptico em que três portais dimensionais se abriram simultaneamente em Praga, Cairo e Kyoto. 
+            Mobilização global da Fundação e aliados evitou invasão em massa de entidades do Outro Lado. Operação 
+            durou 72 horas ininterruptas e resultou no desenvolvimento de novos protocolos de selagem dimensional. 
+            34 agentes foram perdidos, mas milhões de vidas foram salvas.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-icon" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2015</div>
+          <h3 class="timeline-title">Tratado de Cooperação Paranormal</h3>
+          <p class="timeline-desc">
+            Histórica cúpula reuniu líderes de todas as principais organizações paranormais do mundo. Prometheus 
+            desempenhou papel crucial na mediação, resultando no estabelecimento do Protocolo A.S.T.R.A. e acordos 
+            de compartilhamento de recursos e inteligência. Marco fundamental para cooperação global contra ameaças 
+            comuns.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-icon" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <div class="timeline-year">2025</div>
+          <h3 class="timeline-title">Era Digital & Nova Fronteira</h3>
+          <p class="timeline-desc">
+            Expansão para domínio digital com criação da Divisão de Paranormal Cibernético. Catalogação completa 
+            de nossos arquivos em sistemas quânticos ultra-seguros. Estabelecimento de 5 novos santuários em regiões 
+            estratégicas. Prometheus entra em sua era mais ambiciosa, preparando-se para desafios sem precedentes 
+            que o século XXI apresentará.
+          </p>
+        </div>
+        <div class="timeline-visual">
+          <svg class="visual-icon" viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="council" style="background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(0, 0, 0, 1) 100%);">
+    <div class="section-header fade-in">
+      <span class="section-badge">Liderança</span>
+      <h2 class="section-title">Conselho das Sete Chamas</h2>
+      <div class="royal-divider"></div>
+      <p class="section-desc">
+        Os Sete Mestres que guiam o destino da Fundação Prometheus. Cada um representa uma das chamas fundamentais 
+        do conhecimento humano, unidos pela causa comum de preservar e proteger a verdade.
+      </p>
+    </div>
+
+    <div class="council-grid">
+      <div class="council-card fade-in">
+        <div class="council-portrait">
+          <svg class="portrait-icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="council-info">
+          <h3 class="council-name">Dr. Alexander Ashford III</h3>
+          <p class="council-title">Guardião-Mor • Chama da Sabedoria</p>
+          <p class="council-bio">
+            Bisneto do fundador, 72 anos de idade e 45 de serviço à Fundação. Doutor em Teologia Comparada, 
+            Antropologia Mística e História Oculta. Liderou 89 expedições bem-sucedidas e pessoalmente salvou 
+            a Lança de Longinus de cultistas em 1998. Fluente em 12 idiomas, incluindo latim arcano e sumério.
+          </p>
+          <div class="council-specialties">
+            <span class="specialty-tag">Liderança</span>
+            <span class="specialty-tag">Estratégia</span>
+            <span class="specialty-tag">História</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="council-card fade-in">
+        <div class="council-portrait">
+          <svg class="portrait-icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="council-info">
+          <h3 class="council-name">Madre Serafina di Montefiore</h3>
+          <p class="council-title">Suma Sacerdotisa • Chama da Fé</p>
+          <p class="council-bio">
+            Ex-madre superiora do Vaticano, 68 anos. Especialista em exorcismos, rituais de purificação e teologia 
+            paranormal. Realizou mais de 200 exorcismos documentados com 100% de taxa de sucesso. Consultora 
+            teológica chefe da Fundação, responsável pela santificação de novos santuários e proteções divinas.
+          </p>
+          <div class="council-specialties">
+            <span class="specialty-tag">Teologia</span>
+            <span class="specialty-tag">Exorcismo</span>
+            <span class="specialty-tag">Rituais</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="council-card fade-in">
+        <div class="council-portrait">
+          <svg class="portrait-icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="council-info">
+          <h3 class="council-name">Arcano Magnus Corvus</h3>
+          <p class="council-title">Mestre das Artes • Chama do Mistério</p>
+          <p class="council-bio">
+            Praticante das artes arcanas há 50 anos, idade desconhecida devido a prolongamento místico da vida. 
+            Domina 37 escolas de magia, especialista em necromancia defensiva, geomancia e manipulação de energia 
+            paranormal. Desenvolveu 18 rituais de proteção utilizados globalmente pela comunidade paranormal.
+          </p>
+          <div class="council-specialties">
+            <span class="specialty-tag">Ocultismo</span>
+            <span class="specialty-tag">Magia</span>
+            <span class="specialty-tag">Rituais</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="council-card fade-in">
+        <div class="council-portrait">
+          <svg class="portrait-icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="council-info">
+          <h3 class="council-name">Dra. Helena Volkov</h3>
+          <p class="council-title">Chefe de Pesquisa • Chama do Conhecimento</p>
+          <p class="council-bio">
+            Doutora em Física Quântica, Parapsicologia e Biologia Paranormal. 54 anos, nascida na Rússia. 
+            Desenvolvedora do Scanner Prometheus Mark VII para detecção de energia paranormal. Publicou 89 papers 
+            sobre interface entre ciência e paranormal. Lidera equipe de 120 pesquisadores em 6 laboratórios globais.
+          </p>
+          <div class="council-specialties">
+            <span class="specialty-tag">Ciência</span>
+            <span class="specialty-tag">Pesquisa</span>
+            <span class="specialty-tag">Tecnologia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="council-card fade-in">
+        <div class="council-portrait">
+          <svg class="portrait-icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="council-info">
+          <h3 class="council-name">Comandante Marcus Kane</h3>
+          <p class="council-title">Mestre de Armas • Chama da Coragem</p>
+          <p class="council-bio">
+            Ex-SAS britânico, 58 anos de idade, 32 de serviço militar e paranormal. Veterano de 340 missões de 
+            combate em campo. Especialista em táticas anti-paranormais, armamento sagrado e combate corpo-a-corpo 
+            contra entidades. Responsável pelo treinamento de todas as equipes de campo da Fundação.
+          </p>
+          <div class="council-specialties">
+            <span class="specialty-tag">Combate</span>
+            <span class="specialty-tag">Tática</span>
+            <span class="specialty-tag">Treinamento</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="council-card fade-in">
+        <div class="council-portrait">
+          <svg class="portrait-icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="council-info">
+          <h3 class="council-name">Embaixadora Yuki Tanaka</h3>
+          <p class="council-title">Mediadora-Chefe • Chama da Harmonia</p>
+          <p class="council-bio">
+            Diplomata paranormal por excelência, 51 anos. Mediou 47 tratados entre organizações, evitou 12 conflitos 
+            internacionais paranormais e estabeleceu 23 parcerias estratégicas. Representa Prometheus em todas as 
+            cúpulas globais. Fluente em 9 idiomas e versada em protocolos diplomáticos de 34 culturas.
+          </p>
+          <div class="council-specialties">
+            <span class="specialty-tag">Diplomacia</span>
+            <span class="specialty-tag">Negociação</span>
+            <span class="specialty-tag">Alianças</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="council-card fade-in">
+        <div class="council-portrait">
+          <svg class="portrait-icon" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="council-info">
+          <h3 class="council-name">Mestre Arquivista Ibn Al-Rashid</h3>
+          <p class="council-title">Guardião dos Registros • Chama da Memória</p>
+          <p class="council-bio">
+            Bibliotecário-chefe há 40 anos, 65 anos de idade. Memória eidética certificada, capaz de recitar textos 
+            completos de cabeça. Supervisiona 40.000 volumes, 15.000 manuscritos e 500 terabytes de registros 
+            digitais. Desenvolveu o sistema de catalogação paranormal adotado globalmente por organizações aliadas.
+          </p>
+          <div class="council-specialties">
+            <span class="specialty-tag">Arquivo</span>
+            <span class="specialty-tag">História</span>
+            <span class="specialty-tag">Preservação</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="divisions">
+    <div class="section-header fade-in">
+      <span class="section-badge">Estrutura Operacional</span>
+      <h2 class="section-title">Divisões da Fundação</h2>
+      <div class="royal-divider"></div>
+      <p class="section-desc">
+        Cada divisão representa um pilar fundamental de nossa missão. Trabalhando em harmonia, 
+        formam o corpo operacional mais eficiente no mundo paranormal.
+      </p>
+    </div>
+
+    <div class="divisions-showcase">
+      <div class="division-card fade-in">
+        <div class="division-header">
+          <div class="division-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/>
+            </svg>
+          </div>
+          <div class="division-header-text">
+            <h3 class="division-name">Biblioteca Magistral</h3>
+            <p class="division-subtitle">Repositório do Conhecimento Proibido</p>
+          </div>
+        </div>
+        <p class="division-desc">
+          O coração pulsante da Fundação Prometheus. 40.000 volumes catalogados incluindo grimórios medievais, 
+          textos sumérios, pergaminhos egípcios e manuscritos únicos de civilizações perdidas. Sistema de 
+          preservação climática mantém documentos milenares em condições perfeitas.
+        </p>
+        <ul class="division-features">
+          <li>7 andares subterrâneos com proteção anti-incêndio mística</li>
+          <li>Sala de Leitura Especial para textos amaldiçoados</li>
+          <li>Digitalização quântica de toda coleção em andamento</li>
+          <li>23 bibliotecários especialistas em línguas mortas</li>
+          <li>Sistema de busca por IA treinado em ocultismo</li>
+        </ul>
+      </div>
+
+      <div class="division-card fade-in">
+        <div class="division-header">
+          <div class="division-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.09-.16-.26-.25-.44-.25-.06 0-.12.01-.17.03l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.06-.02-.12-.03-.18-.03-.17 0-.34.09-.43.25l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.09.16.26.25.44.25.06 0 .12-.01.17-.03l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.06.02.12.03.18.03.17 0 .34-.09.43-.25l2-3.46c.12-.22.07-.49-.12-.64l-2
+.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+            </svg>
+          </div>
+          <div class="division-header-text">
+            <h3 class="division-name">Laboratórios de Pesquisa</h3>
+            <p class="division-subtitle">Ciência na Fronteira do Impossível</p>
+          </div>
+        </div>
+        <p class="division-desc">
+          Seis laboratórios de última geração distribuídos globalmente. Equipamentos de análise paranormal 
+          proprietários, aceleradores de partículas modificados para detecção dimensional, câmaras de contenção 
+          para estudo de entidades e salas blindadas contra energia psíquica. 120 cientistas trabalhando em 
+          34 projetos ativos.
+        </p>
+        <ul class="division-features">
+          <li>Scanner Prometheus Mark VII para energia paranormal</li>
+          <li>Espectrômetro de Alma desenvolvido internamente</li>
+          <li>Laboratório de Xenobiologia Paranormal</li>
+          <li>Centro de Estudos Dimensionais e Portais</li>
+          <li>Unidade de Análise de Artefatos Místicos</li>
+        </ul>
+      </div>
+
+      <div class="division-card fade-in">
+        <div class="division-header">
+          <div class="division-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+            </svg>
+          </div>
+          <div class="division-header-text">
+            <h3 class="division-name">Forças de Campo</h3>
+            <p class="division-subtitle">Primeira Linha de Defesa</p>
+          </div>
+        </div>
+        <p class="division-desc">
+          267 agentes operacionais distribuídos em 47 países. Treinamento militar avançado combinado com 
+          conhecimento paranormal. Equipados com armamento sagrado, tecnologia de contenção e comunicação 
+          criptografada. Resposta rápida a incidentes paranormais em menos de 4 horas em qualquer continente.
+        </p>
+        <ul class="division-features">
+          <li>12 esquadrões de elite especializados</li>
+          <li>Arsenal de armas abençoadas e tecnologia avançada</li>
+          <li>Veículos blindados com proteções místicas</li>
+          <li>Suporte aéreo para evacuação de emergência</li>
+          <li>Parceria com A.S.T.R.A para reforços adicionais</li>
+        </ul>
+      </div>
+
+      <div class="division-card fade-in">
+        <div class="division-header">
+          <div class="division-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm0 13H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
+            </svg>
+          </div>
+          <div class="division-header-text">
+            <h3 class="division-name">Custódia de Relíquias</h3>
+            <p class="division-subtitle">Guardiões dos Artefatos Sagrados</p>
+          </div>
+        </div>
+        <p class="division-desc">
+          1.892 artefatos paranormais sob nossa proteção. Câmaras especialmente projetadas com selos místicos, 
+          proteções divinas e tecnologia de contenção. Cada relíquia catalogada com histórico completo, 
+          propriedades documentadas e protocolos de manuseio específicos. Sistema de segurança triplo: 
+          físico, místico e digital.
+        </p>
+        <ul class="division-features">
+          <li>Câmaras de contenção Nível 1 a 5</li>
+          <li>Sistemas de supressão de energia paranormal</li>
+          <li>Equipe de 34 curadores especializados</li>
+          <li>Protocolos de emergência para contenção de falhas</li>
+          <li>Inventário digital com rastreamento 24/7</li>
+        </ul>
+      </div>
+
+      <div class="division-card fade-in">
+        <div class="division-header">
+          <div class="division-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+            </svg>
+          </div>
+          <div class="division-header-text">
+            <h3 class="division-name">Academia Prometheus</h3>
+            <p class="division-subtitle">Forjando a Próxima Geração</p>
+          </div>
+        </div>
+        <p class="division-desc">
+          Programa de formação de 7 anos que combina estudos acadêmicos rigorosos, treinamento físico intensivo 
+          e iniciação nos mistérios paranormais. Campus isolado em localização secreta com biblioteca dedicada, 
+          campos de treinamento e instalações de simulação. Apenas 5% dos candidatos completam o programa.
+        </p>
+        <ul class="division-features">
+          <li>Currículo de 42 disciplinas obrigatórias</li>
+          <li>Treinamento em combate paranormal</li>
+          <li>Estudos de línguas antigas e ocultismo</li>
+          <li>Mentoria individual com membros seniores</li>
+          <li>92 graduados ativos servindo globalmente</li>
+        </ul>
+      </div>
+
+      <div class="division-card fade-in">
+        <div class="division-header">
+          <div class="division-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <div class="division-header-text">
+            <h3 class="division-name">Relações Internacionais</h3>
+            <p class="division-subtitle">Pontes Entre Mundos</p>
+          </div>
+        </div>
+        <p class="division-desc">
+          Departamento diplomático que mantém relações com todas as principais organizações paranormais. 
+          Mediação de conflitos, negociação de tratados, coordenação de operações conjuntas e compartilhamento 
+          de inteligência. Representantes permanentes em 18 organizações parceiras e 6 conselhos internacionais.
+        </p>
+        <ul class="division-features">
+          <li>Embaixadas em 12 organizações aliadas</li>
+          <li>Participação ativa no Protocolo A.S.T.R.A</li>
+          <li>Mediação de 47 tratados bem-sucedidos</li>
+          <li>Rede de inteligência compartilhada global</li>
+          <li>Cúpulas anuais de cooperação paranormal</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="relics" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.03) 0%, rgba(139, 0, 0, 0.03) 100%);">
+    <div class="section-header fade-in">
+      <span class="section-badge">Tesouro Sagrado</span>
+      <h2 class="section-title">Relíquias em Custódia</h2>
+      <div class="royal-divider"></div>
+      <p class="section-desc">
+        Artefatos de poder incomparável, cada um com sua própria história e mistérios. Protegidos por gerações, 
+        estudados com reverência, mantidos longe daqueles que buscariam usá-los para o mal.
+      </p>
+    </div>
+
+    <div class="relics-gallery">
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 5 - CRÍTICO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Martelo de Wayland</h3>
+          <p class="relic-origin">Origem: Escandinávia, Século IX</p>
+          <p class="relic-desc">
+            Martelo forjado pelo lendário ferreiro Wayland, o Ferreiro. Capaz de moldar não apenas metal, 
+            mas a própria realidade. Cada golpe ressoa através das dimensões. Usado para criar e para destruir. 
+            Recuperado de um templo viking submerso em 1967. Apenas três pessoas na história conseguiram 
+            erguê-lo sem consequências.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Forjamento Divino</span>
+            <span class="property-badge">Manipulação Realidade</span>
+            <span class="property-badge">Indestrutível</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 5 - CRÍTICO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Lança de Longinus</h3>
+          <p class="relic-origin">Origem: Jerusalém, Século I</p>
+          <p class="relic-desc">
+            A lança que perfurou o lado de Cristo na crucificação. Imbuída com poder divino e sangue sagrado. 
+            Capaz de matar qualquer entidade, mesmo as consideradas imortais. Buscada por cultistas por séculos. 
+            Salva pelo Dr. Ashford em 1998 durante ataque ao museu de Viena. Guardada em câmara abençoada por 
+            três cardeais.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Sagrada</span>
+            <span class="property-badge">Anti-Imortal</span>
+            <span class="property-badge">Poder Divino</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 4 - EXTREMO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Liber Ignis</h3>
+          <p class="relic-origin">Origem: Alexandria, Século III a.C.</p>
+          <p class="relic-desc">
+            Tratado definitivo sobre a natureza do fogo primordial escrito pelo próprio Prometheus, segundo a 
+            lenda. Páginas escritas em língua pré-adâmica contêm conhecimento sobre manipulação de energia 
+            fundamental do universo. Descoberto nas câmaras sob Alexandria em 1957. Leitura prolongada causa 
+            queimaduras espontâneas. Apenas 7 páginas foram traduzidas.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Conhecimento Proibido</span>
+            <span class="property-badge">Fogo Primordial</span>
+            <span class="property-badge">Amaldiçoado</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 3 - ALTO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Ampulheta de Chronos</h3>
+          <p class="relic-origin">Origem: Grécia Antiga, Data Desconhecida</p>
+          <p class="relic-desc">
+            Ampulheta de vidro negro contendo areia que flui em ambas as direções simultaneamente. Permite 
+            visões de linhas temporais alternativas e eventos futuros potenciais. Uso prolongado resulta em 
+            envelhecimento acelerado do usuário. Guardada por família grega por 40 gerações antes de ser 
+            doada à Fundação em 1934.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Temporal</span>
+            <span class="property-badge">Premonição</span>
+            <span class="property-badge">Perigoso</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 4 - EXTREMO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Máscara de Anúbis</h3>
+          <p class="relic-origin">Origem: Egito, XVIII Dinastia</p>
+          <p class="relic-desc">
+            Máscara funerária do sumo sacerdote de Anúbis. Concede ao usuário capacidade de ver e comunicar-se 
+            com os mortos, mas também atrai espíritos malévolos. Forjada em ouro negro místico que não existe 
+            naturalmente. Recuperada de tumba selada por 3.400 anos durante expedição de 1923. Três pesquisadores 
+            morreram durante extração.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Necromancia</span>
+            <span class="property-badge">Visão Espiritual</span>
+            <span class="property-badge">Maldição</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 3 - ALTO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Tabuleiro de Salomão</h3>
+          <p class="relic-origin">Origem: Jerusalém, Século X a.C.</p>
+          <p class="relic-desc">
+            Tabuleiro de xadrez usado pelo Rei Salomão para aprisionar 72 demônios. Cada peça representa um 
+            demônio diferente. Quando as peças são movidas corretamente, podem invocar ou banir entidades 
+            específicas. Manual de uso perdido por 2.000 anos, recentemente encontrado em mosteiro tibetano. 
+            Uso incorreto resulta em liberação de demônios.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Invocação</span>
+            <span class="property-badge">Selo Demoníaco</span>
+            <span class="property-badge">Salomônico</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 5 - CRÍTICO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Espelho de Obsidiana</h3>
+          <p class="relic-origin">Origem: Império Asteca, Século XV</p>
+          <p class="relic-desc">
+            Espelho de obsidiana negra usado por sacerdotes astecas para scrying e comunicação com deuses. 
+            Mostra não o reflexo, mas a verdadeira natureza da alma de quem olha. Portal potencial para dimensão 
+            das sombras. John Dee o usou no século XVI. Coberto com pano abençoado quando não em uso para 
+            prevenir ativação acidental.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Scrying</span>
+            <span class="property-badge">Portal</span>
+            <span class="property-badge">Revelação</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relic-card fade-in">
+        <div class="relic-display">
+          <span class="relic-classification">NÍVEL 2 - MODERADO</span>
+          <svg viewBox="0 0 24 24">
+            <path d="M12 1L8 5v3H2v10h6v-7h4V8l4-4-4-3zm10 9h-6v8c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-8z"/>
+          </svg>
+        </div>
+        <div class="relic-info">
+          <h3 class="relic-name">Cálice de Glastonbury</h3>
+          <p class="relic-origin">Origem: Inglaterra, Século XII</p>
+          <p class="relic-desc">
+            Cálice de prata com runas celtas gravadas. Água ou vinho nele colocado adquire propriedades curativas 
+            extraordinárias. Pode curar ferimentos físicos, doenças e até mesmo algumas maldições menores. 
+            Descoberto em Glastonbury Tor em 1911. Usado em 340 procedimentos de cura documentados com 98% 
+            de taxa de sucesso.
+          </p>
+          <div class="relic-properties">
+            <span class="property-badge">Cura</span>
+            <span class="property-badge">Purificação</span>
+            <span class="property-badge">Benigno</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="section-header fade-in">
+      <span class="section-badge">Fronteira do Conhecimento</span>
+      <h2 class="section-title">Pesquisas Ativas</h2>
+      <div class="royal-divider"></div>
+      <p class="section-desc">
+        Projetos de pesquisa que expandem os limites do conhecimento humano sobre o paranormal. 
+        Cada descoberta nos aproxima da verdade fundamental sobre a natureza da realidade.
+      </p>
+    </div>
+
+    <div class="research-grid">
+      <div class="research-card fade-in">
+        <div class="research-header">
+          <span class="research-category">FÍSICA PARANORMAL</span>
+          <h3 class="research-title">Projeto Limiar</h3>
+        </div>
+        <p class="research-desc">
+          Estudo aprofundado sobre a natureza dos portais dimensionais e barreiras entre realidades. 
+          Desenvolvendo tecnologia para detectar, mapear e selar brechas dimensionais antes que se tornem 
+          ameaças. Equipe de 23 físicos quânticos trabalhando com modelos matemáticos de 11 dimensões.
+        </p>
+        <div class="research-meta">
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-value">Fase IV - Testes de Campo</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Pesquisador Principal</div>
+            <div class="meta-value">Dra. Helena Volkov</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Financiamento</div>
+            <div class="meta-value">$8.4M / Ano</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Início</div>
+            <div class="meta-value">Janeiro 2019</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-card fade-in">
+        <div class="research-header">
+          <span class="research-category">XENOBIOLOGIA</span>
+          <h3 class="research-title">Catálogo Cryptozoológico Global</h3>
+        </div>
+        <p class="research-desc">
+          Projeto ambicioso de catalogar e documentar todas as espécies paranormais conhecidas. Base de dados 
+          atualmente contém 2.340 entidades distintas com perfis completos incluindo biologia, comportamento, 
+          habitat e métodos de contenção. Sistema de classificação desenvolvido é padrão global adotado por 
+          organizações aliadas.
+        </p>
+        <div class="research-meta">
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-value">Contínuo desde 1897</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Pesquisador Principal</div>
+            <div class="meta-value">Dr. James Morrison</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Entidades Catalogadas</div>
+            <div class="meta-value">2.340 espécies</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Expedições Anuais</div>
+            <div class="meta-value">45-60</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-card fade-in">
+        <div class="research-header">
+          <span class="research-category">TAUMATURGIA</span>
+          <h3 class="research-title">Síntese de Rituais Universais</h3>
+        </div>
+        <p class="research-desc">
+          Análise comparativa de sistemas mágicos de 47 tradições diferentes buscando princípios fundamentais 
+          universais. Objetivo é desenvolver sistema de magia sintética que combine eficácia de todas as 
+          tradições. Resultados preliminares revolucionários mostram que 73% dos rituais compartilham estrutura 
+          fundamental idêntica.
+        </p>
+        <div class="research-meta">
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-value">Fase III - Síntese</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Pesquisador Principal</div>
+            <div class="meta-value">Arcano Magnus Corvus</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Tradições Analisadas</div>
+            <div class="meta-value">47 sistemas</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Previsão Conclusão</div>
+            <div class="meta-value">2027</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-card fade-in">
+        <div class="research-header">
+          <span class="research-category">ARQUEOLOGIA</span>
+          <h3 class="research-title">Expedição Atlântida</h3>
+        </div>
+        <p class="research-desc">
+          Busca pela lendária civilização perdida usando tecnologia de sonar avançada e análise de registros 
+          históricos de 15 culturas antigas. Três localizações promissoras identificadas no Atlântico. 
+          Preparando expedição submarina para 2026 com submersível especialmente projetado capaz de alcançar 
+          5.000 metros de profundidade.
+        </p>
+        <div class="research-meta">
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-value">Fase II - Preparação</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Pesquisador Principal</div>
+            <div class="meta-value">Dr. Robert Chen</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Parceiros</div>
+            <div class="meta-value">Draconia, NOAA</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Expedição Planejada</div>
+            <div class="meta-value">Verão 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-card fade-in">
+        <div class="research-header">
+          <span class="research-category">PARAPSICOLOGIA</span>
+          <h3 class="research-title">Mapeamento da Consciência Coletiva</h3>
+        </div>
+        <p class="research-desc">
+          Projeto para mapear e compreender a "noosfera" - campo de consciência coletiva humana. Utilizando 
+          rede de sensores psíquicos globalmente distribuídos para detectar padrões em eventos de consciência 
+          em massa. Descobertas sugerem que grandes eventos globais criam ondas mensuráveis no campo psíquico.
+        </p>
+        <div class="research-meta">
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-value">Fase V - Coleta de Dados</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Pesquisadora Principal</div>
+            <div class="meta-value">Dra. Yuki Tanaka</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Sensores Ativos</div>
+            <div class="meta-value">147 globalmente</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Eventos Registrados</div>
+            <div class="meta-value">3.892</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="research-card fade-in">
+        <div class="research-header">
+          <span class="research-category">TECNOLOGIA</span>
+          <h3 class="research-title">Armamento Sagrado de Nova Geração</h3>
+        </div>
+        <p class="research-desc">
+          Desenvolvimento de armas que combinam tecnologia de ponta com encantamentos tradicionais. Protótipos 
+          incluem balas abençoadas com núcleo de prata alquímica, espadas de plasma infundidas com orações e 
+          granadas de disrupção dimensional. Testes de campo mostram eficácia 340% maior contra entidades 
+          paranormais.
+        </p>
+        <div class="research-meta">
+          <div class="meta-item">
+            <div class="meta-label">Status</div>
+            <div class="meta-value">Fase IV - Produção Limitada</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Pesquisador Principal</div>
+            <div class="meta-value">Eng. Klaus Schmidt</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Protótipos Ativos</div>
+            <div class="meta-value">18 sistemas</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Deployment</div>
+            <div class="meta-value">2025-2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-royal">
+    <div class="stat-item fade-in">
+      <div class="stat-value">128</div>
+      <div class="stat-label">Anos de História</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">47</div>
+      <div class="stat-label">Países com Presença</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">40K</div>
+      <div class="stat-label">Volumes na Biblioteca</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">1.892</div>
+      <div class="stat-label">Relíquias Guardadas</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">8.7K</div>
+      <div class="stat-label">Incidentes Resolvidos</div>
+    </div>
+    <div class="stat-item fade-in">
+      <div class="stat-value">534</div>
+      <div class="stat-label">Membros Ativos</div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="section-header fade-in">
+      <span class="section-badge">Vozes da Comunidade</span>
+      <h2 class="section-title">Testemunhos</h2>
+      <div class="royal-divider"></div>
+      <p class="section-desc">
+        Palavras daqueles que trabalharam conosco e testemunharam nossa dedicação à causa do conhecimento e proteção.
+      </p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "A Fundação Prometheus representa o padrão-ouro em pesquisa paranormal. Sua biblioteca é sem igual, 
+          seus pesquisadores são brilhantes, e sua dedicação à verdade é absoluta. Tivemos a honra de colaborar 
+          em dezenas de projetos, e cada experiência reforçou meu respeito por esta organização excepcional."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Grão-Mestre Friedrich Von Stein</div>
+            <div class="author-position">Ordo Realitas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "Quando enfrentamos a Crise das Três Portas, foi o conhecimento e experiência de Prometheus que salvou 
+          o mundo. Sua resposta rápida, recursos especializados e liderança sob pressão foram cruciais. Eles não 
+          buscam glória, apenas resultados. São verdadeiros guardiões da humanidade."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">General Marcus Stone</div>
+            <div class="author-position">Shadow Company</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "A custódia de relíquias da Fundação Prometheus é impecável. Confiamos a eles artefatos de valor 
+          inestimável para nossa linhagem, sabendo que serão protegidos com o mais alto nível de segurança e 
+          reverência. Seu profissionalismo e respeito pelas tradições antigas são admiráveis."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Lady Seraphina Drake</div>
+            <div class="author-position">Casa Draconia</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "Meu treinamento na Academia Prometheus foi a experiência mais transformadora da minha vida. 
+          Sete anos intensos que me forjaram não apenas como pesquisador, mas como guardião do conhecimento. 
+          Os mentores são lendas vivas, o currículo é incomparável, e a irmandade formada é eterna."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Dr. Thomas Blackwood</div>
+            <div class="author-position">Graduado Classe 2018</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "A Fundação Prometheus é um tesouro para toda a comunidade paranormal. Sua generosidade em 
+          compartilhar conhecimento, recursos e expertise elevou todas as nossas capacidades. Eles entendem 
+          que algumas ameaças são maiores que rivalidades organizacionais e lideram com exemplo."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Padre Antonio Moretti</div>
+            <div class="author-position">Sanctum Veritatis</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card fade-in">
+        <p class="testimonial-text">
+          "Durante os anos mais sombrios do século XX, quando o mundo paranormal estava à beira do caos, 
+          foi Prometheus que manteve a chama do conhecimento acesa. Sua coragem, sabedoria e sacrifício 
+          garantiram que as gerações futuras tivessem as ferramentas para enfrentar o desconhecido."
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="author-info">
+            <div class="author-name">Arcano Magnus Corvus</div>
+            <div class="author-position">Conselho Setentrional</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-royal">
+    <div class="cta-content">
+      <h2 class="cta-title">Junte-se à Nossa Causa</h2>
+      <div class="royal-divider"></div>
+      <p class="cta-desc">
+        A Fundação Prometheus está sempre em busca de indivíduos excepcionais que compartilhem nossa paixão 
+        pelo conhecimento e dedicação à proteção da humanidade. Se você possui habilidades únicas, formação 
+        acadêmica relevante ou simplesmente o fogo da curiosidade ardendo em seu coração, considere juntar-se 
+        a nós nesta jornada eterna.
+      </p>
+      <div class="cta-buttons">
+        <a href="#apply" class="btn btn-primary">
+          <span>CANDIDATAR-SE AGORA</span>
+        </a>
+        <a href="#contact" class="btn btn-secondary">
+          <span>AGENDAR VISITA</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section footer-logo-section">
+        <div class="footer-logo">
+          <svg class="footer-emblem" viewBox="0 0 24 24">
+            <path d="M11.7 2.8c.2-.3.6-.4.9-.4.3 0 .7.1.9.4l7.6 8.8c.3.3.3.9 0 1.2-.1.2-.3.3-.5.4v8.4c0 .5-.4.9-.9.9H4.3c-.5 0-.9-.4-.9-.9v-8.4c-.2-.1-.4-.2-.5-.4-.3-.3-.3-.9 0-1.2l7.8-8.8z"/>
+          </svg>
+          <span class="footer-brand">PROMETHEUS</span>
+        </div>
+        <p>
+          Desde 1897, preservando o conhecimento proibido e protegendo a humanidade das trevas que espreitam 
+          além do véu da realidade. A chama que arde eternamente.
+        </p>
+        <div class="footer-badges">
+          <span class="footer-badge">Est. 1897</span>
+          <span class="footer-badge">128 Anos</span>
+          <span class="footer-badge">Global</span>
+          <span class="footer-badge">Certificado ISO-P</span>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>A Fundação</h4>
+        <div class="footer-links">
+          <a href="#">Nossa História</a>
+          <a href="#">Missão e Valores</a>
+          <a href="#">Conselho Superior</a>
+          <a href="#">Estrutura Organizacional</a>
+          <a href="#">Santuários Globais</a>
+          <a href="#">Código de Ética</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Divisões</h4>
+        <div class="footer-links">
+          <a href="#">Biblioteca Magistral</a>
+          <a href="#">Laboratórios de Pesquisa</a>
+          <a href="#">Forças de Campo</a>
+          <a href="#">Custódia de Relíquias</a>
+          <a href="#">Academia Prometheus</a>
+          <a href="#">Relações Internacionais</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Recursos</h4>
+        <div class="footer-links">
+          <a href="#">Catálogo de Relíquias</a>
+          <a href="#">Projetos de Pesquisa</a>
+          <a href="#">Publicações Acadêmicas</a>
+          <a href="#">Arquivo Digital</a>
+          <a href="#">Base de Conhecimento</a>
+          <a href="#">Biblioteca Virtual</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Parceiros</h4>
+        <div class="footer-links">
+          <a href="index">Sanctum Veritatis</a>
+          <a href="ShadowCompany">Shadow Company</a>
+          <a href="#">Ordo Realitas</a>
+          <a href="DraconiaHub">Draconia</a>
+          <a href="ConselhoSetentrional">Conselho Setentrional</a>
+          <a href="ASTRA">Protocolo A.S.T.R.A</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contato</h4>
+        <div class="footer-links">
+          <a href="#">contact@prometheus-foundation.org</a>
+          <a href="#">Linha de Emergência 24/7</a>
+          <a href="#">Portal do Candidato</a>
+          <a href="#">Imprensa e Mídia</a>
+          <a href="#">Doações e Legados</a>
+          <a href="#">Localização dos Santuários</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>
+        <p>&copy; 2025 Fundação Prometheus. Todos os direitos reservados.</p>
+        <p style="font-size: 13px; margin-top: 8px; font-family: 'Cormorant Garamond', serif; font-style: italic;">
+          Lux in Tenebris Lucet - A Luz que Arde nas Trevas
+        </p>
+      </div>
+      <div class="footer-seal">
+        <svg class="seal-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <span class="seal-text">Est. 1897</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const embersContainer = document.getElementById('embers');
+    for (let i = 0; i < 40; i++) {
+      const ember = document.createElement('div');
+      ember.className = 'ember';
+      ember.style.left = Math.random() * 100 + '%';
+      ember.style.setProperty('--drift', (Math.random() * 300 - 150) + 'px');
+      ember.style.animationDelay = Math.random() * 25 + 's';
+      ember.style.animationDuration = (Math.random() * 15 + 15) + 's';
+      embersContainer.appendChild(ember);
+    }
+
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -80px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 120,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    document.querySelectorAll('.btn-primary, .header-cta, .royal-cta').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        if (this.getAttribute('href') === '#apply' || this.getAttribute('href') === '#contact') {
+          e.preventDefault();
+          alert('Sistema de candidatura em desenvolvimento. Em breve você poderá se candidatar para juntar-se à Fundação Prometheus através de nosso portal seguro!');
+        }
+      });
+    });
+
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      document.querySelectorAll('.fade-in').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+
+      lastScroll = currentScroll;
+    });
+
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+  </script>
+</body>
+</html>

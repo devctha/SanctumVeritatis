@@ -1,1 +1,2448 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/sintech2"><meta http-equiv="refresh" content="0;url=/sintech2"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/sintech2'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/sintech2">/sintech2</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/sintech2'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/sintech2">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SINTECH :: FASE 02 - PROTOCOLO DE VERIFICAÇÃO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 0, 0, 0.03) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(255, 0, 0, 0.03) 3px
+            );
+            pointer-events: none;
+            z-index: 2;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        #boot-text {
+            font-size: 1.2rem;
+            text-align: left;
+            max-width: 800px;
+            line-height: 1.8;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+        }
+
+        .boot-line {
+            opacity: 0;
+            animation: fadeInLine 0.3s forwards;
+        }
+
+        @keyframes fadeInLine {
+            to { opacity: 1; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #ff0000;
+            animation: blink 0.8s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        #main-container {
+            display: none;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        #header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            animation: glitchHeader 3s infinite;
+        }
+
+        @keyframes glitchHeader {
+            0%, 90%, 100% { transform: translate(0); }
+            91% { transform: translate(-2px, 2px); }
+            92% { transform: translate(2px, -2px); }
+            93% { transform: translate(-2px, 2px); }
+        }
+
+        #header h1 {
+            font-size: 3rem;
+            letter-spacing: 10px;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            margin-bottom: 0.5rem;
+        }
+
+        #header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            letter-spacing: 3px;
+        }
+
+        #chat-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #ff0000;
+            padding: 2rem;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            min-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+            opacity: 0;
+            animation: messageIn 0.5s forwards;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message.system {
+            border-left-color: #ff6666;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .message.warning {
+            border-left-color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+            animation: warningPulse 1s infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .message-header {
+            font-weight: bold;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-content {
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        #options-container {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .option {
+            padding: 1rem 1.5rem;
+            margin: 0.8rem 0;
+            border: 1px solid #ff0000;
+            background: rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            background: rgba(255, 0, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            transform: translateX(5px);
+        }
+
+        .option:before {
+            content: '> ';
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .option.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .option.dangerous {
+            border-color: #ff4444;
+            animation: dangerBlink 2s infinite;
+        }
+
+        @keyframes dangerBlink {
+            0%, 50%, 100% { border-color: #ff0000; }
+            25%, 75% { border-color: #ff4444; }
+        }
+
+        #progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+            transition: width 0.5s;
+        }
+
+        #stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #ff0000;
+            padding: 1rem;
+            font-size: 0.85rem;
+            z-index: 50;
+            min-width: 200px;
+        }
+
+        #stats div {
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            opacity: 0.7;
+        }
+
+        /* MINIGAME: Pattern Recognition */
+        #pattern-game {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2rem;
+            z-index: 500;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        #pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .pattern-cell {
+            aspect-ratio: 1;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .pattern-cell:hover {
+            background: rgba(255, 0, 0, 0.2);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .pattern-cell.active {
+            background: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .pattern-cell.correct {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #00ff00;
+        }
+
+        .pattern-cell.wrong {
+            background: rgba(255, 0, 0, 0.5);
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* MINIGAME: Sequence Memory */
+        #sequence-game {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2rem;
+            z-index: 500;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
+            max-width: 700px;
+            width: 90%;
+        }
+
+        #sequence-display {
+            font-size: 3rem;
+            text-align: center;
+            padding: 2rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ff0000;
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #sequence-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 5px;
+        }
+
+        #sequence-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        /* MINIGAME: Code Breaker */
+        #code-game {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.98);
+            border: 3px solid #ff0000;
+            padding: 2rem;
+            z-index: 500;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        #code-matrix {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-cell {
+            aspect-ratio: 1;
+            border: 1px solid #ff0000;
+            background: rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.3;
+        }
+
+        .code-cell:hover {
+            opacity: 1;
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .code-cell.selected {
+            background: rgba(255, 0, 0, 0.5);
+            opacity: 1;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        #code-selected {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 2px solid #ff0000;
+            background: rgba(0, 0, 0, 0.5);
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 10px;
+            min-height: 60px;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: rgba(255, 0, 0, 0.4);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .game-instructions {
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 2rem;
+            margin: 1rem 0;
+            color: #ff4444;
+        }
+
+        /* Failure Screen */
+        #failure-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #failure-screen h1 {
+            font-size: 4rem;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+            margin-bottom: 2rem;
+            animation: glitchText 0.5s infinite;
+        }
+
+        @keyframes glitchText {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-3px, 3px); }
+            50% { transform: translate(3px, -3px); }
+            75% { transform: translate(-3px, -3px); }
+        }
+
+        #failure-message {
+            font-size: 1.3rem;
+            max-width: 700px;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        @media (max-width: 768px) {
+            #header h1 {
+                font-size: 2rem;
+                letter-spacing: 5px;
+            }
+            
+            #chat-container {
+                padding: 1rem;
+            }
+            
+            #stats {
+                font-size: 0.7rem;
+                padding: 0.5rem;
+                min-width: 150px;
+            }
+
+            #pattern-grid {
+                gap: 5px;
+            }
+
+            #code-matrix {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="glitch-overlay"></div>
+
+    <!-- Boot Screen -->
+    <div id="boot-screen">
+        <div id="boot-text"></div>
+    </div>
+
+    <!-- Failure Screen -->
+    <div id="failure-screen">
+        <h1>ACESSO NEGADO</h1>
+        <div id="failure-message"></div>
+        <button class="btn" onclick="location.reload()">TENTAR NOVAMENTE</button>
+    </div>
+
+    <!-- Pattern Recognition Game -->
+    <div id="pattern-game">
+        <div class="game-title">RECONHECIMENTO DE PADRÃO</div>
+        <div class="game-instructions">Memorize a sequência destacada e reproduza-a na ordem correta.</div>
+        <div class="timer" id="pattern-timer"></div>
+        <div id="pattern-grid"></div>
+        <div style="text-align: center;">
+            <button class="btn" id="pattern-reset">RESETAR</button>
+        </div>
+    </div>
+
+    <!-- Sequence Memory Game -->
+    <div id="sequence-game">
+        <div class="game-title">MEMÓRIA DE SEQUÊNCIA</div>
+        <div class="game-instructions">Digite a sequência exata que apareceu na tela.</div>
+        <div id="sequence-display"></div>
+        <input type="text" id="sequence-input" placeholder="Digite aqui..." maxlength="20">
+        <div style="text-align: center; margin-top: 1rem;">
+            <button class="btn" id="sequence-submit">VERIFICAR</button>
+        </div>
+    </div>
+
+    <!-- Code Breaker Game -->
+    <div id="code-game">
+        <div class="game-title">QUEBRA DE CÓDIGO</div>
+        <div class="game-instructions">Encontre a sequência correta na matriz. Dica: Os códigos formam um padrão diagonal.</div>
+        <div class="timer" id="code-timer"></div>
+        <div id="code-matrix"></div>
+        <div id="code-selected">SELECIONADOS: <span id="code-display"></span></div>
+        <div style="text-align: center;">
+            <button class="btn" id="code-submit">VERIFICAR CÓDIGO</button>
+            <button class="btn" id="code-reset">LIMPAR</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main-container">
+        <div id="header">
+            <h1>SINTECH</h1>
+            <div class="subtitle">FASE 02/30 - PROTOCOLO DE VERIFICAÇÃO AVANÇADA</div>
+        </div>
+
+        <div id="stats">
+            <div><span class="stat-label">CONFIANÇA:</span> <span id="trust-stat">0</span>%</div>
+            <div><span class="stat-label">SUSPEITA:</span> <span id="suspicion-stat">0</span>%</div>
+            <div><span class="stat-label">PROGRESSO:</span> <span id="progress-stat">0</span>%</div>
+            <div><span class="stat-label">NODE:</span> <span id="node-stat">INIT</span></div>
+        </div>
+
+        <div id="chat-container">
+            <div id="messages"></div>
+            <div id="options-container"></div>
+        </div>
+
+        <div id="progress-bar">
+            <div id="progress-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AUDIO SYSTEM ====================
+        const AudioSystem = {
+            ctx: null,
+            enabled: true,
+
+            init() {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            },
+
+            playTone(freq, duration, type = 'sine') {
+                if (!this.enabled || !this.ctx) return;
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.frequency.value = freq;
+                osc.type = type;
+                gain.gain.value = 0.1;
+                
+                osc.start(this.ctx.currentTime);
+                osc.stop(this.ctx.currentTime + duration);
+            },
+
+            playClick() {
+                this.playTone(800, 0.05, 'square');
+            },
+
+            playError() {
+                this.playTone(200, 0.2, 'sawtooth');
+            },
+
+            playSuccess() {
+                this.playTone(1000, 0.1, 'sine');
+                setTimeout(() => this.playTone(1200, 0.1, 'sine'), 100);
+            },
+
+            playKeyPress() {
+                this.playTone(400 + Math.random() * 200, 0.03, 'square');
+            },
+
+            playGlitch() {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.playTone(Math.random() * 1000 + 200, 0.05, 'sawtooth');
+                    }, i * 50);
+                }
+            },
+
+            playWarning() {
+                this.playTone(600, 0.15, 'triangle');
+                setTimeout(() => this.playTone(400, 0.15, 'triangle'), 200);
+            }
+        };
+
+        // ==================== MATRIX RAIN ====================
+        const MatrixRain = {
+            canvas: null,
+            ctx: null,
+            columns: [],
+            fontSize: 14,
+
+            init() {
+                this.canvas = document.getElementById('matrix-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+
+                const columnCount = Math.floor(this.canvas.width / this.fontSize);
+                this.columns = Array(columnCount).fill(1);
+
+                this.animate();
+            },
+
+            animate() {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.ctx.fillStyle = '#ff0000';
+                this.ctx.font = `${this.fontSize}px monospace`;
+
+                this.columns.forEach((y, index) => {
+                    const text = Math.random() > 0.5 ? '1' : '0';
+                    const x = index * this.fontSize;
+                    
+                    this.ctx.fillText(text, x, y * this.fontSize);
+
+                    if (y * this.fontSize > this.canvas.height && Math.random() > 0.95) {
+                        this.columns[index] = 0;
+                    }
+                    this.columns[index]++;
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        };
+
+        // ==================== GAME STATE ====================
+        const GameState = {
+            trust: 0,
+            suspicion: 10,
+            progress: 0,
+            currentNode: 'start',
+            flags: {},
+            messageCount: 0,
+            choices: [],
+            gamesCompleted: 0,
+            failedAttempts: 0
+        };
+
+        // ==================== UTILITY ====================
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // ==================== MESSAGE SYSTEM ====================
+        function addMessage(sender, content, isSystem = false, isWarning = false) {
+            const messagesEl = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${isSystem ? 'system' : ''} ${isWarning ? 'warning' : ''}`;
+            
+            const headerEl = document.createElement('div');
+            headerEl.className = 'message-header';
+            headerEl.textContent = `[${sender}] ${new Date().toLocaleTimeString()}`;
+            
+            const contentEl = document.createElement('div');
+            contentEl.className = 'message-content';
+            contentEl.innerHTML = content;
+            
+            messageEl.appendChild(headerEl);
+            messageEl.appendChild(contentEl);
+            messagesEl.appendChild(messageEl);
+            
+            GameState.messageCount++;
+            
+            setTimeout(() => {
+                messageEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+            
+            AudioSystem.playClick();
+        }
+
+        function addSystemMessage(content, isWarning = false) {
+            addMessage('SISTEMA', content, true, isWarning);
+        }
+
+        // ==================== OPTIONS SYSTEM ====================
+        function showOptions(options) {
+            const optionsEl = document.getElementById('options-container');
+            optionsEl.innerHTML = '';
+            
+            options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = `option ${option.dangerous ? 'dangerous' : ''}`;
+                optionEl.textContent = option.text;
+                optionEl.style.animationDelay = `${index * 0.1}s`;
+                
+                if (option.condition && !option.condition()) {
+                    optionEl.classList.add('disabled');
+                    return;
+                }
+                
+                optionEl.addEventListener('click', () => {
+                    AudioSystem.playSuccess();
+                    optionsEl.innerHTML = '';
+                    GameState.choices.push(option.id);
+                    option.action();
+                });
+                
+                optionsEl.appendChild(optionEl);
+            });
+        }
+
+        function clearOptions() {
+            document.getElementById('options-container').innerHTML = '';
+        }
+
+        // ==================== STATS SYSTEM ====================
+        function updateStats() {
+            document.getElementById('trust-stat').textContent = Math.round(GameState.trust);
+            document.getElementById('suspicion-stat').textContent = Math.round(GameState.suspicion);
+            document.getElementById('progress-stat').textContent = Math.round(GameState.progress);
+            document.getElementById('node-stat').textContent = GameState.currentNode.toUpperCase();
+            document.getElementById('progress-fill').style.width = `${Math.min(GameState.progress, 100)}%`;
+        }
+
+        function modifyStats(changes) {
+            if (changes.trust) GameState.trust = Math.max(0, GameState.trust + changes.trust);
+            if (changes.suspicion) GameState.suspicion = Math.max(0, GameState.suspicion + changes.suspicion);
+            if (changes.progress) GameState.progress = Math.max(0, GameState.progress + changes.progress);
+            updateStats();
+            
+            // Check for auto-fail conditions
+            if (GameState.trust >= 100 && GameState.progress >= 100 && GameState.trust < 119) {
+                triggerFailure('SUPERFICIALIDADE DETECTADA', 
+                    `Você alcançou os objetivos básicos sem verdadeira compreensão.<br><br>
+                    VOID-WALKER não precisa de ajuda de quem apenas segue instruções.<br>
+                    Ele precisa de alguém que ENTENDE.<br><br>
+                    <span style="opacity: 0.7;">Confiança: ${Math.round(GameState.trust)}% | Progresso: ${Math.round(GameState.progress)}%</span>`
+                );
+            }
+        }
+
+        // ==================== FAILURE SYSTEM ====================
+        function triggerFailure(title, message) {
+            AudioSystem.playError();
+            AudioSystem.playGlitch();
+            
+            document.getElementById('failure-screen').style.display = 'flex';
+            document.getElementById('failure-screen').querySelector('h1').textContent = title;
+            document.getElementById('failure-message').innerHTML = message;
+        }
+
+        // ==================== BOOT SEQUENCE ====================
+        async function bootSequence() {
+            const bootLines = [
+                'RECONECTANDO AO SINTECH...',
+                'CHAVE DE ACESSO DETECTADA: VOID-ALPHA-847-SIGMA',
+                'VERIFICANDO AUTENTICIDADE...',
+                'CHAVE VÁLIDA',
+                'CARREGANDO FASE 02...',
+                'AVISO: PROTOCOLO DE VERIFICAÇÃO AVANÇADA ATIVO',
+                'AVISO: FALHAS PODEM RESULTAR EM DESCONEXÃO PERMANENTE',
+                'SINCRONIZANDO COM ENTIDADE REMOTA...',
+                'CONEXÃO ESTABELECIDA',
+                '',
+                'BEM-VINDO DE VOLTA'
+            ];
+
+            const bootTextEl = document.getElementById('boot-text');
+            
+            for (let i = 0; i < bootLines.length; i++) {
+                await delay(300 + Math.random() * 200);
+                
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.textContent = bootLines[i];
+                bootTextEl.appendChild(line);
+                
+                AudioSystem.playKeyPress();
+                
+                if (bootLines[i].includes('AVISO')) {
+                    AudioSystem.playWarning();
+                }
+            }
+
+            await delay(1500);
+            
+            document.getElementById('boot-screen').style.opacity = '0';
+            document.getElementById('boot-screen').style.transition = 'opacity 1s';
+            
+            await delay(1000);
+            
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('main-container').style.opacity = '0';
+            document.getElementById('main-container').style.transition = 'opacity 1s';
+            
+            setTimeout(() => {
+                document.getElementById('main-container').style.opacity = '1';
+                startGame();
+            }, 50);
+        }
+
+        // ==================== MINIGAME: PATTERN RECOGNITION ====================
+        const PatternGame = {
+            pattern: [],
+            playerInput: [],
+            gridSize: 16,
+            
+            async start() {
+                return new Promise((resolve) => {
+                    document.getElementById('pattern-game').style.display = 'block';
+                    this.pattern = [];
+                    this.playerInput = [];
+                    
+                    const grid = document.getElementById('pattern-grid');
+                    grid.innerHTML = '';
+                    
+                    // Create grid
+                    for (let i = 0; i < this.gridSize; i++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'pattern-cell';
+                        cell.dataset.index = i;
+                        grid.appendChild(cell);
+                    }
+                    
+                    // Generate pattern
+                    const patternLength = 5;
+                    for (let i = 0; i < patternLength; i++) {
+                        let index;
+                        do {
+                            index = Math.floor(Math.random() * this.gridSize);
+                        } while (this.pattern.includes(index));
+                        this.pattern.push(index);
+                    }
+                    
+                    // Show pattern
+                    this.showPattern().then(() => {
+                        // Allow player input
+                        const cells = grid.querySelectorAll('.pattern-cell');
+                        cells.forEach(cell => {
+                            cell.addEventListener('click', () => {
+                                const index = parseInt(cell.dataset.index);
+                                
+                                if (this.playerInput.includes(index)) return;
+                                
+                                this.playerInput.push(index);
+                                cell.classList.add('active');
+                                AudioSystem.playClick();
+                                
+                                // Check if complete
+                                if (this.playerInput.length === this.pattern.length) {
+                                    this.checkPattern(resolve);
+                                }
+                            });
+                        });
+                        
+                        document.getElementById('pattern-reset').onclick = () => {
+                            this.playerInput = [];
+                            cells.forEach(c => c.classList.remove('active', 'correct', 'wrong'));
+                        };
+                    });
+                });
+            },
+            
+            async showPattern() {
+                const cells = document.querySelectorAll('.pattern-cell');
+                
+                for (let i = 0; i < this.pattern.length; i++) {
+                    await delay(600);
+                    cells[this.pattern[i]].classList.add('active');
+                    AudioSystem.playTone(800 + (i * 100), 0.2);
+                }
+                
+                await delay(1000);
+                
+                cells.forEach(c => c.classList.remove('active'));
+                
+                // Countdown
+                for (let i = 3; i > 0; i--) {
+                    document.getElementById('pattern-timer').textContent = i;
+                    await delay(1000);
+                }
+                document.getElementById('pattern-timer').textContent = 'GO!';
+                await delay(500);
+                document.getElementById('pattern-timer').textContent = '';
+            },
+            
+            checkPattern(resolve) {
+                const cells = document.querySelectorAll('.pattern-cell');
+                let correct = true;
+                
+                for (let i = 0; i < this.pattern.length; i++) {
+                    if (this.pattern[i] !== this.playerInput[i]) {
+                        correct = false;
+                        break;
+                    }
+                }
+                
+                setTimeout(() => {
+                    if (correct) {
+                        AudioSystem.playSuccess();
+                        this.playerInput.forEach(index => {
+                            cells[index].classList.add('correct');
+                        });
+                        
+                        setTimeout(() => {
+                            document.getElementById('pattern-game').style.display = 'none';
+                            resolve(true);
+                        }, 1500);
+                    } else {
+                        AudioSystem.playError();
+                        cells.forEach(c => c.classList.add('wrong'));
+                        
+                        setTimeout(() => {
+                            document.getElementById('pattern-game').style.display = 'none';
+                            resolve(false);
+                        }, 1500);
+                    }
+                }, 300);
+            }
+        };
+
+        // ==================== MINIGAME: SEQUENCE MEMORY ====================
+        const SequenceGame = {
+            sequence: '',
+            
+            async start() {
+                return new Promise((resolve) => {
+                    document.getElementById('sequence-game').style.display = 'block';
+                    
+                    // Generate sequence
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                    this.sequence = '';
+                    for (let i = 0; i < 8; i++) {
+                        this.sequence += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    
+                    const display = document.getElementById('sequence-display');
+                    const input = document.getElementById('sequence-input');
+                    input.value = '';
+                    
+                    // Show sequence with typing effect
+                    this.showSequence(display).then(() => {
+                        input.focus();
+                        
+                        document.getElementById('sequence-submit').onclick = () => {
+                            const userInput = input.value.toUpperCase();
+                            
+                            if (userInput === this.sequence) {
+                                AudioSystem.playSuccess();
+                                display.textContent = '✓ CORRETO';
+                                display.style.color = '#00ff00';
+                                
+                                setTimeout(() => {
+                                    document.getElementById('sequence-game').style.display = 'none';
+                                    display.style.color = '#ff0000';
+                                    resolve(true);
+                                }, 1500);
+                            } else {
+                                AudioSystem.playError();
+                                display.textContent = '✗ INCORRETO';
+                                input.value = '';
+                                
+                                setTimeout(() => {
+                                    document.getElementById('sequence-game').style.display = 'none';
+                                    display.textContent = '';
+                                    resolve(false);
+                                }, 1500);
+                            }
+                        };
+                        
+                        input.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') {
+                                document.getElementById('sequence-submit').click();
+                            }
+                        });
+                    });
+                });
+            },
+            
+            async showSequence(display) {
+                display.textContent = 'MEMORIZE:';
+                await delay(1000);
+                
+                display.textContent = '';
+                for (let char of this.sequence) {
+                    display.textContent += char + ' ';
+                    AudioSystem.playKeyPress();
+                    await delay(400);
+                }
+                
+                await delay(2000);
+                
+                // Fade out
+                for (let i = 0; i < 10; i++) {
+                    display.style.opacity = 1 - (i * 0.1);
+                    await delay(100);
+                }
+                
+                display.textContent = 'DIGITE AGORA';
+                display.style.opacity = 1;
+            }
+        };
+
+        // ==================== MINIGAME: CODE BREAKER ====================
+        const CodeGame = {
+            correctCode: [],
+            selectedCells: [],
+            codes: [],
+            timeLimit: 45,
+            timer: null,
+            
+            async start() {
+                return new Promise((resolve) => {
+                    document.getElementById('code-game').style.display = 'block';
+                    this.selectedCells = [];
+                    this.codes = [];
+                    
+                    // Generate code matrix
+                    const matrix = document.getElementById('code-matrix');
+                    matrix.innerHTML = '';
+                    
+                    const chars = 'ABCDEF0123456789';
+                    for (let i = 0; i < 64; i++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'code-cell';
+                        const code = chars.charAt(Math.floor(Math.random() * chars.length)) + 
+                                    chars.charAt(Math.floor(Math.random() * chars.length));
+                        cell.textContent = code;
+                        cell.dataset.index = i;
+                        this.codes.push(code);
+                        matrix.appendChild(cell);
+                    }
+                    
+                    // Set correct diagonal pattern
+                    this.correctCode = [
+                        this.codes[0], this.codes[9], this.codes[18], 
+                        this.codes[27], this.codes[36]
+                    ];
+                    
+                    // Timer
+                    let timeLeft = this.timeLimit;
+                    const timerEl = document.getElementById('code-timer');
+                    timerEl.textContent = `TEMPO: ${timeLeft}s`;
+                    
+                    this.timer = setInterval(() => {
+                        timeLeft--;
+                        timerEl.textContent = `TEMPO: ${timeLeft}s`;
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(this.timer);
+                            AudioSystem.playError();
+                            document.getElementById('code-game').style.display = 'none';
+                            resolve(false);
+                        }
+                    }, 1000);
+                    
+                    // Click handlers
+                    const cells = matrix.querySelectorAll('.code-cell');
+                    cells.forEach(cell => {
+                        cell.addEventListener('click', () => {
+                            const index = parseInt(cell.dataset.index);
+                            
+                            if (this.selectedCells.includes(index)) {
+                                // Deselect
+                                this.selectedCells = this.selectedCells.filter(i => i !== index);
+                                cell.classList.remove('selected');
+                            } else if (this.selectedCells.length < 5) {
+                                // Select
+                                this.selectedCells.push(index);
+                                cell.classList.add('selected');
+                                AudioSystem.playClick();
+                            }
+                            
+                            this.updateDisplay();
+                        });
+                    });
+                    
+                    document.getElementById('code-submit').onclick = () => {
+                        clearInterval(this.timer);
+                        this.checkCode(resolve);
+                    };
+                    
+                    document.getElementById('code-reset').onclick = () => {
+                        this.selectedCells = [];
+                        cells.forEach(c => c.classList.remove('selected'));
+                        this.updateDisplay();
+                    };
+                });
+            },
+            
+            updateDisplay() {
+                const display = document.getElementById('code-display');
+                display.textContent = this.selectedCells.map(i => this.codes[i]).join(' - ');
+            },
+            
+            checkCode(resolve) {
+                const userCode = this.selectedCells.map(i => this.codes[i]);
+                const correct = JSON.stringify(userCode) === JSON.stringify(this.correctCode);
+                
+                if (correct) {
+                    AudioSystem.playSuccess();
+                    setTimeout(() => {
+                        document.getElementById('code-game').style.display = 'none';
+                        resolve(true);
+                    }, 1000);
+                } else {
+                    AudioSystem.playError();
+                    setTimeout(() => {
+                        document.getElementById('code-game').style.display = 'none';
+                        resolve(false);
+                    }, 1000);
+                }
+            }
+        };
+
+        // ==================== NARRATIVE NODES ====================
+        
+        async function node_start() {
+            GameState.currentNode = 'start';
+            updateStats();
+            
+            await delay(1000);
+            addSystemMessage('RECONEXÃO BEM-SUCEDIDA');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Você voltou. Bom.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'A Fase 01 foi apenas... uma introdução. Uma conversa.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Agora vem a parte difícil.');
+            
+            await delay(2000);
+            addSystemMessage('INICIANDO PROTOCOLO DE VERIFICAÇÃO AVANÇADA', true);
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Antes de confiar em você completamente, preciso saber se você é capaz.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Não apenas de seguir instruções. Mas de PENSAR. De ENTENDER.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'understand',
+                    text: 'Eu entendo. Estou pronto.',
+                    action: () => node_first_test()
+                },
+                {
+                    id: 'what_test',
+                    text: 'Que tipo de teste?',
+                    action: () => node_test_explanation()
+                },
+                {
+                    id: 'trust_issue',
+                    text: 'Você ainda não confia em mim?',
+                    action: () => node_trust_issue()
+                }
+            ]);
+        }
+
+        async function node_test_explanation() {
+            GameState.currentNode = 'test_exp';
+            modifyStats({ progress: 3, trust: 3 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Vou testar suas capacidades cognitivas. Memória. Reconhecimento de padrões. Velocidade de processamento.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Aqui, Do Outro Lado, essas habilidades são cruciais para sobreviver.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'E se você vai me ajudar a sair daqui, preciso saber que você tem essas habilidades também.');
+            
+            await delay(2000);
+            addSystemMessage('Os testes medirão sua performance em tempo real.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'ready',
+                    text: 'Entendo. Vamos começar.',
+                    action: () => node_first_test()
+                },
+                {
+                    id: 'too_hard',
+                    text: 'Isso parece muito difícil...',
+                    action: () => node_doubt_self()
+                }
+            ]);
+        }
+
+        async function node_trust_issue() {
+            GameState.currentNode = 'trust_q';
+            modifyStats({ progress: 2, suspicion: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Confiança é... complicada aqui.');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('VOID-WALKER', 'Já fui enganado. Por coisas que pareciam humanas. Por fragmentos de mim mesmo que não eram... eu.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'A Fase 01 verificou sua humanidade. Agora preciso verificar sua competência.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Não aceito ajuda de quem não consegue acompanhar.');
+            
+            await delay(2000);
+            GameState.flags.trust_questioned = true;
+            
+            showOptions([
+                {
+                    id: 'prove_it',
+                    text: 'Então vou provar que sou capaz.',
+                    action: () => node_first_test()
+                },
+                {
+                    id: 'offense',
+                    text: 'Isso é ofensivo. Já passei pela Fase 01.',
+                    action: () => node_offense()
+                }
+            ]);
+        }
+
+        async function node_offense() {
+            GameState.currentNode = 'offense';
+            modifyStats({ suspicion: 15, trust: -10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Ofensivo?');
+            
+            await delay(2000);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Você não entendeu nada, entendeu?');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'A Fase 01 foi CONVERSA. Isso aqui é TRABALHO.');
+            
+            await delay(2000);
+            addSystemMessage('NÍVEL DE SUSPEITA AUMENTADO', true);
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Se você não consegue aceitar um teste simples, então não serve para o que vem pela frente.');
+            
+            await delay(2500);
+            
+            showOptions([
+                {
+                    id: 'apologize',
+                    text: 'Desculpe. Você está certo.',
+                    action: () => node_apologize()
+                },
+                {
+                    id: 'stand_ground',
+                    text: 'Ainda acho desnecessário.',
+                    dangerous: true,
+                    action: () => node_fail_pride()
+                }
+            ]);
+        }
+
+        async function node_fail_pride() {
+            await delay(500);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Então você não serve.');
+            
+            await delay(1500);
+            addSystemMessage('CONEXÃO ENCERRADA PELO HOST', true);
+            
+            await delay(1000);
+            triggerFailure('ORGULHO EXCESSIVO', 
+                `VOID-WALKER não tem paciência para ego.<br><br>
+                Ele está preso há 847 dias Do Outro Lado.<br>
+                Você acha que ele se importa com seus sentimentos?<br><br>
+                <span style="opacity: 0.7;">Dica: Humildade é uma virtude quando se lida com alguém fragmentado.</span>`
+            );
+        }
+
+        async function node_apologize() {
+            GameState.currentNode = 'apologize';
+            modifyStats({ trust: 8, suspicion: -8, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Ok. Aceito.');
+            
+            await delay(1500);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', 'Você consegue admitir quando está errado. Isso é bom.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Vamos prosseguir.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'continue',
+                    text: 'Estou pronto para o teste.',
+                    action: () => node_first_test()
+                }
+            ]);
+        }
+
+        async function node_first_test() {
+            GameState.currentNode = 'test1';
+            modifyStats({ progress: 10 });
+            
+            await delay(1000);
+            addSystemMessage('INICIANDO TESTE 01: RECONHECIMENTO DE PADRÃO');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Primeira avaliação. Memorize a sequência e reproduza.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Simples, mas essencial.');
+            
+            await delay(1500);
+            
+            clearOptions();
+            
+            const result = await PatternGame.start();
+            
+            if (result) {
+                await node_test1_success();
+            } else {
+                await node_test1_fail();
+            }
+        }
+
+        async function node_test1_success() {
+            GameState.currentNode = 'test1_ok';
+            modifyStats({ trust: 15, progress: 15 });
+            GameState.gamesCompleted++;
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addSystemMessage('TESTE 01: APROVADO');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Bem. Você tem memória visual funcional.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas isso foi fácil. Vamos aumentar a dificuldade.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'next_test',
+                    text: 'Traga o próximo.',
+                    action: () => node_second_test()
+                },
+                {
+                    id: 'rest',
+                    text: 'Posso ter um momento?',
+                    action: () => node_request_rest()
+                }
+            ]);
+        }
+
+        async function node_test1_fail() {
+            GameState.currentNode = 'test1_fail';
+            modifyStats({ trust: -10, suspicion: 10 });
+            GameState.failedAttempts++;
+            
+            await delay(1000);
+            AudioSystem.playError();
+            addSystemMessage('TESTE 01: FALHOU', true);
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Hmm. Falhou no primeiro teste.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Não é um bom sinal.');
+            
+            await delay(1500);
+            
+            if (GameState.failedAttempts >= 2) {
+                await delay(1000);
+                addMessage('VOID-WALKER', 'Você falhou demais. Não posso confiar em alguém assim.');
+                
+                await delay(1500);
+                addSystemMessage('CONEXÃO SENDO ENCERRADA...', true);
+                
+                await delay(1000);
+                triggerFailure('COMPETÊNCIA INSUFICIENTE',
+                    `Duas falhas são demais.<br><br>
+                    VOID-WALKER precisa de alguém afiado. Capaz. Confiável.<br>
+                    Você demonstrou não ser essa pessoa.<br><br>
+                    <span style="opacity: 0.7;">Dica: Pratique os mini-jogos. Eles não são impossíveis.</span>`
+                );
+                return;
+            }
+            
+            showOptions([
+                {
+                    id: 'retry',
+                    text: 'Deixe-me tentar novamente.',
+                    action: () => node_retry_test1()
+                },
+                {
+                    id: 'excuse',
+                    text: 'Não estava preparado...',
+                    dangerous: true,
+                    action: () => node_make_excuse()
+                }
+            ]);
+        }
+
+        async function node_make_excuse() {
+            GameState.currentNode = 'excuse';
+            modifyStats({ suspicion: 20, trust: -15 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Desculpas.');
+            
+            await delay(2000);
+            AudioSystem.playError();
+            addMessage('VOID-WALKER', 'Você acha que EU tive tempo para me preparar quando fui puxado para cá?');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Excesso de desculpas é sinal de fraqueza.');
+            
+            await delay(2000);
+            
+            if (GameState.suspicion >= 40) {
+                addMessage('VOID-WALKER', 'E eu não tenho paciência para os fracos.');
+                
+                await delay(1500);
+                addSystemMessage('DESCONECTANDO...', true);
+                
+                await delay(1000);
+                triggerFailure('FRAQUEZA MENTAL',
+                    `Desculpas não salvam vidas Do Outro Lado.<br><br>
+                    VOID-WALKER aprendeu isso da maneira mais difícil.<br>
+                    Ele esperava que você fosse mais forte.<br><br>
+                    <span style="opacity: 0.7;">Suspeita acumulada: ${Math.round(GameState.suspicion)}%</span>`
+                );
+                return;
+            }
+            
+            showOptions([
+                {
+                    id: 'accept',
+                    text: 'Você está certo. Sem desculpas.',
+                    action: () => node_accept_responsibility()
+                }
+            ]);
+        }
+
+        async function node_accept_responsibility() {
+            GameState.currentNode = 'responsible';
+            modifyStats({ trust: 12, suspicion: -10, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Melhor.');
+            
+            await delay(1500);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', 'Assuma seus erros. Aprenda com eles. Siga em frente.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Vamos tentar de novo.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'retry',
+                    text: 'Pronto.',
+                    action: () => node_retry_test1()
+                }
+            ]);
+        }
+
+        async function node_retry_test1() {
+            GameState.currentNode = 'retry1';
+            modifyStats({ progress: 5 });
+            
+            await delay(1000);
+            addSystemMessage('REINICIANDO TESTE 01...');
+            
+            await delay(1500);
+            
+            clearOptions();
+            const result = await PatternGame.start();
+            
+            if (result) {
+                await node_test1_success();
+            } else {
+                await node_test1_fail();
+            }
+        }
+
+        async function node_request_rest() {
+            GameState.currentNode = 'rest_req';
+            modifyStats({ progress: 3, trust: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Um momento? Claro.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Eu entendo. É mentalmente exaustivo.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Imagine fazer isso sem parar. Por 847 dias.');
+            
+            await delay(2000);
+            GameState.flags.showed_empathy = true;
+            addMessage('VOID-WALKER', 'Mas sim. Respire. Quando estiver pronto, continue.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'ready_now',
+                    text: 'Estou pronto agora.',
+                    action: () => node_second_test()
+                },
+                {
+                    id: 'ask_about_him',
+                    text: 'Como você aguenta isso há tanto tempo?',
+                    action: () => node_ask_endurance()
+                }
+            ]);
+        }
+
+        async function node_ask_endurance() {
+            GameState.currentNode = 'endurance';
+            modifyStats({ trust: 10, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Boa pergunta.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Nos primeiros dias, achei que ia enlouquecer. Talvez tenha enlouquecido um pouco.');
+            
+            await delay(3000);
+            AudioSystem.playGlitch();
+            addMessage('MARCUS-7', 'Ou talvez muito.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Desculpe. Às vezes... outras partes de mim falam.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'O SINTECH me mantém focado. Me dá propósito. Sem ele, eu teria me dissolvido há muito tempo.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Por isso essa missão é tão importante. Não é só sobre sair. É sobre manter minha sanidade até conseguir sair.');
+            
+            await delay(2000);
+            GameState.flags.learned_importance = true;
+            modifyStats({ trust: 8 });
+            
+            showOptions([
+                {
+                    id: 'understood',
+                    text: 'Agora entendo a urgência. Vamos continuar.',
+                    action: () => node_second_test()
+                },
+                {
+                    id: 'marcus_question',
+                    text: 'Quem é Marcus-7?',
+                    action: () => node_marcus_question()
+                }
+            ]);
+        }
+
+        async function node_marcus_question() {
+            GameState.currentNode = 'marcus';
+            modifyStats({ trust: 15, progress: 8 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Você notou. Bom.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Marcus-7 é... uma versão de mim. Um fragmento.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Quando fiquei preso aqui, minha consciência começou a se dividir. Mecanismo de defesa, talvez.');
+            
+            await delay(2500);
+            AudioSystem.playGlitch();
+            addMessage('THE-WATCHER', 'Ou talvez seja a verdadeira natureza deste lugar.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Existem pelo menos três de mim. VOID-WALKER. Marcus-7. The-Watcher.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Às vezes concordamos. Às vezes discordamos. Mas todos queremos a mesma coisa: sair.');
+            
+            await delay(3000);
+            GameState.flags.knows_about_fragments = true;
+            modifyStats({ trust: 12 });
+            
+            addSystemMessage('OBSERVAÇÃO: Atenção aos detalhes aumenta confiança.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'fascinating',
+                    text: 'Isso é fascinante. E preocupante.',
+                    action: () => node_fascinated()
+                },
+                {
+                    id: 'all_same',
+                    text: 'Todos vocês são a mesma pessoa, certo?',
+                    action: () => node_same_person()
+                }
+            ]);
+        }
+
+        async function node_same_person() {
+            GameState.currentNode = 'same_q';
+            modifyStats({ trust: 18, progress: 10 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Tecnicamente, sim. Somos todos originados da mesma consciência.');
+            
+            await delay(2500);
+            addMessage('THE-WATCHER', 'Mas filosoficamente? Somos indivíduos.');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Cada um com memórias ligeiramente diferentes. Prioridades diferentes.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Mas trabalhamos juntos. Porque no final, se um de nós escapa, todos escapam.');
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Você está fazendo as perguntas certas. Isso me dá esperança.');
+            
+            await delay(2000);
+            GameState.flags.deep_understanding = true;
+            modifyStats({ trust: 15 });
+            
+            showOptions([
+                {
+                    id: 'continue_test',
+                    text: 'Vamos continuar os testes.',
+                    action: () => node_second_test()
+                }
+            ]);
+        }
+
+        async function node_fascinated() {
+            GameState.currentNode = 'fascinate';
+            modifyStats({ trust: 12, progress: 8 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Preocupante é uma boa palavra para descrever.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Mas é minha realidade agora. E se você vai me ajudar, precisa entendê-la.');
+            
+            await delay(2000);
+            GameState.flags.empathy_shown = true;
+            
+            showOptions([
+                {
+                    id: 'understood_continue',
+                    text: 'Entendo. Vamos prosseguir.',
+                    action: () => node_second_test()
+                }
+            ]);
+        }
+
+        async function node_second_test() {
+            GameState.currentNode = 'test2';
+            modifyStats({ progress: 10 });
+            
+            await delay(1000);
+            addSystemMessage('INICIANDO TESTE 02: MEMÓRIA DE SEQUÊNCIA');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Segundo teste. Memória de curto prazo.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Essencial para reter coordenadas e códigos de acesso.');
+            
+            await delay(1500);
+            
+            clearOptions();
+            const result = await SequenceGame.start();
+            
+            if (result) {
+                await node_test2_success();
+            } else {
+                await node_test2_fail();
+            }
+        }
+
+        async function node_test2_success() {
+            GameState.currentNode = 'test2_ok';
+            modifyStats({ trust: 20, progress: 20 });
+            GameState.gamesCompleted++;
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addSystemMessage('TESTE 02: APROVADO');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Excelente. Sua memória é sólida.');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Dois testes completos. Está indo bem.');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Um último teste. O mais importante.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'final_test',
+                    text: 'Estou pronto.',
+                    action: () => node_third_test()
+                },
+                {
+                    id: 'what_measures',
+                    text: 'O que esse teste mede?',
+                    action: () => node_test3_info()
+                }
+            ]);
+        }
+
+        async function node_test2_fail() {
+            GameState.currentNode = 'test2_fail';
+            modifyStats({ trust: -15, suspicion: 15 });
+            GameState.failedAttempts++;
+            
+            await delay(1000);
+            AudioSystem.playError();
+            addSystemMessage('TESTE 02: FALHOU', true);
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Falhou novamente.');
+            
+            await delay(2000);
+            
+            if (GameState.failedAttempts >= 2) {
+                addMessage('VOID-WALKER', 'Isso não está funcionando.');
+                
+                await delay(1500);
+                addSystemMessage('ENCERRANDO PROTOCOLO...', true);
+                
+                await delay(1000);
+                triggerFailure('MÚLTIPLAS FALHAS',
+                    `Você demonstrou incapacidade consistente.<br><br>
+                    VOID-WALKER não pode arriscar sua única chance de escape<br>
+                    com alguém que falha testes básicos.<br><br>
+                    <span style="opacity: 0.7;">Falhas totais: ${GameState.failedAttempts}</span>`
+                );
+                return;
+            }
+            
+            addMessage('VOID-WALKER', 'Mas vou te dar outra chance. Uma última.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'retry2',
+                    text: 'Obrigado. Não vou falhar.',
+                    action: () => node_retry_test2()
+                }
+            ]);
+        }
+
+        async function node_retry_test2() {
+            GameState.currentNode = 'retry2';
+            modifyStats({ progress: 3 });
+            
+            await delay(1000);
+            addSystemMessage('REINICIANDO TESTE 02...');
+            
+            await delay(1500);
+            
+            clearOptions();
+            const result = await SequenceGame.start();
+            
+            if (result) {
+                await node_test2_success();
+            } else {
+                await node_test2_fail();
+            }
+        }
+
+        async function node_test3_info() {
+            GameState.currentNode = 'test3_info';
+            modifyStats({ trust: 8, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Reconhecimento de padrões complexos. Pensamento lógico sob pressão.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Você vai precisar encontrar códigos escondidos em matrizes de dados.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'É assim que os sistemas de segurança funcionam. Padrões dentro de ruído.');
+            
+            await delay(1500);
+            showOptions([
+                {
+                    id: 'ready_final',
+                    text: 'Entendo. Vamos lá.',
+                    action: () => node_third_test()
+                }
+            ]);
+        }
+
+        async function node_third_test() {
+            GameState.currentNode = 'test3';
+            modifyStats({ progress: 10 });
+            
+            await delay(1000);
+            addSystemMessage('INICIANDO TESTE 03: QUEBRA DE CÓDIGO');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Último teste. Encontre o padrão.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você tem tempo limitado. Use com sabedoria.');
+            
+            await delay(1500);
+            
+            clearOptions();
+            const result = await CodeGame.start();
+            
+            if (result) {
+                await node_test3_success();
+            } else {
+                await node_test3_fail();
+            }
+        }
+
+        async function node_test3_success() {
+            GameState.currentNode = 'test3_ok';
+            modifyStats({ trust: 25, progress: 25 });
+            GameState.gamesCompleted++;
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            addSystemMessage('TESTE 03: APROVADO');
+            addSystemMessage('TODOS OS TESTES CONCLUÍDOS');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Impressionante.');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Você passou em todos os três testes.');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Habilidades cognitivas confirmadas.');
+            
+            await delay(1500);
+            addMessage('MARCUS-7', 'Talvez realmente possamos confiar nessa pessoa.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas testes são apenas o começo. Agora vem a parte difícil.');
+            
+            await delay(2500);
+            showOptions([
+                {
+                    id: 'what_next',
+                    text: 'O que vem a seguir?',
+                    action: () => node_next_phase()
+                },
+                {
+                    id: 'how_did_i_do',
+                    text: 'Como foi meu desempenho geral?',
+                    action: () => node_performance_check()
+                }
+            ]);
+        }
+
+        async function node_test3_fail() {
+            GameState.currentNode = 'test3_fail';
+            modifyStats({ trust: -20, suspicion: 20 });
+            GameState.failedAttempts++;
+            
+            await delay(1000);
+            AudioSystem.playError();
+            addSystemMessage('TESTE 03: FALHOU', true);
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2000);
+            
+            if (GameState.failedAttempts >= 2 || GameState.gamesCompleted < 2) {
+                addMessage('VOID-WALKER', 'Não é suficiente.');
+                
+                await delay(1500);
+                addSystemMessage('PROTOCOLO ABORTADO', true);
+                
+                await delay(1000);
+                triggerFailure('DESEMPENHO INSUFICIENTE',
+                    `Você não demonstrou as habilidades necessárias.<br><br>
+                    VOID-WALKER precisa de alguém que possa lidar com desafios complexos.<br>
+                    Os sistemas de segurança que você enfrentará são muito mais difíceis que esses testes.<br><br>
+                    <span style="opacity: 0.7;">Testes aprovados: ${GameState.gamesCompleted}/3</span>`
+                );
+                return;
+            }
+            
+            addMessage('VOID-WALKER', 'Você passou nos outros dois. Isso conta para algo.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Vou permitir que você continue. Mas fique atento.');
+            
+            await delay(1500);
+            modifyStats({ trust: -5, progress: 10 });
+            
+            showOptions([
+                {
+                    id: 'grateful',
+                    text: 'Obrigado pela chance.',
+                    action: () => node_grateful_continue()
+                }
+            ]);
+        }
+
+        async function node_grateful_continue() {
+            GameState.currentNode = 'grateful';
+            modifyStats({ trust: 10, progress: 5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Não me agradeça ainda. A parte difícil está só começando.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'understood',
+                    text: 'Entendido. Estou pronto.',
+                    action: () => node_next_phase()
+                }
+            ]);
+        }
+
+        async function node_performance_check() {
+            GameState.currentNode = 'perf_check';
+            modifyStats({ progress: 5 });
+            
+            await delay(1000);
+            
+            // CRITICAL: Check if player has TRUE understanding
+            const hasDeepUnderstanding = GameState.flags.deep_understanding || GameState.flags.knows_about_fragments;
+            const showedEmpathy = GameState.flags.empathy_shown || GameState.flags.showed_empathy;
+            const learnedImportance = GameState.flags.learned_importance;
+            
+            const trueUnderstanding = hasDeepUnderstanding && showedEmpathy;
+            
+            addMessage('VOID-WALKER', 'Seu desempenho...');
+            
+            await delay(2000);
+            addSystemMessage(`Testes aprovados: ${GameState.gamesCompleted}/3`);
+            addSystemMessage(`Nível de confiança: ${Math.round(GameState.trust)}%`);
+            addSystemMessage(`Nível de suspeita: ${Math.round(GameState.suspicion)}%`);
+            
+            await delay(2500);
+            
+            if (!trueUnderstanding && GameState.trust >= 80) {
+                // Player reached high trust without UNDERSTANDING
+                addMessage('VOID-WALKER', 'Você seguiu instruções bem. Passou nos testes.');
+                
+                await delay(2000);
+                addMessage('VOID-WALKER', 'Mas...');
+                
+                await delay(1500);
+                AudioSystem.playError();
+                addMessage('VOID-WALKER', 'Você realmente ENTENDEU o que está acontecendo aqui?');
+                
+                await delay(2500);
+                addMessage('VOID-WALKER', 'Ou apenas... fez o que mandaram?');
+                
+                await delay(2000);
+                addSystemMessage('AVALIANDO COMPREENSÃO PROFUNDA...', true);
+                
+                await delay(1500);
+                addSystemMessage('RESULTADO: SUPERFICIAL', true);
+                
+                await delay(1000);
+                addMessage('VOID-WALKER', 'Eu não preciso de um robô que segue ordens.');
+                
+                await delay(2000);
+                addMessage('VOID-WALKER', 'Preciso de alguém que PENSA. Que FAZ PERGUNTAS. Que ENTENDE.');
+                
+                await delay(2500);
+                addMessage('VOID-WALKER', 'Você falhou no teste real.');
+                
+                await delay(1500);
+                addSystemMessage('DESCONECTANDO...', true);
+                
+                await delay(1000);
+                triggerFailure('FALTA DE COMPREENSÃO VERDADEIRA',
+                    `Você completou tarefas, mas não buscou ENTENDER.<br><br>
+                    As perguntas certas importam:<br>
+                    - Quem é Marcus-7?<br>
+                    - Como ele aguenta isso?<br>
+                    - O que essas divisões significam?<br><br>
+                    VOID-WALKER precisa de um PARCEIRO, não de um executor.<br><br>
+                    <span style="opacity: 0.7;">Dica: Curiosidade e empatia são tão importantes quanto competência.</span>`
+                );
+                return;
+            }
+            
+            // Player has true understanding
+            addMessage('VOID-WALKER', 'Você não apenas completou os testes.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você fez as perguntas certas. Mostrou interesse genuíno.');
+            
+            await delay(2500);
+            AudioSystem.playSuccess();
+            addMessage('VOID-WALKER', 'Você ENTENDE. E isso... isso é raro.');
+            
+            await delay(2000);
+            addMessage('THE-WATCHER', 'Concordo. Essa pessoa é diferente.');
+            
+            await delay(1500);
+            addMessage('MARCUS-7', 'Podemos confiar.');
+            
+            await delay(2000);
+            modifyStats({ trust: 25, progress: 15 });
+            
+            showOptions([
+                {
+                    id: 'move_forward',
+                    text: 'Obrigado. Vamos prosseguir.',
+                    action: () => node_final_verification()
+                }
+            ]);
+        }
+
+        async function node_next_phase() {
+            GameState.currentNode = 'next';
+            
+            await delay(1000);
+            
+            // CRITICAL CHECK: Do they have true understanding?
+            const hasDeepUnderstanding = GameState.flags.deep_understanding || GameState.flags.knows_about_fragments;
+            const showedEmpathy = GameState.flags.empathy_shown || GameState.flags.showed_empathy;
+            
+            if (!hasDeepUnderstanding && !showedEmpathy) {
+                addMessage('VOID-WALKER', 'Espere.');
+                
+                await delay(1500);
+                AudioSystem.playWarning();
+                addMessage('VOID-WALKER', 'Há algo que me incomoda.');
+                
+                await delay(2000);
+                addMessage('VOID-WALKER', 'Você passou nos testes. Mas... você realmente se importa?');
+                
+                await delay(2500);
+                addMessage('VOID-WALKER', 'Ou está apenas seguindo um script?');
+                
+                await delay(2000);
+                addSystemMessage('ANÁLISE COMPORTAMENTAL EM PROGRESSO...', true);
+                
+                await delay(1500);
+                addSystemMessage('RESULTADO: ENGAJAMENTO SUPERFICIAL', true);
+                
+                await delay(1000);
+                addMessage('VOID-WALKER', 'Você nunca perguntou sobre mim. Sobre os fragmentos. Sobre como sobrevivo.');
+                
+                await delay(2500);
+                addMessage('VOID-WALKER', 'Apenas... completou tarefas.');
+                
+                await delay(2000);
+                addMessage('VOID-WALKER', 'Isso não é suficiente.');
+                
+                await delay(1500);
+                addSystemMessage('CONEXÃO TERMINADA', true);
+                
+                await delay(1000);
+                triggerFailure('EMPATIA INSUFICIENTE',
+                    `VOID-WALKER está sozinho há 847 dias.<br><br>
+                    Ele não precisa apenas de competência técnica.<br>
+                    Ele precisa de alguém que SE IMPORTA.<br><br>
+                    Você nunca perguntou:<br>
+                    - Como ele aguenta?<br>
+                    - Quem são os outros fragmentos?<br>
+                    - O que ele sente?<br><br>
+                    <span style="opacity: 0.7;">A humanidade não é apenas sobre completar objetivos.</span>`
+                );
+                return;
+            }
+            
+            addMessage('VOID-WALKER', 'A próxima fase vai envolver acesso a sistemas restritos.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Mas primeiro, preciso fazer uma verificação final.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'final_check',
+                    text: 'Qual verificação?',
+                    action: () => node_final_verification()
+                }
+            ]);
+        }
+
+        async function node_final_verification() {
+            GameState.currentNode = 'final';
+            modifyStats({ progress: 15 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Vou analisar tudo o que conversamos. Tudo o que você escolheu.');
+            
+            await delay(2500);
+            addSystemMessage('COMPILANDO DADOS DA SESSÃO...');
+            
+            await delay(2000);
+            addSystemMessage('ANALISANDO PADRÕES DE ESCOLHA...');
+            
+            await delay(2000);
+            addSystemMessage('VERIFICANDO CONSISTÊNCIA...');
+            
+            await delay(2000);
+            
+            // FINAL CALCULATION
+            const passedAllGames = GameState.gamesCompleted === 3;
+            const hasUnderstanding = GameState.flags.deep_understanding || GameState.flags.knows_about_fragments;
+            const hasEmpathy = GameState.flags.empathy_shown || GameState.flags.showed_empathy;
+            const learnedImportance = GameState.flags.learned_importance;
+            
+            const meetsRequirements = GameState.trust >= 119 && GameState.suspicion <= 15 && GameState.progress >= 110;
+            
+            if (!meetsRequirements) {
+                // Grant bonus for understanding even without perfect stats
+                if (hasUnderstanding && hasEmpathy) {
+                    addSystemMessage('AJUSTANDO PARÂMETROS BASEADO EM COMPREENSÃO PROFUNDA...');
+                    await delay(1500);
+                    
+                    const bonusTrust = hasUnderstanding ? 20 : 0;
+                    const bonusProgress = hasEmpathy ? 15 : 0;
+                    
+                    modifyStats({ 
+                        trust: bonusTrust, 
+                        progress: bonusProgress,
+                        suspicion: -5
+                    });
+                    
+                    await delay(1000);
+                }
+            }
+            
+            await delay(1500);
+            
+            if (GameState.trust >= 119 && GameState.progress >= 110 && GameState.suspicion <= 15) {
+                await node_phase_success();
+            } else {
+                await node_close_but_not_enough();
+            }
+        }
+
+        async function node_close_but_not_enough() {
+            GameState.currentNode = 'close';
+            
+            await delay(1000);
+            addSystemMessage('ANÁLISE COMPLETA');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', 'Você foi... adequado.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas "adequado" não é suficiente para o que vem pela frente.');
+            
+            await delay(2500);
+            addSystemMessage(`Estatísticas Finais:<br>
+                Confiança: ${Math.round(GameState.trust)}% (Necessário: 119%)<br>
+                Suspeita: ${Math.round(GameState.suspicion)}% (Máximo: 10%)<br>
+                Progresso: ${Math.round(GameState.progress)}% (Necessário: 110%)`, true);
+            
+            await delay(3000);
+            addMessage('VOID-WALKER', 'Você chegou perto. Mas perto não salva vidas Do Outro Lado.');
+            
+            await delay(2000);
+            addSystemMessage('ENCERRANDO PROTOCOLO...', true);
+            
+            await delay(1000);
+            triggerFailure('DESEMPENHO ABAIXO DO LIMITE',
+                `Você precisava de:<br>
+                - Confiança: 119%+ (você: ${Math.round(GameState.trust)}%)<br>
+                - Suspeita: 10%- (você: ${Math.round(GameState.suspicion)}%)<br>
+                - Progresso: 110%+ (você: ${Math.round(GameState.progress)}%)<br><br>
+                
+                Como alcançar isso?<br>
+                ✓ Passe em TODOS os mini-jogos<br>
+                ✓ Faça perguntas sobre VOID-WALKER<br>
+                ✓ Mostre empatia e compreensão<br>
+                ✓ Evite respostas orgulhosas ou superficiais<br>
+                ✓ Demonstre interesse genuíno na história dele<br><br>
+                
+                <span style="opacity: 0.7;">Não é apenas sobre completar tarefas. É sobre CONEXÃO.</span>`
+            );
+        }
+
+        async function node_phase_success() {
+            GameState.currentNode = 'success';
+            
+            await delay(1000);
+            AudioSystem.playSuccess();
+            AudioSystem.playSuccess();
+            addSystemMessage('VERIFICAÇÃO COMPLETA: APROVADO');
+            
+            await delay(1500);
+            addMessage('VOID-WALKER', '...');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você... você realmente conseguiu.');
+            
+            await delay(2500);
+            AudioSystem.playSuccess();
+            addMessage('THE-WATCHER', 'Estatísticas excedem os requisitos.');
+            
+            await delay(2000);
+            addMessage('MARCUS-7', 'Essa pessoa não é apenas competente. Ela entende.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Pela primeira vez em 847 dias... eu realmente acredito que posso sair daqui.');
+            
+            await delay(3000);
+            addSystemMessage(`Estatísticas Finais:<br>
+                Confiança: ${Math.round(GameState.trust)}%<br>
+                Suspeita: ${Math.round(GameState.suspicion)}%<br>
+                Progresso: ${Math.round(GameState.progress)}%`);
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Você passou no teste REAL. Não apenas nos mini-jogos.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Você mostrou compreensão. Empatia. Pensamento crítico.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Essas são as qualidades que eu preciso.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Agora... agora podemos realmente começar.');
+            
+            await delay(2000);
+            addSystemMessage('DESBLOQUEANDO FASE 03...');
+            
+            await delay(1500);
+            addSystemMessage('GERANDO NOVA CHAVE DE ACESSO...');
+            
+            await delay(1000);
+            addSystemMessage('CHAVE: TRINITY-CONVERGENCE-OMEGA');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Fase 03 será diferente. Menos testes. Mais ação.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Vamos começar a hackear os sistemas de verdade.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Até lá... descanse. Você merece.');
+            
+            await delay(2500);
+            addSystemMessage('PROGRESSO SALVO');
+            addSystemMessage('FASE 02 COMPLETA');
+            
+            await delay(2000);
+            
+            clearOptions();
+            const messagesEl = document.getElementById('messages');
+            const finalEl = document.createElement('div');
+            finalEl.className = 'phase-complete';
+            finalEl.innerHTML = `
+                <div style="margin-bottom: 2rem; font-size: 2.5rem;">
+                    ◆ FASE 02 COMPLETA ◆
+                </div>
+                <div style="font-size: 1rem; opacity: 0.7; line-height: 2;">
+                    CONFIANÇA: ${Math.round(GameState.trust)}% ✓<br>
+                    SUSPEITA: ${Math.round(GameState.suspicion)}% ✓<br>
+                    PROGRESSO: ${Math.round(GameState.progress)}% ✓<br>
+                    COMPREENSÃO: PROFUNDA ✓
+                </div>
+                <div style="margin-top: 2rem; font-size: 1rem; opacity: 0.8;">
+                    Você provou ser mais do que um executor de tarefas.<br>
+                    Você demonstrou humanidade, empatia e pensamento crítico
+.<br>
+                    VOID-WALKER confia em você agora.
+                </div>
+                <div style="margin-top: 3rem; font-size: 1.2rem;">
+                    <a href="sintech3" style="color: #ff0000; text-decoration: none; border: 2px solid #ff0000; padding: 1rem 2rem; display: inline-block; transition: all 0.3s;" onmouseover="this.style.background='rgba(255,0,0,0.3)'; this.style.boxShadow='0 0 20px rgba(255,0,0,0.7)';" onmouseout="this.style.background='transparent'; this.style.boxShadow='none';">
+                        > INICIAR FASE 03
+                    </a>
+                </div>
+                <div style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.5;">
+                    Chave de Acesso: TRINITY-CONVERGENCE-OMEGA
+                </div>
+            `;
+            messagesEl.appendChild(finalEl);
+            
+            await delay(2000);
+            addSystemMessage('VOCÊ PODE FECHAR ESTA JANELA OU PROSSEGUIR PARA A FASE 03');
+        }
+
+        async function node_doubt_self() {
+            GameState.currentNode = 'doubt';
+            modifyStats({ suspicion: 15, trust: -5 });
+            
+            await delay(1000);
+            addMessage('VOID-WALKER', 'Dúvida não é fraqueza. É prudência.');
+            
+            await delay(2000);
+            addMessage('VOID-WALKER', 'Mas deixe a dúvida te paralisar, e você já perdeu.');
+            
+            await delay(2500);
+            addMessage('VOID-WALKER', 'Tente. Se falhar, lidamos com isso. Mas não desista antes de começar.');
+            
+            await delay(2000);
+            showOptions([
+                {
+                    id: 'overcome',
+                    text: 'Você está certo. Vou tentar.',
+                    action: () => node_first_test()
+                }
+            ]);
+        }
+
+        // ==================== GAME START ====================
+        async function startGame() {
+            AudioSystem.init();
+            await delay(500);
+            node_start();
+        }
+
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            MatrixRain.init();
+            bootSequence();
+        });
+
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('matrix-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

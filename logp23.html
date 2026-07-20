@@ -1,1 +1,868 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/logp23"><meta http-equiv="refresh" content="0;url=/logp23"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/logp23'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/logp23">/logp23</a>.</p></body></html>
+<!doctype html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/logp23'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/logp23">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SHADOW COMPANY // PRIVATE LOG // PROJETO 23</title>
+  <style>
+    :root{
+      --bg:#050607;
+      --panel:#0b0d10;
+      --panel2:#0f1216;
+      --line:#1c222b;
+      --text:#d6dde6;
+      --muted:#8e98a7;
+      --dim:#5f6a79;
+      --accent:#d1143a;
+      --accent2:#8b0020;
+      --ok:#56e39f;
+      --warn:#ffbf66;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: radial-gradient(1100px 700px at 50% 10%, rgba(209,20,58,.10), transparent 55%),
+                  radial-gradient(900px 600px at 70% 90%, rgba(86,227,159,.06), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family:var(--mono);
+      overflow:hidden;
+      cursor:crosshair;
+    }
+
+    .crt::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,.03), rgba(255,255,255,0)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 1px, rgba(0,0,0,0) 4px, rgba(0,0,0,0) 6px);
+      mix-blend-mode:overlay;
+      opacity:.45;
+      animation: crtFlicker 3.4s infinite linear;
+      z-index:50;
+    }
+    .crt::after{
+      content:"";
+      position:fixed;
+      inset:-40px;
+      pointer-events:none;
+      background: radial-gradient(closest-side at 50% 50%, transparent 60%, rgba(0,0,0,.55) 100%);
+      opacity:.85;
+      z-index:51;
+    }
+
+    @keyframes crtFlicker{
+      0%{ opacity:.42; transform:translateY(0px); }
+      10%{ opacity:.48; }
+      20%{ opacity:.38; }
+      35%{ opacity:.46; }
+      50%{ opacity:.40; }
+      70%{ opacity:.50; transform:translateY(1px); }
+      85%{ opacity:.41; }
+      100%{ opacity:.45; transform:translateY(0px); }
+    }
+
+    .app{
+      position:relative;
+      height:100%;
+      width:100%;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      z-index:1;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11,13,16,.92), rgba(11,13,16,.72));
+      backdrop-filter: blur(6px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .sigil{
+      width:12px;
+      height:12px;
+      border:1px solid rgba(209,20,58,.9);
+      box-shadow:0 0 18px rgba(209,20,58,.35);
+      background:linear-gradient(135deg, rgba(209,20,58,.25), rgba(139,0,32,.08));
+      transform:rotate(45deg);
+    }
+
+    .titlewrap{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .title{
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color:rgba(214,221,230,.95);
+    }
+
+    .subtitle{
+      font-size:11px;
+      letter-spacing:.12em;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(15,18,22,.92), rgba(12,14,17,.72));
+      color:var(--text);
+      font-size:11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      user-select:none;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+
+    .chip:active{ transform:translateY(1px); }
+    .chip:hover{
+      border-color: rgba(209,20,58,.55);
+      box-shadow: 0 0 0 2px rgba(209,20,58,.12);
+    }
+
+    .chip .dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:var(--dim);
+      box-shadow:0 0 0 1px rgba(0,0,0,.25) inset;
+    }
+    .chip.on .dot{ background:var(--ok); box-shadow:0 0 12px rgba(86,227,159,.35); }
+    .chip.warn .dot{ background:var(--warn); box-shadow:0 0 12px rgba(255,191,102,.25); }
+
+    .frame{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:12px;
+      padding:12px;
+      height:100%;
+      min-height:0;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(11,13,16,.85), rgba(8,9,11,.75));
+      min-height:0;
+      overflow:hidden;
+    }
+
+    .side{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .panelhead{
+      padding:12px 12px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      background:linear-gradient(180deg, rgba(15,18,22,.92), rgba(11,13,16,.78));
+    }
+
+    .panelhead h3{
+      margin:0;
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(214,221,230,.92);
+    }
+
+    .stamp{
+      font-size:10px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      padding:5px 8px;
+      border:1px solid rgba(209,20,58,.55);
+      color:rgba(209,20,58,.95);
+      background:rgba(209,20,58,.06);
+      box-shadow:0 0 24px rgba(209,20,58,.14);
+      white-space:nowrap;
+    }
+
+    .sidebody{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      overflow:auto;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:8px 12px;
+      padding:10px;
+      border:1px solid rgba(28,34,43,.9);
+      background:rgba(15,18,22,.55);
+    }
+
+    .k{ color:var(--muted); font-size:11px; letter-spacing:.10em; text-transform:uppercase; }
+    .v{ color:rgba(214,221,230,.95); font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+    .v.red{ color:rgba(209,20,58,.95); }
+    .v.ok{ color:rgba(86,227,159,.95); }
+
+    .hint{
+      padding:10px;
+      border:1px dashed rgba(28,34,43,.95);
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.55;
+      letter-spacing:.02em;
+      background:rgba(10,12,15,.35);
+    }
+
+    .main{
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+
+    .chat{
+      height:100%;
+      min-height:0;
+      overflow:auto;
+      padding:16px;
+      background:
+        radial-gradient(1100px 700px at 30% 30%, rgba(209,20,58,.06), transparent 55%),
+        radial-gradient(900px 700px at 70% 80%, rgba(86,227,159,.04), transparent 60%),
+        rgba(8,9,11,.45);
+    }
+
+    .line{
+      padding:12px 12px;
+      border:1px solid rgba(28,34,43,.9);
+      background:rgba(15,18,22,.55);
+      margin-bottom:10px;
+      box-shadow:0 6px 24px rgba(0,0,0,.25);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .line::before{
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width:2px;
+      background:linear-gradient(180deg, rgba(209,20,58,.9), rgba(139,0,32,.25));
+      opacity:.75;
+    }
+
+    .meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+
+    .who{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+
+    .tag{
+      padding:2px 6px;
+      border:1px solid rgba(28,34,43,.95);
+      background:rgba(10,12,15,.45);
+      color:rgba(214,221,230,.9);
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .handle{
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      color:rgba(214,221,230,.95);
+    }
+
+    .ts{
+      white-space:nowrap;
+      color:rgba(142,152,167,.95);
+    }
+
+    .body{
+      font-size:13px;
+      line-height:1.6;
+      color:rgba(214,221,230,.95);
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .cursor{
+      display:inline-block;
+      width:10px;
+      margin-left:2px;
+      color:rgba(209,20,58,.95);
+      animation: blink .9s infinite steps(1,end);
+    }
+    @keyframes blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+    .typingRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 12px;
+      border-top:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(11,13,16,.72), rgba(9,10,12,.92));
+    }
+
+    .typingLeft{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .dots{
+      display:inline-flex;
+      gap:4px;
+      transform:translateY(1px);
+    }
+    .dots i{
+      display:block;
+      width:4px;
+      height:4px;
+      border-radius:99px;
+      background:rgba(142,152,167,.85);
+      animation: pulse 1.0s infinite ease-in-out;
+    }
+    .dots i:nth-child(2){ animation-delay:.12s; }
+    .dots i:nth-child(3){ animation-delay:.24s; }
+    @keyframes pulse{
+      0%,100%{ opacity:.25; transform:translateY(0); }
+      50%{ opacity:1; transform:translateY(-2px); }
+    }
+
+    .typingRight{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      user-select:none;
+    }
+
+    .kbd{
+      padding:2px 6px;
+      border:1px solid rgba(28,34,43,.95);
+      background:rgba(10,12,15,.45);
+      color:rgba(214,221,230,.85);
+      font-size:10px;
+      letter-spacing:.12em;
+    }
+
+    @media (max-width: 980px){
+      .frame{ grid-template-columns: 1fr; }
+      .side{ display:none; }
+    }
+  </style>
+</head>
+
+<body class="crt">
+  <div class="app" id="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="sigil"></div>
+        <div class="titlewrap">
+          <div class="title">Shadow Company // Private Chat Log</div>
+          <div class="subtitle">Projeto 23 · A.S.T.R.A (aquisição interna) · São Firmo (SETENTRIONAL)</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="chip warn" id="btnAudio" role="button" tabindex="0" aria-label="Alternar áudio">
+          <span class="dot"></span><span id="audioLabel">Audio: Arm</span>
+        </div>
+        <div class="chip" id="btnPause" role="button" tabindex="0" aria-label="Pausar ou retomar">
+          <span class="dot" id="pauseDot"></span><span id="pauseLabel">Play</span>
+        </div>
+        <div class="chip" id="btnSkip" role="button" tabindex="0" aria-label="Pular para o fim">
+          <span class="dot"></span><span>Skip</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="frame">
+      <div class="panel side">
+        <div class="panelhead">
+          <h3>Header</h3>
+          <div class="stamp">Restricted</div>
+        </div>
+        <div class="sidebody">
+          <div class="kv">
+            <div class="k">Canal</div><div class="v">SC-INT/BLACKWIRE</div>
+            <div class="k">Cripto</div><div class="v ok">Handshake: OK</div>
+            <div class="k">Log</div><div class="v red">Privado</div>
+            <div class="k">Operação</div><div class="v">PROJETO 23</div>
+            <div class="k">Zona</div><div class="v">SÃO FIRMO</div>
+            <div class="k">Tag</div><div class="v">SETENTRIONAL</div>
+          </div>
+
+          <div class="hint">
+            Controles:<br>
+            <span class="kbd">Espaço</span> Pausar/Retomar · <span class="kbd">Enter</span> Skip · <span class="kbd">A</span> Audio (arm/on)<br><br>
+            Este terminal reproduz o log como se estivesse “sendo reidratado” de um dump criptografado.
+          </div>
+
+          <div class="kv">
+            <div class="k">Nota</div><div class="v">Sem atribuição</div>
+            <div class="k">Origem</div><div class="v">Mirror interno</div>
+            <div class="k">Integridade</div><div class="v ok">99.7%</div>
+            <div class="k">Trechos</div><div class="v">Não cens.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel main">
+        <div class="panelhead">
+          <h3>Live Playback</h3>
+          <div class="stamp" id="statusStamp">Decrypting</div>
+        </div>
+
+        <div class="chat" id="chat" aria-live="polite"></div>
+
+        <div class="typingRow">
+          <div class="typingLeft" id="typingLeft">
+            <span id="typingName">—</span>
+            <span>typing</span>
+            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          </div>
+          <div class="typingRight">
+            <span id="net">NET: STABLE</span>
+            <span class="kbd">SC-INT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatEl = document.getElementById("chat");
+    const typingLeft = document.getElementById("typingLeft");
+    const typingName = document.getElementById("typingName");
+    const statusStamp = document.getElementById("statusStamp");
+    const btnAudio = document.getElementById("btnAudio");
+    const btnPause = document.getElementById("btnPause");
+    const btnSkip = document.getElementById("btnSkip");
+    const audioLabel = document.getElementById("audioLabel");
+    const pauseLabel = document.getElementById("pauseLabel");
+    const pauseDot = document.getElementById("pauseDot");
+
+    const state = {
+      paused: true,
+      skip: false,
+      audioArmed: false,
+      audioOn: false,
+      ctx: null,
+      lastTick: 0
+    };
+
+    const nowBase = new Date();
+    const pad = n => String(n).padStart(2,"0");
+    const t = (m) => {
+      const d = new Date(nowBase.getTime() + m*60000);
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    };
+
+    const participants = {
+      "RAVEN": { tag: "SANCTUM", tint: "rgba(209,20,58,.95)" },
+      "GOSS": { tag: "SHADOW", tint: "rgba(214,221,230,.95)" },
+      "KITE": { tag: "SHADOW", tint: "rgba(214,221,230,.95)" },
+      "MILLER": { tag: "OPS", tint: "rgba(214,221,230,.95)" },
+      "SABLE": { tag: "INTEL", tint: "rgba(214,221,230,.95)" },
+      "NOVA": { tag: "COMMS", tint: "rgba(214,221,230,.95)" }
+    };
+
+    const log = [
+      { m: 0.0, from:"SYSTEM", text:"--- INICIANDO HANDSHAKE CRIPTOGRAFADO (RSA-4096) ---", mood:"sys" },
+{ m: 0.1, from:"SYSTEM", text:"Nó de Retransmissão: BLACKWIRE v4.4 // Latência: 4ms", mood:"sys" },
+{ m: 0.2, from:"NOVA", text:"Túnel seguro. Estamos no escuro. Logs marcados como [EYES ONLY].", mood:"sys" },
+
+{ m: 0.5, from:"SABLE", text:"Ping recebido. O arquivo tá pesado. Isso não veio pelos canais da Ordem, veio?", mood:"n" },
+{ m: 0.8, from:"GOSS", text:"Negativo. Roteamento externo. O carimbo no header é A.S.T.R.A. Protocolo 'Black-Budget'.", mood:"n" },
+{ m: 1.2, from:"SABLE", text:"Puta que pariu. A.S.T.R.A? Achei que eles só limpavam a bagunça que a gente não conseguia varrer.", mood:"n" },
+
+{ m: 1.6, from:"KITE", text:"Alguém checou a assinatura digital? Se for isca, a gente frita agora.", mood:"n" },
+{ m: 2.0, from:"NOVA", text:"Validada. Assinatura dupla. Um General ID [REDIGIDO] e... Hartmann. Sanctum.", mood:"n" },
+
+{ m: 2.5, from:"MILLER", text:"Hartmann ainda tá respirando? Achei que tinham aposentado ele depois do incidente de Riga.", mood:"n" },
+{ m: 2.9, from:"GOSS", text:"Riga nunca acabou. Só foi enterrada com dinheiro.", mood:"n" },
+
+{ m: 3.4, from:"KITE", text:"Então confirma. Desengavetaram o Projeto 23.", mood:"n" },
+{ m: 3.8, from:"SABLE", text:"O da 'Besta de Cimento'. Aquilo não é projeto, é uma maldição com orçamento.", mood:"n" },
+
+{ m: 4.3, from:"MILLER", text:"Telemetria tá aberta. São Firmo não é ruído paranormal comum. Tem dois vetores rodando simultâneos.", mood:"n" },
+{ m: 4.7, from:"SABLE", text:"Dois? Quem foi o gênio?", mood:"n" },
+
+{ m: 5.1, from:"MILLER", text:"Vetor 1: SETENTRIONAL. Padrão antigo. Ritualístico. Vetor 2 é… instável.", mood:"n" },
+{ m: 5.6, from:"GOSS", text:"SETENTRIONAL aparece em memorandos desde 2004. Sempre arquivado. Sempre 'fora de controle'.", mood:"n" },
+
+{ m: 6.0, from:"NOVA", text:"Alerta: aumento de tráfego civil. Rádio amador, ligações quebradas, relatos inconsistentes. 'Histeria suprimida'.", mood:"warn" },
+{ m: 6.5, from:"KITE", text:"Ou seja: o povo tá vendo coisa que não devia.", mood:"n" },
+
+{ m: 6.9, from:"SABLE", text:"Quem tá no comando dessa porcaria?", mood:"n" },
+{ m: 7.3, from:"GOSS", text:"Estrutura fragmentada. Ordem empresta o rosto. A.S.T.R.A banca. Sanctum… se retirou.", mood:"n" },
+
+{ m: 7.7, from:"SABLE", text:"Como assim 'se retirou'?", mood:"n" },
+
+{ m: 8.1, from:"NOVA", text:"Nova conexão tentando acesso prioritário. Identificador: CORVUS_PRIME.", mood:"sys" },
+
+{ m: 8.4, from:"SYSTEM", text:"--- CANAL AUTORIZADO ---", mood:"sys" },
+
+{ m: 8.6, from:"CORVO", text:"Antes que alguém pergunte: a Sanctum me largou.", mood:"n" },
+
+{ m: 9.0, from:"SABLE", text:"HAHA. Olha só. O corvo sem ninho.", mood:"n" },
+{ m: 9.4, from:"KITE", text:"Achei que você fosse patrimônio deles, Corvo. Até tatuado no contrato.", mood:"n" },
+
+{ m: 9.8, from:"CORVO", text:"Contrato rasgado. Ordem de silêncio unilateral. Me chamaram de 'passivo instável'.", mood:"n" },
+{ m: 10.3, from:"GOSS", text:"Traduzindo: você sabe demais.", mood:"n" },
+
+{ m: 10.7, from:"MILLER", text:"Desde quando a Sanctum abandona ativo operacional no meio de um evento convergente?", mood:"n" },
+
+{ m: 11.2, from:"CORVO", text:"Desde que o Conselho começou a ouvir vozes que não estavam na sala.", mood:"n" },
+
+{ m: 11.7, from:"SABLE", text:"Tá ficando poético agora? Ou isso é sintoma?", mood:"n" },
+{ m: 12.1, from:"CORVO", text:"Zomba enquanto pode. Eles reativaram o 23 sem protocolo de contenção.", mood:"n" },
+
+{ m: 12.6, from:"KITE", text:"Sem contenção?! Aquilo precisa de três camadas de isolamento cognitivo!", mood:"n" },
+
+{ m: 13.0, from:"NOVA", text:"Interferência detectada. Assinatura diferente. Não é A.S.T.R.A.", mood:"warn" },
+
+{ m: 13.3, from:"SYSTEM", text:"--- NOVO AGENTE NO CANAL ---", mood:"sys" },
+
+{ m: 13.5, from:"MARIPOSA", text:"Confirmando o que o Corvo disse. A Sanctum perdeu o eixo.", mood:"n" },
+
+{ m: 13.9, from:"SABLE", text:"MARIPOSA?! Achei que você tivesse sumido no Mar Negro.", mood:"n" },
+{ m: 14.3, from:"MARIPOSA", text:"Sumir foi a única forma de não virar estatística interna.", mood:"n" },
+
+{ m: 14.8, from:"GOSS", text:"Explica. Devagar.", mood:"n" },
+
+{ m: 15.2, from:"MARIPOSA", text:"Eles não querem conter São Firmo. Querem observar.", mood:"n" },
+{ m: 15.7, from:"MILLER", text:"Observar o quê?", mood:"n" },
+
+{ m: 16.1, from:"MARIPOSA", text:"O SETENTRIONAL não é o evento. É a antena.", mood:"n" },
+
+{ m: 16.6, from:"KITE", text:"Antena pra quê?", mood:"n" },
+
+{ m: 17.0, from:"CORVO", text:"Pra algo que responde quando chamado.", mood:"n" },
+
+{ m: 17.4, from:"SABLE", text:"Isso é o Vetor 2?", mood:"n" },
+{ m: 17.8, from:"CORVO", text:"Chamamos de ECO. Ele aprende.", mood:"n" },
+
+{ m: 18.3, from:"NOVA", text:"Tentativa de triangulação ativa. Estão caçando este nó.", mood:"warn" },
+
+{ m: 18.7, from:"MARIPOSA", text:"Eles vão sacrificar a ilha inteira pra provar uma tese.", mood:"n" },
+{ m: 19.1, from:"GOSS", text:"A Sanctum virou culto.", mood:"n" },
+
+{ m: 19.5, from:"CORVO", text:"Sempre foi. Só tiraram a máscara agora.", mood:"n" },
+
+{ m: 20.0, from:"MILLER", text:"Então por que você ainda tá aqui, Corvo?", mood:"n" },
+
+{ m: 20.4, from:"CORVO", text:"Porque alguém precisa garantir que o 23 não saia do controle.", mood:"n" },
+{ m: 20.9, from:"SABLE", text:"E você acha que consegue sozinho?", mood:"n" },
+
+{ m: 21.3, from:"CORVO", text:"Não. Por isso estou falando com vocês.", mood:"n" },
+
+{ m: 21.8, from:"NOVA", text:"Integridade do canal em 22%. Decisão imediata necessária.", mood:"sys" },
+
+{ m: 22.1, from:"MARIPOSA", text:"Se ficarmos, morremos. Se formos, talvez levemos o ECO conosco.", mood:"n" },
+
+{ m: 22.6, from:"KITE", text:"Ótimo. Nenhuma opção boa.", mood:"n" },
+
+{ m: 23.0, from:"CORVO", text:"Nunca houve. Tragam inibidores. Tragam chumbo. E não olhem direto pra ilha.", mood:"n" },
+
+{ m: 23.4, from:"SYSTEM", text:"--- CONEXÃO INTERROMPIDA PELO HOST ---", mood:"sys" },
+{ m: 23.7, from:"SYSTEM", text:"Limpeza de cache iniciada... [||||||||||||||||] 100%", mood:"sys" }
+
+    ];
+
+    function makeLine({from, text, ts, tag}){
+      const wrap = document.createElement("div");
+      wrap.className = "line";
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const who = document.createElement("div");
+      who.className = "who";
+
+      const tagEl = document.createElement("span");
+      tagEl.className = "tag";
+      tagEl.textContent = tag;
+
+      const handle = document.createElement("span");
+      handle.className = "handle";
+      handle.textContent = from;
+
+      who.appendChild(tagEl);
+      who.appendChild(handle);
+
+      const timeEl = document.createElement("span");
+      timeEl.className = "ts";
+      timeEl.textContent = ts;
+
+      meta.appendChild(who);
+      meta.appendChild(timeEl);
+
+      const body = document.createElement("div");
+      body.className = "body";
+
+      wrap.appendChild(meta);
+      wrap.appendChild(body);
+
+      chatEl.appendChild(wrap);
+      chatEl.scrollTop = chatEl.scrollHeight;
+
+      return { wrap, body };
+    }
+
+    function armAudio(){
+      if(state.ctx) return true;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return false;
+      state.ctx = new AC();
+      return true;
+    }
+
+    function beep(freq=1200, dur=0.018, gain=0.035){
+      if(!state.audioOn || !state.ctx) return;
+      const ctx = state.ctx;
+      const t0 = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "square";
+      o.frequency.setValueAtTime(freq, t0);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(gain, t0 + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start(t0);
+      o.stop(t0 + dur + 0.01);
+    }
+
+    function thump(){
+      beep(180, 0.03, 0.04);
+    }
+
+    function setTyping(name){
+      typingName.textContent = name ? name : "—";
+      typingLeft.style.opacity = name ? "1" : "0.0";
+    }
+
+    function setStatus(text){
+      statusStamp.textContent = text;
+      statusStamp.style.borderColor = text === "Live" ? "rgba(86,227,159,.55)" : "rgba(209,20,58,.55)";
+      statusStamp.style.color = text === "Live" ? "rgba(86,227,159,.95)" : "rgba(209,20,58,.95)";
+      statusStamp.style.background = text === "Live" ? "rgba(86,227,159,.06)" : "rgba(209,20,58,.06)";
+      statusStamp.style.boxShadow = text === "Live" ? "0 0 24px rgba(86,227,159,.14)" : "0 0 24px rgba(209,20,58,.14)";
+    }
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    async function waitIfPaused(){
+      while(state.paused && !state.skip) await sleep(70);
+    }
+
+    async function typeText(el, full, speedMin=8, speedMax=20){
+      el.textContent = "";
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.textContent = "█";
+      el.appendChild(cursor);
+
+      let buf = "";
+      for(let i=0;i<full.length;i++){
+        if(state.skip){
+          buf = full;
+          break;
+        }
+        await waitIfPaused();
+        const ch = full[i];
+        buf += ch;
+        el.textContent = buf;
+        el.appendChild(cursor);
+
+        const now = performance.now();
+        if(ch !== " " && ch !== "\n" && (now - state.lastTick) > 22){
+          beep(920 + Math.random()*220, 0.012, 0.02);
+          state.lastTick = now;
+        }
+        const jitter = speedMin + Math.random()*(speedMax-speedMin);
+        await sleep(jitter);
+        chatEl.scrollTop = chatEl.scrollHeight;
+      }
+
+      el.textContent = buf;
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    async function run(){
+      setStatus("Decrypting");
+      setTyping(null);
+      await sleep(420);
+      setStatus("Live");
+      await sleep(180);
+
+      for(let i=0;i<log.length;i++){
+        if(state.skip) break;
+        await waitIfPaused();
+
+        const item = log[i];
+        const p = participants[item.from] || { tag:"UNK" };
+        const ts = t(item.m);
+
+        setTyping(item.from);
+
+        const delayBefore = 260 + Math.random()*380;
+        await sleep(delayBefore);
+
+        if(state.skip) break;
+        await waitIfPaused();
+
+        const { body } = makeLine({ from: item.from, text:item.text, ts, tag:p.tag });
+        thump();
+        await typeText(body, item.text, 7, 22);
+
+        setTyping(null);
+
+        const gap = 240 + Math.random()*560;
+        await sleep(gap);
+      }
+
+      if(state.skip){
+        for(let i=0;i<log.length;i++){
+          const item = log[i];
+          const p = participants[item.from] || { tag:"UNK" };
+          const ts = t(item.m);
+          const { body } = makeLine({ from: item.from, text:item.text, ts, tag:p.tag });
+          body.textContent = item.text;
+        }
+      }
+
+      setTyping(null);
+      setStatus("Archived");
+      statusStamp.style.borderColor = "rgba(28,34,43,.95)";
+      statusStamp.style.color = "rgba(142,152,167,.95)";
+      statusStamp.style.background = "rgba(10,12,15,.35)";
+      statusStamp.style.boxShadow = "none";
+    }
+
+    function togglePause(){
+      state.paused = !state.paused;
+      pauseLabel.textContent = state.paused ? "Play" : "Pause";
+      pauseDot.style.background = state.paused ? "var(--warn)" : "var(--ok)";
+      btnPause.classList.toggle("on", !state.paused);
+      btnPause.classList.toggle("warn", state.paused);
+      if(!state.paused) thump();
+    }
+
+    async function toggleAudioArm(){
+      if(!state.audioArmed){
+        state.audioArmed = true;
+        const ok = armAudio();
+        if(ok && state.ctx && state.ctx.state === "suspended") await state.ctx.resume();
+        state.audioOn = ok;
+      }else{
+        state.audioOn = !state.audioOn;
+      }
+
+      if(state.audioOn){
+        btnAudio.classList.add("on");
+        btnAudio.classList.remove("warn");
+        audioLabel.textContent = "Audio: On";
+        thump();
+      }else{
+        btnAudio.classList.remove("on");
+        btnAudio.classList.add("warn");
+        audioLabel.textContent = state.audioArmed ? "Audio: Off" : "Audio: Arm";
+      }
+    }
+
+    function skipAll(){
+      state.skip = true;
+      state.paused = false;
+      pauseLabel.textContent = "Pause";
+      btnPause.classList.add("on");
+      pauseDot.style.background = "var(--ok)";
+      thump();
+    }
+
+    btnPause.addEventListener("click", togglePause);
+    btnSkip.addEventListener("click", skipAll);
+    btnAudio.addEventListener("click", toggleAudioArm);
+
+    btnPause.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); togglePause(); }});
+    btnSkip.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); skipAll(); }});
+    btnAudio.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleAudioArm(); }});
+
+    window.addEventListener("keydown", (e) => {
+      if(e.key === " "){ e.preventDefault(); togglePause(); }
+      if(e.key === "Enter"){ e.preventDefault(); skipAll(); }
+      if(e.key.toLowerCase() === "a"){ e.preventDefault(); toggleAudioArm(); }
+    });
+
+    togglePause();
+    run();
+  </script>
+</body>
+</html>

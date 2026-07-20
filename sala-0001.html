@@ -1,1 +1,444 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/sala-0001"><meta http-equiv="refresh" content="0;url=/sala-0001"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/sala-0001'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/sala-0001">/sala-0001</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-br">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/sala-0001'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/sala-0001">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0001 – A CIDADE QUE SONHA EM SANGUE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #14060b;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #1a0000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(-6deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.5));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line {
+            margin: 4px 0;
+            white-space: pre-wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: 0.85em;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(139,0,0,0.24);
+            color: var(--gold);
+        }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 5</div>
+        <h1>S.A.L.A-0001</h1>
+        <p class="designation">"A CIDADE QUE SONHA EM SANGUE"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0001 / ZONA-ONÍRICA-CONSOLIDADA</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Manifestação Territorial do Outro Lado – Eixo <span class="highlight">MEDO/CONHECIMENTO</span></span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>ALTO – Eventualmente CATASTRÓFICO (Escala Richter-Δ 4/5)</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>5 – Ultra Secreto / Autorização da Congregação & Conselho Escarlate</span>
+
+            <span class="label">LOCALIZAÇÃO:</span>
+            <span>Sobreposição parcial com a cidade de <span class="redacted">██████████</span>, interior de São Paulo, Brasil</span>
+
+            <span class="label">ESTADO ATUAL:</span>
+            <span>Ativo – Perímetro cercado, população substituída por "habitantes-eco"</span>
+
+            <span class="label">DATA DO PRIMEIRO CONTATO:</span>
+            <span>02 de Maio de 2011 (retroativamente rastreado até 1998)</span>
+        </div>
+    </section>
+
+    <h2>§ I. RESUMO</h2>
+
+    <p>S.A.L.A-0001 é uma cidade inteira parcialmente absorvida pelo Outro Lado, existindo simultaneamente como município brasileiro funcional e como <span class="highlight">território onírico</span> habitado por entidades que imitam seres humanos. A Congregação Escarlate classifica 0001 como uma "Ferida Territorial": um ponto em que a Membrana se rasgou não em uma sala, prédio ou rua, mas sobre toda uma malha urbana.</p>
+
+    <p>Para visitantes superficiais, 0001 parece uma cidade interiorana comum, com comércio, escolas, residências e circulação regular de pessoas. No entanto, observação prolongada revela padrões anômalos: trajetos idênticos repetidos diariamente por "habitantes", conversas que entram em loops perfeitos, ausência total de envelhecimento visível, e um padrão recorrente de <span class="highlight">sonhos idênticos</span> em todos os moradores.</p>
+
+    <h2>§ II. HISTÓRICO E DESCOBERTA</h2>
+
+    <p>Primeiros rumores chegaram à Congregação por meio de relatos de padres locais sobre fiéis que afirmavam "não conseguir acordar", mesmo enquanto se moviam e trabalhavam normalmente. Paralelamente, a Ordo Realitas registrou um aumento de NEX gradual na região, mas sem um foco pontual aparente.</p>
+
+    <div class="incident">
+        <h3>INCIDENTE "BAILE DE FORMATURA"</h3>
+        <p><b>Data:</b> 26/11/2011<br>
+           <b>Local:</b> Escola Estadual <span class="redacted">████████</span>, ginásio coberto<br>
+           <b>Equipe da Congregação:</b> Irmão Samuel Hartmann (observador), Agente de Campo Júlia Costa</p>
+
+        <p>O gatilho para a classificação de S.A.L.A-0001 como ameaça ocorreu durante um baile de formatura. Hartmann, infiltrado como professor substituto, percebeu um comportamento incomum: a música repetia o mesmo trecho, exatamente 37 segundos, há mais de uma hora, sem que ninguém parecesse notar. Alunos dançavam, riam e repetiam as mesmas frases, com timing perfeito.</p>
+
+        <blockquote>
+            <b>Relato de Hartmann (extrato do diário de campo):</b><br><br>
+            "Quando percebi já era tarde demais. A Júlia olhou para mim e disse 'Você está vendo isso?', mas a frase saiu da boca dela em sincronia <i>perfeita</i> com outras três alunas na pista. Quatro bocas diferentes, quatro rostos diferentes, a mesma entonação, a mesma respiração entre as sílabas.<br><br>
+            Parecia uma gravação. Uma peça de teatro vista pela milésima vez, com os atores presos ao texto. Eu gritei o nome da Júlia de novo, mas ela só sorriu, girou, e repetiu:<br>
+            'Você está vendo isso?'<br>
+            Pela segunda vez. Idêntica."<br>
+        </blockquote>
+
+        <p>A partir deste momento, a Congregação decretou quarentena discreta. Linhas de ônibus foram alteradas, estradas receberam "desvios por obras", e relatórios oficiais falsos sobre contaminação de água foram usados para desalentar turistas.</p>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Habitantes-Eco</h3>
+    <p>Os moradores de S.A.L.A-0001 apresentam padrões de comportamento repetitivos, com variações mínimas. Testes prolongados indicam que:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Nenhum morador envelheceu visivelmente entre 2011 e 2025.</li>
+        <li>Todos sonham <i>o mesmo sonho</i> todas as noites, com detalhes idênticos.</li>
+        <li>Eventos traumáticos (acidentes, brigas, mortes) se "reiniciam" ao amanhecer.</li>
+        <li>Quando removidos da cidade por mais de 72 horas, os habitantes se desintegram em pó cinzento durante o sono.</li>
+    </ul>
+
+    <p>A Congregação passou a chamá-los de "Habitantes-Eco": ecos de pessoas que existiram ou poderiam existir, presos em uma narrativa fixa.</p>
+
+    <h3>III-B. O Sonho Coletivo</h3>
+    <p>Todos os habitantes relatam, se questionados com insistência, um sonho recorrente em que caminham por ruas vazias da mesma cidade, à noite, guiados por uma lua vermelha. Ao fundo, ouvem um canto distante em uma língua que não conhecem, mas entendem:</p>
+
+    <blockquote>
+        "As ruas são iguais, mas não são as mesmas. As casas estão vazias, mas sinto gente atrás das paredes. Tem uma torre no centro que não existe na cidade de verdade. E no alto da torre, uma luz que parece um olho, olhando para nós todos. Sempre que me aproximo, acordo."<br><br>
+        – Declaração repetida, com variação mínima, por 118 moradores diferentes.
+    </blockquote>
+
+    <p>Investigação posterior confirmou a existência da torre no <i>Outro Lado</i> da cidade—uma estrutura que não existe na geografia física, mas aparece em projeções oníricas e em mapas paranormais de NEX.</p>
+
+    <h3>III-C. Sobreposição de Realidades</h3>
+    <p>S.A.L.A-0001 parece ser uma <span class="highlight">cidade em duas camadas</span>: o lado "acordado", onde visitantes e agentes caminham, e o lado "sonhado", onde a topografia é distorcida. Alguns lugares, como a praça principal e a igreja, apresentam "pontos de sangramento", onde as duas versões se misturam.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>LOCAL</th>
+                <th>VERSÃO FÍSICA</th>
+                <th>VERSÃO ONÍRICA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Praça Central</td>
+                <td>Coreto, bancos, feira aos domingos</td>
+                <td>Coreto transformado em altar de pedra, bancos virados para uma torre inexistente</td>
+            </tr>
+            <tr>
+                <td>Igreja Matriz</td>
+                <td>Igreja católica comum, missas regulares</td>
+                <td>Nave infinita, bancos se repetem, altar vazio com um espaço onde "algo deveria estar"</td>
+            </tr>
+            <tr>
+                <td>Escola Estadual</td>
+                <td>Prédio de dois andares, aulas normais</td>
+                <td>Corredores intermináveis, portas que levam de volta ao mesmo corredor, quadros-negros com frases em loop</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>§ IV. RELATOS E LOGS DE CAMPO</h2>
+
+    <div class="log">
+        <div class="log-line"><b>LOG DE CAMPO #0001-07 – Agente Júlia Costa</b></div>
+        <div class="log-line">Data: 14/04/2014</div>
+        <div class="log-line">Objetivo: Acompanhar a rotina de uma família "habitante-eco" por 24 horas.</div>
+        <br>
+        <div class="log-line">[06:00] Acordo antes deles. A casa está silenciosa. Eles despertam todos juntos, exatamente às 06:13.</div>
+        <div class="log-line">[06:14] A mãe liga o rádio. Sempre a mesma música. Sempre o mesmo volume.</div>
+        <div class="log-line">[06:20] O pai toma café, três goles, pausa, dois goles. Mexe o jornal para a esquerda, depois para a direita. As manchetes são de anos diferentes, misturadas, como se o tempo tivesse sido impresso errado.</div>
+        <div class="log-line">[06:22] O filho mais novo pergunta: "Mãe, você acha que hoje vai chover no sonho?". Ela responde: "Só se a lua estiver cansada, meu amor." Frase repetida exatamente, nos últimos nove dias.</div>
+        <div class="log-line">[07:30] Eles saem de casa. Eu sigo. Vizinhos dão bom dia com falas idênticas, como se alguém tivesse escrito o roteiro. Até o cachorro da esquina late em contagem perfeita: três latidos, pausa, dois latidos.</div>
+        <div class="log-line">[12:00] No trabalho, ninguém erra. Nunca. Telefones tocam sempre no mesmo minuto de cada hora.</div>
+        <div class="log-line">[18:00] Voltam para casa. Jantam. A TV só exibe estática, mas eles riem como se fosse uma comédia.</div>
+        <div class="log-line">[22:00] Todos vão dormir ao mesmo tempo. Em menos de 40 segundos, todos entram no mesmo padrão de respiração profunda. Sonhando. Com a mesma coisa.</div>
+        <div class="log-line"><i>Conclusão: S.A.L.A-0001 não é uma cidade viva. É um sonho que se recusa a acordar.</i></div>
+    </div>
+
+    <div class="incident">
+        <h3>INCIDENTE "O DESPERTAR COLETIVO"</h3>
+        <p><b>Data:</b> 03/08/2018<br>
+           <b>Contexto:</b> Experimento coordenado pela Congregação para tentar "acordar" a cidade.</p>
+
+        <p>A Congregação, em cooperação com a Ordo Realitas, conduziu um ritual de grande escala para tentar interromper o sonho coletivo. O ritual envolveu a criação de um círculo de sal e sangue nas margens da cidade, com 32 ocultistas entoando um hino de Despertar.</p>
+
+        <p>Por 35 segundos, funcionou.</p>
+
+        <p>Câmeras espalhadas por 0001 registraram um fenômeno sem precedentes: todos os habitantes pararam de se mover, simultaneamente. Olharam para cima, como se algo tivesse saído do quadro. Algumas pessoas desmaiaram. Outras começaram a chorar.</p>
+
+        <blockquote>
+            <b>Transcrição parcial – Câmera 12, Rua das Limeiras:</b><br><br>
+            [00:01] (Moradores paralisam) <br>
+            [00:05] Mulher 1: "Eu... eu lembro... da dor. Eu lembro de morrer."<br>
+            [00:08] Homem 2: "Isso não é minha casa. Onde estão meus filhos?"<br>
+            [00:10] (Criança começa a gritar) "Ele está olhando! Ele está olhando de novo!"<br>
+            [00:12] Voz coletiva, sobreposta, em dezenas de bocas diferentes: "Não devia... ter acordado."<br>
+            [00:15] (A lua no céu escurece por 3 segundos, apesar de ser meio-dia)<br>
+            [00:35] (Toda a cidade volta ao comportamento anterior. Ciclo reiniciado.) 
+        </blockquote>
+
+        <p>O ritual foi imediatamente abortado. Os ocultistas relataram terem sentido "uma outra presença" tentando atravessar junto com o Despertar. Algo que não pertencia nem à cidade, nem ao sonho—"um Observador", nas palavras dos participantes.</p>
+    </div>
+
+    <h2>§ V. INTERAÇÕES COM OUTRAS ENTIDADES</h2>
+
+    <p>S.A.L.A-0001 está intimamente ligado a conceitos estabelecidos em outros arquivos: a Biblioteca de 0000, a existência de deuses como <b>Muka'an</b> (via KAIRA), e a noção de que o Outro Lado possui uma estrutura quase religiosa. Em sonhos supervisionados dentro da cidade, vários agentes afirmam ter ouvido referências a uma figura chamada:</p>
+
+    <div class="ritual">
+        "Aquele que Caminha Pelas Ruas Entre Os Capítulos"
+    </div>
+
+    <p>Teólogos da Congregação acreditam que esse epíteto se refere a um intermediário entre 0001 e 0000: uma entidade encarregada de <span class="highlight">manter a narrativa da cidade coerente</span>, garantindo que o sonho continue, mesmo quando alguém tenta acordar.</p>
+
+    <blockquote>
+        "Se 0000 é o Bibliotecário que lê o fim de todas as histórias, 0001 é uma dessas histórias sendo escrita em tempo real. Uma novela de terror metafísico em que os personagens não sabem que são personagens.<br><br>
+        O intermediário, 'Aquele que Caminha Pelas Ruas Entre Os Capítulos', é o editor. Corta, reescreve, suprime. Mantém a cidade legível para os deuses do Outro Lado."<br><br>
+        – Dra. Isabela Navarro, Departamento de Estudos Teológicos Anômalos
+    </blockquote>
+
+    <h2>§ VI. PROTOCOLO DE APROXIMAÇÃO E SAÍDA</h2>
+
+    <p>Entrada em S.A.L.A-0001 requer:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Uso de talismã anti-onírico (âncora de memória) preso ao peito.</li>
+        <li>Equipe mínima de dois agentes, com palavras-código combinadas para verificação de loops temporais.</li>
+        <li>Tempo máximo de permanência: 6 horas por incursão.</li>
+        <li>Proibição absoluta de "participar" do cotidiano da cidade (dançar, rezar, trabalhar, estudar) por mais de 3 minutos em qualquer atividade.</li>
+    </ul>
+
+    <p>Para sair, os agentes devem se dirigir ao <b>Marco Zero</b>, um obelisco discreto na entrada da cidade marcado apenas para aqueles com treinamento da Congregação. Parar diante dele, fechar os olhos e repetir a seguinte frase ritual:</p>
+
+    <div class="ritual">
+        "Eu não pertenço a esta história. Eu lembro de ter chegado. Eu posso partir."<br>
+        (3 vezes, em voz baixa)
+    </div>
+
+    <p>Agentes que falham em realizar o ritual relatam, ao retornar, uma sensação de "deslocamento", como se estivessem sonhando constantemente. Em ao menos 5 casos confirmados, agentes passaram a aparecer brevemente em gravações dentro da cidade quando não estavam fisicamente lá, caminhando ao lado de habitantes-eco.</p>
+
+    <h2>§ VII. ADENDO FINAL – O MAPA QUE NÃO EXISTE</h2>
+
+    <div class="addendum">
+        <p>Em 2022, durante uma inspeção de rotina no Arquivo da Congregação, foi encontrado um mapa que não constava em nenhum inventário: um mapa completo da cidade de S.A.L.A-0001, com ruas, quadras e detalhes topográficos. No canto inferior, em letras pequenas, lia-se:</p>
+
+        <div class="ritual">
+            "Primeira Edição – Biblioteca de Carpathia – Sala que Não Existe"
+        </div>
+
+        <p>O mapa mostrava um bairro inteiro que não existe na versão física da cidade. Ao investigar o local correspondente, agentes encontraram apenas um terreno baldio, cercado por muros altos. No entanto, durante uma incursão onírica guiada, o mesmo local revelou-se um bairro habitado, com casas, lojas e uma pequena praça com uma estátua central.</p>
+
+        <blockquote>
+            A estátua representa uma figura alta, de túnica, com o rosto coberto por páginas rasgadas.<br>
+            Ao redor da estátua, sete crianças brincam, cada uma segurando uma esfera de vidro.<br>
+            Embaixo, na placa, a inscrição:<br><br>
+            "Ao Vigil Silencioso. Sem ele, nada seria lembrado."<br><br>
+            – Relato da Ocultista Bianca Moreau, após projeção onírica supervisionada
+        </blockquote>
+
+        <p>Isso indica que S.A.L.A-0001 e S.A.L.A-0000 estão conectados em uma <span class="highlight">cadeia de narrativa e memória</span>. A cidade é um capítulo. O bibliotecário é quem segura o livro aberto.</p>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo é parte integrante da Biblioteca da Congregação Escarlate.</p>
+        <p>Alterações não autorizadas serão tratadas como contaminação narrativa.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"Algumas cidades nunca dormem. Outras nunca acordam."</i></p>
+    </div>
+</div>
+
+</body>
+</html>

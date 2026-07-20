@@ -1,1 +1,431 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/ConselhoEscarlate"><meta http-equiv="refresh" content="0;url=/ConselhoEscarlate"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/ConselhoEscarlate'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/ConselhoEscarlate">/ConselhoEscarlate</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/ConselhoEscarlate'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/ConselhoEscarlate">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACESSO RESTRITO: CONSELHO ESCARLATE</title>
+    <style>
+        :root {
+            --primary: #ff0f0f; /* Vermelho Sangue Neon */
+            --secondary: #4a0000; /* Sangue Seco */
+            --bg: #050505; /* Vazio */
+            --text: #e0e0e0;
+            --glitch-width: 100vw;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            height: 100vh;
+            perspective: 1000px;
+        }
+
+        /* --- BACKGROUND FX --- */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+            animation: scrollLines 10s linear infinite;
+        }
+
+        .crt-flicker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 11;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        /* --- UI LAYOUT --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: "CONSELHO ESCARLATE";
+            position: absolute;
+            left: 2px;
+            top: 0;
+            color: var(--secondary);
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
+            animation: glitch 2s infinite linear alternate-reverse;
+        }
+
+        .warning-box {
+            border: 1px solid var(--primary);
+            background: rgba(74, 0, 0, 0.2);
+            padding: 15px;
+            color: var(--primary);
+            font-size: 0.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* --- RELIC GRID --- */
+        .relics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .relic-card {
+            border: 1px solid #333;
+            background: rgba(10,10,10,0.8);
+            padding: 20px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .relic-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 15, 15, 0.2);
+        }
+
+        .relic-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 5px var(--primary));
+            transition: 0.5s;
+        }
+
+        .relic-card:hover .relic-icon {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 15px var(--primary));
+        }
+
+        .data-label {
+            color: #666;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .relic-title {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        .encrypted-text {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            min-height: 80px;
+        }
+
+        .origin-tag {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--primary);
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            margin-top: 15px;
+            border: 1px solid var(--primary);
+        }
+
+        /* --- FOOTER / LORE --- */
+        .demonlarium-section {
+            margin-top: 60px;
+            border-top: 1px dashed #333;
+            padding-top: 20px;
+            opacity: 0.5;
+            transition: 1s;
+        }
+
+        .demonlarium-section:hover {
+            opacity: 1;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes glitch {
+            0% { clip: rect(24px, 9999px, 91px, 0); transform: skew(0.6deg); }
+            20% { clip: rect(85px, 9999px, 14px, 0); transform: skew(0.2deg); }
+            40% { clip: rect(20px, 9999px, 65px, 0); transform: skew(0.05deg); }
+            60% { clip: rect(5px, 9999px, 90px, 0); transform: skew(0.8deg); }
+            80% { clip: rect(44px, 9999px, 25px, 0); transform: skew(0.2deg); }
+            100% { clip: rect(66px, 9999px, 10px, 0); transform: skew(0.5deg); }
+        }
+
+        @keyframes scrollLines {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.1; }
+            5% { opacity: 0.2; }
+            10% { opacity: 0.1; }
+            100% { opacity: 0.1; }
+        }
+
+        .hidden { display: none; }
+        
+        /* Modal Styles */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid var(--primary);
+            background: #000;
+            padding: 30px;
+            box-shadow: 0 0 50px var(--secondary);
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            color: var(--primary);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+    <div class="crt-flicker"></div>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="warning-box">
+                ⚠ AVISO: NÍVEL DE MEMBRANA INSTÁVEL DETECTADO. ACESSO AUTORIZADO APENAS PARA GRAU ESCARLATE.
+            </div>
+            <h1 data-text="CONSELHO ESCARLATE">CONSELHO ESCARLATE</h1>
+            <p style="margin-top: 10px; color: #666;">Arquivo: Relíquias da Calamidade // Origem: Demonlarium</p>
+        </header>
+
+        <main class="relics-grid">
+            <!-- RELIC 1 -->
+            <div class="relic-card" onclick="openModal('coroa')">
+                <span class="data-label">Item #001 // Classe: Keter</span>
+                <div class="relic-icon">👑</div>
+                <h2 class="relic-title">A Coroa</h2>
+                <p class="encrypted-text" data-original="Um artefato de dominação psíquica. Aqueles que a vestem ouvem os sussurros de mil almas condenadas. Permite comandar a vontade dos fracos, mas drena a sanidade do usuário a cada ordem proferida. Dizem ser feita dos ossos de um Rei do Outro Lado.">
+                    X7#9jh @!ksj d81jd... [DADOS CORROMPIDOS] ...8shd 12
+                </p>
+                <div class="origin-tag">Ressonância: Mental/Sangue</div>
+            </div>
+
+            <!-- RELIC 2 -->
+            <div class="relic-card" onclick="openModal('cetro')">
+                <span class="data-label">Item #002 // Classe: Euclid</span>
+                <div class="relic-icon">🥢</div>
+                <h2 class="relic-title">O Cetro</h2>
+                <p class="encrypted-text" data-original="O canalizador puro de energia do Demonlarium. Capaz de rasgar a membrana com um simples movimento. A madeira parece carne petrificada e pulsa quando próxima de sangue fresco. Foi usado para abrir os primeiros portais.">
+                    010101 ERROR ... 404 ... SANGUE ... 99% ... FALHA
+                </p>
+                <div class="origin-tag">Ressonância: Energia/Matéria</div>
+            </div>
+
+            <!-- RELIC 3 -->
+            <div class="relic-card" onclick="openModal('colar')">
+                <span class="data-label">Item #003 // Classe: Thaumiel</span>
+                <div class="relic-icon">📿</div>
+                <h2 class="relic-title">Colar de Sangue</h2>
+                <p class="encrypted-text" data-original="Não é um objeto, é um parasita simbiótico. Ele se funde à jugular do portador, garantindo regeneração absurda em troca de alimentação constante. Se o portador parar de matar, o colar consome o próprio dono.">
+                    CONTAINMENT BREACH ... 0x992 ... MORTE ... VIDA ... DOR
+                </p>
+                <div class="origin-tag">Ressonância: Biológica/Parasita</div>
+            </div>
+        </main>
+
+        <div class="demonlarium-section">
+            <h3 style="color: var(--secondary);">>>> REGISTRO DE ORIGEM: DEMONLARIUM</h3>
+            <p id="demon-text" style="font-size: 0.8rem; margin-top: 10px; max-width: 600px;">
+                O Reino Proibido. Uma dimensão de entropia absoluta onde a física obedece à vontade do sangue. As relíquias não foram criadas; elas são partes desmembradas das Entidades Regentes que governam aquele lugar. Trazê-las para cá não foi uma descoberta... foi um convite.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title" style="color: var(--primary); margin-bottom: 20px;"></h2>
+            <div id="modal-body" style="font-family: sans-serif; line-height: 1.6; color: #ccc;"></div>
+            <div style="margin-top: 20px; border: 1px solid #333; padding: 10px; font-size: 0.7rem; color: var(--secondary);">
+                STATUS: CONTAMINADO // NÃO TOCAR DIRETAMENTE
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- MATRIX / DECIPHER EFFECT ---
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
+        
+        document.querySelectorAll('.encrypted-text').forEach(element => {
+            const originalText = element.getAttribute('data-original');
+            let iterations = 0;
+            
+            element.onmouseover = event => {
+                let interval = setInterval(() => {
+                    event.target.innerText = event.target.innerText.split("")
+                        .map((letter, index) => {
+                            if(index < iterations) {
+                                return originalText[index];
+                            }
+                            return chars[Math.floor(Math.random() * chars.length)]
+                        })
+                        .join("");
+                    
+                    if(iterations >= originalText.length){ 
+                        clearInterval(interval);
+                    }
+                    
+                    iterations += 1/2; // Speed of decoding
+                }, 30);
+            }
+        });
+
+        // --- CANVAS PARTICLES (BLOOD DUST) ---
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        class Particle {
+            constructor(){
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() * 1) - 0.5;
+                this.speedY = (Math.random() * 1) - 0.5;
+                this.color = `rgba(${Math.random() > 0.9 ? '255, 50, 50' : '100, 100, 100'}, ${Math.random()})`;
+            }
+            update(){
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.01;
+                if (this.size <= 0.2) {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2;
+                }
+            }
+            draw(){
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles(){
+            for(let i=0; i<100; i++){
+                particles.push(new Particle());
+            }
+        }
+        
+        function animate(){
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            for(let i=0; i<particles.length; i++){
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+        initParticles();
+        animate();
+
+        // --- MODAL LOGIC ---
+        const modal = document.getElementById('modal-overlay');
+        const mTitle = document.getElementById('modal-title');
+        const mBody = document.getElementById('modal-body');
+
+        const db = {
+            'coroa': {
+                t: 'A COROA (Objeto 01)',
+                b: 'Recuperada nas ruínas da Capela Rubra. A análise de Carbono-14 falhou; o objeto envelhece e rejuvenesce ciclicamente. <br><br><strong>Efeito Passivo:</strong> O usuário ganha +10 em testes de Presença, mas perde 1d4 de Sanidade por hora.<br><strong>Efeito Ativo:</strong> "Comando Absoluto". Alvos biológicos obedecem sem questionar. Falha crítica causa hemorragia cerebral.'
+            },
+            'cetro': {
+                t: 'O CETRO (Objeto 02)',
+                b: 'Encontrado cravado no peito de um agente desaparecido em 1999. O objeto vibra em frequências infra-som.<br><br><strong>Propriedade:</strong> Funciona como uma chave. Apontar para superfícies sólidas e gastar 5 PE permite atravessá-las como se fossem líquidas.<br><strong>Risco:</strong> Ocasionalmente, o que está do outro lado olha de volta.'
+            },
+            'colar': {
+                t: 'COLAR DE SANGUE (Objeto 03)',
+                b: 'Origem desconhecida. Parece reagir à adrenalina. As "pedras" do colar são, na verdade, olhos calcificados.<br><br><strong>Vínculo:</strong> Uma vez colocado, não pode ser removido sem cirurgia ou morte. Concede Regeneração 5, mas exige 1L de sangue humano a cada 24 horas.'
+            }
+        };
+
+        function openModal(id){
+            mTitle.innerText = db[id].t;
+            mBody.innerHTML = db[id].b;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal(){
+            modal.style.display = 'none';
+        }
+
+        // --- EASTER EGG CONSOLE ---
+        console.log("%c CONSELHO ESCARLATE", "color: red; font-size: 20px; font-weight: bold; background: black; padding: 5px;");
+        console.log("Conexão estabelecida com Demonlarium...");
+        console.log("Não olhe para trás.");
+
+    </script>
+</body>
+</html>

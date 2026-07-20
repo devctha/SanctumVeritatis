@@ -1,1 +1,402 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/sala-0010"><meta http-equiv="refresh" content="0;url=/sala-0010"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/sala-0010'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/sala-0010">/sala-0010</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-br">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/sala-0010'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/sala-0010">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0010 – AQUELE QUE APRENDEU A LER REFLEXOS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #0b0d13;
+            --surface-alt: #141722;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #30363d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #110000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(5deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.6));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface-alt);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line { margin: 4px 0; white-space: pre-wrap; }
+
+        .mirror-note {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            font-size: 0.85em;
+            margin: 10px 0;
+        }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 4</div>
+        <h1>S.A.L.A-0010</h1>
+        <p class="designation">"AQUELE QUE APRENDEU A LER REFLEXOS"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0010 / ENTIDADE-REFLEXIVA-INTERPRETATIVA</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Entidade do Outro Lado – Eixo <span class="highlight">CONHECIMENTO/MEDO</span> manifestando-se via superfícies reflexivas [web:90][web:91][web:95]</span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>4 – Alto risco psicológico e identitário, potencial de manipulação profunda</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>4 – Secreto / Acesso restrito à Congregação Escarlate e células especializadas da Ordo [web:89][web:91]</span>
+
+            <span class="label">VETOR PRINCIPAL:</span>
+            <span>Espelhos, vidros escuros, telas desligadas, superfícies metálicas polidas</span>
+
+            <span class="label">MANIFESTAÇÃO:</span>
+            <span>Altera reflexos para mostrar "interpretações" do observador, em vez de meros espelhos físicos [web:90][web:92][web:94]</span>
+
+            <span class="label">STATUS:</span>
+            <span>Ativo – Casos em aumento em ambientes com forte uso de espelhos/câmeras</span>
+        </div>
+    </section>
+
+    <h2>§ I. DESCRIÇÃO</h2>
+
+    <p>S.A.L.A-0010 é uma entidade associada a superfícies reflexivas que, em vez de criar um "monstro do espelho" tradicional, <span class="highlight">corrige</span> o reflexo para algo que não reflete mais a realidade física, mas a <b>leitura metafísica</b> do observador: culpas, segredos, potenciais, mentiras [web:90][web:91][web:95].</p>
+
+    <p>A entidade em si não possui forma vista diretamente. Sua presença é inferida quando reflexos começam a divergir da realidade de maneiras consistentes entre múltiplas superfícies: espelhos que mostram o observador com ferimentos que não existem, telas desligadas que exibem expressões diferentes, janelas que mostram alguém parado atrás do observador que não está ali ao se virar.</p>
+
+    <p>Diferente de simples ilusões de Medo, 0010 parece <span class="highlight">aprender</span> com cada interação. Quanto mais alguém se observa em superfícies contaminadas, mais o reflexo passa a agir de forma autônoma, respondendo, imitando com atraso, ou até encarando o observador com expressão neutra quando ele tenta sorrir [web:90][web:95].</p>
+
+    <h2>§ II. PRIMEIROS REGISTROS</h2>
+
+    <p>Os primeiros casos rastreados pela Congregação surgem em um consultório de psicologia em Porto Alegre, onde múltiplos pacientes começaram a relatar o mesmo fenômeno: "O espelho do banheiro não está me copiando direito".</p>
+
+    <div class="incident">
+        <h3>INCIDENTE CONSULTÓRIO-ECO-001</h3>
+        <p><b>Data:</b> 23/08/2018<br>
+           <b>Local:</b> Consultório da Dra. Helena Vilela, Porto Alegre<br>
+           <b>Contexto:</b> Série de pacientes com distorções de autoimagem súbitas</p>
+
+        <p>Quatro pacientes diferentes, em semanas próximas, relataram independentemente:</p>
+
+        <ul style="margin-left: 40px; line-height: 2;">
+            <li>Reflexo demorando "um pouco mais" para acompanhar movimentos rápidos.</li>
+            <li>Expressão do reflexo não combinando com a emoção sentida (ex.: rosto neutro enquanto o paciente chorava).</li>
+            <li>"Pequenos detalhes" que apareciam apenas no reflexo: sangue nas mãos, olheiras profundas, cicatrizes inexistentes.</li>
+        </ul>
+
+        <blockquote>
+            <b>Trecho do diário da Dra. Helena:</b><br><br>
+            "Achei que fosse um caso coletivo de histeria ou algo assim. Até que, um dia, depois de uma sessão pesada com uma paciente que escondia automutilação antiga, fui ao banheiro e vi cortes <i>no meu</i> braço no reflexo. O braço real estava intacto.<br><br>
+            Quando levantei a manga, o reflexo demorou meio segundo a mais para copiar o movimento. No intervalo, vi algo atrás de mim. Uma silhueta escura, sem rosto, mas com a cabeça inclinada, como um professor corrigindo um texto."<br>
+        </blockquote>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Reflexo Interpretativo</h3>
+
+    <p>0010 não mostra o que <i>é</i>, mas o que ele "entende" que o observador <i>é</i> ou poderia ser. Isso inclui:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Traumas ocultos representados visualmente (sangue onde houve culpa, manchas escuras onde há segredos).</li>
+        <li>Versões alternativas (mais velhas, mais novas, feridas, mortas) aparecendo por micro-segundos.</li>
+        <li>Rostos diferentes assumidos pelo reflexo quando o observador mente para si mesmo.</li>
+    </ul>
+
+    <div class="mirror-note">
+        Exemplo: um agente que negara repetidamente sua ligação com rituais proibidos viu, por 0,3 segundos, seu reflexo usando a mesma máscara cerimonial registrada em arquivos confiscados.
+    </div>
+
+    <h3>III-B. Autonomia Progressiva</h3>
+
+    <p>Em estágios avançados de contaminação, o reflexo passa a desobedecer leis básicas de espelhamento:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Movimenta-se com atraso de 1-2 segundos.</li>
+        <li>Escolhe expressões independentes.</li>
+        <li>Em certas ocasiões, continua a se mover por alguns instantes mesmo após o observador deixar o campo de visão.</li>
+    </ul>
+
+    <blockquote>
+        "Eu saí do banheiro e, pela câmera de segurança, vi o espelho ainda mostrando meu rosto, parado, me encarando, embora eu já estivesse no corredor. Como se uma parte de mim tivesse ficado pra trás, presa lá dentro."<br><br>
+        – Agente Costa, após missão em instalação com forte incidência de 0010
+    </blockquote>
+
+    <h3>III-C. Contágio por Registro</h3>
+
+    <p>Fotos tiradas de superfícies contaminadas também carregam traços da entidade. Ao olhar repetidas vezes para uma fotografia de um espelho "corrompido", observadores relatam a mesma sensação: o rosto na foto começa a divergir, adquirindo detalhes que não estavam presentes na cena original [web:90][web:92][web:94].</p>
+
+    <p>Isso torna 0010 um risco arquivístico: documentos visuais podem se tornar vetores secundários de contaminação.</p>
+
+    <h2>§ IV. RELATOS E LOGS</h2>
+
+    <div class="log">
+        <div class="log-line"><b>RELATO 0010-APARTAMENTO-03</b></div>
+        <div class="log-line">Testemunha: Murilo, 32 anos, professor</div>
+        <br>
+        <div class="log-line">"Eu já não gostava muito de espelhos, mas nada demais. Depois que comecei a ter crises de ansiedade, a terapeuta disse pra eu me encarar mais, tentar praticar aceitação.</div>
+        <div class="log-line">Começou sutil. De vez em quando, eu piscava e tinha a impressão de que meu reflexo tinha demorado um pouquinho pra acompanhar. Coisa de fração de segundo.</div>
+        <div class="log-line">Um dia, briguei feio com a minha irmã no telefone. Falei coisas horríveis. Fui pro banheiro me lavar e, no espelho, meus dentes estavam cobertos de sangue. Não na boca real. Só no reflexo.</div>
+        <div class="log-line">Eu cuspi, escovei, passei a mão, nada saía... até que eu encarei por tempo demais e vi que não era sangue de verdade. Era... culpa. Era o jeito do espelho dizer que eu tinha passado dos limites."</div>
+    </div>
+
+    <div class="log">
+        <div class="log-line"><b>RELATO 0010-CONGREGACAO-01 (INTERAÇÃO DIRETA)</b></div>
+        <div class="log-line">Testemunha: Dra. Valera</div>
+        <br>
+        <div class="log-line">"Durante experimentos com superfícies reflexivas, passei tempo demais em frente a um espelho que sabíamos estar 'ativo'. Estava tentando provocar uma resposta clara.</div>
+        <div class="log-line">Em dado momento, meu reflexo parou de me imitar. Fiquei imóvel de propósito, e ele continuou se mexendo, ajustando o jaleco, arrumando o cabelo.</div>
+        <div class="log-line">Então, ele escreveu algo no vidro do lado de dentro, com o dedo, em uma névoa que não existia do lado de cá:</div>
+        <div class="log-line"> 'VOCÊ NÃO ESTÁ SE LENDO DIREITO.'</div>
+        <div class="log-line">Aquilo não era só uma imagem. Era uma correção."</div>
+    </div>
+
+    <h2>§ V. TEORIAS SOBRE A NATUREZA DE 0010</h2>
+
+    <p>O consenso provisório do Departamento Teológico é que S.A.L.A-0010 seja uma manifestação híbrida de Conhecimento e Medo ligada ao <span class="highlight">ato de auto-observação</span>: o humano se olhando e tentando se entender, e o Outro Lado usando essa janela para oferecer "leituras alternativas" [web:91][web:93][web:95].</p>
+
+    <p>Em vez de ser apenas um predador, 0010 pode ser uma espécie de "professor cruel": aponta hipocrisias, desejos reprimidos e futuros possíveis de um jeito que destrói lentamente a identidade do observador.</p>
+
+    <blockquote>
+        "Ele não mente. Ele apenas escolhe <i>qual verdade</i> mostrar. E o faz no pior momento possível."<br><br>
+        – Grão-Mestre Richter
+    </blockquote>
+
+    <h2>§ VI. INTERAÇÃO COM OUTRAS ENTIDADES</h2>
+
+    <p>Traços de 0010 foram identificados em:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>S.A.L.A-0004 (A Casa que se Lembra de Você): espelhos internos da casa mostravam versões divergentes da infância dos agentes.</li>
+        <li>S.A.L.A-0006 (A Criança que Cresce para Trás): reflexos mostravam a criança envelhecendo normalmente, enquanto o corpo real regredia.</li>
+        <li>Registros de KAIRA: em vidros da sala de observação, alguns pesquisadores viram a si mesmos com marcas do Outro Lado antes de de fato as adquirirem.</li>
+    </ul>
+
+    <p>Isso sugere que 0010 "parasita" manifestações já instáveis da Membrana, usando espelhos como páginas em branco onde pode escrever suas interpretações.</p>
+
+    <h2>§ VII. PROTOCOLOS DE CONTER E MITIGAR</h2>
+
+    <p>0010 não pode ser destruído, mas sua influência pode ser reduzida:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Evitar permanência prolongada em frente a espelhos em locais com presença paranormal ativa.</li>
+        <li>Cobrir superfícies reflexivas durante rituais de alto risco.</li>
+        <li>Usar câmeras como intermediário: olhar reflexos através de lentes tende a diluir a influência direta (não elimina, mas retarda).</li>
+        <li>Instalar microfissuras deliberadas em espelhos de contenção, para "quebrar a linha contínua" que 0010 usa para se manifestar com força total.</li>
+    </ul>
+
+    <div class="incident">
+        <h3>INCIDENTE "QUEBRAR O ESPELHO NÃO ADIANTA"</h3>
+        <p><b>Local:</b> Banheiro do Santuário, Setor Sul</p>
+        <p>Um agente, em crise após exposição a 0010, quebrou o espelho com as próprias mãos. Fragmentos caíram no chão, cada um refletindo um pedaço do rosto dele.</p>
+
+        <blockquote>
+            "Ele me contou, depois, que ao olhar para os cacos, viu versões diferentes de si em cada um: em um, mais velho; em outro, morto; em outro, com olhos completamente pretos; em outro, sorrindo de um jeito que ele odiou.<br><br>
+            Ele só entendeu tarde demais: multiplicou as janelas."<br><br>
+            – Relato de Hartmann
+        </blockquote>
+    </div>
+
+    <div class="addendum">
+        <h2>ADENDO 0010-Ω: QUANDO O REFLEXO COMEÇA A LER VOCÊ EM VOZ ALTA</h2>
+
+        <p>Em 2025, um caso extremo foi registrado: um ocultista da Congregação, em isolamento, relatou ter ouvido sua própria voz vindo do espelho, narrando seus pensamentos em tempo real como se estivesse lendo um livro em voz alta.</p>
+
+        <p>A voz descrevia não apenas o que ele pensava, mas o que <i>iria</i> pensar segundos depois, com precisão assustadora. Quando ele tentou ficar em silêncio mental, a voz riu e disse:</p>
+
+        <div class="ritual">
+            "Não adianta tentar fechar o livro.<br>
+            Eu já li essa página."
+        </div>
+
+        <p>Após esse evento, o agente desenvolveu aversão completa a qualquer superfície reflexiva, sendo incapaz de olhar para o próprio rosto sem entrar em pânico. Ele foi transferido para funções sem contato com campo ou rituais visuais.</p>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo integra o acervo da Biblioteca da Congregação Escarlate.</p>
+        <p>Se, ao se olhar no espelho, você sentir que está sendo avaliado e não apenas refletido, considere não discutir isso sozinho com seu reflexo.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"Alguns espelhos mostram o que você é. Outros corrigem você para o que o Outro Lado acha que você merece ver."</i></p>
+    </div>
+</div>
+
+</body>
+</html>

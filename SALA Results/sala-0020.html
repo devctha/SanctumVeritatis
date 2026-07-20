@@ -1,1 +1,428 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/SALA Results/sala-0020"><meta http-equiv="refresh" content="0;url=/SALA Results/sala-0020"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/SALA Results/sala-0020'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/SALA Results/sala-0020">/SALA Results/sala-0020</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-br">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/SALA Results/sala-0020'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/SALA Results/sala-0020">
+    <meta charset="UTF-8">
+    <title>S.A.L.A-0020 – O VISITANTE QUE NUNCA SABE QUE CHEGOU</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Source+Code+Pro:wght@300;400;600&display=swap');
+
+        :root {
+            --crimson: #8b0000;
+            --gold: #d4af37;
+            --bg: #050509;
+            --surface: #14060b;
+            --text: #eee2d6;
+            --muted: #8b7d6b;
+            --border: #3d1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at top, #1a0000 0%, #000000 65%);
+            color: var(--text);
+            font-family: 'Source Code Pro', monospace;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 3px double var(--crimson);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: var(--crimson);
+            border: 3px solid var(--crimson);
+            padding: 8px 18px;
+            transform: rotate(5deg);
+            text-shadow: 0 0 15px rgba(139,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: var(--crimson);
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(139,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        .designation {
+            font-size: 1.1em;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .meta-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 22px 24px;
+            margin: 28px 0;
+            box-shadow: 0 0 20px rgba(139,0,0,0.3);
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--crimson);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin: 45px 0 20px;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em;
+            color: var(--gold);
+            margin: 25px 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p { margin: 14px 0; text-align: justify; }
+
+        .redacted {
+            background: #000;
+            color: transparent;
+            padding: 0 6px;
+            user-select: none;
+        }
+
+        .highlight {
+            background: rgba(139,0,0,0.17);
+            border-left: 3px solid var(--crimson);
+            padding: 1px 6px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--crimson);
+            background: rgba(139,0,0,0.12);
+            padding: 18px 20px;
+            margin: 22px 0;
+            font-style: italic;
+        }
+
+        .incident {
+            background: linear-gradient(135deg, rgba(139,0,0,0.22), rgba(10,0,0,0.5));
+            border: 2px solid var(--crimson);
+            padding: 24px 22px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .incident::before {
+            content: "REGISTRO DE INCIDENTE";
+            position: absolute;
+            top: -13px;
+            left: 18px;
+            background: #050509;
+            padding: 0 10px;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+        }
+
+        .log {
+            background: var(--surface);
+            border-left: 4px solid var(--gold);
+            padding: 18px 18px 10px;
+            margin: 18px 0;
+            font-size: 0.9em;
+        }
+
+        .log-line { margin: 4px 0; white-space: pre-wrap; }
+
+        .visitor-note {
+            background: rgba(75,0,130,0.15);
+            border: 1px dashed var(--gold);
+            padding: 14px 16px;
+            margin: 14px 0;
+            font-size: 0.9em;
+        }
+
+        .addendum {
+            background: linear-gradient(to right, rgba(212,175,55,0.07), transparent);
+            padding: 26px 22px;
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            margin: 40px 0;
+        }
+
+        .ritual {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--crimson);
+            border: 2px double var(--gold);
+            padding: 16px 14px;
+            margin: 18px 0;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .meta-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="stamp">NÍVEL 5</div>
+        <h1>S.A.L.A-0020</h1>
+        <p class="designation">"O VISITANTE QUE NUNCA SABE QUE CHEGOU"</p>
+    </header>
+
+    <section class="meta-box">
+        <div class="meta-grid">
+            <span class="label">DESIGNAÇÃO:</span>
+            <span>S.A.L.A-0020 / ENTIDADE-ERRANTE-AMNÉSICA</span>
+
+            <span class="label">CLASSIFICAÇÃO:</span>
+            <span>Manifestação Física – Eixo <span class="highlight">MEDO/MORTE</span> com distorção de percepção temporal</span>
+
+            <span class="label">NÍVEL DE AMEAÇA:</span>
+            <span>5 – Alto / Induz amnésia profunda em si mesma e em observadores</span>
+
+            <span class="label">NÍVEL DE ACESSO:</span>
+            <span>5 – Ultra Secreto / Conselho Escarlate + Células de Observação Móvel</span>
+
+            <span class="label">APARÊNCIA:</span>
+            <span>Figura humanoide andrógina, vestindo roupas de viajante desgastadas, carregando mala antiga sempre vazia</span>
+
+            <span class="label">COMPORTAMENTO:</span>
+            <span>Anda por áreas urbanas e rurais como se estivesse procurando algo, mas nunca lembra o quê</span>
+
+            <span class="label">STATUS:</span>
+            <span>ATIVO MÓVEL – 1.247 avistamentos confirmados em 34 países desde 1952</span>
+        </div>
+    </section>
+
+    <h2>§ I. DESCRIÇÃO</h2>
+
+    <p>S.A.L.A-0020 é uma entidade humanóide que existe em estado perpétuo de <span class="highlight">chegada sem destino</span>. Ela vaga por cidades, estradas e vilarejos como se estivesse tentando chegar a algum lugar específico, mas nunca se lembra onde é esse lugar ou por que está indo para lá.</p>
+
+    <p>Visualmente, 0020 aparenta ter entre 30-45 anos (relatos variam), possui feições andróginas e usa roupas de viajante que parecem décadas desatualizadas—mas o estilo específico muda dependendo do local onde é avistada. Em São Paulo, usa terno de 1970. No interior, roupas de tropeiro do século XIX. Na Europa, trajes de peregrino medieval.</p>
+
+    <p>Sempre carrega uma mala de couro marrom, antiga e surrada. A mala nunca é aberta por 0020, mas quando autoridades ou investigadores a inspecionam, descobrem que está completamente vazia—não há nem forro interno, apenas um vazio impossível que parece mais profundo do que as dimensões externas permitiriam.</p>
+
+    <h2>§ II. PRIMEIRO REGISTRO OFICIAL</h2>
+
+    <div class="incident">
+        <h3>CASO ESTAÇÃO-RODOVIÁRIA-RJ</h3>
+        <p><b>Data:</b> 23/07/1952<br>
+           <b>Local:</b> Estação Rodoviária Central, Rio de Janeiro<br>
+           <b>Contexto:</b> Primeiro contato documentado fotograficamente</p>
+
+        <p>Uma figura foi vista perambulando pela estação rodoviária durante 11 horas consecutivas. Funcionários notaram porque a pessoa "parecia perdida", mas quando abordada, reagia com confusão:</p>
+
+        <blockquote>
+            <b>Transcrição de abordagem policial:</b><br><br>
+            Policial: "Senhor, posso ajudar? O senhor está perdido?"<br>
+            0020: "Eu... acho que sim. Eu preciso chegar em... [pausa longa] onde eu preciso chegar?"<br>
+            Policial: "Não sei, senhor. Para onde o senhor está indo?"<br>
+            0020: [Olha para a mala, depois ao redor, expressão de confusão profunda] "Eu estava indo para... não, eu vim de... espera, eu já cheguei?"<br>
+            Policial: "O senhor acabou de chegar de viagem?"<br>
+            0020: [Longa pausa] "Não sei. Por que estou com essa mala? É minha?"<br>
+            Policial: "O senhor não sabe se a mala é sua?"<br>
+            0020: "Acho que sim. Estou carregando ela. Mas... por quê?"
+        </blockquote>
+
+        <p>O policial tentou verificar documentos, mas 0020 não carregava nenhum. Quando solicitado a acompanhar à delegacia, a entidade concordou—mas ao virar a esquina do prédio, simplesmente <b>não estava mais lá</b>. Desapareceu entre dois passos.</p>
+
+        <p>Três dias depois, foi vista em Porto Alegre, com as mesmas roupas, mesma mala, mesma expressão perdida.</p>
+    </div>
+
+    <h2>§ III. PROPRIEDADES ANÔMALAS</h2>
+
+    <h3>III-A. Amnésia Perpétua</h3>
+
+    <p>0020 não possui memória de curto prazo funcional. Cada interação com ela revela que <span class="highlight">ela não se lembra de nada além dos últimos 3-7 minutos</span>. Pergunte seu nome, ela não sabe. Pergunte de onde veio, ela esqueceu. Pergunte para onde vai, ela olha ao redor confusa, como se tivesse acabado de perceber que está caminhando.</p>
+
+    <p>Mais perturbador: ela não parece angustiada por isso. A amnésia é tão completa que ela esquece que deveria se lembrar de algo. É como se sua identidade fosse resetada a cada poucos minutos, criando um loop eterno de "acabar de chegar" sem nunca ter partido.</p>
+
+    <h3>III-B. Contágio de Esquecimento</h3>
+
+    <p>Pessoas que interagem com 0020 por mais de 15 minutos começam a experimentar <span class="highlight">falhas de memória seletivas</span>:</p>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Esquecem por que abordaram 0020 em primeiro lugar.</li>
+        <li>Não conseguem lembrar detalhes da conversa momentos depois.</li>
+        <li>Em casos avançados, esquecem que encontraram alguém—mas têm vaga sensação de que "algo importante aconteceu".</li>
+    </ul>
+
+    <div class="visitor-note">
+        <b>Relato de testemunha:</b><br>
+        "Eu estava andando no centro e vi um cara com mala parado na esquina, olhando ao redor. Parecia perdido. Fui perguntar se precisava de ajuda. Conversamos por... não sei quanto tempo. Mas quando me virei para ir embora, não conseguia lembrar sobre o que tínhamos falado. Nem o rosto dele. Só que ele tinha uma mala. E por algum motivo, isso me deixou triste."
+    </div>
+
+    <h3>III-C. Deslocamento Impossível</h3>
+
+    <p>0020 "viaja" de formas inexplicáveis. Ela pode ser vista em uma cidade pela manhã e aparecer em outra, centenas de quilômetros distante, à tarde—sempre a pé, sempre carregando a mesma mala, sempre parecendo ter acabado de chegar.</p>
+
+    <p>Não há evidência de uso de transporte. Câmeras de segurança capturam ela <b>simplesmente aparecendo</b> em locais, geralmente em esquinas, becos ou entradas de estações—como se tivesse acabado de sair de um veículo invisível.</p>
+
+    <h2>§ IV. PADRÕES DE COMPORTAMENTO</h2>
+
+    <div class="log">
+        <div class="log-line"><b>ANÁLISE COMPORTAMENTAL – 1.247 AVISTAMENTOS</b></div>
+        <br>
+        <div class="log-line">• Sempre aparece em locais de trânsito: estações, terminais, cruzamentos, praças centrais.</div>
+        <div class="log-line">• Caminha lentamente, olhando ao redor como se procurasse algo familiar.</div>
+        <div class="log-line">• Ocasionalmente para, coloca a mala no chão, abre ela, olha dentro, fecha confusa.</div>
+        <div class="log-line">• Quando questionada, responde educadamente mas sempre com confusão sobre sua situação.</div>
+        <div class="log-line">• Nunca come, nunca bebe, nunca dorme (observações de até 72h confirmam isso).</div>
+        <div class="log-line">• Se forçada a ir a algum lugar específico, desaparece assim que perde linha de visão do observador.</div>
+        <div class="log-line">• 89% dos avistamentos ocorrem entre 14h-18h, horário de "chegada" típico de viajantes.</div>
+    </div>
+
+    <h2>§ V. TENTATIVAS DE COMUNICAÇÃO PROFUNDA</h2>
+
+    <div class="incident">
+        <h3>OPERAÇÃO DESTINO-FIXO</h3>
+        <p><b>Data:</b> 11/2021<br>
+           <b>Objetivo:</b> Estabelecer diálogo prolongado e descobrir "destino" de 0020</p>
+
+        <p>Agente treinado em interrogatório paranormal passou 4 horas seguindo e conversando com 0020, fazendo perguntas repetidas para mapear padrões:</p>
+
+        <blockquote>
+            <b>Fragmentos da conversa:</b><br><br>
+            [Hora 1]<br>
+            Agente: "Para onde você está indo?"<br>
+            0020: "Eu... não sei. Mas sinto que preciso chegar lá."<br>
+            Agente: "Onde é 'lá'?"<br>
+            0020: "Boa pergunta. Você sabe?"<br><br>
+            [Hora 2]<br>
+            Agente: "O que tem na mala?"<br>
+            0020: [Abre, olha dentro] "Nada. Sempre foi assim?"<br>
+            Agente: "Não sei. Por que você carrega uma mala vazia?"<br>
+            0020: "Eu carrego? Ah, sim. Estou carregando. Talvez eu precise dela quando chegar."<br>
+            Agente: "Chegar onde?"<br>
+            0020: [Pausa] "Você acabou de me perguntar isso?"<br><br>
+            [Hora 3]<br>
+            Agente: "Você se lembra de mim?"<br>
+            0020: "Deveria? Você está me ajudando a encontrar o lugar?"<br>
+            Agente: "Que lugar?"<br>
+            0020: "Não sei. Mas quando eu chegar, vou saber."<br>
+            Agente: "Como você vai saber se não sabe onde é?"<br>
+            0020: [Primeira vez que demonstra emoção—quase chorando] "Porque... porque eu vou finalmente poder parar de procurar."<br><br>
+            [Hora 4]<br>
+            0020: "Você está me seguindo há quanto tempo?"<br>
+            Agente: "Quatro horas."<br>
+            0020: "É? Parece que acabei de te conhecer. Ou... já te conheci antes?"<br>
+            Agente: "Nós conversamos várias vezes nas últimas horas."<br>
+            0020: "Sobre o quê?"<br>
+            Agente: "Sobre onde você está indo."<br>
+            0020: [Olha ao redor] "Para onde estou indo mesmo?"
+        </blockquote>
+
+        <p>O agente relatou sensação crescente de desorientação. No final das 4 horas, ele próprio começou a questionar por que estava seguindo aquela pessoa e para onde estava indo.</p>
+    </div>
+
+    <h2>§ VI. TEORIAS SOBRE NATUREZA</h2>
+
+    <h3>Teoria 1: O Viajante Eterno</h3>
+
+    <p>0020 pode ter sido, em algum momento, uma pessoa real que morreu durante uma viagem—mas o desejo de "chegar" era tão intenso que ela continua existindo como eco, eternamente buscando um destino que já não existe.</p>
+
+    <h3>Teoria 2: Manifestação de Saudade Coletiva</h3>
+
+    <p>Outra hipótese: 0020 é a personificação de todas as pessoas que partiram e nunca voltaram. Cada emigrante, cada viajante perdido, cada pessoa que disse "volto logo" e desapareceu—suas histórias se fundiram em uma entidade que <span class="highlight">eternamente está "quase chegando"</span> mas nunca chega.</p>
+
+    <h3>Teoria 3: Fragmento de 0001</h3>
+
+    <p>Alguns teóricos sugerem que 0020 seja um <b>habitante de S.A.L.A-0001</b> (A Cidade Vazia) que conseguiu escapar, mas perdeu completamente a memória de onde veio e para onde ia. Ela ainda carrega a mala, sugerindo que estava em trânsito—talvez tentando sair da Cidade, mas agora perdida no mundo real.</p>
+
+    <h2>§ VII. CONEXÕES COM OUTRAS ENTIDADES</h2>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li><b>0001:</b> Relatos indicam que 0020 já foi vista dentro da Cidade Vazia, caminhando pelas ruas como se procurasse algo.</li>
+        <li><b>0015:</b> A mala vazia pode estar conectada à entidade de ausência—talvez contenha algo que foi esquecido ontologicamente.</li>
+        <li><b>0016:</b> 0020 nunca tenta "voltar para casa", sugerindo que perdeu até mesmo o conceito de lar.</li>
+        <li><b>0012 (A Testemunha):</b> 0012 aparece em 34% dos avistamentos de 0020, sempre observando de longe, como se documentasse sua jornada eterna.</li>
+    </ul>
+
+    <h2>§ VIII. PROTOCOLOS DE INTERAÇÃO</h2>
+
+    <ul style="margin-left: 40px; line-height: 2;">
+        <li>Se avistar 0020, não tente detê-la fisicamente—ela desaparecerá.</li>
+        <li>Conversas devem ser limitadas a 10 minutos para evitar contágio de amnésia.</li>
+        <li>Não pergunte repetidamente as mesmas coisas—isso parece causar angústia na entidade.</li>
+        <li>NUNCA ofereça indicações de "para onde ir"—vítimas que fizeram isso reportaram que 0020 as seguiu por dias.</li>
+        <li>Se 0020 perguntar "você sabe onde eu preciso ir?", responda "não" e afaste-se.</li>
+    </ul>
+
+    <div class="addendum">
+        <h2>ADENDO 0020-Ω: A MALA FINALMENTE ABERTA</h2>
+
+        <p>Em 2023, durante um avistamento em Curitiba, 0020 deixou a mala no chão por alguns segundos. Um agente conseguiu fotografar o interior com câmera de alta resolução antes dela pegá-la de volta.</p>
+
+        <p>A análise da foto revelou algo impossível: dentro da mala, refletida em alguma superfície interna imperceptível, havia <span class="highlight">uma fotografia antiga de uma família</span>. Seis pessoas sorrindo em frente a uma casa. Uma delas—um homem de aproximadamente 35 anos—tinha semelhança física com 0020.</p>
+
+        <p>Investigação da foto levou a descoberta perturbadora: a família existiu. A casa existiu. Mas desapareceram completamente em 1947, durante mudança para cidade distante. O caminhão de mudança nunca chegou. A família nunca chegou. Nenhum corpo foi encontrado.</p>
+
+        <div class="ritual">
+            "Ela não está procurando um lugar.<br>
+            Ela está procurando o momento em que chegaria.<br>
+            O momento em que desceria do caminhão,<br>
+            Abriria a porta da casa nova,<br>
+            E diria: 'Chegamos. Estamos em casa.'<br>
+            Mas esse momento nunca aconteceu.<br>
+            Então ela caminha.<br>
+            E caminha.<br>
+            E continua quase chegando.<br>
+            Para sempre."
+        </div>
+
+        <p>Se essa teoria estiver correta, 0020 pode não ser uma entidade—pode ser um <b>fantasma coletivo de uma família inteira</b>, fundida em uma única forma, eternamente viajando para um lar que deixou de existir antes que eles chegassem.</p>
+
+        <p>A mala está vazia porque tudo que era importante ficou para trás. E agora, só resta a jornada.</p>
+    </div>
+
+    <div class="footer">
+        <p>Este arquivo integra o acervo da Biblioteca da Congregação Escarlate.</p>
+        <p>Se você ver alguém parado na esquina, com mala antiga, olhando ao redor como se estivesse perdido... talvez ofereça um sorriso gentil. Mas não pergunte para onde vai. Ela não sabe. E talvez seja melhor assim.</p>
+        <p style="margin-top: 10px; color: var(--crimson);"><i>"Nem toda jornada tem destino. Algumas são apenas o ato de caminhar, eternamente quase chegando."</i></p>
+    </div>
+</div>
+
+</body>
+</html>

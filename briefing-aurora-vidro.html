@@ -1,1 +1,565 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/briefing-aurora-vidro"><meta http-equiv="refresh" content="0;url=/briefing-aurora-vidro"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/briefing-aurora-vidro'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/briefing-aurora-vidro">/briefing-aurora-vidro</a>.</p></body></html>
+<!doctype html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/briefing-aurora-vidro'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/briefing-aurora-vidro">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>SV.BRIEF — Aurora de Vidro (Equipe-01)</title>
+  <style>
+    :root{
+      --bg:#07070a;
+      --panel:rgba(255,255,255,.05);
+      --panel2:rgba(255,255,255,.075);
+      --line:rgba(255,255,255,.10);
+      --muted:rgba(255,255,255,.65);
+      --text:rgba(255,255,255,.92);
+
+      --gold:#AD974F;
+      --gold2:#8E793E;
+      --gold3:#E7D7A6;
+
+      --danger:#ff4d6d;
+      --ok:#36d399;
+      --warn:#ffcc66;
+
+      --radius:16px;
+      --shadow:0 18px 60px rgba(0,0,0,.55);
+      --shadow2:0 12px 30px rgba(0,0,0,.55);
+
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 0%, rgba(173,151,79,.10), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(142,121,62,.10), transparent 60%),
+        radial-gradient(900px 600px at 50% 100%, rgba(255,255,255,.05), transparent 70%),
+        linear-gradient(180deg, #050508, #07070a 45%, #06060a);
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    button{ font:inherit; }
+
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px 18px 44px;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom: 14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(173,151,79,.18);
+      background: linear-gradient(180deg, rgba(173,151,79,.10), rgba(255,255,255,.02));
+      box-shadow: var(--shadow2);
+    }
+    .sigil{
+      width:42px; height:42px; border-radius:12px;
+      position:relative;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(231,215,166,.35), transparent 55%),
+        linear-gradient(135deg, rgba(173,151,79,.35), rgba(142,121,62,.15));
+      border: 1px solid rgba(231,215,166,.35);
+      overflow:hidden;
+    }
+    .sigil:before{
+      content:"";
+      position:absolute;
+      inset:-20px;
+      background:
+        conic-gradient(from 180deg,
+          rgba(231,215,166,.0),
+          rgba(231,215,166,.35),
+          rgba(231,215,166,.0),
+          rgba(173,151,79,.0),
+          rgba(173,151,79,.30),
+          rgba(173,151,79,.0)
+        );
+      animation: spin 8s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
+
+    .brand h1{
+      margin:0;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      line-height:1.1;
+    }
+    .brand small{
+      display:block;
+      margin-top:4px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border:1px solid rgba(173,151,79,.28);
+      background: rgba(173,151,79,.10);
+      color: rgba(231,215,166,.95);
+      padding: 8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition:.15s ease;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .btn:hover{
+      border-color: rgba(231,215,166,.45);
+      background: rgba(173,151,79,.14);
+    }
+    .btn.ghost{
+      border-color: rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: rgba(255,255,255,.80);
+    }
+    .btn.danger{
+      border-color: rgba(255,77,109,.35);
+      background: rgba(255,77,109,.08);
+      color: rgba(255,190,200,.95);
+    }
+
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero{
+      padding: 16px 16px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(1200px 360px at 10% 0%, rgba(173,151,79,.22), transparent 60%),
+        radial-gradient(900px 320px at 85% 0%, rgba(231,215,166,.12), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.20), rgba(255,255,255,.02));
+    }
+
+    .hero h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .sub{
+      margin-top: 8px;
+      font-family: var(--mono);
+      color: rgba(255,255,255,.75);
+      font-size: 12px;
+      letter-spacing: .04em;
+      line-height: 1.4;
+    }
+
+    .tags{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .tag{
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing:.03em;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color: rgba(255,255,255,.78);
+      white-space: nowrap;
+    }
+    .tag.gold{
+      border-color: rgba(173,151,79,.30);
+      background: rgba(173,151,79,.10);
+      color: rgba(231,215,166,.95);
+    }
+    .tag.warn{
+      border-color: rgba(255,204,102,.30);
+      background: rgba(255,204,102,.08);
+      color: rgba(255,231,190,.92);
+    }
+    .tag.danger{
+      border-color: rgba(255,77,109,.35);
+      background: rgba(255,77,109,.08);
+      color: rgba(255,190,200,.95);
+    }
+
+    .body{
+      padding: 14px 16px 18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+      align-items:start;
+    }
+
+    .panel{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+    }
+    .panel h3{
+      margin:0 0 8px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(231,215,166,.95);
+    }
+
+    .mono{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.80);
+      line-height: 1.65;
+      margin: 0 0 10px;
+    }
+    ul{ padding-left: 18px; margin: 8px 0 0; }
+    li{ margin: 6px 0; font-family: var(--mono); font-size: 12px; color: rgba(255,255,255,.78); line-height:1.55; }
+
+    .hr{ height:1px; background: rgba(255,255,255,.10); margin: 12px 0; }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .cell{
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,.78);
+      line-height: 1.35;
+    }
+    .cell b{ color: rgba(231,215,166,.95); font-weight:600; }
+
+    .terminal{
+      border-radius: 16px;
+      border: 1px solid rgba(173,151,79,.25);
+      background: rgba(0,0,0,.28);
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(231,215,166,.92);
+      overflow:auto;
+      max-height: 440px;
+      white-space: pre-wrap;
+    }
+    .terminal .dim{ color: rgba(255,255,255,.55); }
+    .terminal .ok{ color: rgba(54,211,153,.90); }
+    .terminal .warn{ color: rgba(255,204,102,.92); }
+    .terminal .bad{ color: rgba(255,77,109,.92); }
+
+    .stamp{
+      display:inline-block;
+      font-family: var(--mono);
+      letter-spacing: .12em;
+      font-size: 11px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255,77,109,.55);
+      color: rgba(255,190,200,.95);
+      background: rgba(255,77,109,.06);
+      transform: rotate(-1.5deg);
+      user-select:none;
+    }
+
+    /* Diegético: “glitch” leve ao ativar replay */
+    .glitching .terminal{
+      animation: jitter .09s linear infinite;
+    }
+    @keyframes jitter{
+      0%{ transform: translate(0,0); }
+      25%{ transform: translate(0.4px,-0.6px); }
+      50%{ transform: translate(-0.6px,0.4px); }
+      75%{ transform: translate(0.6px,0.2px); }
+      100%{ transform: translate(0,0); }
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    @media print{
+      .actions{ display:none !important; }
+      body{ background:#fff; color:#000; }
+      .card{ box-shadow:none; }
+      .panel, .terminal{ border:1px solid #ccc; background:#fff; color:#000; }
+      .tag{ border:1px solid #ccc; background:#fff; color:#000; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap" id="app">
+    <div class="top">
+      <div class="brand" aria-label="Sanctum Veritatis">
+        <div class="sigil" aria-hidden="true"></div>
+        <div>
+          <h1>Sanctum Veritatis</h1>
+          <small>SV.BRIEF // BRIEFING INICIAL</small>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" onclick="window.print()">IMPRIMIR</button>
+        <button class="btn" id="btnReplay">REPLAY LOG</button>
+        <button class="btn danger" id="btnSeal">LACRAR</button>
+      </div>
+    </div>
+
+    <article class="card">
+      <header class="hero">
+        <h2>Briefing Inicial — Equipe-01</h2>
+        <div class="sub">
+          Operação: AURORA DE VIDRO // Código interno: HORDA<br/>
+          Teatro: Vík, Islândia // Dezembro 2025 // Condição estimada: -8°C<br/>
+          Classificação: INTERNO (Leitura) // Janela inicial: 72h
+        </div>
+
+        <div class="tags">
+          <span class="tag gold">OPERAÇÃO NORMAL</span>
+          <span class="tag warn">HIPÓTESE: CONHECIMENTO</span>
+          <span class="tag danger">RISCO: ALTO</span>
+          <span class="tag">SV-OP-AV</span>
+        </div>
+      </header>
+
+      <section class="body">
+        <div class="grid">
+          <!-- ESQUERDA -->
+          <div>
+            <div class="panel">
+              <h3>Objetivo</h3>
+              <p class="mono">
+                Infiltrar o perímetro urbano de Vík, confirmar a natureza do “silêncio” (falha física vs. camuflagem ativa),
+                localizar as equipes locais desaparecidas e coletar evidência bruta do fenômeno luminoso sem reproduzir padrões
+                verbalmente.
+              </p>
+              <div class="hr"></div>
+              <h3>Regras críticas</h3>
+              <ul>
+                <li>Dupla observação: ninguém olha para o céu sem observador secundário.</li>
+                <li>Tempo de exposição: 10 segundos por janela; alternância obrigatória.</li>
+                <li>Se ocorrer sorriso involuntário, registrar e recuar imediatamente.</li>
+                <li>Não transcrever padrões em voz alta; registrar apenas em mídia local.</li>
+                <li>Comunicação externa em bursts (3–5s). Se “parecer seguro”, não é.</li>
+              </ul>
+            </div>
+
+            <div class="panel" style="margin-top:12px;">
+              <h3>Hipótese operacional (Elemento Conhecimento)</h3>
+              <p class="mono">
+                A hipótese “Conhecimento” sugere um vetor que atua por compreensão: quando o observador reconhece a estrutura,
+                a estrutura passa a reconhecer o observador. O fenômeno não precisa de contato físico, nem de som: basta
+                o ato de “ler” as luzes.
+              </p>
+              <p class="mono dim">
+                Nota de análise: o risco não é apenas ver. É entender.
+              </p>
+            </div>
+
+            <div class="panel" style="margin-top:12px;">
+              <h3>Mandantes</h3>
+              <div class="kv">
+                <div class="cell"><b>Autoridade</b><br/>Dr. Hartmann</div>
+                <div class="cell"><b>Tática</b><br/>Cmd. McRae</div>
+                <div class="cell"><b>Inteligência</b><br/>Yara Saldanha</div>
+                <div class="cell"><b>Sigilo</b><br/>Pe. Damián Corvin</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIREITA -->
+          <aside>
+            <div class="panel">
+              <h3>Composição (Equipe-01)</h3>
+              <ul>
+                <li>Agente “LARK” (líder de infiltração)</li>
+                <li>Agente “MUIR” (comunicações / rádio)</li>
+                <li>Agente “HEATH” (observador secundário / perímetro)</li>
+                <li>Agente “SOLACE” (registro / evidências)</li>
+              </ul>
+            </div>
+
+            <div class="panel" style="margin-top:12px;">
+              <h3>Status</h3>
+              <p class="mono">
+                <span class="stamp" id="miaStamp" style="display:none;">MIA — PERDA EM CAMPO</span>
+              </p>
+              <div class="terminal" id="logBox" aria-label="Log de conversa (SV.AUDIT / rádio)">
+                <span class="dim">Pressione “REPLAY LOG” para exibir a sequência completa.</span>
+              </div>
+            </div>
+
+            <div class="panel" style="margin-top:12px;">
+              <h3>Observação (leitura)</h3>
+              <p class="mono">
+                Este briefing inclui o log de rádio do primeiro contato. O conteúdo foi preservado como evidência
+                e pode conter padrões comportamentais relevantes.
+              </p>
+              <p class="mono dim">
+                Se em jogo você quiser “hack”, esconda uma chave em comentários HTML (abaixo) ou em um atributo data-*.
+              </p>
+
+              <!--
+                KEY (diegético): HORDA-LEX-17
+                hint: "o primeiro erro foi olhar como quem lê"
+              -->
+            </div>
+          </aside>
+        </div>
+      </section>
+    </article>
+  </div>
+
+  <script>
+    const app = document.getElementById("app");
+    const logBox = document.getElementById("logBox");
+    const btnReplay = document.getElementById("btnReplay");
+    const btnSeal = document.getElementById("btnSeal");
+    const miaStamp = document.getElementById("miaStamp");
+
+    const lines = [
+      "[sv.audit] event=MISSION_BRIEF op=aurora_vidro codename=HORDA unit=EQUIPE-01",
+      "[sv.ops]  directive='dupla observação; exposição em janelas; não transcrever em voz alta'",
+      "",
+      "[T+00.0s] [MUIR/RÁDIO] Checando canal. Sinal limpo. Entrando no perímetro.",
+      "[T+01.6s] [LARK] Confirmo. Céu ativo. Luzes... não estão como aurora normal.",
+      "[T+03.2s] [SOLACE] Gravando. RAW. Sem compressão. Sem preview em tela grande.",
+      "[T+04.9s] [HEATH] Perímetro quieto. Ruas vazias. Sem veículos. Sem som.",
+      "[T+06.1s] [LARK] Estou vendo padrão. Não é aleatório. Tem repetição.",
+      "[T+07.4s] [MUIR/RÁDIO] LARK, tempo. Dez segundos. Alterna.",
+      "[T+08.2s] [LARK] Só mais— ...isso parece uma sequência. Como se fosse—",
+      "[T+09.0s] [SOLACE] Não verbaliza. Registra e recua.",
+      "[T+10.1s] [HEATH] LARK está sorrindo. LARK? Você tá sorrindo.",
+      "[T+11.0s] [LARK] (riso baixo) Não. Tô normal. Eu só... entendi. Eu entendi.",
+      "[T+12.2s] [MUIR/RÁDIO] 'Entendeu' o quê? LARK, tira o olho do céu.",
+      "[T+13.3s] [LARK] Não é luz. É texto. Não é texto... é instrução.",
+      "[T+14.6s] [SOLACE] Heath, puxa ele. Agora.",
+      "[T+15.2s] [HEATH] Tentando. Ele tá parado. Pesado. Como se...",
+      "[T+16.1s] [MUIR/RÁDIO] LARK, responde com palavra curta. SIM/NÃO. Você foi exposto?",
+      "[T+17.0s] [LARK] (sorrindo) Nós fomos vistos.",
+      "[T+17.6s] [SOLACE] Contaminação por olhar. A gente não sabia. Recuar! RECUAR!",
+      "[T+18.3s] [MUIR/RÁDIO] Perdi retorno do LARK. Sinal caiu—",
+      "[T+18.9s] [HEATH] Eles estão olhando pra cima. Eu— eu não quero, mas—",
+      "[T+19.4s] [SOLACE] Fecha os olhos! Fecha os olhos!",
+      "[T+19.8s] [MUIR/RÁDIO] ...sorrindo.",
+      "",
+      "[sv.audit] event=COMMS_LOST unit=EQUIPE-01 window=<20s status=MIA",
+      "[sv.audit] note='vetor provável: visual/compreensão; gatilho: reconhecimento de padrão'",
+      "[sv.audit] action='bloqueio de repetição verbal; reforçar dupla observação; reduzir janelas para 5s'"
+    ];
+
+    let playing = false;
+    let timer = null;
+
+    function resetLog(){
+      logBox.textContent = "";
+      miaStamp.style.display = "none";
+      app.classList.remove("glitching");
+    }
+
+    function append(text){
+      // simples: preserva quebras
+      logBox.textContent += (logBox.textContent ? "\n" : "") + text;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function play(){
+      if(playing) return;
+      playing = true;
+      resetLog();
+      btnReplay.textContent = "REPRODUZINDO...";
+      btnReplay.disabled = true;
+
+      let i = 0;
+      const start = Date.now();
+
+      // insere aos poucos (efeito de log chegando)
+      timer = setInterval(() => {
+        if(i >= lines.length){
+          clearInterval(timer);
+          playing = false;
+          btnReplay.textContent = "REPLAY LOG";
+          btnReplay.disabled = false;
+
+          miaStamp.style.display = "inline-block";
+          app.classList.add("glitching");
+          setTimeout(() => app.classList.remove("glitching"), 900);
+          return;
+        }
+
+        append(lines[i]);
+        i++;
+
+        // acelera perto do fim (quando “cai em menos de 20s”)
+        if(i > 18) {
+          clearInterval(timer);
+          timer = setInterval(() => {
+            if(i >= lines.length){
+              clearInterval(timer);
+              playing = false;
+              btnReplay.textContent = "REPLAY LOG";
+              btnReplay.disabled = false;
+
+              miaStamp.style.display = "inline-block";
+              app.classList.add("glitching");
+              setTimeout(() => app.classList.remove("glitching"), 900);
+              return;
+            }
+            append(lines[i]);
+            i++;
+          }, 60);
+        }
+      }, 220);
+    }
+
+    btnReplay.addEventListener("click", play);
+
+    btnSeal.addEventListener("click", () => {
+      btnSeal.textContent = "LACRADO";
+      btnSeal.disabled = true;
+      document.documentElement.setAttribute("data-sealed", "true");
+      setTimeout(() => {
+        btnSeal.textContent = "LACRAR";
+        btnSeal.disabled = false;
+        document.documentElement.removeAttribute("data-sealed");
+      }, 1400);
+    });
+  </script>
+</body>
+</html>

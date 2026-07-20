@@ -1,1 +1,901 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/mariposa"><meta http-equiv="refresh" content="0;url=/SAS Results/mariposa"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/SAS Results/mariposa'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/SAS Results/mariposa">/SAS Results/mariposa</a>.</p></body></html>
+<!doctype html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/SAS Results/mariposa'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/SAS Results/mariposa">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>S.A.S • MARIPOSA • Ariadne Valença</title>
+
+  <style>
+    :root{
+      --bg0:#04030a;
+      --bg1:#07081b;
+
+      --violet:#a855f7;
+      --blue:#38bdf8;
+      --green:#22c55e;
+      --red:#ef4444;
+      --orange:#fb923c;
+
+      --text:#dbeafe;
+      --muted: rgba(219,234,254,.68);
+      --grid: rgba(86, 88, 240, .10);
+
+      --shadowV: 0 0 14px rgba(168,85,247,.35);
+      --shadowB: 0 0 16px rgba(56,189,248,.22);
+      --shadowG: 0 0 14px rgba(34,197,94,.22);
+      --shadowR: 0 0 14px rgba(239,68,68,.20);
+      --shadowO: 0 0 14px rgba(251,146,60,.16);
+
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      --scan-opacity: .11;
+      --noise-opacity: .07;
+      --flicker: .050;
+      --shake: 0px;
+
+      /* Readability */
+      --fz: 13px;
+      --fzSmall: 12px;
+      --pad: 12px;
+      --padSmall: 10px;
+      --line: 1.55;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: var(--mono);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 16% 12%, rgba(168,85,247,.12), transparent 62%),
+        radial-gradient(900px 650px at 86% 22%, rgba(56,189,248,.10), transparent 60%),
+        radial-gradient(900px 650px at 50% 92%, rgba(34,197,94,.08), transparent 62%),
+        radial-gradient(1200px 900px at 50% 50%, rgba(239,68,68,.10), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow:hidden;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      width:100%;
+      padding: clamp(12px, 2vw, 20px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: clamp(10px, 1.6vw, 16px);
+      isolation:isolate;
+      transform: translate3d(var(--shake), 0, 0);
+    }
+
+    /* CRT overlay */
+    .crt::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(110% 100% at 50% 40%, rgba(255,255,255,.055), transparent 62%),
+        linear-gradient(90deg, rgba(255,0,0,.03), transparent 22%, rgba(0,255,255,.02) 60%, transparent);
+      mix-blend-mode: screen;
+      opacity:.50;
+      z-index: 3;
+      filter: blur(.2px);
+    }
+    .crt::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      pointer-events:none;
+      background: linear-gradient(to bottom, rgba(0,0,0,.60) 50%, rgba(255,255,255,.04) 50%);
+      background-size: 100% 2px;
+      opacity: var(--scan-opacity);
+      z-index: 4;
+      animation: scanShift 10s linear infinite;
+    }
+    @keyframes scanShift{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+
+    .noise{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index: 5;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      mix-blend-mode: overlay;
+      animation: noiseDrift 3.6s steps(2) infinite;
+    }
+    @keyframes noiseDrift{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-7px,5px,0); }
+      50%{ transform: translate3d(6px,-5px,0); }
+      75%{ transform: translate3d(-4px,-2px,0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    .flicker{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:6;
+      background: rgba(255,255,255, .02);
+      opacity:0;
+      animation: flicker 4.4s infinite;
+    }
+    @keyframes flicker{
+      0%, 100%{ opacity: 0; }
+      33%{ opacity: calc(var(--flicker) * 1.2); }
+      34%{ opacity: 0; }
+      58%{ opacity: calc(var(--flicker) * .8); }
+      59%{ opacity: 0; }
+      88%{ opacity: calc(var(--flicker) * 1.45); }
+      89%{ opacity: 0; }
+    }
+
+    header{
+      position:relative;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,24,.72), rgba(5,6,10,.44));
+      border: 1px solid rgba(168,85,247,.22);
+      box-shadow: var(--shadowV), var(--shadowB);
+      overflow:hidden;
+    }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .title{
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: 15px;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      line-height:1.1;
+    }
+    .sub{
+      margin-top:6px;
+      font-size: var(--fzSmall);
+      color: rgba(219,234,254,.74);
+      line-height:1.35;
+      max-width: 92ch;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,.24);
+      background: rgba(2,6,23,.35);
+      box-shadow: var(--shadowB);
+      font-size: 12px;
+      color: rgba(219,234,254,.82);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: var(--violet);
+      box-shadow: 0 0 14px rgba(168,85,247,.55);
+    }
+
+    main{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(10,12,20,.66), rgba(3,6,18,.46));
+      border: 1px solid rgba(168,85,247,.16);
+      box-shadow: var(--shadowV), var(--shadowB), inset 0 0 0 1px rgba(34,197,94,.08);
+      overflow:hidden;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .gridOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(70% 60% at 50% 35%, #000 60%, transparent 100%);
+      opacity:.55;
+      z-index:0;
+    }
+
+    .toolbar{
+      position:relative;
+      z-index:1;
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+    }
+    .toolbar .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.76);
+    }
+    .actions{ display:flex; gap: 10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+
+    .btn, .ghost{
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-family: var(--mono);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn{
+      border: 1px solid rgba(251,146,60,.22);
+      background: linear-gradient(180deg, rgba(251,146,60,.18), rgba(239,68,68,.10));
+      color: #ffe4c7;
+      box-shadow: var(--shadowO), var(--shadowR);
+      transition: transform .08s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    .ghost{
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(2,6,23,.22);
+      color: rgba(219,234,254,.82);
+      box-shadow: var(--shadowB);
+    }
+
+    .wrap{
+      position:relative;
+      z-index:1;
+      padding: 14px;
+      min-height:0;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+      display:grid;
+      gap: 12px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 12px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid2{ grid-template-columns: 1fr; } }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.25);
+      box-shadow: inset 0 0 0 1px rgba(56,189,248,.06);
+      overflow:hidden;
+      min-width: 0;
+    }
+
+    .cardHead{
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      min-width: 0;
+    }
+    .cardHead .h{
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.82);
+      min-width: 0;
+    }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: rgba(2,6,23,.28);
+      font-size: 12px;
+      color: rgba(219,234,254,.62);
+      white-space:nowrap;
+    }
+    .chip b{ color: rgba(219,234,254,.90); }
+
+    .cardBody{
+      padding: var(--pad);
+      min-width: 0;
+    }
+
+    .kv{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      padding: var(--padSmall);
+      box-shadow: var(--shadowV);
+      min-width: 0;
+    }
+    .kv .k{
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.55);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .kv .v{
+      margin-top:6px;
+      font-size: var(--fz);
+      line-height: var(--line);
+      color: rgba(219,234,254,.82);
+      min-width: 0;
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+
+    .ok{ color: rgba(34,197,94,.90); text-shadow: var(--shadowG); }
+    .warn{ color: rgba(251,146,60,.90); text-shadow: var(--shadowO); }
+    .danger{ color: rgba(239,68,68,.90); text-shadow: var(--shadowR); }
+
+    .mono{
+      font-family: var(--mono);
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(56,189,248,.20);
+      background: rgba(2,6,23,.25);
+      color: rgba(219,234,254,.86);
+      white-space: nowrap;
+    }
+
+    .redact{
+      background: linear-gradient(90deg, rgba(239,68,68,.16), rgba(0,0,0,.0));
+      border-left: 3px solid rgba(239,68,68,.55);
+      padding: 10px 10px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    .redact .k{
+      font-size: 11px; letter-spacing:.12em; text-transform:uppercase;
+      color: rgba(239,68,68,.78);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .redact .v{
+      margin-top:6px;
+      font-size: var(--fz);
+      line-height: var(--line);
+      color: rgba(219,234,254,.78);
+      overflow-wrap:anywhere;
+    }
+
+    /* Ops table area */
+    .opsWrap{
+      border-radius: 14px;
+      border: 1px solid rgba(168,85,247,.14);
+      background: rgba(3,6,18,.44);
+      box-shadow: var(--shadowV);
+      overflow:hidden;
+    }
+    .opsScroll{
+      max-height: 52vh;
+      overflow:auto;
+      scrollbar-color: rgba(168,85,247,.55) rgba(2,6,23,.25);
+      scrollbar-width: thin;
+    }
+    table{
+      width:100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td{
+      text-align:left;
+      padding: 10px;
+      border-bottom: 1px solid rgba(56,189,248,.12);
+      vertical-align:top;
+      font-size: var(--fz);
+      line-height: 1.45;
+      color: rgba(219,234,254,.82);
+      overflow-wrap:anywhere;
+      word-break: break-word;
+    }
+    th{
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      font-size: 12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(219,234,254,.72);
+      background: rgba(2,6,23,.60);
+      backdrop-filter: blur(6px);
+    }
+    tr:last-child td{ border-bottom:none; }
+
+    .colCode{ width: 110px; }
+    .colStatus{ width: 110px; }
+    .colOp{ width: 40%; }
+    .colRec{ width: auto; }
+
+    /* Compact mode */
+    body.compact{
+      --fz: 12px;
+      --fzSmall: 11px;
+      --pad: 10px;
+      --padSmall: 9px;
+      --line: 1.45;
+    }
+
+    /* Intro */
+    .intro{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      padding: 16px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+    }
+    .introCard{
+      width:min(980px, 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(168,85,247,.26);
+      background: linear-gradient(180deg, rgba(5,6,10,.90), rgba(3,6,18,.64));
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.10) inset,
+        0 0 48px rgba(168,85,247,.18),
+        0 0 56px rgba(56,189,248,.12);
+      overflow:hidden;
+      position:relative;
+    }
+    .introTop{
+      padding: 16px 16px 10px;
+      border-bottom: 1px solid rgba(56,189,248,.14);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+    .introTop .h{
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+      color: #e9d5ff;
+      text-shadow: var(--shadowV);
+      font-size: 13px;
+    }
+    .introTop .s{
+      margin-top:6px;
+      font-size: 12px;
+      color: rgba(219,234,254,.65);
+      line-height:1.35;
+      max-width: 110ch;
+    }
+    .typebox{
+      padding: 14px 16px 16px;
+      white-space: pre-wrap;
+      line-height:1.55;
+      color: rgba(219,234,254,.78);
+      font-size: 12px;
+      min-height: 200px;
+      max-height: min(52vh, 560px);
+      overflow:auto;
+    }
+    .introActions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+    .kbd{
+      font-size:12px;
+      color: rgba(219,234,254,.62);
+    }
+    .kbd code{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(251,146,60,.25);
+      background: rgba(251,146,60,.08);
+      color: #ffe4c7;
+    }
+  </style>
+</head>
+
+<body class="compact">
+  <div class="stage crt" id="stage">
+    <div class="gridOverlay" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="flicker" aria-hidden="true"></div>
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="title">S.A.S / Perfil • Mariposa</div>
+          <div class="sub">
+            Identidade: <span class="ok">Ariadne Valença</span> • Codinome: <span class="warn">MARIPOSA</span>.<br/>
+            Perfil conhecido: infiltração, mediação de risco memético e extração silenciosa; “fica perto do fogo sem virar cinza”.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>FILE: MARIPOSA_PROFILE • UI: FIT</span></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <div class="k">BIO / INDEX</div>
+        <div class="actions">
+          <button class="ghost" id="btnNoise" type="button">Ruído</button>
+          <button class="btn" id="btnRead" type="button">Modo: COMPACTO</button>
+          <button class="ghost" id="btnTop" type="button">Topo</button>
+        </div>
+      </div>
+
+      <div class="wrap" id="scrollArea">
+        <div class="grid2">
+          <section class="card">
+            <div class="cardHead">
+              <div class="h">Ficha rápida</div>
+              <div class="chips">
+                <span class="chip"><b>Status</b> Ativa</span>
+                <span class="chip"><b>Função</b> infiltração</span>
+                <span class="chip"><b>Risco</b> variável</span>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="k">Nome</div>
+                <div class="v">Ariadne Valença</div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="kv">
+                <div class="k">Organização atual</div>
+                <div class="v"><span class="ok">Sanctum Veritatis</span> (afiliada operacional / “consultora de campo”).</div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="kv">
+                <div class="k">Organizações anteriores</div>
+                <div class="v">
+                  Ordo Realitas (contratada) • Consórcio Helix (curto período) • Núcleo Umbra (célula de apoio) •
+                  “Trabalho solo” (longo intervalo).
+                </div>
+              </div>
+
+              <div class="redact">
+                <div class="k">Assinatura</div>
+                <div class="v">
+                  Mariposa não “entra quebrando”: ela entra como hábito.
+                  Onde a porta não abre, ela vira parte da parede até a parede esquecer que ela não nasceu ali.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="cardHead">
+              <div class="h">Vínculos e relações</div>
+              <div class="chips">
+                <span class="chip"><b>Vínculo</b> Corvo</span>
+                <span class="chip"><b>Rede</b> contatos</span>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="k">Corvo (Varn Blackwood)</div>
+                <div class="v">
+                  Relação: vínculo emocional e operacional; fator de estabilidade e risco simultâneos.
+                  Em campo, Mariposa costuma ser a última voz que Corvo escuta antes de fazer algo irreversível.
+                </div>
+              </div>
+
+              <div style="height:10px"></div>
+
+              <div class="kv">
+                <div class="k">Rede de contato (não-exaustiva)</div>
+                <div class="v">
+                  “Sable” (intermediário de rotas) • “Lumen” (fornecedor de falsos registros) • “Rookline” (extração) •
+                  “Mãe-Cinza” (informação ritual) • “Tess Arc” (interface técnica).
+                </div>
+              </div>
+
+              <div class="redact">
+                <div class="k">Condecorações</div>
+                <div class="v">
+                  1× Aquia Vermelha (Sanctum, “extração impossível”).<br/>
+                  1× Platina (Ordo, “mitigação de dano memético”).<br/>
+                  Observação: Mariposa evita medalhas; aceita apenas quando a recusa colocaria outros em risco político.
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Biografia (encaixada)</div>
+            <div class="chips">
+              <span class="chip"><b>Traço</b> adaptação</span>
+              <span class="chip"><b>Contraste</b> com Corvo</span>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="grid2">
+              <div class="kv">
+                <div class="k">Antes do Sanctum</div>
+                <div class="v">
+                  Trabalhou como operadora de infiltração e negociação de crise, especialmente em cenários onde “verdade”
+                  era menos útil do que “sobrevivência”. Aprendeu a ler pessoas como se lê um prédio: pelas rachaduras.
+                </div>
+              </div>
+              <div class="kv">
+                <div class="k">Por que “Mariposa”</div>
+                <div class="v">
+                  Codinome por hábito de operar perto de fenômenos luminosos/atrativos sem ser consumida.
+                  Onde outros “queimam”, ela fica — e a permanência vira ferramenta.
+                </div>
+              </div>
+            </div>
+
+            <div class="redact">
+              <div class="k">Postura ética</div>
+              <div class="v">
+                Mariposa não é fria: é calibrada.
+                Ela acredita que o certo precisa existir, mas às vezes precisa ser “guardado” até haver gente suficiente viva para defendê-lo.
+                Por isso funciona como contrapeso do Corvo: ela não corta a corrente; ela escolhe o elo certo para soltar.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardHead">
+            <div class="h">Operações assistidas</div>
+            <div class="chips">
+              <span class="chip"><b>Sucesso</b> 147</span>
+              <span class="chip"><b>Falha</b> 3</span>
+              <span class="chip"><b>Sem info</b> 4</span>
+              <span class="chip"><b>Total</b> 154</span>
+            </div>
+          </div>
+
+          <div class="cardBody">
+            <div class="kv">
+              <div class="k">Leitura</div>
+              <div class="v">
+                Lista com rolagem interna (não estoura a página).
+                Cabeçalhos fixos e quebra automática de texto.
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="opsWrap">
+              <div class="opsScroll">
+                <table id="opsTable">
+                  <thead>
+                    <tr>
+                      <th class="colCode">Cod</th>
+                      <th class="colStatus">Status</th>
+                      <th class="colOp">Operação</th>
+                      <th class="colRec">Registro</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Introdução Mariposa">
+    <div class="introCard">
+      <div class="introTop">
+        <div>
+          <div class="h">SARCOPHAGUS / OPEN FILE</div>
+          <div class="s">
+            Perfil de infiltração e mitigação memética. Atenção: “Mariposa” aparece em relatórios como sinônimo de entrada não detectada.<br/>
+            Atalho: <code>R</code> alterna Compacto/Legível.
+          </div>
+        </div>
+        <div class="pill"><span class="dot"></span><span>MODE: FIT</span></div>
+      </div>
+      <div class="typebox" id="typebox"></div>
+      <div class="introActions">
+        <button class="btn" id="btnEnter" type="button">Entrar</button>
+        <div class="kbd">Atalhos: <code>Enter</code> entrar • <code>/</code> ruído • <code>T</code> topo • <code>R</code> leitura</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const typebox = document.getElementById("typebox");
+    const scrollArea = document.getElementById("scrollArea");
+
+    const btnNoise = document.getElementById("btnNoise");
+    const btnTop = document.getElementById("btnTop");
+    const btnEnter = document.getElementById("btnEnter");
+    const btnRead = document.getElementById("btnRead");
+
+    const opsTbody = document.querySelector("#opsTable tbody");
+
+    let compact = true;
+
+    function setVars(scan, noise, flick, shake){
+      document.documentElement.style.setProperty("--scan-opacity", scan);
+      document.documentElement.style.setProperty("--noise-opacity", noise);
+      document.documentElement.style.setProperty("--flicker", flick);
+      document.documentElement.style.setProperty("--shake", shake);
+    }
+
+    function dopaminePulse(){
+      const scan = (0.08 + Math.random()*0.12).toFixed(2);
+      const noise = (0.05 + Math.random()*0.09).toFixed(2);
+      const flick = (0.04 + Math.random()*0.07).toFixed(3);
+      const shake = (Math.random() < 0.10) ? ((Math.random() * 2 - 1).toFixed(1) + "px") : "0px";
+      setVars(scan, noise, flick, shake);
+      setTimeout(() => setVars(".11",".07",".050","0px"), 1100);
+    }
+
+    function closeIntro(){
+      intro.style.display = "none";
+      dopaminePulse();
+      scrollArea.scrollTop = 0;
+    }
+
+    function pad4(n){ return String(n).padStart(4,"0"); }
+    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+    function statusBadge(s){
+      if (s === "SUCESSO") return `<span class="ok">${s}</span>`;
+      if (s === "FALHA") return `<span class="danger">${s}</span>`;
+      return `<span class="warn">${s}</span>`;
+    }
+
+    function buildOps(){
+      // 147 sucessos, 3 falhas, 4 sem info = 154
+      const ops = [];
+
+      const tags = [
+        "Casulo Vazio","Luz de Cinza","Véu Pálido","Fio de Seda","Janela Morta",
+        "Coro Baixo","Sal e Fumaça","Rota Curta","Nó Invisível","Sala Sem Porta",
+        "Íris Quebrada","Linha de Giz","Sussurro Limpo","Fenda de Papel","Olho de Vidro",
+        "Mapa de Fósforo","Flor Negra","Rastro de Néon","Queda Suave","Espelho Cego"
+      ];
+      const romans = ["I","II","III","IV","V","VI","VII","VIII","IX","X"];
+
+      for (let i=1; i<=147; i++){
+        ops.push({
+          code: "MV-" + pad4(i),
+          status: "SUCESSO",
+          title: `Operação ${pick(tags)} ${pick(romans)}`,
+          rec: "Completo (resumo interno)."
+        });
+      }
+
+      const fails = [
+        { t:"Operação Asa Rasgada", r:"Falha por identificação tardia de isca memética; retirada forçada." },
+        { t:"Operação Lâmpada Afogada", r:"Falha por colapso de cobertura (documentos falsos queimados no local)." },
+        { t:"Operação Cinza no Pulso", r:"Falha por interferência humana: traição do contato local." }
+      ];
+      for (let i=148; i<=150; i++){
+        ops.push({
+          code:"MV-"+pad4(i),
+          status:"FALHA",
+          title:fails[i-148].t,
+          rec:fails[i-148].r
+        });
+      }
+
+      ops.push({ code:"MV-0151", status:"SEM INFO", title:"[REMOVIDO]", rec:"Registro removido por veto; apenas o cabeçalho permaneceu." });
+      ops.push({ code:"MV-0152", status:"SEM INFO", title:"[NEGADO]", rec:"Registro negado. ‘Não existe’ em espelhos e cópias." });
+      ops.push({ code:"MV-0153", status:"SEM INFO", title:"[ILEGÍVEL]", rec:"Arquivo corrompido por ruído; caracteres substituídos por espaços." });
+      ops.push({ code:"MV-0154", status:"SEM INFO", title:"[CIFRA]", rec:"Registro cifrado com chave não autorizada (origem desconhecida)." });
+
+      return ops;
+    }
+
+    function renderOps(){
+      const ops = buildOps();
+      opsTbody.innerHTML = ops.map(o => `
+        <tr>
+          <td class="colCode"><span class="mono">${o.code}</span></td>
+          <td class="colStatus">${statusBadge(o.status)}</td>
+          <td class="colOp">${o.title}</td>
+          <td class="colRec">${o.rec}</td>
+        </tr>
+      `).join("");
+    }
+
+    function updateReadMode(){
+      document.body.classList.toggle("compact", compact);
+      btnRead.textContent = "Modo: " + (compact ? "COMPACTO" : "LEGÍVEL");
+    }
+
+    const boot = [
+      "[S.A.S] file: mariposa.html",
+      "[S.A.S] ui: fit (wrap + fixed table + internal scroll)",
+      "",
+      "AGENTE: MARIPOSA",
+      "Ariadne Valença",
+      "Condecorações: 1× Aquia Vermelha • 1× Platina",
+      "Operações: 147 sucesso • 3 falha • 4 sem info",
+      "",
+      "Pressione ENTER."
+    ];
+
+    function typeBoot(){
+      typebox.textContent = "";
+      let i = 0;
+      const tick = () => {
+        if (i >= boot.length) return;
+        typebox.textContent += boot[i] + "\n";
+        typebox.scrollTop = typebox.scrollHeight;
+        i++;
+        setTimeout(tick, 25 + Math.random()*80);
+      };
+      tick();
+    }
+
+    btnNoise.addEventListener("click", dopaminePulse);
+    btnTop.addEventListener("click", () => scrollArea.scrollTop = 0);
+    btnEnter.addEventListener("click", closeIntro);
+
+    btnRead.addEventListener("click", () => {
+      compact = !compact;
+      updateReadMode();
+      dopaminePulse();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (intro.style.display !== "none") {
+        if (e.key === "Enter") closeIntro();
+        return;
+      }
+      if (e.key === "/") { e.preventDefault(); dopaminePulse(); }
+      if (e.key.toLowerCase() === "t") scrollArea.scrollTop = 0;
+      if (e.key.toLowerCase() === "r") { compact = !compact; updateReadMode(); dopaminePulse(); }
+    });
+
+    // init
+    typeBoot();
+    renderOps();
+    updateReadMode();
+  </script>
+</body>
+</html>

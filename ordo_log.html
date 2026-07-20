@@ -1,1 +1,829 @@
-<!doctype html><html data-clean-route-alias lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="https://sanctumveritatis.com/ordo_log"><meta http-equiv="refresh" content="0;url=/ordo_log"><title>Registro transferido | Sanctum Veritatis</title><script>location.replace('/ordo_log'+location.search+location.hash)</script></head><body><p>Registro transferido para <a href="/ordo_log">/ordo_log</a>.</p></body></html>
+<!DOCTYPE html>
+<html data-clean-route-alias lang="pt-BR">
+<head><script>if(/\.html$/i.test(location.pathname))location.replace('/ordo_log'+location.search+location.hash)</script><base href="./"><link rel="canonical" href="https://sanctumveritatis.com/ordo_log">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORdo // NÚCLEO DE REGISTROS</title>
+
+  <!-- FONTES -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Share+Tech+Mono&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #020305;
+      --panel: #090b10;
+      --panel-alt: #0f1118;
+      --primary: #ff2b2b;
+      --primary-soft: rgba(255, 43, 43, 0.3);
+      --accent: #d4af37;
+      --text: #e5e5e5;
+      --text-dim: #7a7a7a;
+      --border: rgba(255,255,255,0.08);
+      --ok: #46ff9a;
+      --warn: #ffbf40;
+      --danger: #ff2b2b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #151822 0, #020305 55%, #000 100%);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    /* BACKGROUND FX */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: -2;
+    }
+    .vignette {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, transparent 60%, #000 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* CONTAINER PRINCIPAL */
+    .shell {
+      width: 95%;
+      max-width: 1200px;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid var(--border);
+      box-shadow: 0 0 40px rgba(0,0,0,0.8);
+      border-radius: 8px;
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+    }
+
+    .shell-header {
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #05060b, #151822);
+    }
+
+    .shell-header span:nth-child(1) {
+      color: var(--text-dim);
+    }
+    .shell-header span:nth-child(2) {
+      color: var(--primary-soft);
+    }
+    .status-pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      font-weight: 600;
+      text-shadow: 0 0 6px rgba(255,43,43,0.6);
+      animation: pulseStatus 1.8s infinite;
+    }
+
+    /* ÁREA CONTEÚDO (LOGIN / DASHBOARD) */
+    .shell-body {
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    /* LOGIN */
+    .login-panel {
+      max-width: 420px;
+      margin: 0 auto;
+      background: linear-gradient(145deg, rgba(7,9,15,0.98), rgba(12,15,26,0.98));
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      padding: 2.2rem 2rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-panel::before {
+      content: '';
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(from 120deg, rgba(255,43,43,0.1), transparent, transparent, rgba(212,175,55,0.04), transparent);
+      opacity: 0.8;
+      mix-blend-mode: screen;
+      animation: rotateAura 18s linear infinite;
+    }
+
+    .login-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .subheading {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+    }
+
+    .title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      color: #fff;
+    }
+
+    .title span {
+      color: var(--primary);
+    }
+
+    .login-hint {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 1.8rem;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--text-dim);
+    }
+
+    .field {
+      margin-top: 0.25rem;
+      position: relative;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      background: #05060c;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(255,43,43,0.35);
+      background: #05050a;
+    }
+
+    .error-msg {
+      margin-top: 0.25rem;
+      font-size: 0.75rem;
+      color: var(--danger);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 1rem;
+    }
+
+    button[type="submit"] {
+      margin-top: 0.5rem;
+      padding: 0.7rem 1rem;
+      background: linear-gradient(90deg, var(--primary), #ff5c5c);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(255,43,43,0.4);
+      transition: transform 0.08s ease-out, box-shadow 0.08s, filter 0.08s;
+    }
+
+    button[type="submit"]:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow: 0 0 26px rgba(255,43,43,0.6);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(0);
+      box-shadow: 0 0 14px rgba(255,43,43,0.4);
+    }
+
+    .login-footer {
+      margin-top: 1.6rem;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      opacity: 0.9;
+    }
+
+    .badge {
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--text-dim);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* DASHBOARD */
+    .dashboard {
+      display: none; /* escondido até login */
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr 320px;
+      gap: 1.5rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      padding: 1.1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,43,43,0.05), transparent 40%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .panel h2 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .panel-title-strong {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+      color: #fff;
+    }
+
+    .identity-block {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .id-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      font-size: 0.7rem;
+    }
+
+    .id-value {
+      font-size: 0.9rem;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.25rem;
+    }
+
+    .tag-row {
+      margin-top: 0.6rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+    }
+
+    .tag--risk {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* OPERAÇÕES ATIVAS */
+    .ops-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin-top: 0.4rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.76rem;
+    }
+
+    .op-item {
+      background: var(--panel-alt);
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 0.55rem 0.65rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr) auto;
+      gap: 0.4rem;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .op-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,43,43,0.08), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .op-item:hover::before {
+      opacity: 1;
+    }
+
+    .op-code {
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .op-meta {
+      color: var(--text-dim);
+    }
+
+    .op-status {
+      font-size: 0.65rem;
+      padding: 0.16rem 0.55rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      border: 1px solid var(--border);
+      text-align: right;
+    }
+
+    .op-status--active { border-color: var(--ok); color: var(--ok); }
+    .op-status--critical { border-color: var(--danger); color: var(--danger); animation: blinkSoft 1.4s infinite; }
+    .op-status--covert { border-color: var(--warn); color: var(--warn); }
+
+    .ops-caption {
+      margin-top: 0.6rem;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* LOG / NOTIFICAÇÕES */
+    .log-list {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 0.4rem;
+    }
+
+    .log-entry {
+      margin-bottom: 0.55rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
+    }
+
+    .log-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.15rem;
+      color: var(--text-dim);
+    }
+
+    .log-meta span:nth-child(2) {
+      color: var(--danger);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.64rem;
+    }
+
+    .log-body-urgent {
+      color: #ff9f9f;
+    }
+
+    .blink-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--danger);
+      display: inline-block;
+      margin-right: 4px;
+      box-shadow: 0 0 10px rgba(255,43,43,0.8);
+      animation: blinkHard 0.8s infinite;
+    }
+
+    /* DESPACHO ALTO CONSELHO */
+    .council-note {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .note-header {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 0.35rem;
+    }
+
+    .note-body {
+      background: #080b11;
+      border-radius: 4px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      padding: 0.7rem 0.75rem;
+    }
+
+    .note-body p {
+      margin-bottom: 0.45rem;
+    }
+
+    .note-sign {
+      margin-top: 0.6rem;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    .note-strong {
+      color: var(--warn);
+    }
+
+    /* ANIMAÇÕES */
+    @keyframes rotateAura {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pulseStatus {
+      0%,100% { box-shadow: 0 0 6px rgba(255,43,43,0.7); }
+      50% { box-shadow: 0 0 14px rgba(255,43,43,1); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blinkSoft {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+    @keyframes blinkHard {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.1; }
+    }
+
+    @media (max-width: 960px) {
+      .shell-body {
+        padding: 1.6rem;
+      }
+      .dash-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="vignette"></div>
+
+  <div class="shell">
+    <div class="shell-header">
+      <span>// ORDO REALITAS :: NÚCLEO DE REGISTROS</span>
+      <span id="timeLabel">SINCRONIA MEMBRANA: --:--:--</span>
+      <span class="status-pill">CANAL RESTRITO</span>
+    </div>
+
+    <div class="shell-body">
+      <!-- LOGIN VIEW -->
+      <section id="loginView" class="login-panel">
+        <div class="login-inner">
+          <div class="subheading">identificação requerida</div>
+          <div class="title"><span>OR</span>DO / LOG</div>
+          <div class="login-hint">
+            Este terminal está vinculado ao cluster de operações críticas do Atlântico Norte.
+            Acesso autorizado apenas a operadores homologados pelo Alto Conselho.
+          </div>
+
+          <form id="loginForm">
+            <div>
+              <label for="userId">ID de Operador</label>
+              <div class="field">
+                <input type="text" id="userId" autocomplete="off" spellcheck="false" placeholder="EX: 000-X">
+              </div>
+            </div>
+
+            <div>
+              <label for="password">Chave de Acesso</label>
+              <div class="field">
+                <input type="password" id="password" autocomplete="off" placeholder="••••">
+              </div>
+            </div>
+
+            <div class="error-msg" id="errorMsg"></div>
+
+            <button type="submit">validar credenciais</button>
+          </form>
+
+          <div class="login-footer">
+            <span>PROTOCOLO: SETOR ATLÂNTICO | NÓ 004</span>
+            <span class="badge">CAMADA N3</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- DASHBOARD VIEW -->
+      <section id="dashboardView" class="dashboard" aria-hidden="true">
+        <div class="dash-grid">
+          <!-- COLUNA ESQUERDA – IDENTIDADE -->
+          <div class="panel">
+            <h2>perfil de operador</h2>
+            <div class="panel-title-strong">004-N</div>
+            <div class="identity-block">
+              <div class="id-label">designação interna</div>
+              <div class="id-value">NÓRTEO / NÚCLEO SETENTRIONAL</div>
+
+              <div class="id-label" style="margin-top:0.5rem;">nível de credencial</div>
+              <div class="id-value" style="color:var(--ok);">CAMADA N3 / AT</div>
+
+              <div class="tag-row">
+                <span class="tag">cluster atlântico</span>
+                <span class="tag">setor paranorte</span>
+                <span class="tag tag--risk">exposição além-véu: ativa</span>
+              </div>
+
+              <div style="margin-top:0.9rem; font-size:0.72rem; color:var(--text-dim);">
+                Último log registrado: OP.SETENTRIONAL_973 // STATUS: <span style="color:var(--danger);">DEGRADANTE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUNA CENTRAL – OPERAÇÕES -->
+          <div class="panel">
+            <h2>operações ativas // ordo realitas</h2>
+            <div class="panel-title-strong">teatro global</div>
+
+            <div class="ops-list">
+              <!-- SETENTRIONAL -->
+              <div class="op-item">
+                <div class="op-code">OP.SETENTRIONAL_973</div>
+                <div class="op-meta">Ilha de São Firmo / Atlântico Norte</div>
+                <div class="op-status op-status--critical">crítico</div>
+              </div>
+              <!-- Outras operações ativas criadas -->
+              <div class="op-item">
+                <div class="op-code">OP.HELIÓGRAFO_21</div>
+                <div class="op-meta">Instalação Solar Militar Desativada / Deserto de Atacama</div>
+                <div class="op-status op-status--active">ativo</div>
+              </div>
+              <div class="op-item">
+                <div class="op-code">OP.VITRAL_NEGRO_44</div>
+                <div class="op-meta">Catedral Subterrânea / Leste Europeu</div>
+                <div class="op-status op-status--covert">coberto</div>
+              </div>
+              <div class="op-item">
+                <div class="op-code">OP.LIMIAR_Ω-08</div>
+                <div class="op-meta">Fenda Estável / Círculo Polar Ártico</div>
+                <div class="op-status op-status--active">ativo</div>
+              </div>
+              <div class="op-item">
+                <div class="op-code">OP.CALEFACTOR_31</div>
+                <div class="op-meta">Reator Geotérmico Paranormal / Islândia</div>
+                <div class="op-status op-status--active">ativo</div>
+              </div>
+              <div class="op-item">
+                <div class="op-code">OP.LUCIDO_Δ-03</div>
+                <div class="op-meta">Rede Onírica Coletiva / Metrópole Não Divulgada</div>
+                <div class="op-status op-status--covert">coberto</div>
+              </div>
+            </div>
+
+            <div class="ops-caption">
+              Registro apresenta apenas operações marcadas como <span style="color:var(--ok);">ATIVAS</span> na malha global,
+              além da OP.SETENTRIONAL_973 (marcada como <span style="color:var(--danger);">CRÍTICA</span> pelo Agente Corvo).
+            </div>
+
+            <h2 style="margin-top:2rem;">histórico de operações arquivadas</h2>
+            <div class="ops-list">
+              <div class="op-item">
+                <div class="op-code">OP.CARBONO_FRIO_07</div>
+                <div class="op-meta">Mina Desativada / Ruhrgebiet</div>
+                <div class="op-status">arquivado</div>
+              </div>
+              <div class="op-item">
+                <div class="op-code">OP.SINFONIA_MORTA_12</div>
+                <div class="op-meta">Teatro Abandonado / Costa Oeste</div>
+                <div class="op-status">arquivado</div>
+              </div>
+              <div class="op-item">
+                <div class="op-code">OP.VELOCINO_33</div>
+                <div class="op-meta">Complexo Rural / Interior do Brasil</div>
+                <div class="op-status">arquivado</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUNA DIREITA – LOGS E CONSELHO -->
+          <div class="panel">
+            <h2>alertas de emergência // canal corvo</h2>
+
+            <div class="log-list">
+              <div class="log-entry">
+                <div class="log-meta">
+                  <span>[CORVO//SETENTRIONAL]</span>
+                  <span><span class="blink-dot"></span>prioridade 01</span>
+                </div>
+                <div class="log-body-urgent">
+                  "Confirmada a morte operacional do Agente RÉU. Membrana colapsando ao redor do farol. Solicito
+                  autorização imediata para evacuação e fogo de saturação."
+                </div>
+              </div>
+
+              <div class="log-entry">
+                <div class="log-meta">
+                  <span>[CORVO//SETENTRIONAL]</span>
+                  <span><span class="blink-dot"></span>prioridade 01</span>
+                </div>
+                <div class="log-body-urgent">
+                  "Equipe Beta não responde há mais de 09 minutos. Registros locais apresentam lacunas cognitivas.
+                  Indício de entidade com capacidade de <strong>remoção de traço mnêmico</strong> em campo."
+                </div>
+              </div>
+
+              <div class="log-entry">
+                <div class="log-meta">
+                  <span>[CORVO//SETENTRIONAL]</span>
+                  <span><span class="blink-dot"></span>prioridade 02</span>
+                </div>
+                <div class="log-body-urgent">
+                  "Habitantes remanescentes da vila já não reconhecem a própria topografia da ilha.
+                  Setentrional está <em>se reescrevendo</em>. Reitero: aguardo protocolo de contenção."
+                </div>
+              </div>
+
+              <div class="log-entry">
+                <div class="log-meta">
+                  <span>[CORVO//SETENTRIONAL]</span>
+                  <span>prioridade 02</span>
+                </div>
+                <div>
+                  "Contagem de agentes operacionais em campo: 05. Projeção de sobrevivência sem reforço:
+                  &lt; 18%. Solicito, pela terceira vez, escalonamento para Alto Conselho."
+                </div>
+              </div>
+
+              <div class="log-entry">
+                <div class="log-meta">
+                  <span>[SISTEMA//ROTEAMENTO]</span>
+                  <span>fila: suspensa</span>
+                </div>
+                <div style="color:var(--text-dim);">
+                  Últimas 4 mensagens de Corvo marcadas como <em>“Recebidas / Não Homologadas”</em> pelo cluster de deliberação.
+                </div>
+              </div>
+            </div>
+
+            <h2 style="margin-top:1.6rem;">despacho alto conselho</h2>
+            <div class="council-note">
+              <div class="note-header">diretiva hc-Δ/973 // extrato</div>
+              <div class="note-body">
+                <p>
+                  "Considerando a atual sobrecarga de ativos em múltiplos teatros críticos e a
+                  <span class="note-strong">baixa relação custo–benefício operacional</span> observada no cenário
+                  da OP.SETENTRIONAL_973, determina-se o seguinte:
+                </p>
+                <p>
+                  1. Manter a operação sob status <strong>“observação remota passiva”</strong>, com
+                  <span class="note-strong">proibição expressa de empenho adicional de recursos</span> até segunda deliberação.
+                </p>
+                <p>
+                  2. Qualquer solicitação de extração, suporte bélico ou reforço ritual deverá ser
+                  registrada em camada de log apenas para fins estatísticos, sem acionamento automático
+                  de resposta.
+                </p>
+                <p>
+                  3. A eventual perda total de equipe em campo será tratada como <em>“dano colateral
+                  aceitável”</em>, diante da prioridade das demais frentes já homologadas.
+                </p>
+                <div class="note-sign">
+                  — Conselheiro Responsável: <strong>Eduard Hartmann</strong><br>
+                  Homologação: HC / Câmara Fechada / Sessão Não Publicada.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Relógio simples só para ambientação
+    function updateTime() {
+      const el = document.getElementById('timeLabel');
+      const now = new Date();
+      const t = now.toISOString().split('T')[1].split('.')[0];
+      el.textContent = 'SINCRONIA MEMBRANA: ' + t;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // LOGIN HANDLER
+    const loginForm = document.getElementById('loginForm');
+    const userField = document.getElementById('userId');
+    const passField = document.getElementById('password');
+    const errorMsg = document.getElementById('errorMsg');
+    const loginView = document.getElementById('loginView');
+    const dashboardView = document.getElementById('dashboardView');
+
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const user = userField.value.trim().toUpperCase();
+      const pass = passField.value;
+
+      if (user === '004-N' && pass === 'ORDO') {
+        // sucessinho: transição para dashboard
+        errorMsg.textContent = '';
+        loginView.style.transition = 'opacity 0.4s, transform 0.4s';
+        loginView.style.opacity = '0';
+        loginView.style.transform = 'translateY(10px)';
+
+        setTimeout(() => {
+          loginView.style.display = 'none';
+          dashboardView.style.display = 'block';
+          dashboardView.setAttribute('aria-hidden', 'false');
+        }, 400);
+      } else {
+        errorMsg.textContent = 'CREDENCIAIS INVÁLIDAS PARA ESTE TERMINAL.';
+        loginView.classList.remove('shake');
+        void loginView.offsetWidth; // reflow
+        loginView.classList.add('shake');
+      }
+    });
+
+    // Pequeno efeito de "shake" via JS (classe injetada)
+    const css = document.createElement('style');
+    css.innerHTML = `
+      .shake { animation: shakeAnim 0.25s linear 0s 1; }
+      @keyframes shakeAnim {
+        0% { transform: translateX(0); }
+        20% { transform: translateX(-4px); }
+        40% { transform: translateX(4px); }
+        60% { transform: translateX(-3px); }
+        80% { transform: translateX(3px); }
+        100% { transform: translateX(0); }
+      }
+    `;
+    document.head.appendChild(css);
+  </script>
+</body>
+</html>
