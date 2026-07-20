@@ -26,9 +26,15 @@ assert(legacy.includes('SVAuth.requireAccess'), 'Conteúdo operacional legado pe
 assert(data.publicAccess !== false && data.casualties === 6 && data.mobilized === 6, 'Metadados públicos inconsistentes');
 assert(data.agents.length === 6 && data.agents.some(agent => agent.name === 'IDENTIDADE PROTEGIDA'), 'Equipe não preserva divergência do sexto registro');
 assert(data.classified.every(entry => entry.length === 2) && !JSON.stringify(data.classified).match(/causa.{0,20}:/i), 'Conteúdo classificado completo enviado ao cliente');
+assert(data.timeline.length >= 12 && data.timeline.some(entry => entry[1].includes('igreja')) && data.timeline.some(entry => entry[1].includes('mina')), 'Cronologia operacional incompleta');
+assert(data.evidence.length === 6 && data.evidence.every(entry => entry.length === 6), 'Evidências públicas incompletas ou sem detalhes');
+assert(data.classified.length === 5, 'Blocos classificados incompletos');
+assert(data.files.every(file => file.length === 8) && data.files.filter(file => file[7]).length >= 4, 'Arquivos sem identificador ou ações válidas');
 assert(page.includes('Nenhum conteúdo secreto foi incluído'), 'Limite público não está declarado');
+assert(page.includes('ARQUIVO DE ÁUDIO INDISPONÍVEL') && !page.includes('<audio'), 'Estado do áudio ausente ou player falso presente');
+assert(page.includes('A operação foi encerrada.') && page.includes('O fenômeno, não.'), 'Encerramento obrigatório ausente');
 assert(css.includes('@media(max-width:600px)') && css.includes('@media(prefers-reduced-motion:reduce)'), 'CSS sem mobile ou movimento reduzido');
 assert(client.includes("addEventListener('click'") && page.includes('aria-live="polite"'), 'Interações acessíveis ausentes');
 assert(page.includes('onclick="window.print()"') && page.includes('id="copy-id"'), 'Ações de imprimir/copiar ausentes');
 
-console.log(JSON.stringify({route:'/operacoes/canto-da-mariposa',indexEntry:true,legacyCompatible:true,publicRecords:data.files.length,agents:data.agents.length,classifedPayload:false,mobile:true,reducedMotion:true}));
+console.log(JSON.stringify({route:'/operacoes/canto-da-mariposa',indexEntry:true,legacyCompatible:true,publicRecords:data.files.length,agents:data.agents.length,evidence:data.evidence.length,classifiedBlocks:data.classified.length,classifiedPayload:false,mobile:true,reducedMotion:true}));
