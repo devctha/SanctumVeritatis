@@ -1,0 +1,20 @@
+[
+  {
+    "id": "field-training",
+    "name": "Treinamento de Campo",
+    "category": "classe",
+    "cost": 0
+  },
+  {
+    "id": "quick-analysis",
+    "name": "Análise Rápida",
+    "category": "especialista",
+    "cost": 1
+  },
+  {
+    "id": "paranormal-sense",
+    "name": "Sentir o Outro Lado",
+    "category": "ocultista",
+    "cost": 1
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "RL-ID-01",
+    "name": "LOTUS-04",
+    "lastActivity": "DATA IMPOSSÍVEL",
+    "status": "ativo",
+    "correspondence": "Sem confirmação"
+  },
+  {
+    "id": "RL-ID-02",
+    "name": "NASH/LOTUS",
+    "lastActivity": "2021-02-17",
+    "status": "apagado",
+    "correspondence": "Possível vínculo com canal legado NASH/LOTUS"
+  },
+  {
+    "id": "RL-ID-03",
+    "name": "RAIZ",
+    "lastActivity": "2022-03-17",
+    "status": "duplicado",
+    "correspondence": "Sem confirmação"
+  },
+  {
+    "id": "RL-ID-04",
+    "name": "JARDINEIRO",
+    "lastActivity": "DATA IMPOSSÍVEL",
+    "status": "não confirmado",
+    "correspondence": "Sem confirmação"
+  },
+  {
+    "id": "RL-ID-05",
+    "name": "PÉTALA BRANCA",
+    "lastActivity": "2024-05-17",
+    "status": "ativo",
+    "correspondence": "Sem confirmação"
+  },
+  {
+    "id": "RL-ID-06",
+    "name": "NÃO INDEXADO",
+    "lastActivity": "2025-06-17",
+    "status": "apagado",
+    "correspondence": "Sem confirmação"
+  },
+  {
+    "id": "RL-ID-07",
+    "name": "SINTECH",
+    "lastActivity": "DATA IMPOSSÍVEL",
+    "status": "duplicado",
+    "correspondence": "Processo ou interlocutor Sintech"
+  },
+  {
+    "id": "RL-ID-08",
+    "name": "CONSELHO",
+    "lastActivity": "2021-08-17",
+    "status": "não confirmado",
+    "correspondence": "Sem confirmação"
+  },
+  {
+    "id": "RL-ID-09",
+    "name": "MORTO-17",
+    "lastActivity": "2022-09-17",
+    "status": "ativo",
+    "correspondence": "Sem confirmação"
+  },
+  {
+    "id": "RL-ID-10",
+    "name": "QUARTO NOME",
+    "lastActivity": "DATA IMPOSSÍVEL",
+    "status": "apagado",
+    "correspondence": "Sem confirmação"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "flashlight",
+    "name": "Lanterna tática",
+    "category": "Equipamentos",
+    "spaces": 1
+  },
+  {
+    "id": "radio",
+    "name": "Rádio de campo",
+    "category": "Equipamentos",
+    "spaces": 1
+  },
+  {
+    "id": "medkit",
+    "name": "Kit médico",
+    "category": "Consumíveis",
+    "spaces": 2
+  }
+]

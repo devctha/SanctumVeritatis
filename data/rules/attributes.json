@@ -1,0 +1,22 @@
+[
+  {
+    "id": "agility",
+    "name": "Agilidade"
+  },
+  {
+    "id": "strength",
+    "name": "Força"
+  },
+  {
+    "id": "intellect",
+    "name": "Intelecto"
+  },
+  {
+    "id": "presence",
+    "name": "Presença"
+  },
+  {
+    "id": "vigor",
+    "name": "Vigor"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "old-name",
+    "trigger": "second-visit",
+    "description": "O nome do agente surge em conversa antiga."
+  },
+  {
+    "id": "sintech-signal",
+    "trigger": "sintech-phase-4",
+    "description": "Frequência vermelha infiltra o hub."
+  },
+  {
+    "id": "future-count",
+    "trigger": "third-visit",
+    "description": "Contador apresenta usuário impossível."
+  }
+]

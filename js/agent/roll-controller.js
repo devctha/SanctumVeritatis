@@ -1,0 +1,1 @@
+(function(){function roll(p,skill,bonus){const d=1+Math.floor(Math.random()*20),total=d+Number(bonus||0),result={at:new Date().toISOString(),skill,dice:`1d20 [${d}]`,bonus:Number(bonus||0),total};SVHistory.add(p,'roll',null,total,skill);return result}window.SVRoll={roll}})();

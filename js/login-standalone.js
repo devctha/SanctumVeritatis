@@ -1,0 +1,4 @@
+(function () {
+  const form = document.querySelector('#login-form'); const status = document.querySelector('#auth-status'); const button = form.querySelector('button[type="submit"]');
+  form.addEventListener('submit', async event => { event.preventDefault(); button.disabled = true; form.dataset.state = 'checking'; status.textContent = 'Abrindo sessão demonstrativa…'; const result = await SVAuth.authenticate(form.agent.value, '', form.remember.checked); if (!result.ok) { form.dataset.state = 'error'; status.textContent = 'Informe uma identificação para continuar.'; button.disabled = false; return; } form.dataset.state = 'authorized'; status.textContent = `Modo demonstração iniciado para ${result.session.codename}.`; const next = new URLSearchParams(location.search).get('next'); setTimeout(() => { location.href = next || 'sistema/dashboard.html'; }, 250); });
+})();

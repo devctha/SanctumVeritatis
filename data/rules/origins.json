@@ -1,0 +1,18 @@
+[
+  {
+    "id": "academic",
+    "name": "Acadêmico"
+  },
+  {
+    "id": "military",
+    "name": "Militar"
+  },
+  {
+    "id": "investigator",
+    "name": "Investigador"
+  },
+  {
+    "id": "worker",
+    "name": "Operário"
+  }
+]

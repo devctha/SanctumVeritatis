@@ -1,0 +1,162 @@
+[
+  {
+    "id": "RL-CNV-001",
+    "at": "03:14:00",
+    "from": "LOTUS-04",
+    "to": "JARDINEIRO",
+    "text": "Você demorou, mas o arquivo permaneceu aberto.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-002",
+    "at": "03:15:07",
+    "from": "NASH/LOTUS",
+    "to": "PÉTALA BRANCA",
+    "text": "Setentrional não terminou; apenas mudou de suporte.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-003",
+    "at": "03:16:14",
+    "from": "RAIZ",
+    "to": "NÃO INDEXADO",
+    "text": "O farol não ilumina para fora. A raiz também não cresce para baixo.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-004",
+    "at": "03:17:21",
+    "from": "JARDINEIRO",
+    "to": "SINTECH",
+    "text": "A pergunta foi registrada antes de você formulá-la.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-005",
+    "at": "03:18:28",
+    "from": "PÉTALA BRANCA",
+    "to": "CONSELHO",
+    "text": "Não confie na versão que concorda com todas as outras.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-006",
+    "at": "03:19:35",
+    "from": "NÃO INDEXADO",
+    "to": "MORTO-17",
+    "text": "A Congregação marcou esta sessão.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-007",
+    "at": "03:20:42",
+    "from": "SINTECH",
+    "to": "QUARTO NOME",
+    "text": "A.L.I.C.I.A. remove pessoas e dados na mesma operação.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-008",
+    "at": "03:21:49",
+    "from": "CONSELHO",
+    "to": "LOTUS-04",
+    "text": "Corvo ainda segura uma porta que não sabe nomear.",
+    "requires": 0
+  },
+  {
+    "id": "RL-CNV-009",
+    "at": "03:22:56",
+    "from": "MORTO-17",
+    "to": "NASH/LOTUS",
+    "text": "Há seis passagens no inventário da Alpha. Conte os nomes.",
+    "requires": 4
+  },
+  {
+    "id": "RL-CNV-010",
+    "at": "03:23:03",
+    "from": "QUARTO NOME",
+    "to": "RAIZ",
+    "text": "A Sintech detectou nossa frequência e chamou isso de ruído.",
+    "requires": 4
+  },
+  {
+    "id": "RL-CNV-011",
+    "at": "03:24:10",
+    "from": "LOTUS-04",
+    "to": "JARDINEIRO",
+    "text": "O Conselho prefere um culto: cultos podem ser eliminados.",
+    "requires": 4
+  },
+  {
+    "id": "RL-CNV-012",
+    "at": "03:25:17",
+    "from": "NASH/LOTUS",
+    "to": "PÉTALA BRANCA",
+    "text": "O Jardim não é uma visualização criada por nós.",
+    "requires": 4
+  },
+  {
+    "id": "RL-CNV-013",
+    "at": "03:26:24",
+    "from": "RAIZ",
+    "to": "NÃO INDEXADO",
+    "text": "Seu nome aparece em uma conversa de 1978.",
+    "requires": 4
+  },
+  {
+    "id": "RL-CNV-014",
+    "at": "03:27:31",
+    "from": "JARDINEIRO",
+    "to": "SINTECH",
+    "text": "Não abra a Raiz enquanto o farol estiver ativo.",
+    "requires": 4
+  },
+  {
+    "id": "RL-CNV-015",
+    "at": "03:28:38",
+    "from": "PÉTALA BRANCA",
+    "to": "CONSELHO",
+    "text": "O arquivo morto continua escrevendo revisões.",
+    "requires": 4
+  },
+  {
+    "id": "RL-CNV-016",
+    "at": "03:29:45",
+    "from": "NÃO INDEXADO",
+    "to": "MORTO-17",
+    "text": "A próxima resposta chegará antes desta mensagem.",
+    "requires": 12
+  },
+  {
+    "id": "RL-CNV-017",
+    "at": "03:30:52",
+    "from": "SINTECH",
+    "to": "QUARTO NOME",
+    "text": "Hartmann, Wolfe e Varela assinam versões incompatíveis.",
+    "requires": 12
+  },
+  {
+    "id": "RL-CNV-018",
+    "at": "03:31:59",
+    "from": "CONSELHO",
+    "to": "LOTUS-04",
+    "text": "Se a flor fosse símbolo, não precisaria de testemunhas.",
+    "requires": 12
+  },
+  {
+    "id": "RL-CNV-019",
+    "at": "03:32:06",
+    "from": "MORTO-17",
+    "to": "NASH/LOTUS",
+    "text": "Toda quarentena é também uma forma de conservar.",
+    "requires": 12
+  },
+  {
+    "id": "RL-CNV-020",
+    "at": "03:33:13",
+    "from": "QUARTO NOME",
+    "to": "RAIZ",
+    "text": "Não somos a resposta. Somos a contradição que permaneceu.",
+    "requires": 12
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "RL-SYM-01",
+    "name": "Variação 01",
+    "rotation": 0,
+    "meaning": "abertura",
+    "confirmed": true
+  },
+  {
+    "id": "RL-SYM-02",
+    "name": "Variação 02",
+    "rotation": 37,
+    "meaning": "retorno",
+    "confirmed": true
+  },
+  {
+    "id": "RL-SYM-03",
+    "name": "Variação 03",
+    "rotation": 74,
+    "meaning": "identidade",
+    "confirmed": true
+  },
+  {
+    "id": "RL-SYM-04",
+    "name": "Variação 04",
+    "rotation": 111,
+    "meaning": "silêncio",
+    "confirmed": true
+  },
+  {
+    "id": "RL-SYM-05",
+    "name": "Variação 05",
+    "rotation": 148,
+    "meaning": "transmissão",
+    "confirmed": true
+  },
+  {
+    "id": "RL-SYM-06",
+    "name": "Variação 06",
+    "rotation": 185,
+    "meaning": "abertura",
+    "confirmed": true
+  },
+  {
+    "id": "RL-SYM-07",
+    "name": "Variação 07",
+    "rotation": 222,
+    "meaning": "retorno",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-08",
+    "name": "Variação 08",
+    "rotation": 259,
+    "meaning": "identidade",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-09",
+    "name": "Variação 09",
+    "rotation": 296,
+    "meaning": "silêncio",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-10",
+    "name": "Variação 10",
+    "rotation": 333,
+    "meaning": "transmissão",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-11",
+    "name": "Variação 11",
+    "rotation": 10,
+    "meaning": "abertura",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-12",
+    "name": "Variação 12",
+    "rotation": 47,
+    "meaning": "retorno",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-13",
+    "name": "Variação 13",
+    "rotation": 84,
+    "meaning": "identidade",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-14",
+    "name": "Variação 14",
+    "rotation": 121,
+    "meaning": "silêncio",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-15",
+    "name": "Variação 15",
+    "rotation": 158,
+    "meaning": "transmissão",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-16",
+    "name": "Variação 16",
+    "rotation": 195,
+    "meaning": "abertura",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-17",
+    "name": "Variação 17",
+    "rotation": 232,
+    "meaning": "retorno",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-18",
+    "name": "Variação 18",
+    "rotation": 269,
+    "meaning": "identidade",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-19",
+    "name": "Variação 19",
+    "rotation": 306,
+    "meaning": "silêncio",
+    "confirmed": false
+  },
+  {
+    "id": "RL-SYM-20",
+    "name": "Variação 20",
+    "rotation": 343,
+    "meaning": "transmissão",
+    "confirmed": false
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "pistol",
+    "name": "Pistola",
+    "damage": "2d6",
+    "critical": "18/x2",
+    "spaces": 1
+  },
+  {
+    "id": "knife",
+    "name": "Faca tática",
+    "damage": "1d4",
+    "critical": "19/x3",
+    "spaces": 1
+  }
+]
