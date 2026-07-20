@@ -10,7 +10,7 @@ Data da auditoria: 20 de julho de 2026. Escopo: versão atual, histórico Git ac
 - Branches remotas efetivas: `main` e `feature/sanctum-veritatis-full-rebuild`. Referências locais `origin/agent/*` estavam obsoletas após merges anteriores.
 - Nenhuma tag, release, issue aberta ou pull request aberto.
 - Um workflow próprio ativo, `.github/workflows/validate.yml`, além do workflow dinâmico do GitHub Pages.
-- Dependabot, alertas de vulnerabilidade e análise de código não estavam habilitados/configurados.
+- Dependabot, alertas de vulnerabilidade e análise de código não estavam habilitados/configurados. Durante a organização, alertas de vulnerabilidade e correções automáticas do Dependabot foram habilitados com sucesso.
 - A branch `main` não possuía regra de proteção.
 - Histórico recente contém commits genéricos antigos (`Add files via upload`), preservados para evitar reescrita destrutiva. Os commits recentes usam majoritariamente Conventional Commits.
 
@@ -41,7 +41,7 @@ Problemas observados:
 
 - README profissional com instalação, testes, implantação, estrutura, segurança e roadmap.
 - Templates para bugs, funcionalidades, conteúdo e pull requests.
-- Dependabot mensal para npm e GitHub Actions.
+- Dependabot mensal para npm e GitHub Actions; alertas de vulnerabilidade e correções automáticas habilitados no GitHub.
 - `.gitignore` ampliado para caches, temporários, IDEs e bancos locais.
 - geração do Arquivo Central tornada determinística.
 - relatórios de branches, arquivos grandes, terceiros e roadmap adicionados.
@@ -54,7 +54,7 @@ Nenhum asset, rota, documento narrativo, branch remota ou arquivo histórico foi
 ## Recomendações administrativas
 
 1. Tornar privado o conteúdo de mestre ou separá-lo em um repositório privado, sem simplesmente ocultá-lo via JavaScript.
-2. Habilitar GitHub Secret Scanning/Push Protection e alertas do Dependabot nas configurações.
+2. Habilitar GitHub Secret Scanning/Push Protection; os alertas e correções automáticas do Dependabot já foram habilitados.
 3. Proteger `main`: exigir PR, check `validate`, resolução de conversas, bloquear force push e exclusão.
 4. Avaliar a procedência de cada asset listado em `THIRD_PARTY_ASSETS.md`.
 5. Otimizar imagens, GIFs, áudio e vídeo antes de considerar Git LFS; Pages e clones devem ser medidos primeiro.
