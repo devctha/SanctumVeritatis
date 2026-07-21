@@ -8,6 +8,12 @@
     "test": "node tools/test-update.js && node tools/test-agent-auth.js && node tools/test-archives.js && node tools/test-clean-routes.js && node tools/test-canto-da-mariposa.js",
     "lint": "node --check system_core.js && node --check js/ui.js && node --check js/auth-standalone.js",
     "typecheck": "node --check js/auth/auth-service.js && node --check js/archive-search.js && node --check js/agent/sheet-controller.js",
+    "check:repository": "node tools/check-repository.js repository",
+    "check:links": "node tools/check-repository.js links",
+    "check:assets": "node tools/check-repository.js assets",
+    "check:duplicates": "node tools/check-repository.js duplicates",
+    "check:unused": "node tools/check-repository.js unused",
+    "clean:generated": "node tools/clean-generated.js --dry-run",
     "preview": "node tools/dev-server.js",
     "validate": "npm run lint && npm run typecheck && npm test && npm run build"
   },

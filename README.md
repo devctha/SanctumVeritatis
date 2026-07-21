@@ -25,6 +25,19 @@ Acesse a URL indicada pelo servidor. Não há dependências npm em produção ne
 - `tools/`: geradores, auditoria e testes Node.
 - `docs/`: inventários, decisões e guias técnicos.
 
+## Manutenção do repositório
+
+```powershell
+npm.cmd run check:repository
+npm.cmd run check:links
+npm.cmd run check:assets
+npm.cmd run check:duplicates
+npm.cmd run check:unused
+npm.cmd run clean:generated -- --dry-run
+```
+
+Os relatórios de inventário, duplicados, arquivos grandes e decisões de remoção ficam em `docs/repository/`.
+
 ## Segurança e licença
 
 O controle de acesso atual é adequado apenas para narrativa local: um site estático não consegue manter segredos contra quem recebe os arquivos. Não publique dados reais. O código e conteúdo são reservados; veja [SECURITY.md](SECURITY.md) e [LICENSE](LICENSE).
