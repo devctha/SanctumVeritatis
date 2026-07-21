@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /mestre/
+Disallow: /agentes/
+Disallow: /sistema/
+Disallow: /restrito/
+Disallow: /login
+
+Sitemap: https://sanctumveritatis.com/sitemap.xml

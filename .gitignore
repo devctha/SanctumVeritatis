@@ -7,6 +7,17 @@
 node_modules/
 coverage/
 dist/
+.cache/
+.tmp/
+tmp/
+*.tmp
+*.bak
+*.swp
+*.db
+*.sqlite
+*.sqlite3
+.idea/
+.vscode/
 .DS_Store
 Thumbs.db
 *.log

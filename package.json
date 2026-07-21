@@ -4,12 +4,18 @@
   "private": true,
   "description": "Plataforma narrativa e administrativa da Sanctum Veritatis.",
   "scripts": {
+    "dev": "node tools/dev-server.js",
     "build": "node tools/build-agent-rules.js && node tools/build-agent-aliases.js && node tools/build-sintech-data.js && node tools/build-redlotus-data.js && node tools/build-canto-route.js && node tools/reclassify-setentrional-route.js && node tools/build-archives.js",
-    "test": "node tools/test-update.js && node tools/test-agent-auth.js && node tools/test-archives.js && node tools/test-clean-routes.js && node tools/test-canto-da-mariposa.js",
+    "test": "node tools/test-update.js && node tools/test-agent-auth.js && node tools/test-archives.js && node tools/test-clean-routes.js && node tools/test-canto-da-mariposa.js && node tools/test-site-quality.js",
+    "test:e2e": "node tools/test-critical-flows.js",
     "lint": "node --check system_core.js && node --check js/ui.js && node --check js/auth-standalone.js",
     "typecheck": "node --check js/auth/auth-service.js && node --check js/archive-search.js && node --check js/agent/sheet-controller.js",
+    "lint:fix": "npm run lint",
+    "format": "node tools/check-format.js",
     "preview": "node tools/dev-server.js",
-    "validate": "npm run lint && npm run typecheck && npm test && npm run build"
+    "security": "npm audit --audit-level=high",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build",
+    "validate": "npm run check"
   },
   "engines": { "node": ">=20" }
 }
