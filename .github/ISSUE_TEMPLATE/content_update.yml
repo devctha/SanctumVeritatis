@@ -1,0 +1,26 @@
+name: Atualizar conteúdo
+description: Solicite uma alteração narrativa sem publicar spoilers no relato.
+title: "content: "
+labels: [content]
+body:
+  - type: input
+    id: module
+    attributes: { label: Módulo afetado }
+    validations: { required: true }
+  - type: textarea
+    id: current
+    attributes: { label: Conteúdo atual, description: Resuma sem inserir material secreto em repositório público. }
+  - type: textarea
+    id: new
+    attributes: { label: Conteúdo novo, description: Para conteúdo sigiloso, indique apenas onde ele será entregue privadamente. }
+    validations: { required: true }
+  - type: dropdown
+    id: secrecy
+    attributes: { label: Nível de sigilo, options: [público, interno, restrito, mestre] }
+    validations: { required: true }
+  - type: input
+    id: permissions
+    attributes: { label: Permissões necessárias }
+  - type: input
+    id: operations
+    attributes: { label: Operações relacionadas }

@@ -1,0 +1,25 @@
+name: Propor funcionalidade
+description: Sugira uma melhoria funcional ou técnica.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes: { label: Problema, description: Qual necessidade precisa ser atendida? }
+    validations: { required: true }
+  - type: textarea
+    id: solution
+    attributes: { label: Solução proposta }
+    validations: { required: true }
+  - type: input
+    id: users
+    attributes: { label: Usuários afetados }
+  - type: dropdown
+    id: priority
+    attributes: { label: Prioridade, options: [baixa, média, alta, crítica] }
+  - type: textarea
+    id: alternatives
+    attributes: { label: Alternativas consideradas }
+  - type: textarea
+    id: impacts
+    attributes: { label: Impactos, description: Considere rotas, acessibilidade, segurança, conteúdo e implantação. }
